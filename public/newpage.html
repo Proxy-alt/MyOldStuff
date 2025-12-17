@@ -1,0 +1,934 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pete Proxy</title>
+    <script type="text/javascript" src="//pl27983175.effectivegatecpm.com/c1/07/27/c10727dadb32856a5f427df5cc7f44ab.js"></script>
+    <link rel="icon" type="icon/x-icon" href="storage/images/logo-png-removebg-preview.png" />
+    <link rel="stylesheet" type="text/css" href="/storage/css/themes2.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100..900&family=Outfit:wght@100..900&display=swap');
+      body {
+        color: #fff;
+        background-color: #0a1d37;
+        font-family:
+          'Inter',
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+      }
+      .god-rays {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 550px;
+        --stripes: repeating-linear-gradient(
+          100deg,
+          rgba(20, 40, 60, 0.8) 0%,
+          rgba(20, 40, 60, 0.8) 7%,
+          transparent 10%,
+          transparent 12%,
+          rgba(20, 40, 60, 0.8) 16%
+        );
+        --rays: repeating-linear-gradient(
+          100deg,
+          rgba(30, 50, 90, 0.9) 10%,
+          rgba(20, 40, 80, 0.9) 15%,
+          rgba(30, 50, 90, 0.9) 20%,
+          rgba(20, 40, 80, 0.9) 25%,
+          rgba(30, 50, 90, 0.9) 30%
+        );
+        background-image: var(--stripes), var(--rays);
+        background-size: 300%, 200%;
+        background-position:
+          50% 50%,
+          50% 50%;
+        animation: fadeIn 2s ease;
+        mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
+        -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
+        pointer-events: none;
+        z-index: -1;
+      }
+      .god-rays::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: var(--stripes), var(--rays);
+        background-size: 200%, 100%;
+        animation: god-rays 40s linear infinite;
+        background-attachment: fixed;
+        mix-blend-mode: difference;
+      }
+      h1 {
+        font-size: 3rem;
+        color: #ffffff;
+        font-weight: 900;
+        text-transform: none;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        margin-top: 5px;
+        text-shadow:
+          0 0 15px rgba(255, 255, 255, 0.3),
+          0 0 20px rgba(255, 255, 255, 0.3);
+        transition: transform 0.3s ease-in-out;
+      }
+      h1:hover {
+        transform: scale(1.05);
+      }
+      #dynamicParagraph {
+        color: #ffffff;
+        font-size: 1.25rem;
+        margin-top: 5px;
+        font-weight: 300;
+        text-shadow:
+          0 0 15px rgba(255, 255, 255, 0.2),
+          0 0 10px rgba(255, 255, 255, 0.1);
+        transition: color 0.3s ease-in-out;
+      }
+      #dynamicParagraph:hover {
+        color: #a0a0a0;
+      }
+      #search-container {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .search-bar-home {
+        padding: 12px 18px;
+        width: 350px;
+        border: 2px solid #1e2a47;
+        background-color: #141414;
+        border-radius: 30px;
+        font-family: 'Outfit', sans-serif;
+        outline: none;
+        margin: 0;
+        color: #fff;
+        font-size: 16px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease-in-out;
+      }
+      .search-bar-home::placeholder {
+        color: #bbb;
+        opacity: 0.8;
+        font-size: 14px;
+      }
+      .search-bar-home:focus {
+        border-color: #64a6e0;
+        background-color: #1d2537;
+      }
+      .search-button {
+        padding: 10px 20px;
+        background-color: #1e2a47;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 30px;
+        margin-top: 10px;
+        cursor: pointer;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease-in-out;
+      }
+      .search-button:hover {
+        background-color: #64a6e0;
+        transform: translateY(-2px);
+      }
+      .search-button i {
+        margin-left: 8px;
+      }
+      #time {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        font-size: 18px;
+        color: white;
+        font-family: 'Outfit', sans-serif;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 5px 10px;
+        border-radius: 10px;
+      }
+      #vpn-selector {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 100;
+        opacity: 0;
+        animation: fadeIn 2s ease forwards;
+        animation-delay: 0.5s;
+      }
+      .vpn-button {
+        padding: 6px 10px;
+        background: rgba(20, 30, 48, 0.92);
+        border: 1px solid rgba(100, 166, 224, 0.15);
+        border-radius: 8px;
+        color: white;
+        font-family: 'Outfit', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        min-width: 110px;
+      }
+      .vpn-button:hover {
+        background: rgba(30, 45, 70, 0.95);
+        border-color: rgba(100, 166, 224, 0.3);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      }
+      .vpn-button .flag-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+      .vpn-button .chevron {
+        margin-left: auto;
+        font-size: 9px;
+        opacity: 0.5;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .vpn-button.active .chevron {
+        transform: rotate(180deg);
+      }
+      .vpn-dropdown-panel {
+        display: none;
+        position: fixed;
+        top: 50px;
+        left: 10px;
+        background: rgba(20, 30, 48, 0.96);
+        border: 1px solid rgba(100, 166, 224, 0.15);
+        border-radius: 10px;
+        padding: 10px;
+        backdrop-filter: blur(30px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        width: 140px;
+        animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .vpn-dropdown-panel.show {
+        display: block;
+      }
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .vpn-panel-header {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(100, 166, 224, 0.1);
+      }
+      .vpn-panel-header i {
+        font-size: 12px;
+        color: rgba(100, 166, 224, 0.8);
+      }
+      .vpn-panel-header h3 {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+        color: white;
+        letter-spacing: 0.3px;
+      }
+      .vpn-regions-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .vpn-region-card {
+        background: rgba(30, 45, 70, 0.4);
+        border: 1px solid rgba(100, 166, 224, 0.1);
+        border-radius: 7px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+      }
+      .vpn-region-card:hover {
+        background: rgba(40, 60, 90, 0.5);
+        border-color: rgba(100, 166, 224, 0.25);
+        transform: translateX(2px);
+      }
+      .vpn-region-card.selected {
+        background: rgba(100, 166, 224, 0.15);
+        border-color: rgba(100, 166, 224, 0.4);
+      }
+      .vpn-region-card.selected::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, rgba(100, 166, 224, 0.9), rgba(100, 166, 224, 0.5));
+        border-radius: 7px 0 0 7px;
+      }
+      .flag-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        flex-shrink: 0;
+        background-size: cover;
+        background-position: center;
+      }
+      .vpn-region-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        flex: 1;
+      }
+      .vpn-location {
+        font-size: 12px;
+        font-weight: 600;
+        color: white;
+        line-height: 1.2;
+      }
+      .vpn-country {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 400;
+        line-height: 1.2;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #0a1d37;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 35px;
+        border-radius: 20px;
+        z-index: 1000;
+        color: #fff;
+        box-shadow:
+          0 10px 40px rgba(0, 0, 0, 0.4),
+          inset 0 0 10px rgba(255, 255, 255, 0.05);
+        animation: popupFadeIn 0.3s ease-out;
+        min-width: 400px;
+        max-width: 450px;
+        backdrop-filter: blur(8px);
+      }
+      @keyframes popupFadeIn {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -40%);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+        }
+      }
+      .popup h3 {
+        margin: 0 0 20px;
+        font-weight: 600;
+        color: #fff;
+        letter-spacing: 0.5px;
+      }
+      .popup input[type='text'] {
+        margin: 10px 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        padding: 12px 15px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-family: 'Outfit', sans-serif;
+      }
+      .popup input[type='text']:focus {
+        border-color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        outline: none;
+      }
+      .popup input[type='file'] {
+        margin: 15px 0;
+        color: #fff;
+        width: 100%;
+        font-family: 'Outfit', sans-serif;
+      }
+      .popup input[type='file']::-webkit-file-upload-button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px 15px;
+        border-radius: 10px;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .popup input[type='file']::-webkit-file-upload-button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+      .popup-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
+      .popup button {
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 500;
+      }
+      .popup button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+      .popup button#add-btn {
+        background: linear-gradient(135deg, #ffffff, #e0e0e0);
+        color: #0a1d37;
+        border: none;
+      }
+      .popup button#add-btn:hover {
+        background: linear-gradient(135deg, #e0e0e0, #ffffff);
+      }
+      .add-pin-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        background: #ffffff;
+        border: 2px solid Franklin;
+        border-radius: 50%;
+        color: #0a1d37;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      .add-pin-btn:hover {
+        transform: scale(1.2);
+        background: #e0e0e0;
+        color: #0a1d37;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="god-rays"></div>
+    <div id="vpn-selector">
+      <button class="vpn-button" id="vpn-toggle">
+        <div
+          class="flag-icon"
+          id="current-flag"
+          style="
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDMiPjxyZWN0IHdpZHRoPSI2IiBoZWlnaHQ9IjMiIGZpbGw9IiNkNTIwMWYiLz48cmVjdCB3aWR0aD0iNiIgaGVpZ2h0PSIxLjUiIGZpbGw9IiNmZmYiLz48L3N2Zz4=');
+          "
+        ></div>
+        <span id="current-region">Canada</span>
+        <i class="fas fa-chevron-down chevron"></i>
+      </button>
+
+      <div class="vpn-dropdown-panel" id="vpn-panel">
+        <div class="vpn-panel-header">
+          <i class="fas fa-shield-halved"></i>
+          <h3>VPN Region</h3>
+        </div>
+
+        <div class="vpn-regions-grid">
+          <div class="vpn-region-card selected" data-region="default">
+            <div
+              class="flag-icon"
+              style="
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDMiPjxyZWN0IHdpZHRoPSI2IiBoZWlnaHQ9IjMiIGZpbGw9IiNkNTIwMWYiLz48cmVjdCB3aWR0aD0iNiIgaGVpZ2h0PSIxLjUiIGZpbGw9IiNmZmYiLz48L3N2Zz4=');
+              "
+            ></div>
+            <div class="vpn-region-info">
+              <div class="vpn-location">Quebec</div>
+              <div class="vpn-country">Canada</div>
+            </div>
+          </div>
+
+          <div class="vpn-region-card" data-region="1">
+            <div
+              class="flag-icon"
+              style="
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NDEwIDM5MDAiPjxyZWN0IHdpZHRoPSI3NDEwIiBoZWlnaHQ9IjM5MDAiIGZpbGw9IiNiMjIyMzQiLz48cGF0aCBkPSJNMCwwaDc0MTB2MzAwSDBaTTAsNjAwaDE3NDEwdjMwMEgwWk0wLDEyMDBoNzQxMHYzMDBIMFpNMCwxODAwaDc0MTB2MzAwSDBaTTAsMjQwMGg3NDEwdjMwMEgwWk0wLDMwMDBoNzQxMHYzMDBIMFpNMCwzNjAwaDE3NDEwdjMwMEgweiIgZmlsbD0iI2ZmZiIvPjxyZWN0IHdpZHRoPSIyOTY0IiBoZWlnaHQ9IjIxMDAiIGZpbGw9IiMzYzNiNmUiLz48L3N2Zz4=');
+              "
+            ></div>
+            <div class="vpn-region-info">
+              <div class="vpn-location">Massachusets</div>
+              <div class="vpn-country">America</div>
+            </div>
+          </div>
+
+          <div class="vpn-region-card" data-region="2">
+            <div
+              class="flag-icon"
+              style="
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NDEwIDM5MDAiPjxyZWN0IHdpZHRoPSI3NDEwIiBoZWlnaHQ9IjM5MDAiIGZpbGw9IiNiMjIyMzQiLz48cGF0aCBkPSJNMCwwaDc0MTB2MzAwSDBaTTAsNjAwaDE3NDEwdjMwMEgwWk0wLDEyMDBoNzQxMHYzMDBIMFpNMCwxODAwaDc0MTB2MzAwSDBaTTAsMjQwMGg3NDEwdjMwMEgwWk0wLDMwMDBoNzQxMHYzMDBIMFpNMCwzNjAwaDE3NDEwdjMwMEgweiIgZmlsbD0iI2ZmZiIvPjxyZWN0IHdpZHRoPSIyOTY0IiBoZWlnaHQ9IjIxMDAiIGZpbGw9IiMzYzNiNmUiLz48L3N2Zz4=');
+              "
+            ></div>
+            <div class="vpn-region-info">
+              <div class="vpn-location">Phoenix</div>
+              <div class="vpn-country">America</div>
+            </div>
+          </div>
+
+          <div class="vpn-region-card" data-region="3">
+            <div
+              class="flag-icon"
+              style="
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NDEwIDM5MDAiPjxyZWN0IHdpZHRoPSI3NDEwIiBoZWlnaHQ9IjM5MDAiIGZpbGw9IiNiMjIyMzQiLz48cGF0aCBkPSJNMCwwaDc0MTB2MzAwSDBaTTAsNjAwaDE3NDEwdjMwMEgwWk0wLDEyMDBoNzQxMHYzMDBIMFpNMCwxODAwaDc0MTB2MzAwSDBaTTAsMjQwMGg3NDEwdjMwMEgwWk0wLDMwMDBoNzQxMHYzMDBIMFpNMCwzNjAwaDE3NDEwdjMwMEgweiIgZmlsbD0iI2ZmZiIvPjxyZWN0IHdpZHRoPSIyOTY0IiBoZWlnaHQ9IjIxMDAiIGZpbGw9IiMzYzNiNmUiLz48L3N2Zz4=');
+              "
+            ></div>
+            <div class="vpn-region-info">
+              <div class="vpn-location">Virginia</div>
+              <div class="vpn-country">America</div>
+            </div>
+          </div>
+
+          <div class="vpn-region-card" data-region="4">
+            <div
+              class="flag-icon"
+              style="
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzQxMCIgaGVpZ2h0PSIzOTAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI3NDEwIiBoZWlnaHQ9IjEzMDAiIGZpbGw9IiNmZjAwMDAiLz48cmVjdCB3aWR0aD0iNzQxMCIgaGVpZ2h0PSIzMDAiIHk9IjEzMDAiIGZpbGw9IiNmZmZmZmYiLz48cmVjdCB3aWR0aD0iNzQxMCIgaGVpZ2h0PSIxMzAwIiB5PSIyNjAwIiBmaWxsPSIjZmYwMDAwIi8+PC9zdmc+');
+              "
+            ></div>
+            <div class="vpn-region-info">
+              <div class="vpn-location">Austria</div>
+              <div class="vpn-country">Vienna</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br /><br /><br /><br />
+    <h1>Pete Proxy</h1>
+    <p id="dynamicParagraph">(TEXT)</p>
+    <div id="search-container">
+      <form id="uv-form">
+        <input id="scram-search-engine" value="https://duckduckgo.com/?q=%s" type="hidden" />
+        <input id="uv-address" type="text" class="search-bar-home url-input" placeholder="Search or enter a URL" />
+        <button type="submit" class="search-button">SEARCH <i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+      <div class="desc left-margin">
+        <p id="uv-error"></p>
+        <pre id="uv-error-code"></pre>
+      </div>
+    </div>
+    <div class="pinned-icons" style="display: flex; justify-content: center; align-items: center; gap: 15px">
+      <a href="/scramjet/https%3A%2F%2Ftiktok.com" style="display: inline-block">
+        <img
+          src="/storage/ag/a/tiktok/IMG_5335.png"
+          style="width: 30px; height: 30px; border-radius: 50%; transition: transform 0.3s"
+          onmouseover="this.style.transform='scale(1.2)'"
+          onmouseout="this.style.transform='scale(1)'"
+        />
+      </a>
+      <a href="/scramjet/https%3A%2F%2Ftwitch.tv" style="display: inline-block">
+        <img
+          src="/storage/ag/a/twitch/IMG_5336.png"
+          style="width: 30px; height: 30px; border-radius: 50%; transition: transform 0.3s"
+          onmouseover="this.style.transform='scale(1.2)'"
+          onmouseout="this.style.transform='scale(1)'"
+        />
+      </a>
+      <a href="/scramjet/https%3A%2F%2Fgoogle.com" style="display: inline-block">
+        <img
+          src="/storage/ag/a/google/IMG_5324.webp"
+          style="width: 30px; height: 30px; border-radius: 50%; transition: transform 0.3s"
+          onmouseover="this.style.transform='scale(1.2)'"
+          onmouseout="this.style.transform='scale(1)'"
+        />
+      </a>
+      <a href="/scramjet/https%3A%2F%2Fnow.gg" style="display: inline-block">
+        <img
+          src="/storage/ag/a/nowgg/IMG_5325.png"
+          style="width: 30px; height: 30px; border-radius: 50%; transition: transform 0.3s"
+          onmouseover="this.style.transform='scale(1.2)'"
+          onmouseout="this.style.transform='scale(1)'"
+        />
+      </a>
+      <a href="#" id="add-pin-btn" class="add-pin-btn">
+        <span class="material-icons" style="font-size: 20px">add</span>
+      </a>
+    </div>
+    <div id="add-pin-popup" class="popup">
+      <h3>Add New Pin</h3>
+      <input type="text" id="pin-url" placeholder="Enter URL (https:// required)" />
+      <input type="file" id="pin-image" accept="image/*" />
+      <div class="popup-buttons">
+        <button id="cancel-btn">Cancel</button>
+        <button id="add-btn">Add</button>
+      </div>
+    </div>
+    <div id="time"></div>
+    <script src="https://cdn.jsdelivr.net/npm/dreamland"></script>
+    <script src="/baremux/index.js"></script>
+    <script>
+      (function () {
+        const rewrite = (url) => {
+          try {
+            if (typeof url === 'string') {
+              const u = new URL(url, location.origin);
+              if (u.pathname === '/scramjet.all.js') return '/scram/scramjet.all.js';
+            }
+          } catch (e) {}
+          if (url === '/scramjet.all.js') return '/scram/scramjet.all.js';
+          return url;
+        };
+
+        const _fetch = window.fetch;
+        window.fetch = function (input, init) {
+          try {
+            if (typeof input === 'string') input = rewrite(input);
+            else if (input && input.url) input = new Request(rewrite(input.url), input);
+          } catch (e) {}
+          return _fetch.call(this, input, init);
+        };
+
+        const _append = Element.prototype.appendChild;
+        Element.prototype.appendChild = function (node) {
+          try {
+            if (node && node.tagName === 'SCRIPT' && node.src) node.src = rewrite(node.src);
+          } catch (e) {}
+          return _append.call(this, node);
+        };
+      })();
+    </script>
+    <script src="/scram/scramjet.all.js"></script>
+    <script id="config-script" src="config.js"></script>
+    <script>
+      const phrases = [
+        'If the Proxy doesnt work go the top left, settings, then tap the `fix proxy` button',
+        'PeteZah sticky message #231',
+        'https://petezahgames.com',
+        'https://discord.petezahgames.com',
+        'Credits to Brunys and Voucan for proxy help',
+        'Art by @the2amgamer_24132 on Discord',
+        'Credits to Gn-Math and Truffled for the games ❤️‍🩹'
+      ];
+      const paragraph = document.getElementById('dynamicParagraph');
+      function changeText() {
+        const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+        paragraph.textContent = randomPhrase;
+      }
+      paragraph.addEventListener('click', changeText);
+      window.onload = changeText;
+      function updateTime() {
+        const timeElement = document.getElementById('time');
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+      }
+      setInterval(updateTime, 1000);
+      const addPinBtn = document.getElementById('add-pin-btn');
+      const popup = document.getElementById('add-pin-popup');
+      const addBtn = document.getElementById('add-btn');
+      const cancelBtn = document.getElementById('cancel-btn');
+      const pinnedIcons = document.querySelector('.pinned-icons');
+      const vpnToggle = document.getElementById('vpn-toggle');
+      const vpnPanel = document.getElementById('vpn-panel');
+      const vpnCards = document.querySelectorAll('.vpn-region-card');
+
+      const regionData = {
+        default: {
+          flag: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDMiPjxyZWN0IHdpZHRoPSI2IiBoZWlnaHQ9IjMiIGZpbGw9IiNkNTIwMWYiLz48cmVjdCB3aWR0aD0iNiIgaGVpZ2h0PSIxLjUiIGZpbGw9IiNmZmYiLz48L3N2Zz4=',
+          name: 'Canada',
+          location: 'Quebec'
+        },
+        1: {
+          flag: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NDEwIDM5MDAiPjxyZWN0IHdpZHRoPSI3NDEwIiBoZWlnaHQ9IjM5MDAiIGZpbGw9IiNiMjIyMzQiLz48cGF0aCBkPSJNMCwwaDc0MTB2MzAwSDBaTTAsNjAwaDE3NDEwdjMwMEgwWk0wLDEyMDBoNzQxMHYzMDBIMFpNMCwxODAwaDc0MTB2MzAwSDBaTTAsMjQwMGg3NDEwdjMwMEgwWk0wLDMwMDBoNzQxMHYzMDBIMFpNMCwzNjAwaDE3NDEwdjMwMEgweiIgZmlsbD0iI2ZmZiIvPjxyZWN0IHdpZHRoPSIyOTY0IiBoZWlnaHQ9IjIxMDAiIGZpbGw9IiMzYzNiNmUiLz48L3N2Zz4=',
+          name: 'America',
+          location: 'Texas'
+        },
+        2: {
+          flag: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NDEwIDM5MDAiPjxyZWN0IHdpZHRoPSI3NDEwIiBoZWlnaHQ9IjM5MDAiIGZpbGw9IiNiMjIyMzQiLz48cGF0aCBkPSJNMCwwaDc0MTB2MzAwSDBaTTAsNjAwaDE3NDEwdjMwMEgwWk0wLDEyMDBoNzQxMHYzMDBIMFpNMCwxODAwaDc0MTB2MzAwSDBaTTAsMjQwMGg3NDEwdjMwMEgwWk0wLDMwMDBoNzQxMHYzMDBIMFpNMCwzNjAwaDE3NDEwdjMwMEgweiIgZmlsbD0iI2ZmZiIvPjxyZWN0IHdpZHRoPSIyOTY0IiBoZWlnaHQ9IjIxMDAiIGZpbGw9IiMzYzNiNmUiLz48L3N2Zz4=',
+          name: 'America',
+          location: 'Phoenix'
+        },
+        3: {
+          flag: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NDEwIDM5MDAiPjxyZWN0IHdpZHRoPSI3NDEwIiBoZWlnaHQ9IjM5MDAiIGZpbGw9IiNiMjIyMzQiLz48cGF0aCBkPSJNMCwwaDc0MTB2MzAwSDBaTTAsNjAwaDE3NDEwdjMwMEgwWk0wLDEyMDBoNzQxMHYzMDBIMFpNMCwxODAwaDc0MTB2MzAwSDBaTTAsMjQwMGg3NDEwdjMwMEgwWk0wLDMwMDBoNzQxMHYzMDBIMFpNMCwzNjAwaDE3NDEwdjMwMEgweiIgZmlsbD0iI2ZmZiIvPjxyZWN0IHdpZHRoPSIyOTY0IiBoZWlnaHQ9IjIxMDAiIGZpbGw9IiMzYzNiNmUiLz48L3N2Zz4=',
+          name: 'America',
+          location: 'Mclean'
+        },
+        4: {
+          flag: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzQxMCIgaGVpZ2h0PSIzOTAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI3NDEwIiBoZWlnaHQ9IjEzMDAiIGZpbGw9IiNmZjAwMDAiLz48cmVjdCB3aWR0aD0iNzQxMCIgaGVpZ2h0PSIzMDAiIHk9IjEzMDAiIGZpbGw9IiNmZmZmZmYiLz48cmVjdCB3aWR0aD0iNzQxMCIgaGVpZ2h0PSIxMzAwIiB5PSIyNjAwIiBmaWxsPSIjZmYwMDAwIi8+PC9zdmc+',
+          name: 'Austria',
+          location: 'Vienna'
+        }
+      };
+
+      const regionConfig = {
+        default: { wisp: '/wisp/', config: 'config.js' },
+        1: { wisp: '/api/alt-wisp-1/', config: '/static/alt-config-1.js' },
+        2: { wisp: '/api/alt-wisp-2/', config: '/static/alt-config-2.js' },
+        3: { wisp: '/api/alt-wisp-3/', config: '/static/alt-config-3.js' },
+        4: { wisp: '/api/alt-wisp-4/', config: '/static/alt-config-4.js' }
+      };
+
+      vpnToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        vpnPanel.classList.toggle('show');
+        vpnToggle.classList.toggle('active');
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!vpnPanel.contains(e.target) && !vpnToggle.contains(e.target)) {
+          vpnPanel.classList.remove('show');
+          vpnToggle.classList.remove('active');
+        }
+      });
+
+      vpnCards.forEach((card) => {
+        card.addEventListener('click', function () {
+          const selectedRegion = this.getAttribute('data-region');
+          const config = regionConfig[selectedRegion];
+          const data = regionData[selectedRegion];
+
+          vpnCards.forEach((c) => c.classList.remove('selected'));
+          this.classList.add('selected');
+
+          document.getElementById('current-flag').style.backgroundImage = `url('${data.flag}')`;
+          document.getElementById('current-region').textContent = data.name;
+
+          localStorage.setItem('selectedVpnRegion', selectedRegion);
+
+          const configScript = document.getElementById('config-script');
+          if (configScript) {
+            configScript.remove();
+          }
+
+          const newConfigScript = document.createElement('script');
+          newConfigScript.id = 'config-script';
+          newConfigScript.src = config.config;
+          newConfigScript.onload = function () {
+            if (typeof _CONFIG !== 'undefined') {
+              _CONFIG.wispurl = (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + config.wisp;
+              store.wispurl = _CONFIG.wispurl;
+              connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]).catch((err) => {
+                console.log('Transport update:', err);
+              });
+            }
+          };
+          document.body.appendChild(newConfigScript);
+
+          window.dispatchEvent(
+            new StorageEvent('storage', {
+              key: 'selectedVpnRegion',
+              newValue: selectedRegion,
+              url: window.location.href
+            })
+          );
+
+          vpnPanel.classList.remove('show');
+          vpnToggle.classList.remove('active');
+        });
+      });
+
+      const savedRegion = localStorage.getItem('selectedVpnRegion');
+      if (savedRegion && regionConfig[savedRegion]) {
+        const savedData = regionData[savedRegion];
+        document.getElementById('current-flag').style.backgroundImage = `url('${savedData.flag}')`;
+        document.getElementById('current-region').textContent = savedData.name;
+
+        vpnCards.forEach((card) => {
+          if (card.getAttribute('data-region') === savedRegion) {
+            card.classList.add('selected');
+          } else {
+            card.classList.remove('selected');
+          }
+        });
+
+        const config = regionConfig[savedRegion];
+        const configScript = document.getElementById('config-script');
+        if (configScript) {
+          configScript.src = config.config;
+        }
+      }
+
+      const { ScramjetController } = $scramjetLoadController();
+      const scramjet = new ScramjetController({
+        prefix: '/scramjet/',
+        files: {
+          wasm: '/scram/scramjet.wasm.wasm',
+          all: '/scram/scramjet.all.js',
+          sync: '/scram/scramjet.sync.js'
+        }
+      });
+      scramjet.init();
+      function loadSavedPins() {
+        const savedPins = JSON.parse(localStorage.getItem('pinnedBookmarks') || '[]');
+        savedPins.forEach((pin) => {
+          createPinElement(pin.url, pin.image);
+        });
+      }
+      function createPinElement(url, imageData) {
+        const newPin = document.createElement('a');
+        const encodedUrl = scramjet.encodeUrl(url);
+        const cleanEncodedUrl = encodedUrl.replace(/^\/scramjet\//, '');
+        newPin.href = `/scramjet/${cleanEncodedUrl}`;
+        newPin.style.display = 'inline-block';
+        const img = document.createElement('img');
+        img.src = imageData;
+        img.style.width = '30px';
+        img.style.height = '30px';
+        img.style.borderRadius = '50%';
+        img.style.transition = 'transform 0.3s';
+        img.onmouseover = function () {
+          this.style.transform = 'scale(1.2)';
+        };
+        img.onmouseout = function () {
+          this.style.transform = 'scale(1)';
+        };
+        newPin.appendChild(img);
+        pinnedIcons.insertBefore(newPin, addPinBtn);
+      }
+      function savePin(url, imageData) {
+        const savedPins = JSON.parse(localStorage.getItem('pinnedBookmarks') || '[]');
+        savedPins.push({ url, image: imageData });
+        localStorage.setItem('pinnedBookmarks', JSON.stringify(savedPins));
+      }
+      addPinBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        popup.style.display = 'block';
+      });
+      addBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const urlInput = document.getElementById('pin-url').value;
+        const imageInput = document.getElementById('pin-image').files[0];
+        if (!urlInput.startsWith('https://')) {
+          alert('URL must start with https://');
+          return;
+        }
+        if (!imageInput) {
+          alert('Please select an image');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const imageData = e.target.result;
+          createPinElement(urlInput, imageData);
+          savePin(urlInput, imageData);
+          popup.style.display = 'none';
+          document.getElementById('pin-url').value = '';
+          document.getElementById('pin-image').value = '';
+        };
+        reader.readAsDataURL(imageInput);
+      });
+      cancelBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        popup.style.display = 'none';
+        document.getElementById('pin-url').value = '';
+        document.getElementById('pin-image').value = '';
+      });
+      window.addEventListener('load', loadSavedPins);
+      navigator.serviceWorker.register('./sw.js');
+      const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
+      const _storeData = {
+        url: 'https://',
+        wispurl: _CONFIG?.wispurl || (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/wisp/',
+        bareurl: _CONFIG?.bareurl || (location.protocol === 'https:' ? 'https' : 'http') + '://' + location.host + '/bare/',
+        proxy: '',
+        transport: '/epoxy/index.mjs'
+      };
+      const store =
+        typeof $store === 'function'
+          ? $store(_storeData, {
+              ident: 'settings',
+              backing: 'localstorage',
+              autosave: 'auto'
+            })
+          : _storeData;
+      self.store = store;
+      async function waitForTransport() {
+        let attempts = 0;
+        const maxAttempts = 10;
+
+        while (attempts < maxAttempts) {
+          try {
+            await connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]);
+            return;
+          } catch (e) {
+            try {
+              await connection.setTransport('/baremux/index.mjs', [store.bareurl]);
+              return;
+            } catch (e2) {
+              try {
+                await connection.setTransport('/libcurl/index.mjs', [{ wisp: store.wispurl }]);
+                return;
+              } catch (e3) {
+                attempts++;
+                if (attempts >= maxAttempts) {
+                  console.error('Failed to set any transport after', maxAttempts, 'attempts');
+                  throw new Error('No bare clients available');
+                }
+                await new Promise((resolve) => setTimeout(resolve, 100));
+              }
+            }
+          }
+        }
+      }
+
+      waitForTransport();
+      connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]);
+      function handleSubmit(e) {
+        e.preventDefault();
+        const addressBar = document.getElementById('uv-address');
+        let url = addressBar.value.trim();
+        if (!url.startsWith('http') && !url.includes('.')) {
+          url = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
+        } else if (!url.startsWith('http')) {
+          url = 'https://' + url;
+        }
+        try {
+          const encodedUrl = scramjet.encodeUrl(url);
+          const baseUrl = window.location.origin;
+          const cleanEncodedUrl = encodedUrl.replace(/^\/scramjet\//, '');
+          window.location.href = `${baseUrl}/scramjet/${cleanEncodedUrl}`;
+        } catch (error) {
+          console.error('Error encoding URL:', error);
+          document.getElementById('uv-error').textContent = 'Invalid URL. Please try again.';
+        }
+      }
+      document.getElementById('uv-form').addEventListener('submit', handleSubmit);
+    </script>
+    <script src="/storage/js/settings.js"></script>
+  </body>
+</html>
