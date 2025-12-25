@@ -107,8 +107,8 @@
 
         while (attempts < maxAttempts) {
           try {
-              await connection.setTransport('/baremod/index.mjs', [store.bareurl]);
-              return;
+            await connection.setTransport('/baremod/index.mjs', [store.bareurl]);
+            return;
           } catch (e) {
             try {
               await connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]);

@@ -1,5 +1,7 @@
 onlyBuiltDependencies:
   - '@mercuryworkshop/scramjet'
   - bufferutil
+  - esbuild
   - node
+  - sharp
   - utf-8-validate

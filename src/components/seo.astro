@@ -1,0 +1,63 @@
+---
+let { title, description, keywords, path } = Astro.props;
+title = title ? title + ' | PeteZah Games' : 'PeteZah Games'
+description = description || 'Play free online games and use web apps on PeteZah Games. Enjoy a variety of games and applications directly in your browser.'
+keywords = keywords || 'PeteZah, PeteZah Games'
+const canonical = Astro.url.origin + (path || '/');
+---
+    <title>{title}</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content={description}>
+    <meta name="author" content="PeteZah-Games">
+    <meta name="keywords" content={keywords}>
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="all,follow">
+    <meta name="language" content="en">
+    <meta name="revised" content="Sunday, April 27th, 2025, 9:00 am">
+    <meta name="color-scheme" content="light dark">
+    <meta name="tracking" content="analytics,scripts,pixels">
+    <meta name="copyright" content="Copyright 2025 PeteZah Games">
+    <meta name="DC.title" content={title}>
+    <meta name="DC.description" content={description}>
+    <meta name="referrer" content="no-referrer" />
+    <meta name="application-name" content="{title}">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content={title} />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Social Sharing tags -->
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content="/assets/images/Social-preview-index.png" type="image/png">
+    <meta property="og:url" content={canonical}>
+    <meta property="og:site_name" content={title}>
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content="/assets/images/Social-preview-index.png" type="image/png">
+
+    <!-- Mobile tags -->
+    <meta name="theme-color" content="#ffffff">
+    <meta name="msapplication-navbutton-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-title" content={title}>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Microsoft tags -->
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/images/mslogo.png">
+    <meta name="msapplication-starturl" content="https://docs.petezahgames.com/">

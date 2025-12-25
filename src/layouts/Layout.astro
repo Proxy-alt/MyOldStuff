@@ -1,0 +1,37 @@
+---
+import { ClientRouter } from 'astro:transitions'; 
+import Particles from '../components/Particles.astro';
+import Analytics from '../components/Analytics.astro';
+import SEO from '../components/seo.astro';
+import SEOjson from '../components/SEOjson.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Widget from '../components/Widget.astro';
+
+const { title, description } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <SEO title={title} description={description} />
+  <SEOjson />
+  <ClientRouter />
+
+  <link rel="stylesheet" href="../styles/themes.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+    rel="stylesheet"
+  />
+  <Analytics location="head" />
+</head>
+<body>
+  <Analytics location="body" />
+  <Particles />
+  <Sidebar />
+  <main class="main-content">
+    <slot />
+  </main>
+  <Widget />
+</body>
+</html>

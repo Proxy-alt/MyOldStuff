@@ -1,0 +1,28 @@
+---
+import AppLayout from '../layouts/Layout.astro';
+import gamesData from '../data/games.json';
+---
+
+<AppLayout>
+  <h1>Games</h1>
+
+  <div class="game-grid">
+    {
+      gamesData.games.map((game) => (
+        <figure class="game-card">
+          <a href={`/play?url=${encodeURIComponent(game.url)}`} aria-label={`Play ${game.label}`}>
+            <picture>
+              {game.imageSources?.map((src) => (
+                <source srcset={src.srcset} type={src.type} />
+              ))}
+
+              <img src={game.imageUrl} alt={game.label} aria-label={game.label} loading="lazy" />
+            </picture>
+
+            <figcaption>{game.label}</figcaption>
+          </a>
+        </figure>
+      ))
+    }
+  </div>
+</AppLayout>
