@@ -17,7 +17,7 @@ export default {
   embeddedLanguageFormatting: 'auto',
   vueIndentScriptAndStyle: false,
   singleAttributePerLine: false,
-  plugins: ['prettier-plugin-organize-imports'],
+  plugins: ['prettier-plugin-organize-imports', 'prettier-plugin-astro'],
 
   // File-specific overrides
   overrides: [
@@ -32,6 +32,12 @@ export default {
       files: '*.json',
       options: {
         quoteProps: 'preserve'
+      }
+    },
+    {
+      files: '*.astro',
+      options: {
+        parser: 'astro'
       }
     }
   ]

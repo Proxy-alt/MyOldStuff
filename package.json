@@ -6,7 +6,10 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -22,6 +25,7 @@
     "@supabase/supabase-js": "^2.86.0",
     "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
     "@tomphttp/bare-server-node": "^2.0.3",
+    "astro": "^5.16.6",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.4.1",
     "cookie-parser": "^1.4.6",
@@ -35,6 +39,7 @@
     "http-proxy-middleware": "^3.0.5",
     "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.11",
+    "prettier-plugin-astro": "^0.14.1",
     "proper-lockfile": "^4.1.2",
     "wisp-server-node": "^1.1.3"
   },

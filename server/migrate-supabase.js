@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import db from './db.js';
 

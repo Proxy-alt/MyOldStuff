@@ -1,0 +1,89 @@
+---
+// This gets the protocol + domain + port (e.g., https://petezahgames.com)
+const url = Astro.url.origin; 
+const path = Astro.url.pathname;
+
+const { breadcrumbOverrides = {} } = Astro.props;
+
+const isGames = path.startsWith('/games');
+
+const name = isGames ? 'Games' : 'PeteZah Games';
+const description = isGames
+  ? 'Play free online games on PeteZah Games.'
+  : 'Play free online games and use web apps on PeteZah Games. Enjoy a variety of games and applications directly in your browser.';
+
+// Build breadcrumb segments
+const segments = path.split('/').filter(Boolean);
+
+// Build breadcrumb list
+const breadcrumbs = [
+  {
+    name: "Home",
+    item: `${url}/`
+  },
+  ...segments.map((segment, index) => {
+    const fullPath = "/" + segments.slice(0, index + 1).join("/");
+    const displayName =
+      breadcrumbOverrides[fullPath] ||
+      segment
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+
+    return {
+      name: displayName,
+      item: `${url}${fullPath}`
+    };
+  })
+];
+
+// Objects for Schema
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PeteZah Games",
+  "url": "https://petezahgames.com", // Usually keep official URL for Org
+  "logo": `${url}/favicon.svg`,
+  "email": "contact@petezahgames.com",
+  "sameAs": [
+    "https://github.com/PeteZahGames",
+    "https://discord.gg/yourserver"
+  ]
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PeteZah Games",
+  "url": url,
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": `${url}/search?q={search_term_string}`,
+    "query-input": "required name=search_term_string"
+  }
+};
+
+const webpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": name,
+  "url": `${url}${path}`,
+  "description": description
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbs.map((crumb, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "name": crumb.name,
+    "item": crumb.item
+  }))
+};
+---
+
+<!-- Use set:html to prevent Astro from escaping the JSON -->
+<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(webpageSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
