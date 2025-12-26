@@ -1,176 +1,96 @@
-/* --- External Fonts & Resets --- */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+body.theme-default {
+  background-color: #0a1d37;
+  color: #ffffff;
+  --primary-gradient: linear-gradient(90deg, #3c5b8e, #4a6fa5);
+  --hover-gradient: linear-gradient(90deg, #2a3c5f, #3c5b8e);
 }
 
+body.theme-swampy-green {
+  background-color: #1a3c34;
+  color: #d4e4d9;
+  --primary-gradient: linear-gradient(90deg, #2e6b4f, #3e8c65);
+  --hover-gradient: linear-gradient(90deg, #1f4a3a, #2e6b4f);
+  --god-rays-color: rgba(30, 70, 50, 0.9);
+}
+
+body.theme-royal-purple {
+  background-color: #2a1a3c;
+  color: #e2d4e9;
+  --primary-gradient: linear-gradient(90deg, #5e3c8e, #7a4fa5);
+  --hover-gradient: linear-gradient(90deg, #3f2a5f, #5e3c8e);
+  --god-rays-color: rgba(70, 30, 90, 0.9);
+}
+
+body.theme-blood-red {
+  background-color: #3c0a1a;
+  color: #e9d4d4;
+  --primary-gradient: linear-gradient(90deg, #8e3c4f, #a54f6f);
+  --hover-gradient: linear-gradient(90deg, #5f2a3f, #8e3c4f);
+  --god-rays-color: rgba(90, 20, 40, 0.9);
+}
+
+body.theme-midnight-forest {
+  background-color: #1f2a2f;
+  color: #cde4d9;
+  --primary-gradient: linear-gradient(90deg, #3f5e4a, #5a7f66);
+  --hover-gradient: linear-gradient(90deg, #2a3f35, #3f5e4a);
+  --god-rays-color: rgba(40, 70, 50, 0.9);
+}
+
+body.theme-cyber-neon {
+  background-color: #1a1a2e;
+  color: #e0e0ff;
+  --primary-gradient: linear-gradient(90deg, #ff2079, #00ddeb);
+  --hover-gradient: linear-gradient(90deg, #cc1a5f, #00a8b5);
+  --god-rays-color: rgba(50, 20, 80, 0.9);
+}
+
+body.theme-desert-oasis {
+  background-color: #3c2f1a;
+  color: #e9e4d4;
+  --primary-gradient: linear-gradient(90deg, #8e6b3c, #a58f4f);
+  --hover-gradient: linear-gradient(90deg, #5f4a2a, #8e6b3c);
+  --god-rays-color: rgba(90, 60, 30, 0.9);
+}
+
+body.theme-glacial-frost {
+  background-color: #2a3c4f;
+  color: #d4e9e9;
+  --primary-gradient: linear-gradient(90deg, #3c6b8e, #4f8fa5);
+  --hover-gradient: linear-gradient(90deg, #2a4a5f, #3c6b8e);
+  --god-rays-color: rgba(30, 60, 90, 0.9);
+}
+
+/* Apply Theme Variables */
+.tab,
+button,
+input[type='file']::-webkit-file-upload-button,
+input[type='file']::file-selector-button {
+  background: var(--primary-gradient);
+}
+
+.tab:hover,
+.tab.active,
+button:hover,
+input[type='file']::-webkit-file-upload-button:hover,
+input[type='file']::file-selector-button:hover {
+  background: var(--hover-gradient);
+}
+
+.god-rays {
+  background-image: repeating-linear-gradient(
+    100deg,
+    var(--god-rays-color, rgba(30, 50, 90, 0.9)) 10%,
+    rgba(20, 40, 80, 0.9) 15%,
+    var(--god-rays-color, rgba(30, 50, 90, 0.9)) 20%,
+    rgba(20, 40, 80, 0.9) 25%,
+    var(--god-rays-color, rgba(30, 50, 90, 0.9)) 30%
+  );
+}
+
+/* Ensure background image overrides theme background color if set */
 body {
-  min-height: 100vh;
-  background: #04041d;
-  color: white;
-  overflow-x: hidden; /* Prevent horizontal scroll during transitions */
-}
-
-/* --- Sidebar Styles --- */
-.sidebar {
-  position: fixed;
-  width: 270px;
-  top: 16px;
-  left: 16px; /* Added left to match your old layout spacing */
-  background: #151a2d;
-  height: calc(100vh - 32px);
-  transition: all 0.4s ease;
-  border: 1px solid white;
-  border-radius: 16px;
-  z-index: 1000;
-}
-
-.sidebar.collapsed {
-  width: 85px;
-}
-
-.sidebar-header {
-  display: flex;
-  position: relative;
-  padding: 25px 20px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.sidebar-header .header-logo img {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  object-fit: contain;
-}
-
-.sidebar .toggler {
-  height: 35px;
-  width: 35px;
-  color: #151a2d;
-  background: #fff;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  transition: 0.4s ease;
-}
-
-.sidebar.collapsed .toggler span {
-  transform: rotate(180deg);
-}
-
-/* --- Navigation Links --- */
-.nav-list {
-  list-style: none;
-  display: flex;
-  gap: 4px;
-  padding: 0 15px;
-  flex-direction: column;
-}
-
-.nav-link {
-  color: #fff;
-  display: flex;
-  gap: 12px;
-  padding: 12px 15px;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: 0.4s ease;
-  white-space: nowrap;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  color: #151a2d;
-  background: #fff;
-}
-
-.sidebar.collapsed .nav-label {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* --- Main Content Area --- */
-.main-content {
-  border: 1px solid white;
-  background: #151a2d;
-  height: calc(100vh - 32px);
-  margin: 16px 16px 16px 301px; /* Default: 270px width + 16px margin + 15px extra */
-  width: calc(100% - 317px);
-  border-radius: 16px;
-  transition: all 0.4s ease;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-/* When the sidebar is collapsed, we move the main content to the left */
-.sidebar.collapsed + .main-content {
-  margin-left: 101px;
-  width: calc(100% - 117px);
-}
-
-/* --- Particles --- */
-.particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.2;
-}
-
-.particle {
-  position: fixed;
-  width: 3px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  animation: floatParticle 8s infinite ease-in-out;
-  opacity: 0.1;
-  border: 1px solid lightblue;
-}
-
-@keyframes floatParticle {
-  0% {
-    transform: translate(0, 0);
-    opacity: 1;
-  }
-  50% {
-    transform: translate(50px, -100px);
-    opacity: 0.6;
-  }
-  100% {
-    transform: translate(-30px, -200px);
-    opacity: 0;
-  }
-}
-
-/* --- Widget --- */
-.widget {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 200;
-}
-
-.widget-button {
-  height: 45px;
-  width: 45px;
-  background: #fff;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
 }

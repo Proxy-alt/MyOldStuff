@@ -1,5 +1,6 @@
 onlyBuiltDependencies:
   - '@mercuryworkshop/scramjet'
+  - better-sqlite3
   - bufferutil
   - esbuild
   - node

@@ -103,7 +103,7 @@ body::-webkit-scrollbar {
   padding-bottom: 30px;
 }
 
-.image-item {
+figure {
   position: relative;
   width: 250px;
   height: 220px;
@@ -118,7 +118,7 @@ body::-webkit-scrollbar {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
 }
 
-.image-item:hover {
+figure:hover {
   transform: scale(1.05);
   z-index: 2;
   box-shadow:
@@ -127,7 +127,7 @@ body::-webkit-scrollbar {
   filter: brightness(0.9) contrast(1.1);
 }
 
-.image-item a {
+figure a {
   display: block;
   width: 100%;
   height: 100%;
@@ -136,14 +136,14 @@ body::-webkit-scrollbar {
   border-radius: 10px;
 }
 
-.image-item img {
+figure img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
 }
 
-.image-item img:hover {
+figure img:hover {
   transform: scale(1.1);
 }
 
@@ -163,7 +163,7 @@ body::-webkit-scrollbar {
   transition: background-color 0.3s;
 }
 
-.image-item:hover .label {
+figure:hover .label {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
@@ -349,7 +349,7 @@ body::-webkit-scrollbar {
   margin-right: -35px;
 }
 
-.image-item {
+figure {
   position: relative;
   width: 200px;
   height: 170px;
@@ -359,11 +359,11 @@ body::-webkit-scrollbar {
   animation: slideInFromLeft 0.5s ease-out forwards;
 }
 
-.image-item:hover {
+figure:hover {
   transform: scale(1.1);
 }
 
-.image-item a {
+figure a {
   display: block;
   width: 100%;
   height: 100%;
@@ -371,13 +371,13 @@ body::-webkit-scrollbar {
   color: inherit;
 }
 
-.image-item img {
+figure img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.label {
+figcaption {
   position: absolute;
   bottom: 0;
   left: 0;

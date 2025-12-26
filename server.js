@@ -27,7 +27,7 @@ import { getLikesHandler, likeHandler } from './server/api/likes.js';
 import { signinHandler } from './server/api/signin.js';
 import { signupHandler } from './server/api/signup.js';
 import db from './server/db.js';
-
+import { handler as ssrHandler } from './dist/server/entry.mjs';
 const { createBareServer } = bareServerPkg;
 
 dotenv.config();
@@ -39,16 +39,9 @@ if (fs.existsSync(envFile)) {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const publicPath = 'public';
-
-const bare = createBareServer('/bare/', {
-  websocket: { maxPayloadLength: 4096 }
-});
-
-const barePremium = createBareServer('/api/bare-premium/', {
-  websocket: { maxPayloadLength: 4096 }
-});
+const publicPath = '/dist/client/ ';
+const bare = createBareServer('/bare/', {});
+const barePremium = createBareServer('/api/bare-premium/', {});
 
 const app = express();
 
@@ -288,16 +281,39 @@ app.get('/api/changelog', (req, res) => {
 
 app.get('/api/feedback', (req, res) => {
   try {
-    const isAdmin = req.session.user ? (() => {
-      try {
-        const user = db.prepare('SELECT is_admin, email FROM users WHERE id = ?').get(req.session.user.id);
-        return user && ((user.is_admin === 1 && user.email === process.env.ADMIN_EMAIL) || user.is_admin === 2 || user.is_admin === 3);
-      } catch { return false; }
-    })() : false;
-    const feedback = db.prepare(`SELECT f.*, u.username${isAdmin ? ', u.email' : ''} FROM feedback f LEFT JOIN users u ON f.user_id = u.id ORDER BY f.created_at DESC LIMIT 100`).all();
-    const sanitizedFeedback = feedback.map(f => {
-      const safe = { id: f.id, content: f.content, created_at: f.created_at, username: f.username || 'Anonymous' };
-      if (isAdmin && f.email) safe.email = f.email;
+    const isAdmin = req.session.user
+      ? (() => {
+        try {
+          const user = db.prepare('SELECT is_admin, email FROM users WHERE id = ?').get(req.session.user.id);
+          return user && ((user.is_admin === 1 && user.email === process.env.ADMIN_EMAIL) || user.is_admin === 2 || user.is_admin === 3);
+        } catch {
+          return false;
+        }
+      })()
+      : false;
+
+    const feedback = db
+      .prepare(
+        `
+      SELECT f.*, u.username${isAdmin ? ', u.email' : ''}
+      FROM feedback f
+      LEFT JOIN users u ON f.user_id = u.id
+      ORDER BY f.created_at DESC
+      LIMIT 100
+    `
+      )
+      .all();
+
+    const sanitizedFeedback = feedback.map((f) => {
+      const safe = {
+        id: f.id,
+        content: f.content,
+        created_at: f.created_at,
+        username: f.username || 'Anonymous'
+      };
+      if (isAdmin && f.email) {
+        safe.email = f.email;
+      }
       return safe;
     });
     res.status(200).json({ feedback: sanitizedFeedback });
@@ -507,7 +523,7 @@ server.on('upgrade', (req, socket, head) => {
     socket.destroy();
   }
 });
-
+app.use(ssrHandler);
 const port = parseInt(process.env.PORT || '3000');
 server.keepAliveTimeout = 30000;
 server.headersTimeout = 31000;
