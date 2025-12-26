@@ -1,5 +1,5 @@
 ---
-import { ClientRouter } from 'astro:transitions'; 
+import { ClientRouter } from 'astro:transitions';
 import Particles from '../components/Particles.astro';
 import Analytics from '../components/Analytics.astro';
 import SEO from '../components/seo.astro';
@@ -7,31 +7,67 @@ import SEOjson from '../components/SEOjson.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Widget from '../components/Widget.astro';
 
+import '../styles/layout.css';
+import '../styles/themes.css';
+
 const { title, description } = Astro.props;
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <SEO title={title} description={description} />
-  <SEOjson />
-  <ClientRouter />
 
-  <link rel="stylesheet" href="../styles/themes.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
-    rel="stylesheet"
-  />
-  <Analytics location="head" />
-</head>
-<body>
-  <Analytics location="body" />
-  <Particles />
-  <Sidebar />
-  <main class="main-content">
-    <slot />
-  </main>
-  <Widget />
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEO title={title} description={description} />
+    <SEOjson />
+    <ClientRouter />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+      rel="stylesheet"
+    />
+    <Analytics location="head" />
+  </head>
+  <body class="sidebar-collapsed">
+    <!-- Default state -->
+    <Analytics location="body" />
+    <Particles />
+
+    <!-- Use transition:persist so the sidebar state remains while navigating -->
+    <Sidebar transition:persist />
+
+    <main class="main-content">
+      <slot />
+      <Widget />
+    </main>
+
+    <script>
+      function initSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const toggler = document.querySelector('.sidebar-toggler');
+        const body = document.body;
+
+        // Load saved state
+        const isExpanded = localStorage.getItem('sidebar-expanded') === 'true';
+        if (isExpanded) {
+          body.classList.remove('sidebar-collapsed');
+          sidebar?.classList.remove('collapsed');
+        }
+
+        toggler?.addEventListener('click', () => {
+          const currentlyCollapsed = body.classList.toggle('sidebar-collapsed');
+          sidebar?.classList.toggle('collapsed');
+          localStorage.setItem('sidebar-expanded', (!currentlyCollapsed).toString());
+        });
+
+        // Mobile Menu Toggler
+        document.querySelector('.menu-toggler')?.addEventListener('click', () => {
+          sidebar?.classList.toggle('menu-active');
+        });
+      }
+
+      // Runs on first load + every view transition swap
+      initSidebar();
+      document.addEventListener('astro:after-swap', initSidebar);
+    </script>
+  </body>
 </html>

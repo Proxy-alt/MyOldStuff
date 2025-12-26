@@ -29,11 +29,15 @@
     <meta name="keywords" content="Proxy, Unblocker, Pete Zah Unblocker, Pete Zah Games, Pete Zah" />
 
     <style>
+      :root {
+        --iframe-width: 100dvw;
+        --iframe-height: 100dvh;
+      }
       body {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 100dvh;
         margin: 0;
         background-color: #0a1d37;
         color: white;
@@ -89,20 +93,23 @@
 
       .container-iframe {
         display: flex;
+        border: 4px solid #ffffff;
+        border-radius: 20px;
+        margin: 4px;
         flex-direction: column;
         align-items: center;
-        margin: 0;
-        width: 90vw;
+        margin: none;
+        width: var(--iframe-width);
+        height: var(--iframe-height);
         z-index: 99;
       }
 
       .iframe-container {
         border-radius: 20px;
         width: 100%;
-        height: 80vh;
+        height: 100%;
         overflow: hidden;
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
-        border: 4px solid #ffffff;
         background-color: #0a1d37;
         transition: transform 0.3s ease-in-out;
       }
@@ -126,6 +133,7 @@
         box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.6);
         padding: 0 30px;
         border-top: 2px solid #ffffff;
+        margin: 4px;
       }
 
       .icon {
@@ -137,10 +145,6 @@
 
       .icon:hover {
         transform: scale(1.2);
-      }
-
-      .controls i:last-child {
-        margin-right: 0;
       }
     </style>
   </head>

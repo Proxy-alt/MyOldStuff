@@ -236,3 +236,4 @@ ssh-keygen
 # Or use husky + a simple check:
 # package.json scripts:
 # "precommit": "node scripts/check-secrets.js"
+docs

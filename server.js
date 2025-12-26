@@ -25,6 +25,7 @@ import { getLikesHandler, likeHandler } from './server/api/likes.js';
 import { signinHandler } from './server/api/signin.js';
 import { signupHandler } from './server/api/signup.js';
 import db from './server/db.js';
+import { handler as ssrHandler } from './dist/server/entry.mjs';
 const { createBareServer } = bareServerPkg;
 
 dotenv.config();
@@ -34,7 +35,7 @@ if (fs.existsSync(envFile)) {
 }
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const publicPath = 'public';
+const publicPath = '/dist/client/ ';
 const bare = createBareServer('/bare/', {});
 const barePremium = createBareServer('/api/bare-premium/', {});
 
@@ -386,13 +387,13 @@ app.get('/api/feedback', (req, res) => {
   try {
     const isAdmin = req.session.user
       ? (() => {
-          try {
-            const user = db.prepare('SELECT is_admin, email FROM users WHERE id = ?').get(req.session.user.id);
-            return user && ((user.is_admin === 1 && user.email === process.env.ADMIN_EMAIL) || user.is_admin === 2 || user.is_admin === 3);
-          } catch {
-            return false;
-          }
-        })()
+        try {
+          const user = db.prepare('SELECT is_admin, email FROM users WHERE id = ?').get(req.session.user.id);
+          return user && ((user.is_admin === 1 && user.email === process.env.ADMIN_EMAIL) || user.is_admin === 2 || user.is_admin === 3);
+        } catch {
+          return false;
+        }
+      })()
       : false;
 
     const feedback = db
@@ -725,7 +726,7 @@ server.on('upgrade', (req, socket, head) => {
     socket.destroy();
   }
 });
-
+app.use(ssrHandler);
 const port = parseInt(process.env.PORT || '3000');
 
 server.keepAliveTimeout = 5000;

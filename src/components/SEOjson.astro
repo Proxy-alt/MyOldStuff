@@ -1,5 +1,4 @@
 ---
-// This gets the protocol + domain + port (e.g., https://petezahgames.com)
 const url = Astro.url.origin; 
 const path = Astro.url.pathname;
 
@@ -12,10 +11,8 @@ const description = isGames
   ? 'Play free online games on PeteZah Games.'
   : 'Play free online games and use web apps on PeteZah Games. Enjoy a variety of games and applications directly in your browser.';
 
-// Build breadcrumb segments
 const segments = path.split('/').filter(Boolean);
 
-// Build breadcrumb list
 const breadcrumbs = [
   {
     name: "Home",
@@ -82,7 +79,6 @@ const breadcrumbSchema = {
 };
 ---
 
-<!-- Use set:html to prevent Astro from escaping the JSON -->
 <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
 <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 <script type="application/ld+json" set:html={JSON.stringify(webpageSchema)} />

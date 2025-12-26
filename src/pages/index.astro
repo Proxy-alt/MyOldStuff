@@ -1,51 +1,9 @@
 ---
 import AppLayout from '../layouts/Layout.astro';
+import gamesData from '../data/games.json';
 ---
 
 <AppLayout>
-  <html lang="en">
-    <head>
-      <script>
-        (function (w, d, s, l, i) {
-          w[l] = w[l] || [];
-          w[l].push({ 'gtm.start': new Date().getTime(), 'event': 'gtm.js' });
-          var f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s),
-            dl = l != 'dataLayer' ? '&l=' + l : '';
-          j.async = true;
-          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-          f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-WPH7NCG4');
-      </script>
-
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-SHE360M0YP"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-          dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', 'G-SHE360M0YP');
-      </script>
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6640595376330309" crossorigin="anonymous"
-      ></script>
-
-      <title>PeteZah | Home</title>
-      <link rel="icon" type="image/png" href="/storage/images/logo-png-removebg-preview.png" />
-      <link rel="stylesheet" type="text/css" href="/storage/css/themes.css" />
-      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Material+Icons&display=swap" rel="stylesheet" />
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-      <link rel="stylesheet" type="text/css" href="/storage/css/home.css" />
-    </head>
-
-    <body>
-      <noscript
-        ><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WPH7NCG4" height="0" width="0" style="display: none; visibility: hidden"
-        ></iframe></noscript
-      >
 
       <div class="god-rays"></div>
       <div class="welcome-section">
@@ -102,7 +60,23 @@ import AppLayout from '../layouts/Layout.astro';
         <img src="/storage/images/main/highway-racer.jpeg" alt="Large Image" class="large-image" id="large-image" />
         <div class="large-image-caption" id="large-image-caption">Highway Racer</div>
       </div>
+        <!-- {
+      gamesData.games.map((game) => (
+        <figure class="game-card">
+          <a href={`/play?url=${encodeURIComponent(game.url)}`} aria-label={`Play ${game.label}`}>
+            <picture>
+              {game.imageSources?.map((src) => (
+                <source srcset={src.srcset} type={src.type} />
+              ))}
 
+              <img src={game.imageUrl} alt={game.label} aria-label={game.label} loading="lazy" />
+            </picture>
+
+            <figcaption>{game.label}</figcaption>
+          </a>
+        </figure>
+      ))
+    } -->
       <div class="image-shuffler">
         <div class="carousel-container">
           <button class="carousel-btn carousel-btn-prev" onclick="moveCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
@@ -246,8 +220,6 @@ import AppLayout from '../layouts/Layout.astro';
         </div>
         <a href="https://discord.gg/arcgZTV9zX" target="_blank" class="discord-btn-two shiny-btn"> Join Discord</a>
       </div>
-      <script src="/storage/js/home.js"></script>
-      <script src="/storage/js/settings.js"></script>
-    </body>
-  </html>
+      <script src="/storage/js/home.js" is:inline></script>
+      <script src="/storage/js/settings.js" is:inline></script>
 </AppLayout>
