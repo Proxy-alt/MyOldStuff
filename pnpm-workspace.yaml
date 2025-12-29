@@ -1,8 +1,10 @@
 onlyBuiltDependencies:
   - '@mercuryworkshop/scramjet'
+  - bcrypt
   - better-sqlite3
   - bufferutil
   - esbuild
   - node
+  - puppeteer
   - sharp
   - utf-8-validate

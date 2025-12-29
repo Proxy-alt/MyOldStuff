@@ -1,0 +1,97 @@
+---
+// src/components/Favicons.astro
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {
+  generateFaviconFiles,
+  generateFaviconHtml,
+  IconTransformationType,
+  type FaviconSettings,
+  type MasterIcon
+} from '@realfavicongenerator/generate-favicon';
+import { getNodeImageAdapter, loadAndConvertToSvg } from '@realfavicongenerator/image-adapter-node';
+
+interface Props {
+  /** Path to your master icon (e.g., './src/assets/logo.svg') */
+  masterIconPath: string;
+}
+
+const { masterIconPath } = Astro.props;
+
+// Configuration
+const PUBLIC_DIR = './public';
+const FAVICON_DIR = 'favicons'; // Will result in public/favicons
+const DESTINATION = path.join(PUBLIC_DIR, FAVICON_DIR);
+
+// 1. Define Settings
+const faviconSettings: FaviconSettings = {
+  icon: {
+    desktop: {
+      regularIconTransformation: {
+        type: IconTransformationType.None
+      },
+      darkIconType: 'none'
+    },
+    touch: {
+      transformation: {
+        type: IconTransformationType.Background,
+        backgroundColor: '#ffffff',
+        backgroundRadius: 0,
+        imageScale: 0.7
+      },
+      appTitle: 'PeteZah-G'
+    },
+    webAppManifest: {
+      transformation: {
+        type: IconTransformationType.Background,
+        backgroundColor: '#FFFFFF',
+        backgroundRadius: 0,
+        imageScale: 0.7
+      },
+      backgroundColor: '#ffffff',
+      themeColor: '#ffffff',
+      name: 'PeteZah Games',
+      shortName: 'PeteZah'
+    }
+  },
+  path: `/${FAVICON_DIR}/`
+};
+
+// 2. Generation Logic (Only runs if manifest is missing)
+const manifestPath = path.join(DESTINATION, 'site.webmanifest');
+let filesExist = false;
+
+try {
+  await fs.access(manifestPath);
+  filesExist = true;
+} catch (e) {
+  filesExist = false;
+}
+
+if (!filesExist) {
+  console.log('Generating Favicons...');
+
+  try {
+    await fs.mkdir(DESTINATION, { recursive: true });
+  } catch (e) {}
+
+  const imageAdapter = await getNodeImageAdapter();
+  const masterIcon: MasterIcon = {
+    icon: await loadAndConvertToSvg(path.resolve(masterIconPath))
+  };
+
+  const files = await generateFaviconFiles(masterIcon, faviconSettings, imageAdapter);
+
+  for (const file of files) {
+    await fs.writeFile(path.join(DESTINATION, file.name), file.content);
+  }
+  console.log('Favicons generated in:', DESTINATION);
+}
+
+// 3. Generate HTML Tags
+// The library returns a single string containing all tags
+const html = await generateFaviconHtml(faviconSettings);
+---
+
+<!-- Render the HTML string directly -->
+<Fragment set:html={html} />

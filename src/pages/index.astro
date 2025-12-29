@@ -1,225 +1,187 @@
 ---
-import AppLayout from '../layouts/Layout.astro';
-import gamesData from '../data/games.json';
+import AppLayout from '../layouts/AppLayout.astro';
+import '../styles/index.css';
+
+// Typewriter Text Data
+const typewriterText = [
+  'PeteZah Games.',
+  'beauty.',
+  'vibrancy.',
+  'prosperity.',
+  'peace.',
+  'stability.',
+  'amazement.',
+  'resiliency.',
+  'friendliness.',
+  'flourishment.',
+  'sustainability.'
+];
+
+// Carousel Data
+const carouselGames = [
+  { label: 'Highway Racer', img: '/storage/images/main/highway-racer.jpeg', url: '/storage/ag/g/highway-racer' },
+  { label: 'Buildnow.gg', img: '/storage/images/main/buildnow.jpeg', url: '/storage/ag/g/buildnowgg' },
+  { label: 'Slope', img: '/storage/ag/g/slope/IMG_5256.jpeg', url: '/storage/ag/g/slope' },
+  { label: 'Clash Royale', img: '/storage/images/main/clash.jpeg', url: '/storage/ag/g/clash-royale' },
+  { label: 'Superstar Car', img: '/storage/images/main/superstarcar.jpeg', url: '/storage/ag/g/superstarcar' },
+  { label: 'Polytrack', img: '/storage/ag/g/polytrack/splash.png', url: '/storage/ag/g/polytrack' },
+  { label: 'Brawl Stars', img: '/storage/images/main/brawlstars1.jpg', url: '/storage/ag/g/brawlstars' },
+  { label: 'YoHoHo!', img: '/storage/ag/g/yohoho/IMG_5302.jpeg', url: '/storage/ag/g/yohoho' },
+  { label: 'Smashy Road', img: '/storage/images/main/smashy.jpg', url: '/storage/ag/g/smashyroad' },
+  { label: 'Ragdoll Archers', img: '/storage/images/main/ragdoll.jpg', url: '/storage/ag/g/ragdoll-archers' },
+  { label: 'Slither.io', img: '/storage/images/main/slitherio.jpg', url: '/storage/ag/g/slither' },
+  // Loop for infinite scroll effect
+  { label: 'Highway Racer', img: '/storage/images/main/highway-racer.jpeg', url: '/storage/ag/g/highway-racer' },
+  { label: 'Buildnow.gg', img: '/storage/images/main/buildnow.jpeg', url: '/storage/ag/g/buildnowgg' },
+  { label: 'Slope', img: '/storage/ag/g/slope/IMG_5256.jpeg', url: '/storage/ag/g/slope' },
+  { label: 'Clash Royale', img: '/storage/images/main/clash.jpeg', url: '/storage/ag/g/clash-royale' },
+  { label: 'Superstar Car', img: '/storage/images/main/superstarcar.jpeg', url: '/storage/ag/g/superstarcar' },
+  { label: 'Polytrack', img: '/storage/ag/g/polytrack/splash.png', url: '/storage/ag/g/polytrack' },
+  { label: 'Brawl Stars', img: '/storage/images/main/brawlstars1.jpg', url: '/storage/ag/g/brawlstars' },
+  { label: 'YoHoHo!', img: '/storage/ag/g/yohoho/IMG_5302.jpeg', url: '/storage/ag/g/yohoho' },
+  { label: 'Smashy Road', img: '/storage/images/main/smashy.jpg', url: '/storage/ag/g/smashyroad' },
+  { label: 'Ragdoll Archers', img: '/storage/images/main/ragdoll.jpg', url: '/storage/ag/g/ragdoll-archers' },
+  { label: 'Slither.io', img: '/storage/images/main/slitherio.jpg', url: '/storage/ag/g/slither' }
+];
+
+const highlightedGame = {
+  label: 'Highway Racer',
+  img: '/storage/images/main/highway-racer.jpeg',
+  url: '/storage/ag/g/highway-racer'
+};
 ---
 
+import ../styles/index.css;
 <AppLayout>
+  <!-- Background Effects -->
+  <div class="god-rays" aria-hidden="true"></div>
 
-      <div class="god-rays"></div>
-      <div class="welcome-section">
-        <h2>
-          Welcome to
-          <br />
-          <span
-            style="
-            cursor: text;
-            background: linear-gradient(to right, #40e0d0, #0096ff, #40e0d0);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-          "
-          >
-            <span
-              class="typewrite"
-              data-period="2000"
-              data-type='[ "PeteZah Games.","beauty.","vibrancy.", "prosperity.", "peace.", "stability.", "amazement.","resiliency.","friendliness.","flourishment.","sustainability."]'
-            >
-              <span class="wrap"></span>
-            </span>
+  <!-- Main Content Wrapper -->
+  <main>
+    <!-- Welcome Section -->
+    <section class="welcome-section" aria-label="Welcome">
+      <h2>
+        Welcome to
+        <br />
+        <span class="gradient-text">
+          <span class="typewrite" data-period="2000" data-type={JSON.stringify(typewriterText)}>
+            <span class="wrap"></span>
           </span>
-        </h2>
-        <p>Game on!</p>
-        <button class="shiny-btn start-btn" onclick="startGaming()">
-          <span>Start Gaming</span>
+        </span>
+      </h2>
+      <p>Game on!</p>
+
+      <a href="/games" class="shiny-btn start-btn">
+        <span>Start Gaming</span>
+      </a>
+
+      <!-- Social Media Navigation -->
+      <nav class="social-media-tray" aria-label="Social Media Links">
+        <a href="https://x.com/PeteZahGames/" target="_parent" aria-label="Twitter X">
+          <div class="social-media-icon-container shiny-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
+              <path
+                fill="#ffffff"
+                d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
+              ></path>
+            </svg>
+          </div>
+        </a>
+        <a href="https://discord.petezahgames.com" target="_parent" aria-label="Discord">
+          <div class="social-media-icon-container shiny-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" height="14" width="17.5" viewBox="0 0 640 512">
+              <path
+                fill="#ffffff"
+                d="M524.5 69.8a1.5 1.5 0 0 0 -.8-.7A485.1 485.1 0 0 0 404.1 32a1.8 1.8 0 0 0 -1.9 .9 337.5 337.5 0 0 0 -14.9 30.6 447.8 447.8 0 0 0 -134.4 0 309.5 309.5 0 0 0 -15.1-30.6 1.9 1.9 0 0 0 -1.9-.9A483.7 483.7 0 0 0 116.1 69.1a1.7 1.7 0 0 0 -.8 .7C39.1 183.7 18.2 294.7 28.4 404.4a2 2 0 0 0 .8 1.4A487.7 487.7 0 0 0 176 479.9a1.9 1.9 0 0 0 2.1-.7A348.2 348.2 0 0 0 208.1 430.4a1.9 1.9 0 0 0 -1-2.6 321.2 321.2 0 0 1 -45.9-21.9 1.9 1.9 0 0 1 -.2-3.1c3.1-2.3 6.2-4.7 9.1-7.1a1.8 1.8 0 0 1 1.9-.3c96.2 43.9 200.4 43.9 295.5 0a1.8 1.8 0 0 1 1.9 .2c2.9 2.4 6 4.9 9.1 7.2a1.9 1.9 0 0 1 -.2 3.1 301.4 301.4 0 0 1 -45.9 21.8 1.9 1.9 0 0 0 -1 2.6 391.1 391.1 0 0 0 30 48.8 1.9 1.9 0 0 0 2.1 .7A486 486 0 0 0 610.7 405.7a1.9 1.9 0 0 0 .8-1.4C623.7 277.6 590.9 167.5 524.5 69.8zM222.5 337.6c-29 0-52.8-26.6-52.8-59.2S193.1 219.1 222.5 219.1c29.7 0 53.3 26.8 52.8 59.2C275.3 311 251.9 337.6 222.5 337.6zm195.4 0c-29 0-52.8-26.6-52.8-59.2S388.4 219.1 417.9 219.1c29.7 0 53.3 26.8 52.8 59.2C470.7 311 447.5 337.6 417.9 337.6z"
+              ></path>
+            </svg>
+          </div>
+        </a>
+      </nav>
+    </section>
+
+    <!-- Featured Game Link -->
+    <a href={`/iframe.html?url=${highlightedGame.url}`} class="large-image-container-link" aria-label={`Play ${highlightedGame.label}`}>
+      <section class="large-image-container">
+        <img src={highlightedGame.img} alt={highlightedGame.label} class="large-image" id="large-image" />
+        <div class="large-image-caption" id="large-image-caption">{highlightedGame.label}</div>
+      </section>
+    </a>
+
+    <!-- Carousel Section -->
+    <section class="image-shuffler" aria-label="Game Carousel">
+      <div class="carousel-container">
+        <button class="carousel-btn carousel-btn-prev" onclick="moveCarousel(-1)" aria-label="Previous Game">
+          <i class="fas fa-chevron-left"></i>
         </button>
-        <div class="social-media-tray">
-          <a href="https://x.com/PeteZahGames/" target="_parent">
-            <div class="social-media-icon-container shiny-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
-                <path
-                  fill="#ffffff"
-                  d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
-                ></path>
-              </svg>
-            </div>
-          </a>
-          <a href="https://discord.petezahgames.com" target="_parent">
-            <div class="social-media-icon-container shiny-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" height="14" width="17.5" viewBox="0 0 640 512">
-                <path
-                  fill="#ffffff"
-                  d="M524.5 69.8a1.5 1.5 0 0 0 -.8-.7A485.1 485.1 0 0 0 404.1 32a1.8 1.8 0 0 0 -1.9 .9 337.5 337.5 0 0 0 -14.9 30.6 447.8 447.8 0 0 0 -134.4 0 309.5 309.5 0 0 0 -15.1-30.6 1.9 1.9 0 0 0 -1.9-.9A483.7 483.7 0 0 0 116.1 69.1a1.7 1.7 0 0 0 -.8 .7C39.1 183.7 18.2 294.7 28.4 404.4a2 2 0 0 0 .8 1.4A487.7 487.7 0 0 0 176 479.9a1.9 1.9 0 0 0 2.1-.7A348.2 348.2 0 0 0 208.1 430.4a1.9 1.9 0 0 0 -1-2.6 321.2 321.2 0 0 1 -45.9-21.9 1.9 1.9 0 0 1 -.2-3.1c3.1-2.3 6.2-4.7 9.1-7.1a1.8 1.8 0 0 1 1.9-.3c96.2 43.9 200.4 43.9 295.5 0a1.8 1.8 0 0 1 1.9 .2c2.9 2.4 6 4.9 9.1 7.2a1.9 1.9 0 0 1 -.2 3.1 301.4 301.4 0 0 1 -45.9 21.8 1.9 1.9 0 0 0 -1 2.6 391.1 391.1 0 0 0 30 48.8 1.9 1.9 0 0 0 2.1 .7A486 486 0 0 0 610.7 405.7a1.9 1.9 0 0 0 .8-1.4C623.7 277.6 590.9 167.5 524.5 69.8zM222.5 337.6c-29 0-52.8-26.6-52.8-59.2S193.1 219.1 222.5 219.1c29.7 0 53.3 26.8 52.8 59.2C275.3 311 251.9 337.6 222.5 337.6zm195.4 0c-29 0-52.8-26.6-52.8-59.2S388.4 219.1 417.9 219.1c29.7 0 53.3 26.8 52.8 59.2C470.7 311 447.5 337.6 417.9 337.6z"
-                ></path>
-              </svg>
-            </div>
-          </a>
+
+        <div class="carousel-track">
+          {
+            carouselGames.map((game) => (
+              <article class="carousel-item">
+                <a href={`/iframe.html?url=${game.url}`} class="carousel-link" aria-label={`Play ${game.label}`}>
+                  <img src={game.img} alt={game.label} class="image" loading="lazy" />
+                  <div class="carousel-item-overlay">{game.label}</div>
+                </a>
+              </article>
+            ))
+          }
         </div>
       </div>
+      <button class="carousel-btn carousel-btn-next" onclick="moveCarousel(1)" aria-label="Next Game">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </section>
+  </main>
 
-      <div class="large-image-container" onclick="window.location='/iframe.html?url=/storage/ag/g/highway-racer';">
-        <img src="/storage/images/main/highway-racer.jpeg" alt="Large Image" class="large-image" id="large-image" />
-        <div class="large-image-caption" id="large-image-caption">Highway Racer</div>
-      </div>
-        <!-- {
-      gamesData.games.map((game) => (
-        <figure class="game-card">
-          <a href={`/play?url=${encodeURIComponent(game.url)}`} aria-label={`Play ${game.label}`}>
-            <picture>
-              {game.imageSources?.map((src) => (
-                <source srcset={src.srcset} type={src.type} />
-              ))}
-
-              <img src={game.imageUrl} alt={game.label} aria-label={game.label} loading="lazy" />
-            </picture>
-
-            <figcaption>{game.label}</figcaption>
-          </a>
-        </figure>
-      ))
-    } -->
-      <div class="image-shuffler">
-        <div class="carousel-container">
-          <button class="carousel-btn carousel-btn-prev" onclick="moveCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-          <div class="carousel-track">
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/highway-racer';">
-              <img src="/storage/images/main/highway-racer.jpeg" alt="Image 1" class="image" />
-              <div class="carousel-item-overlay">Highway Racer</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/buildnowgg';">
-              <img src="/storage/images/main/buildnow.jpeg" alt="Image 2" class="image" />
-              <div class="carousel-item-overlay">Buildnow.gg</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/slope';">
-              <img src="/storage/ag/g/slope/IMG_5256.jpeg" alt="Image 3" class="image" />
-              <div class="carousel-item-overlay">Slope</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/clash-royale';">
-              <img src="/storage/images/main/clash.jpeg" alt="Image 4" class="image" />
-              <div class="carousel-item-overlay">Clash Royale</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/superstarcar';">
-              <img src="/storage/images/main/superstarcar.jpeg" alt="Image 5" class="image" />
-              <div class="carousel-item-overlay">Superstar Car</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/polytrack';">
-              <img src="/storage/ag/g/polytrack/splash.png" alt="Image 6" class="image" />
-              <div class="carousel-item-overlay">Polytrack</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/brawlstars';">
-              <img src="/storage/images/main/brawlstars1.jpg" alt="Image 7" class="image" />
-              <div class="carousel-item-overlay">Brawl Stars</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/yohoho';">
-              <img src="/storage/ag/g/yohoho/IMG_5302.jpeg" alt="Image 8" class="image" />
-              <div class="carousel-item-overlay">YoHoHo!</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/smashyroad';">
-              <img src="/storage/images/main/smashy.jpg" alt="Image 9" class="image" />
-              <div class="carousel-item-overlay">Smashy Road</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/ragdoll-archers';">
-              <img src="/storage/images/main/ragdoll.jpg" alt="Image 10" class="image" />
-              <div class="carousel-item-overlay">Ragdoll Archers</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/slither';">
-              <img src="/storage/images/main/slitherio.jpg" alt="Image 11" class="image" />
-              <div class="carousel-item-overlay">Slither.io</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/highway-racer';">
-              <img src="/storage/images/main/highway-racer.jpeg" alt="Image 1" class="image" />
-              <div class="carousel-item-overlay">Highway Racer</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/buildnowgg';">
-              <img src="/storage/images/main/buildnow.jpeg" alt="Image 2" class="image" />
-              <div class="carousel-item-overlay">Buildnow.gg</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/slope';">
-              <img src="/storage/ag/g/slope/IMG_5256.jpeg" alt="Image 3" class="image" />
-              <div class="carousel-item-overlay">Slope</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/clash-royale';">
-              <img src="/storage/images/main/clash.jpeg" alt="Image 4" class="image" />
-              <div class="carousel-item-overlay">Clash Royale</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/superstarcar';">
-              <img src="/storage/images/main/superstarcar.jpeg" alt="Image 5" class="image" />
-              <div class="carousel-item-overlay">Superstar Car</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/polytrack';">
-              <img src="/storage/ag/g/polytrack/splash.png" alt="Image 6" class="image" />
-              <div class="carousel-item-overlay">Polytrack</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/brawlstars';">
-              <img src="/storage/images/main/brawlstars1.jpg" alt="Image 7" class="image" />
-              <div class="carousel-item-overlay">Brawl Stars</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/yohoho';">
-              <img src="/storage/ag/g/yohoho/IMG_5302.jpeg" alt="Image 8" class="image" />
-              <div class="carousel-item-overlay">YoHoHo!</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/smashyroad';">
-              <img src="/storage/images/main/smashy.jpg" alt="Image 9" class="image" />
-              <div class="carousel-item-overlay">Smashy Road</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/ragdoll-archers';">
-              <img src="/storage/images/main/ragdoll.jpg" alt="Image 10" class="image" />
-              <div class="carousel-item-overlay">Ragdoll Archers</div>
-            </div>
-            <div class="carousel-item" onclick="window.location='/iframe.html?url=/storage/ag/g/slither';">
-              <img src="/storage/images/main/slitherio.jpg" alt="Image 11" class="image" />
-              <div class="carousel-item-overlay">Slither.io</div>
-            </div>
+  <!-- Popup Dialog -->
+  <div id="discord-popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+    <div class="popup-content">
+      <span id="close-popup" class="close-btn" aria-label="Close popup">×</span>
+      <h2 id="popup-title">Want more links and news?</h2>
+      <p>Click below to join our Discord community and follow us on Twitter/X to stay updated!</p>
+      <div class="discord-btn">
+        <a href="https://x.com/PeteZahGames/" target="_parent">
+          <div class="social-media-icon-container-2">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512">
+              <path
+                fill="#ffffff"
+                d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
+              ></path>
+            </svg>
           </div>
-        </div>
-        <button class="carousel-btn carousel-btn-next" onclick="moveCarousel(1)"><i class="fas fa-chevron-right"></i></button>
-      </div>
-      <!-- <div class="carousel-dots" id="carouselDots"></div> -->
-
-      <div id="discord-popup" class="popup">
-        <div class="popup-content">
-          <span id="close-popup" class="close-btn">×</span>
-          <h2>Want more links and news?</h2>
-          <p>Click below to join our Discord community and follow us on Twitter/X to stay updated!</p>
-          <div class="discord-btn">
-            <a href="https://x.com/PeteZahGames/" target="_parent">
-              <div class="social-media-icon-container-2">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512">
-                  <path
-                    fill="#ffffff"
-                    d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
-                  ></path>
-                </svg>
-              </div>
-            </a>
-            <a href="https://discord.petezahgames.com" target="_parent">
-              <div class="social-media-icon-container-2">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="30" viewBox="0 0 640 512">
-                  <path
-                    fill="#ffffff"
-                    d="M524.5 69.8a1.5 1.5 0 0 0 -.8-.7A485.1 485.1 0 0 0 404.1 32a1.8 1.8 0 0 0 -1.9 .9 337.5 337.5 0 0 0 -14.9 30.6 447.8 447.8 0 0 0 -134.4 0 309.5 309.5 0 0 0 -15.1-30.6 1.9 1.9 0 0 0 -1.9-.9A483.7 483.7 0 0 0 116.1 69.1a1.7 1.7 0 0 0 -.8 .7C39.1 183.7 18.2 294.7 28.4 404.4a2 2 0 0 0 .8 1.4A487.7 487.7 0 0 0 176 479.9a1.9 1.9 0 0 0 2.1-.7A348.2 348.2 0 0 0 208.1 430.4a1.9 1.9 0 0 0 -1-2.6 321.2 321.2 0 0 1 -45.9-21.9 1.9 1.9 0 0 1 -.2-3.1c3.1-2.3 6.2-4.7 9.1-7.1a1.8 1.8 0 0 1 1.9-.3c96.2 43.9 200.4 43.9 295.5 0a1.8 1.8 0 0 1 1.9 .2c2.9 2.4 6 4.9 9.1 7ទ0.2s 7.2a1.9 1.9 0 0 1 -.2 3.1 301.4 301.4 0 0 1 -45.9 21.8 1.9 1.9 0 0 0 -1 2.6 391.1 391.1 0 0 0 30 48.8 1.9 1.9 0 0 0 2.1 .7A486 486 0 0 0 610.7 405.7a1.9 1.9 0 0 0 .8-1.4C623.7 277.6 590.9 167.5 524.5 69.8zM222.5 337.6c-29 0-52.8-26.6-52.8-59.2S193.1 219.1 222.5 219.1c29.7 0 53.3 26.8 52.8 59.2C275.3 311 251.9 337.6 222.5 337.6zm195.4 0c-29 0-52.8-26.6-52.8-59.2S388.4 219.1 417.9 219.1c29.7 0 53.3 26.8 52.8 59.2C470.7 311 447.5 337.6 417.9 337.6z"
-                  ></path>
-                </svg>
-              </div>
-            </a>
+        </a>
+        <a href="https://discord.petezahgames.com" target="_parent">
+          <div class="social-media-icon-container-2">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="30" viewBox="0 0 640 512">
+              <path
+                fill="#ffffff"
+                d="M524.5 69.8a1.5 1.5 0 0 0 -.8-.7A485.1 485.1 0 0 0 404.1 32a1.8 1.8 0 0 0 -1.9 .9 337.5 337.5 0 0 0 -14.9 30.6 447.8 447.8 0 0 0 -134.4 0 309.5 309.5 0 0 0 -15.1-30.6 1.9 1.9 0 0 0 -1.9-.9A483.7 483.7 0 0 0 116.1 69.1a1.7 1.7 0 0 0 -.8 .7C39.1 183.7 18.2 294.7 28.4 404.4a2 2 0 0 0 .8 1.4A487.7 487.7 0 0 0 176 479.9a1.9 1.9 0 0 0 2.1-.7A348.2 348.2 0 0 0 208.1 430.4a1.9 1.9 0 0 0 -1-2.6 321.2 321.2 0 0 1 -45.9-21.9 1.9 1.9 0 0 1 -.2-3.1c3.1-2.3 6.2-4.7 9.1-7.1a1.8 1.8 0 0 1 1.9-.3c96.2 43.9 200.4 43.9 295.5 0a1.8 1.8 0 0 1 1.9 .2c2.9 2.4 6 4.9 9.1 7.2a1.9 1.9 0 0 1 -.2 3.1 301.4 301.4 0 0 1 -45.9 21.8 1.9 1.9 0 0 0 -1 2.6 391.1 391.1 0 0 0 30 48.8 1.9 1.9 0 0 0 2.1 .7A486 486 0 0 0 610.7 405.7a1.9 1.9 0 0 0 .8-1.4C623.7 277.6 590.9 167.5 524.5 69.8zM222.5 337.6c-29 0-52.8-26.6-52.8-59.2S193.1 219.1 222.5 219.1c29.7 0 53.3 26.8 52.8 59.2C275.3 311 251.9 337.6 222.5 337.6zm195.4 0c-29 0-52.8-26.6-52.8-59.2S388.4 219.1 417.9 219.1c29.7 0 53.3 26.8 52.8 59.2C470.7 311 447.5 337.6 417.9 337.6z"
+              ></path>
+            </svg>
           </div>
-        </div>
+        </a>
       </div>
+    </div>
+  </div>
 
-      <div id="info-box" class="info-box">
-        <div class="info-row">
-          <span id="battery-display">
-            <span class="battery-container">
-              <i id="battery-icon" class="fas fa-battery-full battery-icon"></i>
-            </span>
-            <span id="battery-percentage">Loading...</span>
-          </span>
-          <span id="fps">FPS: Calculating...</span>
-        </div>
-        <div class="info-row">
-          <span id="time-display">Time: Loading...</span>
-        </div>
-        <a href="https://discord.gg/arcgZTV9zX" target="_blank" class="discord-btn-two shiny-btn"> Join Discord</a>
-      </div>
-      <script src="/storage/js/home.js" is:inline></script>
-      <script src="/storage/js/settings.js" is:inline></script>
+  <!-- Footer / Info Box -->
+  <aside id="info-box" class="info-box" aria-label="System Info">
+    <div class="info-row">
+      <span id="battery-display">
+        <span class="battery-container">
+          <i id="battery-icon" class="fas fa-battery-full battery-icon"></i>
+        </span>
+        <span id="battery-percentage">Loading...</span>
+      </span>
+      <span id="fps">FPS: Calculating...</span>
+    </div>
+    <div class="info-row">
+      <span id="time-display">Time: Loading...</span>
+    </div>
+    <a href="https://discord.gg/arcgZTV9zX" target="_blank" class="discord-btn-two shiny-btn"> Join Discord</a>
+  </aside>
+
+  <script src="/storage/js/home.js" is:inline></script>
+  <script src="/storage/js/settings.js" is:inline></script>
 </AppLayout>

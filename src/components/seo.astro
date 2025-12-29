@@ -1,62 +1,141 @@
 ---
-let { title, description, keywords, path } = Astro.props;
-title = title ? title + ' | PeteZah Games' : 'PeteZah Games'
-description = description || 'Play free online games and use web apps on PeteZah Games. Enjoy a variety of games and applications directly in your browser.'
-keywords = keywords || 'PeteZah, PeteZah Games'
-const canonical = Astro.url.origin + (path || '/');
+import Favicons from './Favicon.astro';
+export interface Props {
+  title?: string;
+  category?: string;
+  tags?: string[];
+  description?: string;
+  keywords?: string;
+  image?: string;
+  path?: string;
+  type?: 'website' | 'game' | 'article' | 'product' | 'profile' | 'video' | 'discussion'; // Expanded types
+  publishDate?: string;
+  modifiedDate?: string;
+  author?: string;
+  noindex?: boolean;
+  nofollow?: boolean;
+}
+
+const {
+  title,
+  category,
+  tags,
+  description,
+  keywords,
+  path,
+  image,
+  type = 'website',
+  publishDate,
+  modifiedDate,
+  author = 'PeteZah Games',
+  noindex = false,
+  nofollow = false
+} = Astro.props;
+
+const siteTitle = 'PeteZah Games';
+const finalTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+const finalDescription = description || 'Play free online games and use web apps on PeteZah Games.';
+const finalKeywords = keywords || 'PeteZah, PeteZah Games, Free Games, Online Games, Browser Games';
+const canonical = new URL(path || Astro.url.pathname, Astro.site || Astro.url.origin).href.replace(/\/+$/, '/');
+
+// Construct Robots Meta
+const robotsParts = [];
+if (noindex) robotsParts.push('noindex');
+else robotsParts.push('index');
+if (nofollow) robotsParts.push('nofollow');
+else robotsParts.push('follow');
+// Add standard optimizations if indexing
+if (!noindex) robotsParts.push('max-image-preview:large', 'max-snippet:-1', 'max-video-preview:-1');
+const robotsValue = robotsParts.join(', ');
+
+// Image Logic
+const socialImage = image
+  ? image.startsWith('http')
+    ? image
+    : new URL(image, Astro.url.origin).href
+  : new URL('./ogImage.avif', Astro.url.origin).href;
+const socialImageSafe = image
+  ? image.startsWith('http')
+    ? image.replace('http://', 'https://')
+    : new URL(image, Astro.url.origin).href.replace('http://', 'https://')
+  : new URL('./ogImage.avif', Astro.url.origin).href;
+
+// Map internal types to Open Graph types
+const ogTypeMap: Record<string, string> = {
+  website: 'website',
+  game: 'website', // FB/OG doesn't have a specific 'game' type, usually 'website' or 'product'
+  article: 'article',
+  product: 'product',
+  profile: 'profile',
+  video: 'video.other',
+  discussion: 'website' // Discussion forums usually map to website for OG
+};
+const ogType = ogTypeMap[type] || 'website';
 ---
-    <title>{title}</title>
-    <!-- Meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content={description}>
-    <meta name="author" content="PeteZah-Games">
-    <meta name="keywords" content={keywords}>
-    <link rel="canonical" href={canonical} />
-    <meta name="robots" content="all,follow">
-    <meta name="language" content="en">
-    <meta name="revised" content="Sunday, April 27th, 2025, 9:00 am">
-    <meta name="color-scheme" content="light dark">
-    <meta name="tracking" content="analytics,scripts,pixels">
-    <meta name="copyright" content="Copyright 2025 PeteZah Games">
-    <meta name="DC.title" content={title}>
-    <meta name="DC.description" content={description}>
-    <meta name="referrer" content="no-referrer" />
-    <meta name="application-name" content="{title}">
 
-    <!-- Favicons -->
-    <link rel="icon" type="image/png" href="/favicons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicons/favicon.svg" />
-    <link rel="shortcut icon" href="/favicons/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="PeteZah-G" />
-    <link rel="manifest" href="/favicons/site.webmanifest" />
+<!-- Essential -->
+<title>{finalTitle}</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content={finalDescription} />
+<meta name="keywords" content={finalKeywords} />
+<meta name="author" content={author} />
+<meta name="language" content="en-US" />
+<!-- <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="PeteZah Games Feed" /> -->
+<link rel="canonical" href={canonical} />
+<meta name="publisher" content="PeteZah Games" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<meta name="robots" content={robotsValue} />
+<meta http-equiv="robots" content={robotsValue} />
+<meta name="generator" content={Astro.generator} />
 
-    <!-- Social Sharing tags -->
-    <meta property="og:title" content={title}>
-    <meta property="og:description" content={description}>
-    <meta property="og:image" content="/assets/images/Social-preview-index.png" type="image/png">
-    <meta property="og:url" content={canonical}>
-    <meta property="og:site_name" content={title}>
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="en_US">
+<!-- Open Graph / Facebook -->
+<meta property="og:site_name" content={siteTitle} />
+<meta property="og:title" content={finalTitle} />
+<meta property="og:description" content={finalDescription} />
+<meta property="og:url" content={canonical} />
+<meta property="og:type" content={ogType} />
+<meta property="og:determiner" content="the" />
+<meta property="og:see_also" content="/games" />
+<meta property="og:see_also" content="https://petezahgames.com/apps" />
+<meta property="og:image:secure_url" content={socialImage} />
+<meta property="og:image:type" content="image/avif" />
+<meta property="og:image" content={socialImageSafe} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="960" />
+<meta property="og:image:height" content="540" />
+<meta property="og:image:alt" content={finalTitle || finalDescription} />
+<meta property="og:locale" content="en_US" />
+{modifiedDate && <meta property="og:updated_time" content={modifiedDate} />}
 
-    <!-- Twitter tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content={title}>
-    <meta name="twitter:description" content={description}>
-    <meta name="twitter:image" content="/assets/images/Social-preview-index.png" type="image/png">
+<!-- Favicons -->
+<Favicons masterIconPath="../assets/images/svg/logo.svg" />
 
-    <!-- Mobile tags -->
-    <meta name="theme-color" content="#ffffff">
-    <meta name="msapplication-navbutton-color" content="#ffffff">
-    <meta name="apple-mobile-web-app-title" content={title}>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@PeteZahGames" />
+<meta name="twitter:title" content={finalTitle} />
+<meta name="twitter:description" content={finalDescription} />
+<meta name="twitter:image" content={socialImage} />
+<meta name="twitter:image:alt" content={finalTitle} />
+<meta name="twitter:image:src" content={socialImage} />
+<meta name="twitter:site" content="@PeteZahGames" />
 
-    <!-- Microsoft tags -->
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/assets/images/mslogo.png">
-    <meta name="msapplication-starturl" content="https://docs.petezahgames.com/">
+<!-- Type Specific: Article -->
+{
+  type === 'article' && (
+    <>
+      <meta property="article:author" content={author} />
+      {publishDate && <meta property="article:published_time" content={publishDate} />}
+      {modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
+    </>
+  )
+}
+{type === 'article' && category && <meta property="article:section" content={category} />}
+{type === 'article' && tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+
+<!-- Performance -->
+<link rel="dns-prefetch" href="//www.google-analytics.com" />
+<meta name="theme-color" content="#ffffff" />

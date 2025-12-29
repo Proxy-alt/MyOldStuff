@@ -1,17 +1,11 @@
-/* Variables for perfect synchronization */
+/* layout.css */
+
 :root {
-  --sb-expanded: 270px;
-  --sb-collapsed: 85px;
-  --page-gap: 16px;
-  --transition: all 0.4s ease;
-
-  /* Initial State (Collapsed) */
-  --current-sb-width: var(--sb-collapsed);
-}
-
-/* When the body is NOT collapsed (expanded state) */
-body:not(.sidebar-collapsed) {
-  --current-sb-width: var(--sb-expanded);
+  --sb-width: 270px;
+  --transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --primary-bg: #151a2d;
+  --body-bg: #04041d;
+  --text-color: white;
 }
 
 * {
@@ -22,48 +16,110 @@ body:not(.sidebar-collapsed) {
 }
 
 body {
-  min-height: 100vh;
-  background: #04041d;
-  overflow-x: hidden;
-  color: white;
+  height: 100vh;
+  width: 100vw;
+  background: var(--body-bg);
+  overflow: hidden; /* Prevent body scroll, let main handle it */
+  color: var(--text-color);
+  position: relative;
 }
 
-/* --- SIDEBAR --- */
+/* --- MAIN CONTENT (FULL VIEWBOX) --- */
+.main-content {
+  position: absolute;
+  inset: 0; /* Top, Right, Bottom, Left = 0 */
+  width: 100%;
+  height: 100%;
+
+  /* Remove borders and margins to take full screen */
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: var(--body-bg); /* Or transparent if body has bg */
+
+  /* Ensure it sits BEHIND the sidebar */
+  z-index: 1;
+  overflow-y: auto; /* Content scrolls inside here */
+  padding: 2rem; /* Optional: Internal padding for text */
+}
+
+/* --- THE FLOATING ARROW BUTTON --- */
+#floating-toggle {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary-bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: none;
+  color: white;
+  padding: 12px 4px 12px 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  cursor: pointer;
+  z-index: 900; /* Above main, below sidebar */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#floating-toggle:hover {
+  padding-right: 8px;
+  background: #1e2540;
+}
+
+body.sidebar-open #floating-toggle {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-20px, -50%);
+}
+
+/* --- SIDEBAR (FLOATING DRAWER) --- */
 .sidebar {
   position: fixed;
-  top: var(--page-gap);
-  left: var(--page-gap);
-  width: var(--current-sb-width);
-  height: calc(100vh - (var(--page-gap) * 2));
-  background: #151a2d;
+  top: 16px; /* Keep the slight gap for aesthetics if desired */
+  left: 16px; /* or set top/left to 0 for a flush sidebar */
+  bottom: 16px; /* or set height: 100vh for full height */
+  width: var(--sb-width);
+  height: calc(100vh - 32px);
+
+  background: var(--primary-bg);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  transition: var(--transition);
-  z-index: 1000;
+  z-index: 1000; /* CRITICAL: Must be higher than .main-content */
   overflow: hidden;
-}
 
-/* --- MAIN CONTENT (FIXED MISMATCH) --- */
-.main-content {
-  position: relative;
-  /* Syncs perfectly because it uses the same variable and transition as .sidebar */
-  margin-left: calc(var(--current-sb-width) + (var(--page-gap) * 2));
-  margin-top: var(--page-gap);
-  margin-bottom: var(--page-gap);
-  margin-right: var(--page-gap);
-
-  /* Width automatically adjusts based on the shared variable */
-  width: calc(100% - (var(--current-sb-width) + (var(--page-gap) * 3)));
-
-  height: calc(100vh - (var(--page-gap) * 2));
-  background: #151a2d;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
+  /* Hidden state */
+  transform: translateX(calc(-100% - 20px));
   transition: var(--transition);
-  overflow-y: auto;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
 }
 
-/* --- SIDEBAR INTERNAL STYLES --- */
+/* Slide in when active */
+body.sidebar-open .sidebar {
+  transform: translateX(0);
+}
+
+/* --- OVERLAY (Backdrop) --- */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 950; /* Between Main (1) and Sidebar (1000) */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+body.sidebar-open .sidebar-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --- SIDEBAR INTERNALS --- */
 .sidebar .sidebar-header {
   display: flex;
   padding: 20px;
@@ -77,21 +133,22 @@ body {
   border-radius: 50%;
 }
 
-.toggler {
+.sidebar-toggler {
   height: 35px;
   width: 35px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 8px;
+  color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition);
+  transition: 0.2s;
 }
 
-.sidebar.collapsed .sidebar-toggler span {
-  transform: rotate(180deg);
+.sidebar-toggler:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .nav-list {
@@ -111,7 +168,7 @@ body {
   padding: 12px;
   border-radius: 8px;
   white-space: nowrap;
-  transition: var(--transition);
+  transition: 0.2s;
 }
 
 .nav-link:hover {
@@ -119,44 +176,79 @@ body {
   color: #151a2d;
 }
 
-/* Hide labels when collapsed */
-.sidebar.collapsed .nav-label {
-  opacity: 0;
-  pointer-events: none;
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .sidebar {
+    /* Optional: Full height/width on mobile */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 85%;
+    height: 100vh;
+    border-radius: 0;
+    border-left: none;
+  }
+}
+.widget {
+  position: absolute;
+  bottom: 30px;
+  right: 16px;
+  z-index: 200;
 }
 
-/* Tooltips only show when collapsed */
-.nav-tooltip {
+.widget-button {
+  height: 40px;
+  width: 40px;
+  color: #151a2d;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.4s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.widget-button:hover {
+  background: #dde4fb;
+}
+
+.widget-button span {
+  font-size: 1.5rem;
+}
+
+.widget-popup {
+  display: none;
   position: absolute;
-  left: 100%;
-  margin-left: 20px;
+  bottom: 50px;
+  right: 0;
+  background: #151a2d;
+  border: 1px solid white;
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+  width: 120px;
+}
+
+.widget-popup.show {
+  display: flex;
+  overflow: hidden;
+}
+
+.widget-option {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.3s ease;
+}
+
+.widget-option:hover {
   background: #fff;
   color: #151a2d;
-  padding: 6px 12px;
-  border-radius: 4px;
-  opacity: 0;
-  display: none;
-  transition: 0.2s;
-}
-
-.sidebar.collapsed .nav-item:hover .nav-tooltip {
-  display: block;
-  opacity: 1;
-}
-
-/* --- RESPONSIVE --- */
-@media (max-width: 1024px) {
-  .sidebar {
-    width: calc(100% - 32px);
-    height: 60px;
-  }
-  .sidebar.menu-active {
-    height: auto;
-    max-height: 100vh;
-  }
-  .main-content {
-    margin-left: 16px;
-    margin-top: var(--page-gap);
-    width: calc(100% - 32px);
-  }
 }
