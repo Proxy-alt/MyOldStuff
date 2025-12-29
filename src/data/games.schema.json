@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Games.json schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema identifier for this document",
+      "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+|[^\\s]+\\.json)$"
+    },
+    "games": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Display name of the game entry"
+          },
+          "url": {
+            "type": "string",
+            "description": "Link to the game or form",
+            "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+|[^\\s]+\\.json)$"
+          },
+          "igdbId": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "description": "The numeric IGDB game ID, or null if unknown."
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Path or URL to the image thumbnail",
+            "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+|[^\\s]+\\.json)$"
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of the image thumbnail in pixels",
+            "minimum": 1
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of the image thumbnail in pixels",
+            "minimum": 1
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["action", "racing", "strategy", "sports", "skill", "shooting", "2 player", "io"]
+            },
+            "description": "Categories assigned to the game",
+            "minItems": 0
+          },
+          "featured": {
+            "type": "boolean",
+            "description": "Whether the game is featured or not",
+            "default": false
+          }
+        },
+        "required": ["label", "url", "imageUrl", "categories", "igdbId"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["games"],
+  "additionalProperties": false
+}

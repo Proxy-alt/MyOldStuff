@@ -1,29 +1,9 @@
 ---
-import AppLayout from '../layouts/Layout.astro';
-import gamesData from '../data/games.json';
-import '../styles/games.css';
+import Layout from '../layouts/GridLayout.astro';
 ---
 
-<AppLayout title="Games" Description="Have games be at your fingertips">
-  <h1>Games</h1>
-
-  <div class="game-grid">
-    {
-      gamesData.games.map((game) => (
-        <figure class="game-card">
-          <a href={`/play?url=${encodeURIComponent(game.url)}`} aria-label={`Play ${game.label}`}>
-            <picture>
-              {game.imageSources?.map((src) => (
-                <source srcset={src.srcset} type={src.type} />
-              ))}
-
-              <img src={game.imageUrl} alt={game.label} aria-label={game.label} loading="lazy" />
-            </picture>
-
-            <figcaption>{game.label}</figcaption>
-          </a>
-        </figure>
-      ))
-    }
-  </div>
-</AppLayout>
+<Layout
+  title="Games"
+  description="Play free online games on PeteZah Games. Enjoy a variety of browser games across different genres."
+  collection="games"
+/>

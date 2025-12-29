@@ -1,0 +1,257 @@
+/* games.css (or global.css) */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #0a1d37;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Renamed from .god-rays */
+.bg-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 550px;
+  --stripes: repeating-linear-gradient(
+    100deg,
+    rgba(20, 40, 60, 0.8) 0%,
+    rgba(20, 40, 60, 0.8) 7%,
+    transparent 10%,
+    transparent 12%,
+    rgba(20, 40, 60, 0.8) 16%
+  );
+  --rays: repeating-linear-gradient(
+    100deg,
+    rgba(30, 50, 90, 0.9) 10%,
+    rgba(20, 40, 80, 0.9) 15%,
+    rgba(30, 50, 90, 0.9) 20%,
+    rgba(20, 40, 80, 0.9) 25%,
+    rgba(30, 50, 90, 0.9) 30%
+  );
+  background-image: var(--stripes), var(--rays);
+  background-size: 300%, 200%;
+  background-position:
+    50% 50%,
+    50% 50%;
+  animation: fadeIn 2s ease;
+  mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.bg-effects::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--stripes), var(--rays);
+  background-size: 200%, 100%;
+  animation: bg-shift 40s linear infinite; /* Renamed animation for neutrality */
+  background-attachment: fixed;
+  mix-blend-mode: difference;
+}
+
+/* Renamed animation from god-rays */
+@keyframes bg-shift {
+  0% {
+    background-position:
+      50% 50%,
+      50% 50%;
+  }
+  100% {
+    background-position:
+      350% 50%,
+      350% 50%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Search Bar */
+search {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #0a1d37;
+  padding: 15px 0;
+  text-align: center;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s;
+}
+
+search > input {
+  font-family: 'Poppins', sans-serif;
+  width: 50vw;
+  padding: 12px 20px;
+  font-size: 18px;
+  border: 2px solid #fff;
+  color: #fff;
+  background: #141414;
+  border-radius: 50px;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+search > input:focus {
+  background: #333;
+  outline: none;
+  box-shadow: 0 0 15px rgba(0, 102, 204, 0.4);
+  border-color: #0066cc;
+}
+
+/* Renamed from .game-container */
+.collection-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding-top: 120px;
+  padding-bottom: 30px;
+  width: 100%;
+}
+
+/* Renamed from .image-item */
+.collection-card {
+  position: relative;
+  width: 200px;
+  height: 170px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  border-radius: 10px;
+  background-color: #222;
+  border: 2px solid #fff;
+  margin: 0;
+  animation: slideInFromLeft 0.5s ease-out forwards;
+}
+
+.collection-card:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.85);
+}
+
+.collection-card a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.collection-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+/* Label */
+.label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  padding: 5px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Renamed from .randomGameOpensBtn */
+.random-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
+  padding: 10px 20px;
+  background-color: #141414;
+  color: white;
+  border: 1px solid white;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.random-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+}
+
+.filter-container {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  z-index: 1100;
+  background-color: #141414;
+  padding: 5px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.filter-container select {
+  background-color: #222;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filter-container select:hover {
+  background-color: #333;
+}
+
+/* Renamed from .ad-container-horizantal */
+.banner-container {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  border: 3px solid red;
+  background-color: #000e24;
+  z-index: 1;
+}

@@ -1,0 +1,91 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Particles from '../components/Particles.astro';
+import Analytics from '../components/Analytics.astro';
+import SEO from '../components/seo.astro';
+import SEOjson from '../components/SEOjson.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Widget from '../components/Widget.astro';
+
+import '../styles/layout.css';
+import '../styles/global.css';
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEO title={title} description={description} />
+    <SEOjson />
+    <ClientRouter />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+      rel="stylesheet"
+    />
+    <Analytics location="head" />
+  </head>
+  <body>
+    <Analytics location="body" />
+
+    <!-- 1. The Overlay (Background dimmer) -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- 2. The Floating Arrow Button -->
+    <button id="floating-toggle" aria-label="Open Menu">
+      <span class="material-symbols-rounded">arrow_forward_ios</span>
+    </button>
+
+    <!-- 3. Sidebar (Using persist to keep state) -->
+    <Sidebar transition:persist />
+
+    <!-- 4. Main Content (Now centered via CSS) -->
+    <main class="main-content">
+      <slot />
+      <Particles />
+      <Widget />
+    </main>
+
+    <script>
+      function initSidebar() {
+        const body = document.body;
+        const floatBtn = document.getElementById('floating-toggle');
+        const overlay = document.getElementById('sidebar-overlay');
+        const internalToggler = document.querySelector('.sidebar-toggler'); // The button inside the sidebar
+
+        // Helper to Toggle
+        const toggleSidebar = (forceOpen) => {
+          const isOpen = forceOpen ?? !body.classList.contains('sidebar-open');
+
+          if (isOpen) {
+            body.classList.add('sidebar-open');
+            localStorage.setItem('sidebar-state', 'open');
+          } else {
+            body.classList.remove('sidebar-open');
+            localStorage.setItem('sidebar-state', 'closed');
+          }
+        };
+
+        // Event Listeners
+        floatBtn?.addEventListener('click', () => toggleSidebar(true));
+        overlay?.addEventListener('click', () => toggleSidebar(false));
+
+        // If you click the toggle button INSIDE the sidebar, it closes the sidebar
+        internalToggler?.addEventListener('click', () => toggleSidebar(false));
+
+        // Restore State on Load
+        // (Optional: If you want it to remember being open. Remove this block if you want it always closed on refresh)
+        const savedState = localStorage.getItem('sidebar-state');
+        if (savedState === 'open') {
+          body.classList.add('sidebar-open');
+        }
+      }
+
+      // Initialize on load and after Astro View Transitions
+      initSidebar();
+      document.addEventListener('astro:after-swap', initSidebar);
+    </script>
+  </body>
+</html>
