@@ -1,4 +1,104 @@
 ---
+// @ts-check
+import AppLayout from '../layouts/AppLayout.astro';
+import { BareMuxConnection } from '@mercuryworkshop/bare-mux';
 const { url } = Astro.params;
-const decodedUrl = decodeURIComponent(url);
+let computedURL;
+
+try {
+  const decoded = decodeURIComponent(Astro.params.url);
+  computedURL = new URL(decoded);
+} catch {
+  Astro.redirect('/404');
+}
 ---
+
+<AppLayout title="Scramjet Embed" description={`Embedded content from ${computedURL.hostname}`}>
+  <script>
+    const { ScramjetController } = $scramjetLoadController();
+    const scramjet = new ScramjetController({
+      prefix: '/petezah/games/',
+      files: {
+        wasm: '/scram/scramjet.wasm.wasm',
+        all: '/scram/scramjet.all.js',
+        sync: '/scram/scramjet.sync.js'
+      }
+    });
+    scramjet.init();
+    navigator.serviceWorker.register('./sw.js');
+    const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
+    const store = {
+      wispurl: _CONFIG?.wispurl || (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/wisp/',
+      bareurl: _CONFIG?.bareurl || (location.protocol === 'https:' ? 'https' : 'http') + '://' + location.host + '/bare/'
+    };
+
+    function getParams() {
+      const hash = location.hash.substring(1);
+      const noRedirect = location.search.includes('no-redirect');
+      let url = hash || 'https://google.com/';
+      if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+      return { url, noRedirect };
+    }
+
+    async function loadFromHash() {
+      const { url, noRedirect } = getParams();
+      await waitForTransport();
+      const frame = scramjet.createFrame();
+      const iframe = frame.frame;
+      iframe.sandbox = 'allow-scripts allow-same-origin allow-pointer-lock allow-presentation allow-forms allow-popups';
+      if (noRedirect) {
+        iframe.addEventListener('load', () => {
+          try {
+            const doc = iframe.contentDocument;
+
+            const blockNewTabOnly = (e) => {
+              const link = e.target.closest('a');
+              if (link && link.getAttribute('target') === '_blank') {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            };
+
+            doc.addEventListener('click', blockNewTabOnly, true);
+            doc.addEventListener('auxclick', blockNewTabOnly, true);
+          } catch (e) {
+            console.error('Failed to set up no-redirect handlers:', e);
+          }
+        });
+      }
+      document.getElementById('iframe-container').appendChild(iframe);
+      frame.go(url);
+    }
+
+    async function waitForTransport() {
+      let attempts = 0;
+      const maxAttempts = 10;
+      while (attempts < maxAttempts) {
+        try {
+          await connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]);
+          return;
+        } catch {
+          try {
+            await connection.setTransport('/baremod/index.mjs', [store.bareurl]);
+            return;
+          } catch {
+            try {
+              await connection.setTransport('/libcurl/index.mjs', [{ wisp: store.wispurl }]);
+              return;
+            } catch {
+              attempts++;
+              if (attempts >= maxAttempts) throw new Error('No transport');
+              await new Promise((r) => setTimeout(r, 100));
+            }
+          }
+        }
+      }
+    }
+
+    window.addEventListener('hashchange', () => {
+      document.getElementById('iframe-container').innerHTML = '';
+      loadFromHash();
+    });
+    window.addEventListener('load', loadFromHash);
+  </script>
+</AppLayout>

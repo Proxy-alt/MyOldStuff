@@ -1,11 +1,7 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-import Particles from '../components/Particles.astro';
 import Analytics from '../components/Analytics.astro';
 import SEO from '../components/seo.astro';
 import SEOjson from '../components/SEOjson.astro';
-import Sidebar from '../components/Sidebar.astro';
-import Widget from '../components/Widget.astro';
 
 import '../styles/global.css';
 
@@ -21,6 +17,6 @@ const { title, description } = Astro.props;
   </head>
   <body>
     <Analytics location="body" />
-    <Slot />
+    <slot />
   </body>
 </html>

@@ -1,5 +1,3 @@
-/* layout.css */
-
 :root {
   --sb-width: 270px;
   --transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -229,7 +227,10 @@ body.sidebar-open .sidebar-overlay {
   border-radius: 8px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   flex-direction: column;
-  width: 120px;
+  width: max-content;        /* Grow only as wide as needed */
+  padding-right: 1rem;       /* Extend 1rem beyond longest text */
+  padding-left: 0.5rem;      /* Optional: keep left padding tidy */
+  box-sizing: content-box;   /* Ensures padding doesn't shrink content */
 }
 
 .widget-popup.show {
@@ -251,4 +252,145 @@ body.sidebar-open .sidebar-overlay {
 .widget-option:hover {
   background: #fff;
   color: #151a2d;
+}
+/* =========================================
+   RELOAD MODAL (Integrated Styles)
+   ========================================= */
+
+/* Overlay - Covers the whole screen including Sidebar */
+.reload-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(4, 4, 29, 0.85); /* Darkened var(--body-bg) */
+  backdrop-filter: blur(8px); /* Modern frosted glass effect */
+  display: flex; /* Hidden by default? Change to 'none' if controlling via JS */
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Higher than Sidebar (1000) and Toggle (900) */
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Modal Card - Uses the "Image Shuffler" aesthetic */
+.reload-content {
+  background-color: #0a1d37; /* The specific dark blue from source */
+  color: white;
+  width: clamp(18rem, 80vw, 28rem);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: clamp(0.6rem, 1vw, 1rem);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 clamp(0.6rem, 2vw, 1.5rem) clamp(2rem, 4vw, 3rem) rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(255, 255, 255, 0.05); /* Subtle inner glow */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+
+  /* Animation from source */
+  animation: slideInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Typography */
+.reload-content h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  margin: 0;
+  text-shadow: 0 4px 10px rgba(255, 255, 255, 0.15);
+}
+
+.reload-content p {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  color: #dcdcdc; /* Light grey from source */
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Icon Styling */
+.reload-icon {
+  color: #fff;
+  width: clamp(3rem, 6vw, 4rem);
+  height: clamp(3rem, 6vw, 4rem);
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
+}
+
+/* =========================================
+   THE SHINY BUTTON (Ported Exactly)
+   ========================================= */
+.shiny-btn {
+  position: relative;
+  outline: none;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: #3c5b8e; /* The blue button color */
+  border: none;
+  border-radius: clamp(0.4rem, 1vw, 0.8rem);
+  color: #fff;
+  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  padding: clamp(0.8rem, 2vw, 1rem) clamp(2rem, 4vw, 3rem);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.02, 0.01, 0.47, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.shiny-btn:hover {
+  background-color: #2a3c5f;
+  transform: scale(1.05);
+  box-shadow: 0 clamp(0.3rem, 1vw, 0.6rem) clamp(0.8rem, 2vw, 1.5rem) rgba(255, 255, 255, 0.4);
+}
+
+.shiny-btn span {
+  color: #fff;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  font-weight: 600;
+  letter-spacing: clamp(0.05rem, 0.3vw, 0.1rem);
+  z-index: 20;
+}
+
+/* The Shine Effect */
+.shiny-btn:after {
+  background: #fff;
+  content: '';
+  height: clamp(6rem, 20vw, 10rem);
+  left: -clamp(4rem, 10vw, 6rem);
+  opacity: 0.4;
+  position: absolute;
+  top: -clamp(2rem, 6vw, 3rem);
+  transform: rotate(35deg);
+  transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+  width: clamp(1.5rem, 4vw, 3rem);
+  z-index: 10;
+}
+
+.shiny-btn:hover:after {
+  left: 120%;
+}
+
+/* =========================================
+   ANIMATIONS (Ported)
+   ========================================= */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(3rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

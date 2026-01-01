@@ -30,24 +30,37 @@ const { title, description } = Astro.props;
   <body>
     <Analytics location="body" />
 
-    <!-- 1. The Overlay (Background dimmer) -->
+    <!-- Overlay -->
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <!-- 2. The Floating Arrow Button -->
+    <!-- Floating Arrow Button -->
     <button id="floating-toggle" aria-label="Open Menu">
       <span class="material-symbols-rounded">arrow_forward_ios</span>
     </button>
 
-    <!-- 3. Sidebar (Using persist to keep state) -->
+    <!-- Sidebar -->
     <Sidebar transition:persist />
 
-    <!-- 4. Main Content (Now centered via CSS) -->
+    <!-- Main Content -->
     <main class="main-content">
-      <slot />
       <Particles />
+      <slot />
       <Widget />
     </main>
 
+    <script type="module">
+      import { registerSW } from 'virtual:pwa-register';
+      registerSW({
+        immediate: true,
+        onNeedRefresh() {
+          // Optional: Show a prompt to user to reload for new content
+          console.log('New content available, reload to update.');
+        },
+        onOfflineReady() {
+          console.log('App is ready to work offline.');
+        },
+      });
+    </script>
     <script>
       function initSidebar() {
         const body = document.body;
@@ -56,7 +69,7 @@ const { title, description } = Astro.props;
         const internalToggler = document.querySelector('.sidebar-toggler'); // The button inside the sidebar
 
         // Helper to Toggle
-        const toggleSidebar = (forceOpen) => {
+        const toggleSidebar = (forceOpen: boolean) => {
           const isOpen = forceOpen ?? !body.classList.contains('sidebar-open');
 
           if (isOpen) {

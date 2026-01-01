@@ -59,6 +59,7 @@ for (const [path, module] of Object.entries(imageImports)) {
       id="search-input"
       placeholder={`Search for YOUR Favorite ${collection.slice(0, -1)}.....`}
       autocomplete="on"
+      aria-label="On this page"
     />
   </search>
 
@@ -185,9 +186,11 @@ for (const [path, module] of Object.entries(imageImports)) {
         });
       }
 
-      /* -----------------------------
-         RANDOM BUTTON
-      ------------------------------ */
+      /**
+       * -----------------------------
+       * RANDOM BUTTON
+       * -----------------------------
+       */
       randomBtn.addEventListener('click', () => {
         if (allCards.length > 0) {
           const randomIndex = Math.floor(Math.random() * allCards.length);
