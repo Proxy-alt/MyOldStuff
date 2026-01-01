@@ -77,13 +77,12 @@ const computedImage = image ? (image.startsWith('http') ? image : `${url}${image
 
 // --- Schemas ---
 
-// 1. Organization (Extended)
+// Organization
 const organizationSchema = {
-  '@context': 'https://schema.org', // Simplified: No more GS1/UNECE
+  '@context': 'https://schema.org',
   '@type': 'Organization',
   'name': 'PeteZah Games',
   'alternateName': 'PeteZah',
-  // vital for "Developer" status to disambiguate from a pizza restaurant
   'description': 'Unblocked Games website for academic enviornmnets and free online games.',
   'url': url,
   'logo': {
@@ -96,6 +95,7 @@ const organizationSchema = {
     'https://x.com/PeteZahGames',
     'https://github.com/PeteZah-Games',
     'https://discord.gg/petezah-games-1337108365591187640',
+    'https://discord.com/invite/petezah-games-1337108365591187640',
     'https://www.youtube.com/@PeteZahGames',
     'https://www.tiktok.com/@petezahpersonal'
   ],
@@ -113,14 +113,13 @@ const organizationSchema = {
       'availableLanguage': ['en']
     }
   ],
-  // Kept generic US country as requested (Online/Remote)
   'address': {
     '@type': 'PostalAddress',
     'addressCountry': 'US'
   }
 };
 
-// 2. WebSite (Search)
+// 2. WebSite
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -152,7 +151,7 @@ const breadcrumbSchema = {
   ]
 };
 
-// 4. SoftwareApplication / VideoGame (With AggregateRating & Reviews)
+// 4. SoftwareApplication / VideoGame
 let gameSchema = null;
 if (isGames) {
   gameSchema = {
@@ -165,7 +164,7 @@ if (isGames) {
     'genre': genre,
     'gamePlatform': platform,
     'applicationCategory': 'Game',
-    'operatingSystem': 'Web Browser, Windows, macOS, Linux, Android, iOS',
+    'operatingSystem': 'Web Browser',
     'author': {
       '@type': 'Organization',
       'name': 'PeteZah Games'
@@ -178,7 +177,7 @@ if (isGames) {
     }
   };
 
-  // Add Aggregate Rating (Star Rating)
+  // Aggregate Rating
   if (ratingValue) {
     gameSchema.aggregateRating = {
       '@type': 'AggregateRating',
@@ -189,7 +188,7 @@ if (isGames) {
     };
   }
 
-  // Add Individual Reviews
+  // Individual Reviews
   if (reviews.length > 0) {
     gameSchema.review = reviews.map((r) => ({
       '@type': 'Review',
@@ -206,7 +205,7 @@ if (isGames) {
   }
 }
 
-// 5. DiscussionForumPosting (New)
+// DiscussionForumPosting
 let forumSchema = null;
 if (isDiscussion && forumThread) {
   forumSchema = {
@@ -228,7 +227,7 @@ if (isDiscussion && forumThread) {
   };
 }
 
-// 6. Article
+// Article
 let articleSchema = null;
 if (isArticle) {
   articleSchema = {
@@ -245,7 +244,7 @@ if (isArticle) {
   };
 }
 
-// 7. FAQPage
+// FAQPage
 let faqSchema = null;
 if (faq.length > 0) {
   faqSchema = {
@@ -259,7 +258,7 @@ if (faq.length > 0) {
   };
 }
 
-// 8. Generic WebPage (Fallback)
+// WebPage
 const webpageSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -279,5 +278,5 @@ const webpageSchema = {
 {articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
 {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
 
-<!-- Fallback only if no specific entity exists -->
+<!-- Fallback -->
 {!gameSchema && !forumSchema && !articleSchema && <script type="application/ld+json" set:html={JSON.stringify(webpageSchema)} />}

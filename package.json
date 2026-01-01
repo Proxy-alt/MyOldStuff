@@ -23,12 +23,14 @@
     "@mercuryworkshop/libcurl-transport": "^1.5.2",
     "@mercuryworkshop/scramjet": "https://github.com/MercuryWorkshop/scramjet/archive/refs/tags/latest.tar.gz",
     "@mercuryworkshop/wisp-js": "^0.4.1",
+    "@petezah-games/ultraviolet": "^3.2.13",
     "@realfavicongenerator/generate-favicon": "^0.5.0",
     "@realfavicongenerator/image-adapter-node": "^0.5.0",
     "@supabase/supabase-js": "^2.89.0",
     "@tailwindcss/vite": "^4.1.18",
     "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
     "@tomphttp/bare-server-node": "^2.0.6",
+    "@vite-pwa/astro": "^1.2.0",
     "astro": "^5.16.6",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.5.0",
@@ -47,11 +49,18 @@
     "proper-lockfile": "^4.1.2",
     "puppeteer": "^24.34.0",
     "sharp": "^0.34.5",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vite-plugin-pwa": "^1.2.0",
+    "workbox-window": "^7.4.0"
   },
   "devDependencies": {
     "@types/node": "^25.0.3",
+    "@types/serviceworker": "^0.0.172",
     "prettier": "3.6.2",
-    "prettier-plugin-organize-imports": "^4.3.0"
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "workbox-expiration": "^7.4.0",
+    "workbox-precaching": "^7.4.0",
+    "workbox-routing": "^7.4.0",
+    "workbox-strategies": "^7.4.0"
   }
 }
