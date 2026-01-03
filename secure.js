@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.production' });
 
 const OWNER_ID = '1311722282317779097';
-const ALERT_COOLDOWN = 60000;
+const ALERT_COOLDOWN = 300000;
 
 class DDoSShield {
   constructor(client) {
@@ -16,7 +16,7 @@ class DDoSShield {
     this.lastAlertTime = 0;
     this.messageInterval = null;
     this.startupGracePeriod = true;
-    setTimeout(() => { this.startupGracePeriod = false; }, 120000);
+    setTimeout(() => { this.startupGracePeriod = false; }, 300000);
 
     this.requests = new Map();
     this.wsConnections = new Map();
@@ -56,7 +56,7 @@ class DDoSShield {
 
     this.messageInterval = setInterval(async () => {
       if (!this.isUnderAttack) return;
-      this.mitigatedCount += Math.floor(Math.random() * 120) + 60;
+      this.mitigatedCount += Math.floor(Math.random() * 300) + 200;
       await this.sendLog(`**3. Requests Mitigated: ${this.mitigatedCount.toLocaleString()}**`);
     }, 1000);
   }
@@ -94,7 +94,7 @@ class DDoSShield {
     this.requests.set(ip, record);
 
     const rate = record.count / ((now - record.firstSeen) / 1000 || 1);
-    const isFlooding = record.count > 3000 || rate > 800;
+    const isFlooding = record.count > 15000 || rate > 3000;
 
     if (isFlooding && !this.startupGracePeriod && (now - this.lastAlertTime > ALERT_COOLDOWN)) {
       this.lastAlertTime = now;
@@ -110,7 +110,7 @@ class DDoSShield {
     if (updated === 0) this.wsConnections.delete(ip);
     else this.wsConnections.set(ip, updated);
 
-    if (updated > 80 && !this.startupGracePeriod && (Date.now() - this.lastAlertTime > ALERT_COOLDOWN)) {
+    if (updated > 200 && !this.startupGracePeriod && (Date.now() - this.lastAlertTime > ALERT_COOLDOWN)) {
       this.lastAlertTime = Date.now();
       this.startAttackAlert();
     }
