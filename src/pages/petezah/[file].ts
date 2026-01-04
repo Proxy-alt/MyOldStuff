@@ -1,4 +1,4 @@
-import pathWrapper from '../../lib/pathWrapper';
+import pathWrapper from '../../lib/pathWrapper.ts';
 import { uvPath } from '@petezah-games/ultraviolet';
 import type { APIRoute } from 'astro';
 export const GET: APIRoute = async ({ params }) => {

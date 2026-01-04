@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import logo from '../lib/logo';
+import logo from '../lib/logo.ts';
 
 const getRobotsTxt = `\
 # Hello from PeteZah Games!

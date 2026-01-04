@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db';
-import { getSession, isAdmin } from '../../lib/auth';
+import db from '../../lib/db.ts';
+import { getSession, isAdmin } from '../../lib/auth.ts';
 import { randomUUID } from 'crypto';
 
 export const GET: APIRoute = async () => {

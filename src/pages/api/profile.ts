@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db';
-import { getSession } from '../../lib/auth';
+import db from '../../lib/db.ts';
+import { getSession } from '../../lib/auth.ts';
 
 export const GET: APIRoute = async (context) => {
   const user = getSession(context); // You must implement this helper based on your DB

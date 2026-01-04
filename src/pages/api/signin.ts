@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db';
+import db from '../../lib/db.ts';
 import bcrypt from 'bcrypt';
-import { createSession } from '../../lib/auth';
-import type { User } from '../../lib/db';
+import { createSession } from '../../lib/auth.ts';
+import type { User } from '../../lib/db.ts';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {

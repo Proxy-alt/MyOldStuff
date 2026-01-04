@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import pathWrapper from '../../lib/pathWrapper';
+import pathWrapper from '../../lib/pathWrapper.ts';
 import { join } from 'node:path';
 
 const entry = import.meta.resolve("@your-org/package");

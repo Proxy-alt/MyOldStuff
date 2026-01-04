@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db';
+import db from '../../lib/db.ts';
 
 export const GET: APIRoute = async ({ url }) => {
   const token = url.searchParams.get('token');

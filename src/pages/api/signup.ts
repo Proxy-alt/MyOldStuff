@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db';
+import db from '../../lib/db.ts';
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 

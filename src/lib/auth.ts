@@ -1,7 +1,7 @@
 import type { APIContext } from 'astro';
 import { randomUUID } from 'crypto';
-import db from './db';
-import type { User, UserSession } from './db';
+import db from './db.ts';
+import type { User, UserSession } from './db.ts';
 
 const SESSION_DURATION = 1000 * 60 * 60 * 24 * 7; // 1 week
 

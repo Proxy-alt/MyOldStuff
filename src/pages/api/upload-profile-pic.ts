@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs';
 import path from 'node:path';
-import db from '../../lib/db';
-import { getSession } from '../../lib/auth';
+import db from '../../lib/db.ts';
+import { getSession } from '../../lib/auth.ts';
 
 export const POST: APIRoute = async (context) => {
   const user = getSession(context);

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db';
+import db from '../../lib/db.ts';
 
 export const POST: APIRoute = async ({ cookies }) => {
   const sessionId = cookies.get('session_id')?.value;
