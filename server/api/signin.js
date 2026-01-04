@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import db from '../db.js';
+import db from '../../src/lib/db.js';
 
 const DUMMY_HASH = '$2b$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12';
 

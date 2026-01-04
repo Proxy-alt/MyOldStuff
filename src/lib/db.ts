@@ -8,6 +8,29 @@ const __dirname = path.dirname(__filename);
 
 const dbPath = path.join(__dirname, '..', 'data', 'users.db');
 const dbDir = path.dirname(dbPath);
+// Types
+export interface User {
+  id: string;
+  email: string;
+  password_hash: string;
+  username: string | null;
+  bio: string | null;
+  avatar_url: string | null;
+  created_at: number;
+  updated_at: number;
+  email_verified: number; // SQLite uses 0/1 for booleans
+  is_admin: number;
+  school: string | null;
+  age: number | null;
+  ip: string | null;
+}
+
+export interface UserSession {
+  session_id: string;
+  user_id: string;
+  created_at: number;
+  expires_at: number;
+}
 
 if (!fs.existsSync(dbDir)) {
   fs.mkdirSync(dbDir, { recursive: true });
@@ -32,7 +55,7 @@ db.exec(`
 
 try {
   const tableInfo = db.prepare('PRAGMA table_info(users)').all();
-  const columnNames = tableInfo.map((col) => col.name);
+  const columnNames = tableInfo.map((col: any) => col.name);
   const hasExistingUsers = db.prepare('SELECT COUNT(*) as count FROM users').get().count > 0;
 
   if (!columnNames.includes('email_verified')) {

@@ -26,7 +26,7 @@ import { addCommentHandler, getCommentsHandler } from './server/api/comments.js'
 import { getLikesHandler, likeHandler } from './server/api/likes.js';
 import { signinHandler } from './server/api/signin.js';
 import { signupHandler } from './server/api/signup.js';
-import db from './server/db.js';
+import db from './src/lib/db.js';
 import { handler as ssrHandler } from './dist/server/entry.mjs';
 const { createBareServer } = bareServerPkg;
 

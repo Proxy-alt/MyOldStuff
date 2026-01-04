@@ -1,5 +1,5 @@
 // filepath: server/api/admin-user-action.js
-import db from '../db.js';
+import db from '../../src/lib/db.js';
 
 export async function adminUserActionHandler(req, res) {
   if (!req.session.user) return res.status(401).json({ error: 'Unauthorized' });
@@ -38,7 +38,7 @@ export async function adminUserActionHandler(req, res) {
     if (action === 'ban') {
       try {
         db.prepare('ALTER TABLE users ADD COLUMN banned INTEGER DEFAULT 0');
-      } catch {}
+      } catch { }
       db.prepare('UPDATE users SET banned = 1, email_verified = 0 WHERE id = ?').run(userId);
       return res.json({ message: 'User and IP banned.' });
     }

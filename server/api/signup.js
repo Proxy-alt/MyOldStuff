@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { createHash, randomUUID } from 'crypto';
-import db from '../db.js';
+import db from '../../src/lib/db.js';
 
 const requestTimestamps = new Map();
 const suspiciousIPs = new Map();

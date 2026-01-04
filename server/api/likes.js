@@ -1,6 +1,6 @@
 // filepath: server/api/likes.js
 import { randomUUID } from 'crypto';
-import db from '../db.js';
+import db from '../../src/lib/db.js';
 
 export async function likeHandler(req, res) {
   if (!req.session.user) return res.status(401).json({ error: 'Unauthorized' });

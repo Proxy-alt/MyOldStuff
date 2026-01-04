@@ -1,104 +1,145 @@
 ---
 // @ts-check
-import AppLayout from '../layouts/AppLayout.astro';
-import { BareMuxConnection } from '@mercuryworkshop/bare-mux';
+import AppLayout from '../../layouts/AppLayout.astro';
 const { url } = Astro.params;
 let computedURL;
 
+/* Filter for bad domains */
+// Cache
+let cachedList: Set<string> | null = null;
+let cachedAt = 0;
+
+// 2 hours in milliseconds
+const CACHE_DURATION = 2 * 60 * 60 * 1000;
+
+async function getBlockedDomains() {
+  const now = Date.now();
+
+  if (cachedList && now - cachedAt < CACHE_DURATION) {
+    return cachedList;
+  }
+
+  // Fetch the hosts file
+  const response = await fetch("https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts");
+  const text = await response.text();
+
+  // Parse into a Set of domains
+  const domains: Set<string> = new Set();
+
+  for (const line of text.split("\n")) {
+    const trimmed = line.trim();
+
+    // Skip comments and empty lines
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const parts = trimmed.split(/\s+/);
+    if (parts.length < 2) continue;
+
+    const [ip, domain] = parts;
+
+    // Only accept 0.0.0.0 or 127.0.0.1 entries
+    if (ip === "0.0.0.0" || ip === "127.0.0.1") {
+      domains.add(domain.toLowerCase());
+    }
+  }
+
+  // Cache it
+  cachedList = domains;
+  cachedAt = now;
+
+  return domains;
+}
+
+
+
 try {
-  const decoded = decodeURIComponent(Astro.params.url);
-  computedURL = new URL(decoded);
+  const decoded = decodeURIComponent(url);
+  const parsed = new URL(decoded);
+if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    throw new Error("Invalid protocol");
+  }
+  computedURL = parsed.toString();
 } catch {
   Astro.redirect('/404');
 }
 ---
 
-<AppLayout title="Scramjet Embed" description={`Embedded content from ${computedURL.hostname}`}>
-  <script>
-    const { ScramjetController } = $scramjetLoadController();
-    const scramjet = new ScramjetController({
-      prefix: '/petezah/games/',
-      files: {
-        wasm: '/scram/scramjet.wasm.wasm',
-        all: '/scram/scramjet.all.js',
-        sync: '/scram/scramjet.sync.js'
-      }
-    });
-    scramjet.init();
-    navigator.serviceWorker.register('./sw.js');
-    const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
-    const store = {
-      wispurl: _CONFIG?.wispurl || (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/wisp/',
-      bareurl: _CONFIG?.bareurl || (location.protocol === 'https:' ? 'https' : 'http') + '://' + location.host + '/bare/'
-    };
+<AppLayout title="Scramjet Embed" description=`Embedded Site for ${computedURL}`>
 
-    function getParams() {
-      const hash = location.hash.substring(1);
-      const noRedirect = location.search.includes('no-redirect');
-      let url = hash || 'https://google.com/';
-      if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-      return { url, noRedirect };
-    }
+		<div id="status">Initializing...</div>
+		<button id="reload-btn" style="display: none; margin: 8px 0">
+			🔄 Reload Test
+		</button>
+		<iframe
+			id="embedFrame"
+			style="width: 100%; height: 100%"
+		></iframe>
+        <script src="/scram/scramjet.js"></script>
+		<script src="/scram/controller.api.js"></script>
+		<script type="module">
+			// @ts-check
+			import { Controller, config } from "@mercuryworkshop/scramjet-controller";
+			const statusEl = document.getElementById("status");
+			const embedFrame = document.getElementById("embedFrame");
+			import { LibcurlClient } from "@mercuryworkshop/libcurl-transport";
 
-    async function loadFromHash() {
-      const { url, noRedirect } = getParams();
-      await waitForTransport();
-      const frame = scramjet.createFrame();
-      const iframe = frame.frame;
-      iframe.sandbox = 'allow-scripts allow-same-origin allow-pointer-lock allow-presentation allow-forms allow-popups';
-      if (noRedirect) {
-        iframe.addEventListener('load', () => {
-          try {
-            const doc = iframe.contentDocument;
+			// Config overrides
+			config.prefix = "/petezah/scram/"
+			config.wasmPath = "/scram/scramjet.wasm";
+			config.injectPath = "/scramcontroller/controller.inject.js";
+			config.wasmPath = "/scram/scramjet.wasm";
+			config.scramjetPath = "/scram/scramjet.js";
 
-            const blockNewTabOnly = (e) => {
-              const link = e.target.closest('a');
-              if (link && link.getAttribute('target') === '_blank') {
-                e.preventDefault();
-                e.stopPropagation();
-              }
-            };
+			let controller;
+			let scramjetFrame;
+			async function init() {
+				statusEl.textContent = "Registering service worker...";
+				const registration = await navigator.serviceWorker.register("/sw.js");
+				// Wait for the service worker to be ready
+				if (!navigator.serviceWorker.controller) {
+					statusEl.textContent = "Waiting for service worker to activate...";
+					await new Promise((resolve) => {
+						if (registration.active) {
+							resolve();
+							return;
+						}
+						const sw = registration.installing || registration.waiting;
+						if (sw) {
+							sw.addEventListener("statechange", () => {
+								if (sw.state === "activated") resolve();
+							});
+						}
+					});
+					// Wait for controller
+					if (!navigator.serviceWorker.controller) {
+						await new Promise((resolve) => {
+							navigator.serviceWorker.addEventListener(
+								"controllerchange",
+								resolve,
+								{ once: true }
+							);
+						});
+					}
+				}
+				statusEl.textContent = "Initializing controller...";
+				const transport = new LibcurlClient({
+					wisp: "ws://localhost:4501/",
+				});
 
-            doc.addEventListener('click', blockNewTabOnly, true);
-            doc.addEventListener('auxclick', blockNewTabOnly, true);
-          } catch (e) {
-            console.error('Failed to set up no-redirect handlers:', e);
-          }
-        });
-      }
-      document.getElementById('iframe-container').appendChild(iframe);
-      frame.go(url);
-    }
+				controller = new Controller({
+					serviceworker: registration.active,
+					transport,
+				});
 
-    async function waitForTransport() {
-      let attempts = 0;
-      const maxAttempts = 10;
-      while (attempts < maxAttempts) {
-        try {
-          await connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]);
-          return;
-        } catch {
-          try {
-            await connection.setTransport('/baremod/index.mjs', [store.bareurl]);
-            return;
-          } catch {
-            try {
-              await connection.setTransport('/libcurl/index.mjs', [{ wisp: store.wispurl }]);
-              return;
-            } catch {
-              attempts++;
-              if (attempts >= maxAttempts) throw new Error('No transport');
-              await new Promise((r) => setTimeout(r, 100));
-            }
-          }
-        }
-      }
-    }
+				await controller.wait;
 
-    window.addEventListener('hashchange', () => {
-      document.getElementById('iframe-container').innerHTML = '';
-      loadFromHash();
-    });
-    window.addEventListener('load', loadFromHash);
-  </script>
-</AppLayout>
+				scramjetFrame = controller.createFrame(embedFrame);
+                scramjetFrame.go("about:blank");
+			}
+
+			init().catch((err) => {
+				statusEl.textContent = `Error: ${err.message}`;
+				console.error("Harness init error:", err);
+			});
+		</script>
+</AppLayout >

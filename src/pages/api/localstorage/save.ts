@@ -1,0 +1,18 @@
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ params }) => {
+  const target = 'https://cdn.jsdelivr.net/gh/gn-math/covers@main';
+  const path = params.path || '';
+
+  try {
+    const response = await fetch(`${target}/${path}`);
+    // Clone response to pass it through
+    return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers
+    });
+  } catch (err) {
+    return new Response("Proxy Error", { status: 502 });
+  }
+};

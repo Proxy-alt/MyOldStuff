@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import db from './db.js';
+import db from '../src/lib/db.js';
 
 async function migrateUser(userData, settingsData) {
   try {

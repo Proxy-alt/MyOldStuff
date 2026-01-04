@@ -1,14 +1,14 @@
 services:
   - type: web
+    runtime: node
+    plan: free
     name: petezahgames
+    repo: https://github.com/PeteZah-Games/PeteZahGames
+    branch: main
     env: node
     plan: free
     envVars:
-      - key: SUPABASE_URL
-        value: ''
-      - key: SUPABASE_KEY
-        value: ''
       - key: SESSION_SECRET
-        value: ''
-    buildCommand: pnpm install
-    startCommand: pnpm start
+        generateValue: true
+    buildCommand: npm install && npm run build
+    startCommand: npm run start

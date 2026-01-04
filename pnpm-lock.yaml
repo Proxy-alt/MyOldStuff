@@ -21,8 +21,11 @@ importers:
         specifier: ^1.5.2
         version: 1.5.2
       '@mercuryworkshop/scramjet':
-        specifier: https://github.com/MercuryWorkshop/scramjet/archive/refs/tags/latest.tar.gz
+        specifier: 2.0.0-alpha
         version: https://github.com/MercuryWorkshop/scramjet/archive/refs/tags/latest.tar.gz
+      '@mercuryworkshop/scramjet-controller':
+        specifier: ^0.0.9
+        version: 0.0.9
       '@mercuryworkshop/wisp-js':
         specifier: ^0.4.1
         version: 0.4.1(utf-8-validate@6.0.5)
@@ -107,13 +110,16 @@ importers:
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
-      vite-plugin-pwa:
-        specifier: ^1.2.0
-        version: 1.2.0(vite@6.4.1(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1))(workbox-build@7.4.0)(workbox-window@7.4.0)
       workbox-window:
         specifier: ^7.4.0
         version: 7.4.0
     devDependencies:
+      '@types/bcrypt':
+        specifier: ^6.0.0
+        version: 6.0.0
+      '@types/better-sqlite3':
+        specifier: ^7.6.13
+        version: 7.6.13
       '@types/node':
         specifier: ^25.0.3
         version: 25.0.3
@@ -126,6 +132,9 @@ importers:
       prettier-plugin-organize-imports:
         specifier: ^4.3.0
         version: 4.3.0(prettier@3.6.2)(typescript@5.9.3)
+      vite-plugin-pwa:
+        specifier: ^1.2.0
+        version: 1.2.0(vite@6.4.1(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1))(workbox-build@7.4.0)(workbox-window@7.4.0)
       workbox-expiration:
         specifier: ^7.4.0
         version: 7.4.0
@@ -1061,6 +1070,15 @@ packages:
   '@mercuryworkshop/libcurl-transport@1.5.2':
     resolution: {integrity: sha512-E0tD/3W6HE99ypc7CStpchU6xs+TP5u2vms/9q/46BShblB2pbRCNeXHBlvXqdz97nh2Xh4A68DryDt5CM29Dg==}
 
+  '@mercuryworkshop/proxy-transports@1.0.2':
+    resolution: {integrity: sha512-zgD+JMYNSx8LxVLWwGPPVnoDHjoh1GqqwUJIjhIwCwhy+Z7g+MhmiTJvCcRPAo7qXXbqJwIrpBJduRSOrjMV7g==}
+
+  '@mercuryworkshop/scramjet-controller@0.0.9':
+    resolution: {integrity: sha512-APYSejR8ST3pOCfJcsJELD93J3P9AvPoUTLrePZMw/jaR17KGw6RH9s1zpo3k5x7EemgQkJ9YkwInMQxG+PW4w==}
+
+  '@mercuryworkshop/scramjet@2.0.2-alpha':
+    resolution: {integrity: sha512-j7GZAovXP3vlY88vCq+DoxO7Sm9aCksOr1RhjL49MYV1AJvLq3RufOgCVztNdYlOdU/Unhdn4DB+Usb+xGQmwA==}
+
   '@mercuryworkshop/scramjet@https://github.com/MercuryWorkshop/scramjet/archive/refs/tags/latest.tar.gz':
     resolution: {tarball: https://github.com/MercuryWorkshop/scramjet/archive/refs/tags/latest.tar.gz}
     version: 2.0.0-alpha
@@ -1399,6 +1417,12 @@ packages:
 
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
+
+  '@types/bcrypt@6.0.0':
+    resolution: {integrity: sha512-/oJGukuH3D2+D+3H4JWLaAsJ/ji86dhRidzZ/Od7H/i8g+aCmvkeCc6Ni/f9uxGLSQVCRZkX2/lqEFG2BvWtlQ==}
+
+  '@types/better-sqlite3@7.6.13':
+    resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
 
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
@@ -5512,6 +5536,24 @@ snapshots:
     dependencies:
       libcurl.js: 0.7.4
 
+  '@mercuryworkshop/proxy-transports@1.0.2': {}
+
+  '@mercuryworkshop/scramjet-controller@0.0.9':
+    dependencies:
+      '@mercuryworkshop/proxy-transports': 1.0.2
+      '@mercuryworkshop/scramjet': 2.0.2-alpha
+
+  '@mercuryworkshop/scramjet@2.0.2-alpha':
+    dependencies:
+      '@mercuryworkshop/proxy-transports': 1.0.2
+      dom-serializer: 2.0.0
+      domhandler: 5.0.3
+      domutils: 3.2.2
+      htmlparser2: 10.0.0
+      idb: 8.0.3
+      parse-domain: 8.2.2
+      set-cookie-parser: 2.7.2
+
   '@mercuryworkshop/scramjet@https://github.com/MercuryWorkshop/scramjet/archive/refs/tags/latest.tar.gz':
     dependencies:
       '@mercuryworkshop/bare-mux': 2.1.8
@@ -5875,6 +5917,14 @@ snapshots:
       - utf-8-validate
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
+
+  '@types/bcrypt@6.0.0':
+    dependencies:
+      '@types/node': 25.0.3
+
+  '@types/better-sqlite3@7.6.13':
+    dependencies:
+      '@types/node': 25.0.3
 
   '@types/debug@4.1.12':
     dependencies:

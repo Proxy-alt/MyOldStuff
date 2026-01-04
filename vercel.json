@@ -1,8 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "name": "PeteZahGames",
-  "installCommand": "pnpm install",
-  "framework": "express",
+  "buildCommand": "npm build",
+  "cleanUrls": false,
+  "devCommand": "npm dev",
+  "installCommand": "npm install",
+  "framework": "astro",
   "images": {
     "sizes": [256, 640, 1080, 2048, 3840],
     "localPatterns": [

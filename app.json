@@ -2,6 +2,11 @@
   "name": "PeteZahGames",
   "description": "Express + static proxy site (PeteZahGames)",
   "repository": "https://github.com/PeteZah-Games/PeteZahGames",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
   "keywords": ["express", "proxy", "games", "scramjet", "supabase"],
   "env": {
     "SUPABASE_URL": {
