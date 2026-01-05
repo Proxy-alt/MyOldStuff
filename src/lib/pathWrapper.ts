@@ -8,6 +8,8 @@ export default async function (basePath: string, file: string | undefined, conte
   }
 
   const fullPath = join(basePath, `${file}`);
+   process.stderr.write(fullPath + "\n");
+
 
   try {
     const data = await readFile(fullPath);
@@ -19,6 +21,9 @@ export default async function (basePath: string, file: string | undefined, conte
       }
     });
   } catch {
-    return new Response("Not found", { status: 404 });
+    process.stderr.write(fullPath + "\n");
+
+
+    return new Response(`Not found and the full path was ${fullPath}`, { status: 404 });
   }
 }

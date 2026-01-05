@@ -1,0 +1,19 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+const title = 'Verify';
+const description = 'Verification page';
+---
+
+<AppLayout title={title} description={description}>
+  <main>
+    <h1>Verify</h1>
+    <p>This preserves legacy verify.html behavior.</p>
+  </main>
+</AppLayout>
+---
+import { redirect } from 'astro:redirect';
+// Redirect to legacy public verify page to preserve behavior while migrating
+export function get() {
+  return redirect('/verify.html', 302);
+}
+---

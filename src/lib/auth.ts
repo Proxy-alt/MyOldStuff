@@ -18,6 +18,23 @@ export const createSession = (userId: string) => {
   return { sessionId, expiresAt };
 };
 
+/**
+ * Create session and set cookie on the Astro API context.
+ * Use this from signin/signup handlers to issue cookie-backed sessions.
+ */
+export const createSessionAndSetCookie = (context: APIContext, userId: string) => {
+  const { sessionId, expiresAt } = createSession(userId);
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    path: '/',
+    expires: new Date(expiresAt)
+  };
+  context.cookies.set('session_id', sessionId, cookieOptions);
+  return { sessionId, expiresAt };
+};
+
 export const getSession = (context: APIContext): User | null => {
   const cookie = context.cookies.get('session_id');
   if (!cookie?.value) return null;
@@ -40,6 +57,34 @@ export const getSession = (context: APIContext): User | null => {
   // 3. Fetch User
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(session.user_id) as User | undefined;
   return user || null;
+};
+
+export const clearSession = (context: APIContext) => {
+  const cookie = context.cookies.get('session_id');
+  if (!cookie?.value) return;
+  const sessionId = cookie.value;
+  try {
+    db.prepare('DELETE FROM user_sessions WHERE session_id = ?').run(sessionId);
+  } catch (e) {
+    // ignore
+  }
+  context.cookies.set('session_id', '', { path: '/', expires: new Date(0) });
+};
+
+export const attachSession = (context: APIContext) => {
+  const user = getSession(context);
+  // Attach to context.locals if available, otherwise return user
+  // Astro's APIContext doesn't have a standardized locals, so return user for handler use
+  return user;
+};
+
+export const requireAuth = (context: APIContext) => {
+  const user = getSession(context);
+  if (!user) {
+    const res = new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+    throw res;
+  }
+  return user;
 };
 
 export const isAdmin = (user: User | null) => {

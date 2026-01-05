@@ -48,20 +48,25 @@ const { title, description } = Astro.props;
       <Widget />
     </main>
 
-    <script type="module">
+    <script type="module" is:inline>
       import { registerSW } from 'virtual:pwa-register';
-      registerSW({
-        immediate: true,
-        onNeedRefresh() {
-          // Optional: Show a prompt to user to reload for new content
-          console.log('New content available, reload to update.');
-        },
-        onOfflineReady() {
-          console.log('App is ready to work offline.');
-        },
-      });
+
+      function initSW() {
+        registerSW({
+          immediate: true,
+          onNeedRefresh() {
+            console.log('New content available, reload to update.');
+          },
+          onOfflineReady() {
+            console.log('App is ready to work offline.');
+          },
+        });
+      }
+
+      initSW();
+      document.addEventListener('astro:after-swap', initSW);
     </script>
-    <script>
+    <script is:inline>
       function initSidebar() {
         const body = document.body;
         const floatBtn = document.getElementById('floating-toggle');

@@ -1,12 +1,14 @@
 import node from '@astrojs/node';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
+import fastify from '@matthewp/astro-fastify';
 import AstroPWA from '@vite-pwa/astro';
 
 export default defineConfig({
   output: 'server',
-  adapter: node({
-    mode: 'middleware'
+  adapter: fastify({
+    // Point this to the file we just created
+    entry: new URL('./src/server.ts', import.meta.url)
   }),
   vite: {
     plugins: [tailwindcss()]

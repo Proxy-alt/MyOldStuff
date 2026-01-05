@@ -1,0 +1,20 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+const title = 'Iframe';
+const description = 'Legacy iframe page';
+---
+
+<AppLayout title={title} description={description}>
+  <main>
+    <h1>Legacy iframe</h1>
+    <p>This page preserves iframe behavior; querystring is preserved.</p>
+    <script type="module">
+      // If original iframe needed special handling, add here.
+      const qs = window.location.search;
+      const inner = document.createElement('iframe');
+      inner.src = '/iframe.html'+qs;
+      inner.style.width='100%'; inner.style.height='600px';
+      document.body.appendChild(inner);
+    </script>
+  </main>
+</AppLayout>

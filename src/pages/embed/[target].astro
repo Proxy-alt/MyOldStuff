@@ -1,7 +1,8 @@
 ---
 // @ts-check
+export const prerender = false;
 import AppLayout from '../../layouts/AppLayout.astro';
-const { url } = Astro.params;
+const { target } = Astro.params;
 let computedURL;
 
 /* Filter for bad domains */
@@ -53,7 +54,7 @@ async function getBlockedDomains() {
 
 
 try {
-  const decoded = decodeURIComponent(url);
+  const decoded = decodeURIComponent(target);
   const parsed = new URL(decoded);
 if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
     throw new Error("Invalid protocol");
@@ -74,9 +75,9 @@ if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
 			id="embedFrame"
 			style="width: 100%; height: 100%"
 		></iframe>
-        <script src="/scram/scramjet.js"></script>
-		<script src="/scram/controller.api.js"></script>
-		<script type="module">
+        <script src="/scram/scramjet.js" is:inline></script>
+		<script src="/scram/controller.api.js" is:inline></script>
+		<script type="module" is:inline>
 			// @ts-check
 			import { Controller, config } from "@mercuryworkshop/scramjet-controller";
 			const statusEl = document.getElementById("status");

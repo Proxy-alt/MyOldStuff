@@ -1,13 +1,82 @@
 ---
 // Stolen Partially From: https://github.com/MercuryWorkshop/scramjet/blob/v2/packages/runway/src/harness/scramjet/public/index.html
 import AppLayout from "../layouts/AppLayout.astro"
+import '/storage/css/browser.css'
 ---
 <AppLayout title="Search" description="Search the site">
-		<h1>Scramjet Test Harness</h1>
-		<div id="status">Initializing...</div>
-		<button id="reload-btn" style="display: none; margin: 8px 0">
-			🔄 Reload Test
-		</button>
+        <div class="browser-container">
+            <dialog id="config-modal" class="cfg">
+                <h2>Settings</h2>
+                <div class="flex col input_row">
+                    <label for="wisp_url_input">Wisp:</label>
+                    <input id="wisp_url_input" spellcheck="false">
+                </div>
+                <div class="flex col input_row">
+                    <label for="bare_url_input">Bare:</label>
+                    <input id="bare_url_input" spellcheck="false">
+                </div>
+                <div class="flex col input_row">
+                    <label for="homepage_input">Homepage:</label>
+                    <input id="homepage_input" spellcheck="false">
+                </div>
+                <div class="flex buttons">
+                    <button onclick="fixProxy();">Fix Proxy</button>
+                </div>
+                <div class="flex buttons centered">
+                    <button onclick="closeConfig()">Close</button>
+                </div>
+            </dialog>
+
+            <dialog id="history-modal" class="history-modal">
+                <h2>Browsing History</h2>
+                <div id="history-list" style="max-height: 300px; overflow-y: auto;"></div>
+                <div class="flex buttons centered">
+                    <button onclick="document.getElementById('history-modal').close()">Close</button>
+                </div>
+            </dialog>
+
+            <div class="flex tabs" id="tabs-container"></div>
+
+            <div class="flex nav">
+                <button onclick="showConfig()" title="Settings"><i class="fas fa-cog"></i></button>
+                <button onclick="getActiveTab()?.frame.back()" title="Back"><i class="fas fa-chevron-left"></i></button>
+                <button onclick="getActiveTab()?.frame.forward()" title="Forward"><i class="fas fa-chevron-right"></i></button>
+                <button onclick="getActiveTab()?.frame.reload()" title="Reload"><i class="fas fa-rotate-right"></i></button>
+
+                <div class="address-bar-container">
+                    <button id="secure-icon" onclick="showSecurePopup()" title="Site Info"><i class="fas fa-lock"></i></button>
+                    <input class="bar" id="address-bar" autocomplete="off" autocapitalize="off" autocorrect="off"
+                           onkeyup="event.keyCode === 13 && handleSubmit()" placeholder="Enter URL or search query">
+                    <button id="favorite-button" onclick="toggleFavorite()" title="Favorite"><i class="fas fa-star"></i></button>
+                </div>
+
+                <button onclick="window.open(scramjet.encodeUrl(getActiveTab()?.url))" title="Open in new window"><i class="fas fa-arrow-up-right-from-square"></i></button>
+                <button class="menu-btn" onclick="toggleMenu()" title="Menu"><i class="fas fa-ellipsis-v"></i></button>
+
+                <div class="menu-dropdown" id="menu-dropdown">
+                    <button onclick="createTab(); document.getElementById('iframe-container').appendChild(tabs[tabs.length-1].frame.frame); switchTab(tabs[tabs.length-1].id); toggleMenu()">
+                        <i class="fas fa-plus"></i> <span>New Tab</span>
+                    </button>
+                    <button onclick="closeAllTabs()">
+                        <i class="fas fa-times"></i> <span>Close All Tabs</span>
+                    </button>
+                    <div class="zoom-controls" style="padding: 10px; display: flex; align-items: center; justify-content: space-between;">
+                        <button style="width: auto;" onclick="zoomOut()"><i class="fas fa-minus"></i></button>
+                        <span id="zoom-level">100%</span>
+                        <button style="width: auto;" onclick="zoomIn()"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <button onclick="showHistory()">
+                        <i class="fas fa-history"></i> <span>History</span>
+                    </button>
+                    <button onclick="toggleFullScreen()">
+                        <i class="fas fa-expand"></i> <span>Fullscreen</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="iframe-container" id="iframe-container"></div>
+        </div>
+    </div>
 		<iframe
 			id="testframe"
 			style="width: 100%; height: 100%"

@@ -1,0 +1,18 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+const title = 'New Page';
+const description = 'Placeholder for newpage.html';
+---
+
+<AppLayout title={title} description={description}>
+  <main>
+    <h1>New Page</h1>
+    <p>This preserves the legacy newpage.html route.</p>
+  </main>
+</AppLayout>
+---
+import { redirect } from 'astro:redirect';
+export function get() {
+  return redirect('/newpage.html', 302);
+}
+---
