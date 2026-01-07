@@ -59,7 +59,7 @@ const { title, description } = Astro.props;
           },
           onOfflineReady() {
             console.log('App is ready to work offline.');
-          },
+          }
         });
       }
 
@@ -74,7 +74,7 @@ const { title, description } = Astro.props;
         const internalToggler = document.querySelector('.sidebar-toggler'); // The button inside the sidebar
 
         // Helper to Toggle
-        const toggleSidebar = (forceOpen: boolean) => {
+        const toggleSidebar = (forceOpen) => {
           const isOpen = forceOpen ?? !body.classList.contains('sidebar-open');
 
           if (isOpen) {

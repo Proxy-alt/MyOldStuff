@@ -1,23 +1,26 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db.ts';
 import { requireAuth } from '../../lib/auth.ts';
+import db from '../../lib/db.ts';
 
 export const POST: APIRoute = async (context) => {
   try {
     const user = requireAuth(context as any);
     const body = await context.request.json();
     const { userId, action } = body;
-    if (!userId || !['suspend', 'staff', 'delete', 'ban', 'promote_admin', 'demote_admin'].includes(action)) return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400 });
+    if (!userId || !['suspend', 'staff', 'delete', 'ban', 'promote_admin', 'demote_admin'].includes(action))
+      return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400 });
     if (userId === (user as any).id) return new Response(JSON.stringify({ error: 'Cannot manage yourself' }), { status: 400 });
 
     const admin = db.prepare('SELECT is_admin, email FROM users WHERE id = ?').get((user as any).id);
     const ownerEmail = process.env.ADMIN_EMAIL;
     const isOwner = admin && admin.email === ownerEmail;
-    if (!admin || (admin.is_admin < 1 && admin.is_admin !== 2)) return new Response(JSON.stringify({ error: 'Admin access required' }), { status: 403 });
+    if (!admin || (admin.is_admin < 1 && admin.is_admin !== 2))
+      return new Response(JSON.stringify({ error: 'Admin access required' }), { status: 403 });
 
     const target = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
     if (!target) return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
-    if (['promote_admin', 'demote_admin', 'staff'].includes(action) && !isOwner) return new Response(JSON.stringify({ error: 'Only the owner can manage admin/staff roles.' }), { status: 403 });
+    if (['promote_admin', 'demote_admin', 'staff'].includes(action) && !isOwner)
+      return new Response(JSON.stringify({ error: 'Only the owner can manage admin/staff roles.' }), { status: 403 });
     if (target.email === ownerEmail) return new Response(JSON.stringify({ error: 'Cannot manage the owner.' }), { status: 403 });
 
     if (action === 'staff') {

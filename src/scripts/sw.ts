@@ -1,16 +1,8 @@
 /// <reference lib="webworker" />
+import { ExpirationPlugin } from 'workbox-expiration';
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import {
-  CacheFirst,
-  NetworkFirst,
-  NetworkOnly,
-  CacheOnly,
-  StaleWhileRevalidate,
-  Strategy,
-  StrategyHandler,
-} from 'workbox-strategies';
-import { ExpirationPlugin } from 'workbox-expiration';
+import { CacheFirst, CacheOnly, NetworkFirst, NetworkOnly, StaleWhileRevalidate, Strategy, StrategyHandler } from 'workbox-strategies';
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -22,7 +14,7 @@ export enum CachingStrategy {
   StaleWhileRevalidate = 'SWR',
   Fastest = 'RACE', // Whichever returns first
   PreferNetwork = 'NETWORK_FIRST',
-  PreferCache = 'CACHE_FIRST',
+  PreferCache = 'CACHE_FIRST'
 }
 
 interface RouteConfig {
@@ -43,28 +35,28 @@ const config: RouteConfig[] = [
     name: 'images',
     pattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
     strategy: CachingStrategy.PreferCache, // Cache First
-    expiration: { maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 }, // 30 Days
+    expiration: { maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 } // 30 Days
   },
   {
     name: 'api-fresh-data',
     pattern: /\/api\/live-data/,
-    strategy: CachingStrategy.PreferNetwork, // Network First
+    strategy: CachingStrategy.PreferNetwork // Network First
   },
   {
     name: 'api-static-data',
     pattern: /\/api\/catalogue/,
-    strategy: CachingStrategy.StaleWhileRevalidate,
+    strategy: CachingStrategy.StaleWhileRevalidate
   },
   {
     name: 'critical-fonts',
     pattern: /\.(?:woff|woff2)$/,
-    strategy: CachingStrategy.CacheOnly, // Must be pre-cached or previously loaded
+    strategy: CachingStrategy.CacheOnly // Must be pre-cached or previously loaded
   },
   {
     name: 'time-sensitive-race',
     pattern: /\/api\/ping/,
-    strategy: CachingStrategy.Fastest, // Race network vs cache
-  },
+    strategy: CachingStrategy.Fastest // Race network vs cache
+  }
 ];
 
 // --- 3. Custom Strategy: Race (Whichever is Fastest) ---
@@ -79,8 +71,8 @@ class RaceStrategy extends Strategy {
 
     // Race them
     const response = await Promise.race([
-      networkPromise.then(r => r || cachePromise), // If network fails, fallback to cache
-      cachePromise.then(r => r || networkPromise)  // If cache misses, fallback to network
+      networkPromise.then((r) => r || cachePromise), // If network fails, fallback to cache
+      cachePromise.then((r) => r || networkPromise) // If cache misses, fallback to network
     ]);
 
     if (!response) {
@@ -97,9 +89,7 @@ class RaceStrategy extends Strategy {
 // --- 4. Strategy Resolver ---
 
 const getStrategy = (type: CachingStrategy, cacheName: string, expiration?: RouteConfig['expiration']) => {
-  const plugins = expiration
-    ? [new ExpirationPlugin({ maxEntries: expiration.maxEntries, maxAgeSeconds: expiration.maxAgeSeconds })]
-    : [];
+  const plugins = expiration ? [new ExpirationPlugin({ maxEntries: expiration.maxEntries, maxAgeSeconds: expiration.maxAgeSeconds })] : [];
 
   const options = { cacheName, plugins };
 
@@ -136,14 +126,8 @@ precacheAndRoute(self.__WB_MANIFEST);
 
 // Register user-configured routes
 config.forEach((route) => {
-  registerRoute(
-    ({ url }) => route.pattern.test(url.pathname),
-    getStrategy(route.strategy, route.name, route.expiration)
-  );
+  registerRoute(({ url }) => route.pattern.test(url.pathname), getStrategy(route.strategy, route.name, route.expiration));
 });
 
 // Default fallback for navigation requests (SPA support)
-registerRoute(
-    ({ request }) => request.mode === 'navigate',
-    new NetworkFirst({ cacheName: 'pages' })
-);
+registerRoute(({ request }) => request.mode === 'navigate', new NetworkFirst({ cacheName: 'pages' }));

@@ -1,15 +1,14 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-export default async function (basePath: string, file: string | undefined, contentType: string = "application/javascript"): Promise<Response> {
+export default async function (basePath: string, file: string | undefined, contentType: string = 'application/javascript'): Promise<Response> {
   // Only allow within that directory
-  if (file?.includes("..")) {
-  return new Response("Invalid path", { status: 400 });
+  if (file?.includes('..')) {
+    return new Response('Invalid path', { status: 400 });
   }
 
   const fullPath = join(basePath, `${file}`);
-   process.stderr.write(fullPath + "\n");
-
+  process.stderr.write(fullPath + '\n');
 
   try {
     const data = await readFile(fullPath);
@@ -17,12 +16,11 @@ export default async function (basePath: string, file: string | undefined, conte
     return new Response(data, {
       status: 200,
       headers: {
-        "Content-Type": contentType
+        'Content-Type': contentType
       }
     });
   } catch {
-    process.stderr.write(fullPath + "\n");
-
+    process.stderr.write(fullPath + '\n');
 
     return new Response(`Not found and the full path was ${fullPath}`, { status: 404 });
   }

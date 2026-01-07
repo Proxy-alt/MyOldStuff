@@ -1,7 +1,7 @@
 import type { APIContext } from 'astro';
 import { randomUUID } from 'crypto';
-import db from './db.ts';
 import type { User, UserSession } from './db.ts';
+import db from './db.ts';
 
 const SESSION_DURATION = 1000 * 60 * 60 * 24 * 7; // 1 week
 
@@ -10,10 +10,12 @@ export const createSession = (userId: string) => {
   const now = Date.now();
   const expiresAt = now + SESSION_DURATION;
 
-  db.prepare(`
+  db.prepare(
+    `
     INSERT INTO user_sessions (session_id, user_id, created_at, expires_at)
     VALUES (?, ?, ?, ?)
-  `).run(sessionId, userId, now, expiresAt);
+  `
+  ).run(sessionId, userId, now, expiresAt);
 
   return { sessionId, expiresAt };
 };
@@ -42,9 +44,13 @@ export const getSession = (context: APIContext): User | null => {
   const sessionId = cookie.value;
 
   // 1. Fetch session
-  const session = db.prepare(`
+  const session = db
+    .prepare(
+      `
     SELECT * FROM user_sessions WHERE session_id = ?
-  `).get(sessionId) as UserSession | undefined;
+  `
+    )
+    .get(sessionId) as UserSession | undefined;
 
   // 2. Validate session
   if (!session) return null;
@@ -89,9 +95,5 @@ export const requireAuth = (context: APIContext) => {
 
 export const isAdmin = (user: User | null) => {
   if (!user) return false;
-  return (
-    (user.is_admin === 1 && user.email === process.env.ADMIN_EMAIL) ||
-    user.is_admin === 2 ||
-    user.is_admin === 3
-  );
+  return (user.is_admin === 1 && user.email === process.env.ADMIN_EMAIL) || user.is_admin === 2 || user.is_admin === 3;
 };

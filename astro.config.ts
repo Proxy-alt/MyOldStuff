@@ -1,13 +1,11 @@
-import node from '@astrojs/node';
-import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'astro/config';
 import fastify from '@matthewp/astro-fastify';
+import tailwindcss from '@tailwindcss/vite';
 import AstroPWA from '@vite-pwa/astro';
+import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   output: 'server',
   adapter: fastify({
-    // Point this to the file we just created
     entry: new URL('./src/server.ts', import.meta.url)
   }),
   vite: {
@@ -16,16 +14,20 @@ export default defineConfig({
   integrations: [
     AstroPWA({
       strategies: 'injectManifest',
-      srcDir: 'src',
+      srcDir: 'src/scripts',
       filename: 'sw.ts',
-      workbox: {
+
+      // ⭐ THIS is the correct place for your glob settings
+      injectManifest: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globIgnores: ['storage/**']
       },
+
       devOptions: {
         enabled: true,
-        type: 'module',
-      },
-    }),
+        type: 'module'
+      }
+    })
   ],
   experimental: {
     svgo: true

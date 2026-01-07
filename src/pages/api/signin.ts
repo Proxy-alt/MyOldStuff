@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db.ts';
 import bcrypt from 'bcrypt';
 import { createSession } from '../../lib/auth.ts';
 import type { User } from '../../lib/db.ts';
+import db from '../../lib/db.ts';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
@@ -16,7 +16,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     }
 
     if (!user.email_verified) {
-       return new Response(JSON.stringify({ error: 'Email not verified' }), { status: 403 });
+      return new Response(JSON.stringify({ error: 'Email not verified' }), { status: 403 });
     }
 
     // Create DB Session
@@ -24,11 +24,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     // Set Cookie
     cookies.set('session_id', sessionId, {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: import.meta.env.PROD,
-        expires: new Date(expiresAt)
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: import.meta.env.PROD,
+      expires: new Date(expiresAt)
     });
 
     return new Response(JSON.stringify({ message: 'Signed in' }), { status: 200 });

@@ -7,11 +7,11 @@ export const GET: APIRoute = async ({ params, request }) => {
   try {
     const response = await fetch(`${target}/${path}`);
     return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: response.headers
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers
     });
   } catch (err) {
-    return new Response("Proxy Error", { status: 502 });
+    return new Response('Proxy Error', { status: 502 });
   }
 };

@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { randomUUID } from 'crypto';
-import db from '../../lib/db.ts';
 import { requireAuth } from '../../lib/auth.ts';
+import db from '../../lib/db.ts';
 
 // Server will perform minimal validation only. Full HTML sanitization
 // should be handled client-side (e.g., DOMPurify) before sending comments.
@@ -20,7 +20,11 @@ export const GET: APIRoute = async ({ request }) => {
     const targetId = url.searchParams.get('targetId');
     if (!['changelog', 'feedback'].includes(type || '')) return new Response(JSON.stringify({ error: 'Invalid type' }), { status: 400 });
     if (!targetId) return new Response(JSON.stringify({ error: 'Invalid targetId' }), { status: 400 });
-    const comments = db.prepare('SELECT c.*, u.username, u.avatar_url FROM comments c LEFT JOIN users u ON c.user_id = u.id WHERE c.type = ? AND c.target_id = ? ORDER BY c.created_at ASC').all(type, targetId);
+    const comments = db
+      .prepare(
+        'SELECT c.*, u.username, u.avatar_url FROM comments c LEFT JOIN users u ON c.user_id = u.id WHERE c.type = ? AND c.target_id = ? ORDER BY c.created_at ASC'
+      )
+      .all(type, targetId);
     return new Response(JSON.stringify({ comments }), { status: 200 });
   } catch (err) {
     console.error('Get comments error:', err);
@@ -39,7 +43,14 @@ export const POST: APIRoute = async (context) => {
     const sanitizedContent = typeof content === 'string' ? content : String(content);
     const id = randomUUID();
     const now = Date.now();
-    db.prepare('INSERT INTO comments (id, type, target_id, user_id, content, created_at) VALUES (?, ?, ?, ?, ?, ?)').run(id, type, targetId, (user as any).id, sanitizedContent, now);
+    db.prepare('INSERT INTO comments (id, type, target_id, user_id, content, created_at) VALUES (?, ?, ?, ?, ?, ?)').run(
+      id,
+      type,
+      targetId,
+      (user as any).id,
+      sanitizedContent,
+      now
+    );
     return new Response(JSON.stringify({ message: 'Comment posted.' }), { status: 200 });
   } catch (err) {
     if (err instanceof Response) return err; // requireAuth may throw

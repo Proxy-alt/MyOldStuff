@@ -10,9 +10,3 @@ const description = 'Placeholder for newpage.html';
     <p>This preserves the legacy newpage.html route.</p>
   </main>
 </AppLayout>
----
-import { redirect } from 'astro:redirect';
-export function get() {
-  return redirect('/newpage.html', 302);
-}
----

@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
 import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Cache variables (module scope = cached across requests)
 let cachedCommit: string | null = null;
@@ -33,9 +33,7 @@ function getPackageVersion() {
   if (cachedVersion) return cachedVersion;
 
   try {
-    const pkg = JSON.parse(
-      readFileSync(join(projectRoot, 'package.json'), 'utf8')
-    );
+    const pkg = JSON.parse(readFileSync(join(projectRoot, 'package.json'), 'utf8'));
 
     cachedVersion = pkg.version ?? 'unknown';
   } catch {

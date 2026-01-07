@@ -12,8 +12,9 @@ const description = 'Legacy iframe page';
       // If original iframe needed special handling, add here.
       const qs = window.location.search;
       const inner = document.createElement('iframe');
-      inner.src = '/iframe.html'+qs;
-      inner.style.width='100%'; inner.style.height='600px';
+      inner.src = '/iframe.html' + qs;
+      inner.style.width = '100%';
+      inner.style.height = '600px';
       document.body.appendChild(inner);
     </script>
   </main>

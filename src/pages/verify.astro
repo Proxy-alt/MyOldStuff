@@ -10,10 +10,3 @@ const description = 'Verification page';
     <p>This preserves legacy verify.html behavior.</p>
   </main>
 </AppLayout>
----
-import { redirect } from 'astro:redirect';
-// Redirect to legacy public verify page to preserve behavior while migrating
-export function get() {
-  return redirect('/verify.html', 302);
-}
----

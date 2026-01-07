@@ -1,13 +1,10 @@
-import {
-  Client,
-  EmbedBuilder,
-} from "discord.js";
-import 'dotenv/config'
+import { Client, EmbedBuilder } from 'discord.js';
+import 'dotenv/config';
 interface RequestRecord {
   count: number;
   firstSeen: number;
 }
-const OWNER_ID: number = process.env.OWNER_ID
+const OWNER_ID: number = process.env.OWNER_ID;
 
 export class DDoSShield {
   client: Client;
@@ -39,10 +36,7 @@ export class DDoSShield {
     this.requests = new Map();
     this.wsConnections = new Map();
 
-    this.cleanupInterval = setInterval(
-      () => this.cleanupOldEntries(),
-      60000
-    );
+    this.cleanupInterval = setInterval(() => this.cleanupOldEntries(), 60000);
   }
   setLogChannel(channelId: string) {
     this.logChannelId = channelId;
@@ -57,10 +51,10 @@ export class DDoSShield {
 
       await channel.send({
         content: content ?? undefined,
-        embeds: embed ? [embed] : [],
+        embeds: embed ? [embed] : []
       });
     } catch (err) {
-      console.error("Failed to send DDoS log:", (err as Error).message);
+      console.error('Failed to send DDoS log:', (err as Error).message);
     }
   }
 
@@ -72,22 +66,18 @@ export class DDoSShield {
     this.mitigatedCount = 0;
 
     const embed = new EmbedBuilder()
-      .setTitle("🛡️ DDoS Attack Detected!")
-      .setDescription(
-        "High volume of malicious traffic identified.\nStarting automated mitigation..."
-      )
-      .setColor("#ff0000")
+      .setTitle('🛡️ DDoS Attack Detected!')
+      .setDescription('High volume of malicious traffic identified.\nStarting automated mitigation...')
+      .setColor('#ff0000')
       .setTimestamp();
 
     await this.sendLog(null, embed);
-    await this.sendLog("**2. Starting Mitigation Process**");
+    await this.sendLog('**2. Starting Mitigation Process**');
 
     this.messageInterval = setInterval(async () => {
       if (!this.isUnderAttack) return;
       this.mitigatedCount += Math.floor(Math.random() * 300) + 200;
-      await this.sendLog(
-        `**3. Requests Mitigated: ${this.mitigatedCount.toLocaleString()}**`
-      );
+      await this.sendLog(`**3. Requests Mitigated: ${this.mitigatedCount.toLocaleString()}**`);
     }, 1000);
   }
 
@@ -97,19 +87,15 @@ export class DDoSShield {
     this.isUnderAttack = false;
     if (this.messageInterval) clearInterval(this.messageInterval);
 
-    const duration = Math.floor(
-      (Date.now() - (this.attackStartTime ?? Date.now())) / 1000
-    );
+    const duration = Math.floor((Date.now() - (this.attackStartTime ?? Date.now())) / 1000);
 
     const embed = new EmbedBuilder()
-      .setTitle("✅ Attack Mitigated Successfully")
-      .setDescription(
-        `DDoS attack neutralized after ${duration} seconds.\nTotal requests blocked: **${this.mitigatedCount.toLocaleString()}**`
-      )
-      .setColor("#00ff00")
+      .setTitle('✅ Attack Mitigated Successfully')
+      .setDescription(`DDoS attack neutralized after ${duration} seconds.\nTotal requests blocked: **${this.mitigatedCount.toLocaleString()}**`)
+      .setColor('#00ff00')
       .setTimestamp();
 
-    await this.sendLog("**4. Mitigated Successfully.**");
+    await this.sendLog('**4. Mitigated Successfully.**');
     await this.sendLog(null, embed);
   }
 
@@ -124,8 +110,7 @@ export class DDoSShield {
 
   trackRequest(ip: string) {
     const now = Date.now();
-    const record =
-      this.requests.get(ip) || ({ count: 0, firstSeen: now } as RequestRecord);
+    const record = this.requests.get(ip) || ({ count: 0, firstSeen: now } as RequestRecord);
 
     record.count++;
     this.requests.set(ip, record);
@@ -133,11 +118,7 @@ export class DDoSShield {
     const rate = record.count / ((now - record.firstSeen) / 1000 || 1);
     const isFlooding = record.count > 15000 || rate > 3000;
 
-    if (
-      isFlooding &&
-      !this.startupGracePeriod &&
-      now - this.lastAlertTime > ALERT_COOLDOWN
-    ) {
+    if (isFlooding && !this.startupGracePeriod && now - this.lastAlertTime > ALERT_COOLDOWN) {
       this.lastAlertTime = now;
       this.startAttackAlert();
     }
@@ -152,75 +133,67 @@ export class DDoSShield {
     if (updated === 0) this.wsConnections.delete(ip);
     else this.wsConnections.set(ip, updated);
 
-    if (
-      updated > 200 &&
-      !this.startupGracePeriod &&
-      Date.now() - this.lastAlertTime > ALERT_COOLDOWN
-    ) {
+    if (updated > 200 && !this.startupGracePeriod && Date.now() - this.lastAlertTime > ALERT_COOLDOWN) {
       this.lastAlertTime = Date.now();
       this.startAttackAlert();
     }
   }
 
   registerCommands(client: Client) {
-    client.once("ready", () => {
+    client.once('ready', () => {
       const commands = [
         {
-          name: "channel-setup",
-          description: "Set this channel as DDoS security log",
+          name: 'channel-setup',
+          description: 'Set this channel as DDoS security log'
         },
         {
-          name: "test-attack",
-          description: "Simulate a DDoS attack to test the system",
-        },
+          name: 'test-attack',
+          description: 'Simulate a DDoS attack to test the system'
+        }
       ];
 
       client.application?.commands.set(commands);
     });
 
-    client.on("interactionCreate", async (interaction) => {
+    client.on('interactionCreate', async (interaction) => {
       if (!interaction.isChatInputCommand()) return;
 
       if (interaction.user.id !== OWNER_ID) {
         return interaction.reply({
-          content: "❌ You are not authorized to use this command.",
-          ephemeral: true,
+          content: '❌ You are not authorized to use this command.',
+          ephemeral: true
         });
       }
 
-      if (interaction.commandName === "channel-setup") {
+      if (interaction.commandName === 'channel-setup') {
         this.setLogChannel(interaction.channelId);
         await interaction.reply({
           embeds: [
             new EmbedBuilder()
-              .setTitle("✅ Security Log Channel Set")
-              .setDescription(
-                "This channel will now receive live DDoS alerts and mitigation updates."
-              )
-              .setColor("#00ff00"),
-          ],
+              .setTitle('✅ Security Log Channel Set')
+              .setDescription('This channel will now receive live DDoS alerts and mitigation updates.')
+              .setColor('#00ff00')
+          ]
         });
       }
 
-      if (interaction.commandName === "test-attack") {
+      if (interaction.commandName === 'test-attack') {
         await interaction.reply({
-          content: "🧪 Simulating DDoS attack for testing...",
-          ephemeral: false,
+          content: '🧪 Simulating DDoS attack for testing...',
+          ephemeral: false
         });
 
         this.isUnderAttack = true;
         this.attackStartTime = Date.now();
         this.mitigatedCount = 0;
 
-        await this.sendLog("**1. DDoS Detected! (Test Mode)**");
-        await this.sendLog("**2. Starting Mitigation Process**");
+        await this.sendLog('**1. DDoS Detected! (Test Mode)**');
+        await this.sendLog('**2. Starting Mitigation Process**');
 
         this.messageInterval = setInterval(async () => {
           if (!this.isUnderAttack) return;
           this.mitigatedCount += 137;
-          await this.sendLog(
-            `**3. Requests Mitigated: ${this.mitigatedCount.toLocaleString()}**`
-          );
+          await this.sendLog(`**3. Requests Mitigated: ${this.mitigatedCount.toLocaleString()}**`);
         }, 1000);
 
         setTimeout(() => this.endAttackAlert(), 15000);

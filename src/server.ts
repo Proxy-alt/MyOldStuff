@@ -1,11 +1,15 @@
 import { server as wisp } from '@mercuryworkshop/wisp-js/server';
 import bareServerPkg from '@tomphttp/bare-server-node';
-import dotenv from 'dotenv';
-import fs from 'fs';
 import { Client, GatewayIntentBits } from 'discord.js';
-import { ddosShield } from './scripts/secure.js';
+import dotenv from 'dotenv';
 import type { FastifyInstance } from 'fastify';
-
+import fs from 'fs';
+import { ddosShield } from './scripts/secure.js';
+// Static routes
+import fastifyStatic from '@fastify/static';
+import { scramjetPath } from '@mercuryworkshop/scramjet/path';
+import scramjetControllerPath from '@petezah-games/scramjet-controller/path';
+// end static routes
 const { createBareServer } = bareServerPkg;
 
 // --- 1. Global/Module Scope Setup ---
@@ -83,7 +87,17 @@ function handleUpgradeVerification(_req: any, _ip: string): boolean {
 // This is what @matthewp/astro-fastify calls.
 
 export default function (fastify: FastifyInstance) {
+  // Static stuff
+  fastify.register(fastifyStatic, {
+    root: scramjetPath,
+    prefix: '/scram/'
+  });
 
+  fastify.register(fastifyStatic, {
+    root: scramjetControllerPath,
+    prefix: '/scramcontroller/',
+    decorateReply: false
+  });
   // A. Handle HTTP Requests (Bare)
   // We use 'onRequest' hook to intercept before Fastify router.
   fastify.addHook('onRequest', (request, reply, done) => {
@@ -93,11 +107,7 @@ export default function (fastify: FastifyInstance) {
     const url = req.url || '';
 
     // Only intervene for our specific routes
-const isBare =
-  url.startsWith('/bare/') ||
-  url.startsWith('/api/bare') ||
-  url.startsWith('/api/bare-premium/');
-
+    const isBare = url.startsWith('/bare/') || url.startsWith('/api/bare') || url.startsWith('/api/bare-premium/');
 
     // If we didn't match Bare, call done() to let Astro/Fastify handle it
     done();
@@ -111,9 +121,7 @@ const isBare =
     // SAFETY CHECK: If it's not our path, ignore it.
     // This allows Vite/Astro HMR websockets to work in dev mode.
     const wispPrefixes = ['/wisp/', '/api/wisp-premium/', '/api/alt-wisp-'];
-    const isOurWs = url.startsWith('/bare/') ||
-                    url.startsWith('/api/bare') ||
-                    wispPrefixes.some(p => url.startsWith(p));
+    const isOurWs = url.startsWith('/bare/') || url.startsWith('/api/bare') || wispPrefixes.some((p) => url.startsWith(p));
 
     if (!isOurWs) return;
 
@@ -164,12 +172,9 @@ const isBare =
     socket.destroy();
   });
 
-fastify.setNotFoundHandler((request, reply) => {
-  reply
-    .code(404)
-    .type('text/plain')
-    .send('FASTIFY-404: This was handled by Fastify, not Astro');
-});
+  fastify.setNotFoundHandler((request, reply) => {
+    reply.code(404).type('text/plain').send('FASTIFY-404: This was handled by Fastify, not Astro');
+  });
 
   // C. Server Timeouts (Optional, applied to raw server)
   fastify.server.keepAliveTimeout = 30000;
@@ -187,4 +192,4 @@ fastify.setNotFoundHandler((request, reply) => {
     } catch {}
     done();
   });
-};
+}

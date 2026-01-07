@@ -9,20 +9,16 @@ const description = 'Authentication callback page';
     <h1>Signing you in…</h1>
     <p>If you are not redirected automatically, click below.</p>
     <a id="continue-link" href="/">Continue</a>
-    <script type="module">
+    <script type="module ">
       // Minimal logic: read hash/query then post to /api/set-session or similar
-      (function(){
-        try{
+      (function () {
+        try {
           const params = new URL(window.location.href).searchParams;
           // existing logic is in public/auth-callback.html; preserve flow by delegating if present
-        }catch(e){console.error(e)}
+        } catch (e) {
+          console.error(e);
+        }
       })();
     </script>
   </main>
 </AppLayout>
----
-import { redirect } from 'astro:redirect';
-export function get() {
-  return redirect('/auth-callback.html', 302);
-}
----

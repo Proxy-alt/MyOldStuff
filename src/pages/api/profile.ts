@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import db from '../../lib/db.ts';
 import { getSession } from '../../lib/auth.ts';
+import db from '../../lib/db.ts';
 
 export const GET: APIRoute = async (context) => {
   const user = getSession(context); // You must implement this helper based on your DB
@@ -20,22 +20,25 @@ export const GET: APIRoute = async (context) => {
     else if (dbUser.is_admin === 3) role = 'Admin';
     else if (dbUser.is_admin === 2) role = 'Staff';
 
-    return new Response(JSON.stringify({
-      user: {
-        id: dbUser.id,
-        email: dbUser.email,
-        user_metadata: {
-          name: dbUser.username,
-          bio: dbUser.bio,
-          avatar_url: dbUser.avatar_url
-        },
-        app_metadata: {
-          provider: 'email',
-          is_admin: dbUser.is_admin,
-          role
+    return new Response(
+      JSON.stringify({
+        user: {
+          id: dbUser.id,
+          email: dbUser.email,
+          user_metadata: {
+            name: dbUser.username,
+            bio: dbUser.bio,
+            avatar_url: dbUser.avatar_url
+          },
+          app_metadata: {
+            provider: 'email',
+            is_admin: dbUser.is_admin,
+            role
+          }
         }
-      }
-    }), { headers: { 'Content-Type': 'application/json' }});
+      }),
+      { headers: { 'Content-Type': 'application/json' } }
+    );
   } catch (error) {
     return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
