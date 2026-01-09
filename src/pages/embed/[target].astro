@@ -79,7 +79,7 @@ try {
     data-scram-controller-config={JSON.stringify( config )}
     data-scram-controller-main={Controller}></iframe>
   <script src="/scram/scramjet.js" is:inline></script>
-  <script src="/scramcontroller/controller.api.js" is:inline></script>
+  <script src="/scramcontroller/controller.api.js" is:inline type="module"></script>
   <script type="module" is:inline>
     // @ts-check
     const embedFrame = document.getElementById("embedFrame")
