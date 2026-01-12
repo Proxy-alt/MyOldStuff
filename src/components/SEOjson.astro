@@ -269,9 +269,9 @@ const webpageSchema = {
 ---
 
 <!-- Core Global Schemas -->
-<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
-<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
-<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(organizationSchema)} />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(websiteSchema)} />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
 
 <!-- Contextual Schemas -->{gameSchema && <script type="application/ld+json" set:html={JSON.stringify(gameSchema)} />}
 {forumSchema && <script type="application/ld+json" set:html={JSON.stringify(forumSchema)} />}

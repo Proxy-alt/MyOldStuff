@@ -1,10 +1,8 @@
 import { server as wisp } from '@mercuryworkshop/wisp-js/server';
 import bareServerPkg from '@tomphttp/bare-server-node';
-import { Client, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
-import type { FastifyInstance } from 'fastify';
+import Fastify from 'fastify';
 import fs from 'fs';
-import { ddosShield } from './scripts/secure.js';
 // Static routes
 import fastifyStatic from '@fastify/static';
 import { scramjetPath } from '@mercuryworkshop/scramjet/path';
@@ -14,29 +12,12 @@ const { createBareServer } = bareServerPkg;
 
 // --- 1. Global/Module Scope Setup ---
 // These initialize once when the module is loaded.
-
+const fastify = Fastify();
 dotenv.config();
 const envFile = `.env.${process.env.NODE_ENV || 'production'}`;
 if (fs.existsSync(envFile)) {
   dotenv.config({ path: envFile });
 }
-
-// Bare & Wisp Setup
-const bare = createBareServer('/bare/', {});
-const barePremium = createBareServer('/api/bare-premium/', {});
-
-// Discord & Shield Setup
-const discordClient = new Client({ intents: [GatewayIntentBits.Guilds] });
-const shield = ddosShield(discordClient);
-
-// Only login if we have a token (prevents crashes during build/types check)
-if (process.env.BOT_TOKEN) {
-  discordClient.login(process.env.BOT_TOKEN).catch((err: any) => {
-    console.error('Failed to login Discord bot:', err?.message || err);
-  });
-}
-
-shield.registerCommands(discordClient);
 
 // Helpers
 function toIPv4(ip: string | undefined): string {
@@ -49,14 +30,11 @@ function toIPv4(ip: string | undefined): string {
 
 // Websocket Tracking
 const wsConnections = new Map<string, number>();
-const MAX_WS_PER_IP = Number(process.env.MAX_WS_PER_IP || '180');
-const MAX_TOTAL_WS = Number(process.env.MAX_TOTAL_WS || '30000');
 
 function cleanupWS(ip: string): void {
   const count = wsConnections.get(ip) || 0;
   if (count <= 1) wsConnections.delete(ip);
   else wsConnections.set(ip, count - 1);
-  shield.trackWS(ip, -1);
 }
 
 // Rate Limiting
@@ -79,14 +57,13 @@ function isRateLimited(ip: string): boolean {
   return entry.count > RATE_MAX;
 }
 
-function handleUpgradeVerification(_req: any, _ip: string): boolean {
-  return true;
-}
-
 // --- 2. The Adapter Entry Function ---
 // This is what @matthewp/astro-fastify calls.
 
-export default function (fastify: FastifyInstance) {
+export default async function () {
+  // Bare & Wisp Setup
+  const bare = createBareServer('/bare/', {});
+  const barePremium = createBareServer('/api/bare-premium/', {});
   // Static stuff
   fastify.register(fastifyStatic, {
     root: scramjetPath,
@@ -103,7 +80,6 @@ export default function (fastify: FastifyInstance) {
   fastify.addHook('onRequest', (request, reply, done) => {
     const req = request.raw;
     const res = reply.raw;
-    const ip = toIPv4(req.socket.remoteAddress || undefined);
     const url = req.url || '';
 
     // Only intervene for our specific routes
@@ -128,20 +104,6 @@ export default function (fastify: FastifyInstance) {
     const ip = toIPv4(req.socket.remoteAddress || undefined);
     const current = wsConnections.get(ip) || 0;
     const total = [...wsConnections.values()].reduce((a, b) => a + b, 0);
-
-    if (total >= MAX_TOTAL_WS || current >= MAX_WS_PER_IP) {
-      shield.trackWS(ip, 1);
-      socket.destroy();
-      return;
-    }
-
-    shield.trackWS(ip, 1);
-
-    if (!handleUpgradeVerification(req, ip)) {
-      shield.trackWS(ip, -1);
-      socket.destroy();
-      return;
-    }
 
     wsConnections.set(ip, current + 1);
     socket.on('close', () => cleanupWS(ip));
@@ -181,14 +143,14 @@ export default function (fastify: FastifyInstance) {
   fastify.server.headersTimeout = 31000;
   fastify.server.requestTimeout = 30000;
   fastify.server.timeout = 30000;
+  await fastify.listen({ port: 3001 });
+  console.log('Fastifyr running on :3001');
 
   // D. Graceful Shutdown Hook
   // Fastify has an onClose hook we can use to clean up Bare
   fastify.addHook('onClose', (instance, done) => {
-    if (shield.isUnderAttack) shield.endAttackAlert();
     try {
       bare.close();
-      // discordClient.destroy(); // Optional
     } catch {}
     done();
   });

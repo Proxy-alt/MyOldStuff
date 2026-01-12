@@ -10,6 +10,9 @@ import Widget from '../components/Widget.astro';
 import '../styles/layout.css';
 import '../styles/global.css';
 
+const hasHeader = !!Astro.slots.header;
+const hasFooter = !!Astro.slots.footer;
+
 const { title, description } = Astro.props;
 ---
 
@@ -37,6 +40,14 @@ const { title, description } = Astro.props;
     <button id="floating-toggle" aria-label="Open Menu">
       <span class="material-symbols-rounded">arrow_forward_ios</span>
     </button>
+    <!-- Header content -->
+    {
+      hasHeader && (
+        <header>
+          <slot name="header" />
+        </header>
+      )
+    }
 
     <!-- Sidebar -->
     <Sidebar transition:persist />
@@ -48,6 +59,14 @@ const { title, description } = Astro.props;
       <Widget />
     </main>
 
+    <!-- Footer content -->
+    {
+      hasFooter && (
+        <footer>
+          <slot name="footer" />
+        </footer>
+      )
+    }
     <script type="module" is:inline>
       import { registerSW } from 'virtual:pwa-register';
 

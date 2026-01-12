@@ -95,7 +95,7 @@ search {
   background-color: #0a1d37;
   padding: 15px 0;
   text-align: center;
-  z-index: 1000;
+  z-index: 5;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   transition: background-color 0.3s;
 }
@@ -120,28 +120,33 @@ search > input:focus {
   border-color: #0066cc;
 }
 
-/* Renamed from .game-container */
+/* Masonry-style column layout */
 .collection-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
+  width: 100%;
   padding-top: 120px;
   padding-bottom: 30px;
-  width: 100%;
+  column-width: 220px; /* preferred card width */
+  column-gap: 30px; /* spacing between columns */
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 /* Renamed from .image-item */
 .collection-card {
   position: relative;
-  width: 200px;
+  width: 100%; /* full width inside column */
+  margin: 0 0 30px; /* spacing between cards */
+  display: block; /* required for column flow */
+  break-inside: avoid; /* prevents card splitting */
+
   height: 170px;
+  content-visibility: auto;
+  contain-intrinsic-size: 200px 200px; /* fallback size */
   overflow: hidden;
   transition: transform 0.3s ease;
   border-radius: 10px;
   background-color: #222;
   border: 2px solid #fff;
-  margin: 0;
   animation: slideInFromLeft 0.5s ease-out forwards;
 }
 
@@ -198,7 +203,7 @@ search > input:focus {
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 1100;
+  z-index: 10;
   padding: 10px 20px;
   background-color: #141414;
   color: white;
@@ -221,7 +226,7 @@ search > input:focus {
   position: fixed;
   top: 15px;
   right: 20px;
-  z-index: 1100;
+  z-index: 10;
   background-color: #141414;
   padding: 5px;
   border-radius: 12px;

@@ -46,43 +46,43 @@ for (const [path, module] of Object.entries(imageImports)) {
 <AppLayout title={title} Description={description}>
   <!-- Background Effects (Renamed class) -->
   <div class="bg-effects"></div>
+  <Fragment slot="header">
+    <!-- Random Button (Renamed class) -->
+    <button class="random-btn" id="randomItemBtn">
+      Random {collection.slice(0, -1).replace(/^\w/, (c) => c.toUpperCase())}
+    </button>
 
-  <!-- Random Button (Renamed class) -->
-  <button class="random-btn" id="randomItemBtn">
-    Random {collection.slice(0, -1).replace(/^\w/, (c) => c.toUpperCase())}
-  </button>
+    <search>
+      <input
+        list="datalist-items"
+        type="text"
+        id="search-input"
+        placeholder={`Search for YOUR Favorite ${collection.slice(0, -1)}…`}
+        autocomplete="on"
+        aria-label="On this page"
+      />
+    </search>
 
-  <search>
-    <input
-      list="datalist-items"
-      type="text"
-      id="search-input"
-      placeholder={`Search for YOUR Favorite ${collection.slice(0, -1)}…`}
-      autocomplete="on"
-      aria-label="On this page"
-    />
-  </search>
+    <datalist id="datalist-items">
+      {items.map((item) => <option value={item.label} />)}
+    </datalist>
 
-  <datalist id="datalist-items">
-    {items.map((item) => <option value={item.label} />)}
-  </datalist>
-
-  <div class="filter-container">
-    {/* Only render Select if categories exist in this collection */}
-    {
-      hasCategories && (
-        <select id="categoryFilter">
-          <option value="">Filter by Category</option>
-          {sortedCategories.map((cat) => (
-            <option value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
-          ))}
-        </select>
-      )
-    }
-  </div>
-
+    <div class="filter-container">
+      {/* Only render Select if categories exist in this collection */}
+      {
+        hasCategories && (
+          <select id="categoryFilter">
+            <option value="">Filter by Category</option>
+            {sortedCategories.map((cat) => (
+              <option value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+            ))}
+          </select>
+        )
+      }
+    </div>
+  </Fragment>
   <!-- Grid Container (Renamed class) -->
-  <div class="collection-container" id="imageContainer">
+  <section class="collection-container" id="imageContainer">
     {
       items.map((item) => {
         // Find local image or use URL
@@ -135,7 +135,7 @@ for (const [path, module] of Object.entries(imageImports)) {
         );
       })
     }
-  </div>
+  </section>
 
   <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
@@ -150,20 +150,20 @@ for (const [path, module] of Object.entries(imageImports)) {
          AUTO-DETECT ABOVE THE FOLD
       ------------------------------ */
       const autoImages = document.querySelectorAll('img[data-auto-detect]');
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              img.loading = 'eager';
-              img.fetchPriority = 'high';
-              img.decoding = 'auto';
-              observer.unobserve(img);
-            }
-          });
-        },
-        { rootMargin: '0px 0px -50% 0px' }
-      );
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.loading = 'eager';
+            img.fetchPriority = 'high';
+            img.decoding = 'auto';
+            observer.unobserve(img);
+          }
+        });
+      });
+
+      // Observe every image
       autoImages.forEach((img) => observer.observe(img));
 
       /* -----------------------------

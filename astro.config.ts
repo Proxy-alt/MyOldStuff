@@ -1,15 +1,19 @@
-import fastify from '@matthewp/astro-fastify';
+import node from '@astrojs/node';
 import tailwindcss from '@tailwindcss/vite';
 import AstroPWA from '@vite-pwa/astro';
 import { defineConfig } from 'astro/config';
+import startFastifyServer from './src/server.ts';
 
 export default defineConfig({
   output: 'server',
-  adapter: fastify({
-    entry: new URL('./src/server.ts', import.meta.url)
-  }),
+  adapter: node({ mode: 'standalone' }),
   vite: {
     plugins: [tailwindcss()]
+  },
+  hooks: {
+    'astro:server:setup': async () => {
+      await startFastifyServer();
+    }
   },
   integrations: [
     AstroPWA({
