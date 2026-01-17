@@ -1,4 +1,6 @@
 {
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 150,
   "deno.enablePaths": ["supabase/functions"],
   "deno.lint": true,
   "deno.unstable": [
@@ -20,5 +22,6 @@
   "editor.formatOnSave": true,
   "files.associations": {
     "mdx": "markdown"
-  }
+  },
+  "LIne": 150
 }

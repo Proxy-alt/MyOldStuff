@@ -1,6 +1,5 @@
 ---
 import { Picture } from 'astro:assets';
-// Import your data file containing both arrays (e.g., { "games": [...], "apps": [...] })
 import collectionData from '../data/games.json';
 import AppLayout from '../layouts/AppLayout.astro';
 import '../styles/grid.css';
@@ -8,18 +7,13 @@ import '../styles/grid.css';
 interface Props {
   title?: string;
   description?: string;
-  // 'collection' string matches the key in your JSON file (e.g., 'games' or 'apps')
   collection?: 'games' | 'apps';
 }
 
 const { title = 'Collection', description = 'Browse our collection', collection = 'games' } = Astro.props;
 
-// 1. SELECT DATA
-// Pick the array from the JSON based on the prop
 const items = collectionData[collection] || [];
 
-// 2. DYNAMICALLY EXTRACT CATEGORIES
-// Scan the selected items for categories to build the menu
 const uniqueCategories = new Set<string>();
 items.forEach((item) => {
   if (Array.isArray(item.categories)) {
@@ -30,8 +24,6 @@ items.forEach((item) => {
 const sortedCategories = Array.from(uniqueCategories).sort();
 const hasCategories = sortedCategories.length > 0;
 
-// 3. IMAGE IMPORT
-// Helper to recursively find images (looks in games/, apps/, etc.)
 const imageImports = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.{png,jpg,jpeg,webp,avif}', { eager: true });
 
 const imageMap = new Map<string, ImageMetadata>();
@@ -44,10 +36,10 @@ for (const [path, module] of Object.entries(imageImports)) {
 ---
 
 <AppLayout title={title} Description={description}>
-  <!-- Background Effects (Renamed class) -->
+  <!-- Background Effects -->
   <div class="bg-effects"></div>
   <Fragment slot="header">
-    <!-- Random Button (Renamed class) -->
+    <!-- Random Button -->
     <button class="random-btn" id="randomItemBtn">
       Random {collection.slice(0, -1).replace(/^\w/, (c) => c.toUpperCase())}
     </button>
@@ -68,7 +60,6 @@ for (const [path, module] of Object.entries(imageImports)) {
     </datalist>
 
     <div class="filter-container">
-      {/* Only render Select if categories exist in this collection */}
       {
         hasCategories && (
           <select id="categoryFilter">
@@ -81,7 +72,7 @@ for (const [path, module] of Object.entries(imageImports)) {
       }
     </div>
   </Fragment>
-  <!-- Grid Container (Renamed class) -->
+  <!-- Grid Container -->
   <section class="collection-container" id="imageContainer">
     {
       items.map((item) => {
@@ -92,7 +83,7 @@ for (const [path, module] of Object.entries(imageImports)) {
         const mainCategory = item.categories?.[0]?.toLowerCase() || '';
 
         return (
-          // Card Item (Renamed class)
+          // Card Item
           <figure class="collection-card" data-label={item.label} data-category={mainCategory} data-url={item.url}>
             <a href={`/play?url=${encodeURIComponent(item.url)}`} aria-label={`Open ${item.label}`}>
               {localImage && (
