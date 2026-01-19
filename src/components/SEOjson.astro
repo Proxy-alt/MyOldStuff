@@ -1,7 +1,7 @@
 ---
-const url = Astro.site ? Astro.site.origin : Astro.url.origin;
-const path = Astro.url.pathname;
-const fullUrl = `${url}${path}`;
+import type { Organization, WithContext, WebSite, BreadcrumbList, Game, Article, DiscussionForumPosting, FAQPage, WebPage } from 'schema-dts';
+
+// --- Interfaces ---
 
 export interface Review {
   author: string;
@@ -10,39 +10,54 @@ export interface Review {
   reviewRating: number; // 1-5
 }
 
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 export interface ForumPost {
   headline: string;
   author: string;
   datePublished: string;
   text: string;
-  interactionCount?: number; // Replies
+  interactionCount?: number;
 }
 
 export interface Props {
+  // Global
   title?: string;
   description?: string;
   image?: string;
   publishDate?: string;
   modifiedDate?: string;
-  type?: 'website' | 'game' | 'article' | 'discussion';
   author?: string;
+  type?: 'website' | 'game' | 'article' | 'discussion' | 'profile' | 'howto' | 'collection';
+
+  // Organization Details (New)
+  org?: {
+    foundingDate?: string; // ISO Date e.g. "2025-02-05"
+    founders?: string[];
+    slogan?: string;
+    knowsAbout?: string[]; // e.g. ["Game Development", "Web Apps"]
+  };
+
+  // Article Specifics (New)
+  articleType?: 'BlogPosting' | 'NewsArticle' | 'Article' | 'TechArticle';
 
   // Game / Product Specifics
-  ratingValue?: number; // Aggregate rating (e.g. 4.5)
-  ratingCount?: number; // Total votes
+  ratingValue?: number;
+  ratingCount?: number;
   genre?: string[];
   platform?: string[];
   price?: string;
   currency?: string;
+  reviews?: Review[]; // Kept!
 
-  // Reviews (Individual user reviews)
-  reviews?: Review[];
-
-  // Discussion Forum Specifics
-  forumThread?: ForumPost; // The main post of the thread
+  // Discussion
+  forumThread?: ForumPost;
 
   // FAQ
-  faq?: { question: string; answer: string }[];
+  faq?: FaqItem[]; // Kept!
 }
 
 const {
@@ -53,6 +68,10 @@ const {
   modifiedDate,
   type = 'website',
   author = 'PeteZah Games',
+  org = {},
+  articleType = 'BlogPosting',
+
+  // Game
   ratingValue,
   ratingCount,
   genre = ['Casual Game'],
@@ -60,44 +79,48 @@ const {
   price = '0',
   currency = 'USD',
   reviews = [],
+
+  // Discussion
   forumThread,
+
+  // FAQ
   faq = []
 } = Astro.props;
 
 // --- Logic ---
-const isGames = path.startsWith('/games') || type === 'game';
+const url = Astro.site ? Astro.site.origin : Astro.url.origin;
+const path = Astro.url.pathname;
+const fullUrl = `${url}${path}`;
+
+const isGame = path.startsWith('/games') || type === 'game';
 const isArticle = type === 'article';
 const isDiscussion = type === 'discussion';
-const foundingDate = new Date('February 5, 2025 18:00:00 GMT+00:00');
 
 const computedName = title || 'PeteZah Games';
-const computedFoundingDate = foundingDate.toISOString();
 const computedDescription = propDescription || 'Play free online games and use web apps on PeteZah Games.';
 const computedImage = image ? (image.startsWith('http') ? image : `${url}${image}`) : `${url}/assets/images/Social-preview-index.png`;
 
-// --- Schemas ---
-
-// Organization
-const organizationSchema = {
+// --- 1. Organization Schema ---
+const organizationSchema: WithContext<Organization> = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   'name': 'PeteZah Games',
   'alternateName': 'PeteZah',
-  'description': 'Unblocked Games website for academic enviornmnets and free online games.',
   'url': url,
   'logo': {
     '@type': 'ImageObject',
     'url': `${url}/favicons/favicon-512x512.png`,
-    'width': 512,
-    'height': 512
+    'width': '512',
+    'height': '512'
   },
+  'slogan': org.slogan || 'Play Free. Play Unblocked.',
+  'foundingDate': org.foundingDate || '2025-02-05T18:00:00+00:00', // Default or Custom
+  'knowsAbout': org.knowsAbout || ['Browser Games', 'Web Development'],
   'sameAs': [
     'https://x.com/PeteZahGames',
     'https://github.com/PeteZah-Games',
-    'https://discord.gg/petezah-games-1337108365591187640',
-    'https://discord.com/invite/petezah-games-1337108365591187640',
-    'https://www.youtube.com/@PeteZahGames',
-    'https://www.tiktok.com/@petezahpersonal'
+    'https://discord.gg/petezah-games',
+    'https://www.youtube.com/@PeteZahGames'
   ],
   'contactPoint': [
     {
@@ -105,22 +128,20 @@ const organizationSchema = {
       'email': 'contact@petezahgames.com',
       'contactType': 'customer support',
       'availableLanguage': ['en']
-    },
-    {
-      '@type': 'ContactPoint',
-      'contactType': 'legal',
-      'email': 'legal@petezahgames.com',
-      'availableLanguage': ['en']
     }
-  ],
-  'address': {
-    '@type': 'PostalAddress',
-    'addressCountry': 'US'
-  }
+  ]
 };
 
-// 2. WebSite
-const websiteSchema = {
+// Add Founders dynamically
+if (org.founders && org.founders.length > 0) {
+  organizationSchema['founder'] = org.founders.map((name) => ({
+    '@type': 'Person',
+    'name': name
+  }));
+}
+
+// --- 2. WebSite Schema ---
+const websiteSchema: WithContext<WebSite> = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   'name': 'PeteZah Games',
@@ -135,9 +156,9 @@ const websiteSchema = {
   }
 };
 
-// 3. Breadcrumbs
+// --- 3. Breadcrumbs ---
 const segments = path.split('/').filter(Boolean);
-const breadcrumbSchema = {
+const breadcrumbSchema: WithContext<BreadcrumbList> = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   'itemListElement': [
@@ -151,12 +172,12 @@ const breadcrumbSchema = {
   ]
 };
 
-// 4. SoftwareApplication / VideoGame
-let gameSchema = null;
-if (isGames) {
+// --- 4. VideoGame Schema (With Reviews) ---
+let gameSchema: WithContext<Game> | null = null;
+if (isGame) {
   gameSchema = {
     '@context': 'https://schema.org',
-    '@type': ['VideoGame', 'SoftwareApplication'],
+    '@type': 'VideoGame',
     'name': computedName,
     'description': computedDescription,
     'url': fullUrl,
@@ -165,10 +186,7 @@ if (isGames) {
     'gamePlatform': platform,
     'applicationCategory': 'Game',
     'operatingSystem': 'Web Browser',
-    'author': {
-      '@type': 'Organization',
-      'name': 'PeteZah Games'
-    },
+    'author': { '@type': 'Organization', 'name': 'PeteZah Games' },
     'offers': {
       '@type': 'Offer',
       'price': price,
@@ -205,34 +223,12 @@ if (isGames) {
   }
 }
 
-// DiscussionForumPosting
-let forumSchema = null;
-if (isDiscussion && forumThread) {
-  forumSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'DiscussionForumPosting',
-    'headline': forumThread.headline,
-    'text': forumThread.text,
-    'author': {
-      '@type': 'Person',
-      'name': forumThread.author
-    },
-    'datePublished': forumThread.datePublished,
-    'interactionStatistic': {
-      '@type': 'InteractionCounter',
-      'interactionType': 'https://schema.org/CommentAction',
-      'userInteractionCount': forumThread.interactionCount || 0
-    },
-    'publisher': organizationSchema
-  };
-}
-
-// Article
-let articleSchema = null;
+// --- 5. Article Schema (Dynamic Type) ---
+let articleSchema: WithContext<Article> | null = null;
 if (isArticle) {
   articleSchema = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
+    '@type': articleType, // BlogPosting, NewsArticle, etc.
     'mainEntityOfPage': { '@type': 'WebPage', '@id': fullUrl },
     'headline': computedName,
     'description': computedDescription,
@@ -244,8 +240,27 @@ if (isArticle) {
   };
 }
 
-// FAQPage
-let faqSchema = null;
+// --- 6. Discussion / Forum ---
+let forumSchema: WithContext<DiscussionForumPosting> | null = null;
+if (isDiscussion && forumThread) {
+  forumSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'DiscussionForumPosting',
+    'headline': forumThread.headline,
+    'text': forumThread.text,
+    'author': { '@type': 'Person', 'name': forumThread.author },
+    'datePublished': forumThread.datePublished,
+    'interactionStatistic': {
+      '@type': 'InteractionCounter',
+      'interactionType': 'https://schema.org/CommentAction',
+      'userInteractionCount': forumThread.interactionCount || 0
+    },
+    'publisher': organizationSchema
+  };
+}
+
+// --- 7. FAQ Page Schema ---
+let faqSchema: WithContext<FAQPage> | null = null;
 if (faq.length > 0) {
   faqSchema = {
     '@context': 'https://schema.org',
@@ -253,30 +268,35 @@ if (faq.length > 0) {
     'mainEntity': faq.map((item) => ({
       '@type': 'Question',
       'name': item.question,
-      'acceptedAnswer': { '@type': 'Answer', 'text': item.answer }
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': item.answer
+      }
     }))
   };
 }
 
-// WebPage
-const webpageSchema = {
+// --- Fallback ---
+const webpageSchema: WithContext<WebPage> = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   'name': computedName,
   'url': fullUrl,
   'description': computedDescription
 };
+
+const hasSpecificSchema = gameSchema || articleSchema || forumSchema || faqSchema;
 ---
 
-<!-- Core Global Schemas -->
+<!-- Global -->
 <script type="application/ld+json" is:inline set:html={JSON.stringify(organizationSchema)} />
 <script type="application/ld+json" is:inline set:html={JSON.stringify(websiteSchema)} />
 <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
 
-<!-- Contextual Schemas -->{gameSchema && <script type="application/ld+json" set:html={JSON.stringify(gameSchema)} />}
-{forumSchema && <script type="application/ld+json" set:html={JSON.stringify(forumSchema)} />}
-{articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
-{faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+<!-- Specific -->{gameSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(gameSchema)} />}
+{articleSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />}
+{forumSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(forumSchema)} />}
+{faqSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}
 
 <!-- Fallback -->
-{!gameSchema && !forumSchema && !articleSchema && <script type="application/ld+json" set:html={JSON.stringify(webpageSchema)} />}
+{!hasSpecificSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(webpageSchema)} />}

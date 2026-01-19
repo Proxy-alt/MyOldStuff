@@ -22,12 +22,6 @@ const { title, description } = Astro.props;
     <SEO title={title} description={description} />
     <SEOjson />
     <ClientRouter />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
-      rel="stylesheet"
-    />
     <Analytics location="head" />
   </head>
   <body>
@@ -40,10 +34,10 @@ const { title, description } = Astro.props;
     <button id="floating-toggle" aria-label="Open Menu">
       <span class="material-symbols-rounded">arrow_forward_ios</span>
     </button>
-    <!-- Header content -->
     {
       hasHeader && (
         <header>
+          <!-- Header content -->
           <slot name="header" />
         </header>
       )
@@ -58,11 +52,10 @@ const { title, description } = Astro.props;
       <slot />
       <Widget />
     </main>
-
-    <!-- Footer content -->
     {
       hasFooter && (
         <footer>
+          <!-- Footer content -->
           <slot name="footer" />
         </footer>
       )
