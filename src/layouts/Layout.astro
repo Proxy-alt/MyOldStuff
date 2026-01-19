@@ -1,18 +1,76 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import Analytics from '../components/Analytics.astro';
 import SEO from '../components/seo.astro';
 import SEOjson from '../components/SEOjson.astro';
-
+import type { Review, ForumPost } from '../components/SEOjson.astro';
 import '../styles/global.css';
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  publishDate,
+  modifiedDate,
+  type,
+  author,
+  ratingValue,
+  ratingCount,
+  genre,
+  platform,
+  price,
+  currency,
+  reviews,
+  forumThread,
+  faq
+} = Astro.props;
+export interface Props {
+  title: string;
+  description?: string;
+  publishDate?: string;
+  modifiedDate?: string;
+  type?: 'website' | 'game' | 'article' | 'discussion';
+  author?: string;
+
+  // Game / Product Specifics
+  ratingValue?: number; // Aggregate rating (e.g. 4.5)
+  ratingCount?: number; // Total votes
+  genre?: string[];
+  platform?: string[];
+  price?: string;
+  currency?: string;
+
+  // Reviews (Individual user reviews)
+  reviews?: Review[];
+
+  // Discussion Forum Specifics
+  forumThread?: ForumPost; // The main post of the thread
+
+  // FAQ
+  faq?: { question: string; answer: string }[];
+}
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <SEO title={title} description={description} />
-    <SEOjson />
+    <SEOjson
+      title={title}
+      description={description}
+      publishDate={publishDate}
+      modifiedDate={modifiedDate}
+      type={type}
+      author={author}
+      ratingValue={ratingValue}
+      genre={genre}
+      platform={platform}
+      price={price}
+      currency={currency}
+      reviews={reviews}
+      forumThread={forumThread}
+      faq={faq}
+    />
+    <ClientRouter />
     <Analytics location="head" />
   </head>
   <body>

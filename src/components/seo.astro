@@ -1,50 +1,76 @@
 ---
+// SEO.astro
 import Favicons from './Favicon.astro';
+
 export interface Props {
+  // Core
   title?: string;
-  category?: string;
-  tags?: string[];
   description?: string;
   keywords?: string;
   image?: string;
+  imageAlt?: string;
   path?: string;
-  type?: 'website' | 'game' | 'article' | 'product' | 'profile' | 'video' | 'discussion'; // Expanded types
+  canonicalUrl?: string;
+
+  // Types
+  type?: 'website' | 'game' | 'article' | 'product' | 'profile' | 'video' | 'discussion';
+
+  // Article Settings
+  articleType?: 'blog' | 'news' | 'tech' | 'general';
+
+  // Dates & Author
   publishDate?: string;
   modifiedDate?: string;
   author?: string;
+  section?: string;
+  tags?: string[];
+  readingTime?: number;
+
+  // Robots
   noindex?: boolean;
   nofollow?: boolean;
+
+  // Verification
+  verification?: {
+    google?: string;
+    bing?: string;
+    yandex?: string;
+    pinterest?: string;
+  };
 }
 
 const {
   title,
-  category,
-  tags,
   description,
   keywords,
   path,
   image,
+  imageAlt,
+  canonicalUrl,
   type = 'website',
   publishDate,
   modifiedDate,
   author = 'PeteZah Games',
+  section,
+  tags = [],
+  readingTime,
   noindex = false,
-  nofollow = false
+  nofollow = false,
+  verification = {}
 } = Astro.props;
 
 const siteTitle = 'PeteZah Games';
 const finalTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 const finalDescription = description || 'Play free online games and use web apps on PeteZah Games.';
 const finalKeywords = keywords || 'PeteZah, PeteZah Games, Free Games, Online Games, Browser Games';
-const canonical = new URL(path || Astro.url.pathname, Astro.site || Astro.url.origin).href.replace(/\/+$/, '/');
+const canonical = canonicalUrl || new URL(path || Astro.url.pathname, Astro.site || Astro.url.origin).href.replace(/\/+$/, '/');
 
-// Construct Robots Meta
+// Robots Logic
 const robotsParts = [];
 if (noindex) robotsParts.push('noindex');
 else robotsParts.push('index');
 if (nofollow) robotsParts.push('nofollow');
 else robotsParts.push('follow');
-// Add standard optimizations if indexing
 if (!noindex) robotsParts.push('max-image-preview:large', 'max-snippet:-1', 'max-video-preview:-1');
 const robotsValue = robotsParts.join(', ');
 
@@ -54,26 +80,13 @@ const socialImage = image
     ? image
     : new URL(image, Astro.url.origin).href
   : new URL('./ogImage.avif', Astro.url.origin).href;
-const socialImageSafe = image
-  ? image.startsWith('http')
-    ? image.replace('http://', 'https://')
-    : new URL(image, Astro.url.origin).href.replace('http://', 'https://')
-  : new URL('./ogImage.avif', Astro.url.origin).href;
+const socialImageSafe = socialImage.startsWith('http://') ? socialImage.replace('http://', 'https://') : socialImage;
 
-// Map internal types to Open Graph types
-const ogTypeMap: Record<string, string> = {
-  website: 'website',
-  game: 'website', // FB/OG doesn't have a specific 'game' type, usually 'website' or 'product'
-  article: 'article',
-  product: 'product',
-  profile: 'profile',
-  video: 'video.other',
-  discussion: 'website' // Discussion forums usually map to website for OG
-};
-const ogType = ogTypeMap[type] || 'website';
+// Type Logic
+const ogType = type === 'article' ? 'article' : type === 'profile' ? 'profile' : 'website';
 ---
 
-<!-- Essential -->
+<!-- Basics -->
 <title>{finalTitle}</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -81,61 +94,50 @@ const ogType = ogTypeMap[type] || 'website';
 <meta name="description" content={finalDescription} />
 <meta name="keywords" content={finalKeywords} />
 <meta name="author" content={author} />
-<meta name="language" content="en-US" />
-<!-- <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="PeteZah Games Feed" /> -->
-<link rel="canonical" href={canonical} />
-<meta name="publisher" content="PeteZah Games" />
-<meta name="format-detection" content="telephone=no" />
-<meta name="referrer" content="strict-origin-when-cross-origin" />
-<meta name="robots" content={robotsValue} />
-<meta http-equiv="robots" content={robotsValue} />
 <meta name="generator" content={Astro.generator} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={robotsValue} />
 
-<!-- Open Graph / Facebook -->
+<!-- Verification -->
+{verification.google && <meta name="google-site-verification" content={verification.google} />}
+{verification.bing && <meta name="msvalidate.01" content={verification.bing} />}
+
+<!-- Open Graph -->
 <meta property="og:site_name" content={siteTitle} />
 <meta property="og:title" content={finalTitle} />
 <meta property="og:description" content={finalDescription} />
 <meta property="og:url" content={canonical} />
 <meta property="og:type" content={ogType} />
-<meta property="og:determiner" content="the" />
-<meta property="og:see_also" content="/games" />
-<meta property="og:see_also" content="https://petezahgames.com/apps" />
-<meta property="og:image:secure_url" content={socialImage} />
-<meta property="og:image:type" content="image/avif" />
 <meta property="og:image" content={socialImageSafe} />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:image:width" content="960" />
-<meta property="og:image:height" content="540" />
-<meta property="og:image:alt" content={finalTitle || finalDescription} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt || finalTitle} />
 <meta property="og:locale" content="en_US" />
 {modifiedDate && <meta property="og:updated_time" content={modifiedDate} />}
 
-<!-- Favicons -->
-<Favicons masterIconPath="../assets/images/svg/logo.svg" />
-
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@PeteZahGames" />
 <meta name="twitter:creator" content="@PeteZahGames" />
 <meta name="twitter:title" content={finalTitle} />
 <meta name="twitter:description" content={finalDescription} />
-<meta name="twitter:image" content={socialImage} />
-<meta name="twitter:image:alt" content={finalTitle} />
-<meta name="twitter:image:src" content={socialImage} />
-<meta name="twitter:site" content="@PeteZahGames" />
+<meta name="twitter:image" content={socialImageSafe} />
+{readingTime && <meta name="twitter:label1" content="Est. reading time" />}
+{readingTime && <meta name="twitter:data1" content={`${readingTime} minutes`} />}
 
-<!-- Type Specific: Article -->
+<!-- Article Meta -->
 {
   type === 'article' && (
     <>
       <meta property="article:author" content={author} />
       {publishDate && <meta property="article:published_time" content={publishDate} />}
       {modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
+      {section && <meta property="article:section" content={section} />}
+      {tags.map((tag) => (
+        <meta property="article:tag" content={tag} />
+      ))}
     </>
   )
 }
-{type === 'article' && category && <meta property="article:section" content={category} />}
-{type === 'article' && tags?.map((tag) => <meta property="article:tag" content={tag} />)}
 
-<!-- Performance -->
-<link rel="dns-prefetch" href="//www.google-analytics.com" />
-<meta name="theme-color" content="#ffffff" />
+<Favicons masterIconPath="../assets/images/svg/logo.svg" />

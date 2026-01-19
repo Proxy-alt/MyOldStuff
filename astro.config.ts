@@ -4,6 +4,8 @@ import AstroPWA from '@vite-pwa/astro';
 import { defineConfig } from 'astro/config';
 import startFastifyServer from './src/server.ts';
 
+import react from '@astrojs/react';
+
 export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
@@ -31,7 +33,8 @@ export default defineConfig({
         enabled: true,
         type: 'module'
       }
-    })
+    }),
+    react()
   ],
   experimental: {
     svgo: true
