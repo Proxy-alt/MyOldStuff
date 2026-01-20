@@ -59,6 +59,3 @@ export default async function (
     console.error('Harness init error:', err);
   });
 }
-function string(string: string): string {
-  return string;
-}

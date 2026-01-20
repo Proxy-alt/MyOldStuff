@@ -1,25 +1,26 @@
-import { server as wisp } from '@mercuryworkshop/wisp-js/server';
-import bareServerPkg from '@tomphttp/bare-server-node';
-import dotenv from 'dotenv';
-import Fastify from 'fastify';
-import fs from 'fs';
-// Static routes
 import fastifyStatic from '@fastify/static';
 import { scramjetPath } from '@mercuryworkshop/scramjet/path';
+import { server as wisp } from '@mercuryworkshop/wisp-js/server';
 import scramjetControllerPath from '@petezah-games/scramjet-controller/path';
-// end static routes
+import bareServerPkg from '@tomphttp/bare-server-node';
+import dotenv from 'dotenv';
+import type { FastifyInstance } from 'fastify';
+import Fastify from 'fastify';
+import fs from 'fs';
+
 const { createBareServer } = bareServerPkg;
 
-// --- 1. Global/Module Scope Setup ---
-// These initialize once when the module is loaded.
-const fastify = Fastify();
+// --- 1. Persist the instance outside the function scope ---
+let instance: FastifyInstance | null = null;
+
+// Move dotenv out so it only runs once
 dotenv.config();
 const envFile = `.env.${process.env.NODE_ENV || 'production'}`;
 if (fs.existsSync(envFile)) {
   dotenv.config({ path: envFile });
 }
 
-// Helpers
+// Helpers (No changes needed here)
 function toIPv4(ip: string | undefined): string {
   if (!ip) return '127.0.0.1';
   let out = ip;
@@ -28,74 +29,46 @@ function toIPv4(ip: string | undefined): string {
   return out.match(/^(\d{1,3}\.){3}\d{1,3}$/) ? out : '127.0.0.1';
 }
 
-// Websocket Tracking
 const wsConnections = new Map<string, number>();
-
 function cleanupWS(ip: string): void {
   const count = wsConnections.get(ip) || 0;
   if (count <= 1) wsConnections.delete(ip);
   else wsConnections.set(ip, count - 1);
 }
 
-// Rate Limiting
-const ENABLE_RATE_LIMITER = process.env.ENABLE_RATE_LIMITER === 'true';
-const RATE_WINDOW_MS = Number(process.env.RATE_WINDOW_MS || '15000');
-const RATE_MAX = Number(process.env.RATE_MAX || '100');
-type RateEntry = { count: number; reset: number };
-const rateMap = new Map<string, RateEntry>();
-
-function isRateLimited(ip: string): boolean {
-  if (!ENABLE_RATE_LIMITER) return false;
-  const now = Date.now();
-  const entry = rateMap.get(ip);
-  if (!entry || now > entry.reset) {
-    rateMap.set(ip, { count: 1, reset: now + RATE_WINDOW_MS });
-    return false;
+export default async function startFastifyServer() {
+  // --- 2. Check if instance already exists (Guard Clause) ---
+  if (instance) {
+    return instance;
   }
-  entry.count++;
-  rateMap.set(ip, entry);
-  return entry.count > RATE_MAX;
-}
 
-// --- 2. The Adapter Entry Function ---
-// This is what @matthewp/astro-fastify calls.
+  // Create the new instance ONLY if one doesn't exist
+  const fastify = Fastify({ logger: false });
+  instance = fastify;
 
-export default async function () {
-  // Bare & Wisp Setup
   const bare = createBareServer('/bare/', {});
   const barePremium = createBareServer('/api/bare-premium/', {});
-  // Static stuff
-  fastify.register(fastifyStatic, {
+
+  // Register Plugins
+  await fastify.register(fastifyStatic, {
     root: scramjetPath,
     prefix: '/scram/'
   });
 
-  fastify.register(fastifyStatic, {
+  await fastify.register(fastifyStatic, {
     root: scramjetControllerPath,
     prefix: '/scramcontroller/',
     decorateReply: false
   });
-  // A. Handle HTTP Requests (Bare)
-  // We use 'onRequest' hook to intercept before Fastify router.
+
+  // Hooks
   fastify.addHook('onRequest', (request, reply, done) => {
-    const req = request.raw;
-    const res = reply.raw;
-    const url = req.url || '';
-
-    // Only intervene for our specific routes
-    const isBare = url.startsWith('/bare/') || url.startsWith('/api/bare') || url.startsWith('/api/bare-premium/');
-
-    // If we didn't match Bare, call done() to let Astro/Fastify handle it
     done();
   });
 
-  // B. Handle Upgrades (WebSocket / Wisp)
-  // Fastify doesn't handle upgrades by default, so we attach to the raw server.
+  // WebSocket Upgrades
   fastify.server.on('upgrade', (req, socket, head) => {
     const url = req.url || '';
-
-    // SAFETY CHECK: If it's not our path, ignore it.
-    // This allows Vite/Astro HMR websockets to work in dev mode.
     const wispPrefixes = ['/wisp/', '/api/wisp-premium/', '/api/alt-wisp-'];
     const isOurWs = url.startsWith('/bare/') || url.startsWith('/api/bare') || wispPrefixes.some((p) => url.startsWith(p));
 
@@ -103,55 +76,51 @@ export default async function () {
 
     const ip = toIPv4(req.socket.remoteAddress || undefined);
     const current = wsConnections.get(ip) || 0;
-    const total = [...wsConnections.values()].reduce((a, b) => a + b, 0);
-
     wsConnections.set(ip, current + 1);
+
     socket.on('close', () => cleanupWS(ip));
     socket.on('error', () => cleanupWS(ip));
 
-    // Bare Upgrades
     if (bare.shouldRoute(req)) return bare.routeUpgrade(req, socket, head);
     if (barePremium.shouldRoute(req)) return barePremium.routeUpgrade(req, socket, head);
 
-    // Wisp Upgrades
     if (wispPrefixes.some((p) => url.startsWith(p))) {
-      // Rewrite URL logic
       if (req.url?.startsWith('/api/wisp-premium/')) req.url = req.url.replace('/api/wisp-premium/', '/wisp/');
       if (req.url?.startsWith('/api/alt-wisp-1/')) req.url = req.url.replace('/api/alt-wisp-1/', '/wisp/');
-      // ... (Add other replacements as needed from original code) ...
-
       try {
         wisp.routeRequest(req, socket, head);
       } catch (error: any) {
-        console.error('WISP server error:', error?.message || error);
         socket.destroy();
         cleanupWS(ip);
       }
       return;
     }
-
     cleanupWS(ip);
     socket.destroy();
   });
 
   fastify.setNotFoundHandler((request, reply) => {
-    reply.code(404).type('text/plain').send('FASTIFY-404: This was handled by Fastify, not Astro');
+    reply.code(404).type('text/plain').send('FASTIFY-404: Handled by Fastify');
   });
 
-  // C. Server Timeouts (Optional, applied to raw server)
-  fastify.server.keepAliveTimeout = 30000;
-  fastify.server.headersTimeout = 31000;
-  fastify.server.requestTimeout = 30000;
-  fastify.server.timeout = 30000;
-  await fastify.listen({ port: 3001 });
-  console.log('Fastifyr running on :3001');
-
-  // D. Graceful Shutdown Hook
-  // Fastify has an onClose hook we can use to clean up Bare
   fastify.addHook('onClose', (instance, done) => {
     try {
       bare.close();
     } catch {}
     done();
   });
+
+  fastify.server.keepAliveTimeout = 30000;
+
+  // Listen
+  try {
+    await fastify.listen({ port: 3001, host: '0.0.0.0' });
+    console.log('Fastify running on :3001');
+  } catch (err) {
+    instance = null; // Reset on failure so next attempt can retry
+    throw err;
+  }
+
+  return fastify;
 }
+startFastifyServer();

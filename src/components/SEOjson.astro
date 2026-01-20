@@ -1,5 +1,5 @@
 ---
-import type { Organization, WithContext, WebSite, BreadcrumbList, Game, Article, DiscussionForumPosting, FAQPage, WebPage } from 'schema-dts';
+import type { Organization, WithContext, WebSite, BreadcrumbList, Game, Article, DiscussionForumPosting, FAQPage, WebPage, HowTo } from 'schema-dts';
 
 // --- Interfaces ---
 
@@ -13,6 +13,11 @@ export interface Review {
 export interface FaqItem {
   question: string;
   answer: string;
+}
+
+export interface HowToStep {
+  name: string;
+  text: string;
 }
 
 export interface ForumPost {
@@ -43,6 +48,7 @@ export interface Props {
 
   // Article Specifics (New)
   articleType?: 'BlogPosting' | 'NewsArticle' | 'Article' | 'TechArticle';
+  wordCount?: number;
 
   // Game / Product Specifics
   ratingValue?: number;
@@ -52,12 +58,16 @@ export interface Props {
   price?: string;
   currency?: string;
   reviews?: Review[]; // Kept!
+  playMode?: ('SinglePlayer' | 'MultiPlayer')[];
 
   // Discussion
   forumThread?: ForumPost;
 
   // FAQ
   faq?: FaqItem[]; // Kept!
+  
+  // HowTo
+  steps?: HowToStep[];
 }
 
 const {
@@ -70,6 +80,7 @@ const {
   author = 'PeteZah Games',
   org = {},
   articleType = 'BlogPosting',
+  wordCount,
 
   // Game
   ratingValue,
@@ -79,12 +90,16 @@ const {
   price = '0',
   currency = 'USD',
   reviews = [],
+  playMode,
 
   // Discussion
   forumThread,
 
   // FAQ
-  faq = []
+  faq = [],
+
+  // HowTo
+  steps = []
 } = Astro.props;
 
 // --- Logic ---
@@ -95,6 +110,7 @@ const fullUrl = `${url}${path}`;
 const isGame = path.startsWith('/games') || type === 'game';
 const isArticle = type === 'article';
 const isDiscussion = type === 'discussion';
+const isHowTo = type === 'howto';
 
 const computedName = title || 'PeteZah Games';
 const computedDescription = propDescription || 'Play free online games and use web apps on PeteZah Games.';
@@ -183,6 +199,7 @@ if (isGame) {
     'url': fullUrl,
     'image': computedImage,
     'genre': genre,
+    'playMode': playMode,
     'gamePlatform': platform,
     'applicationCategory': 'Game',
     'operatingSystem': 'Web Browser',
@@ -236,7 +253,8 @@ if (isArticle) {
     'author': { '@type': 'Person', 'name': author },
     'publisher': organizationSchema,
     'datePublished': publishDate,
-    'dateModified': modifiedDate || publishDate
+    'dateModified': modifiedDate || publishDate,
+    'wordCount': wordCount
   };
 }
 
@@ -276,6 +294,23 @@ if (faq.length > 0) {
   };
 }
 
+// --- 8. HowTo Schema ---
+let howToSchema: WithContext<HowTo> | null = null;
+if (isHowTo && steps.length > 0) {
+  howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    'name': computedName,
+    'description': computedDescription,
+    'step': steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      'position': index + 1,
+      'name': step.name,
+      'text': step.text
+    }))
+  };
+}
+
 // --- Fallback ---
 const webpageSchema: WithContext<WebPage> = {
   '@context': 'https://schema.org',
@@ -285,7 +320,7 @@ const webpageSchema: WithContext<WebPage> = {
   'description': computedDescription
 };
 
-const hasSpecificSchema = gameSchema || articleSchema || forumSchema || faqSchema;
+const hasSpecificSchema = gameSchema || articleSchema || forumSchema || faqSchema || howToSchema;
 ---
 
 <!-- Global -->
@@ -293,10 +328,13 @@ const hasSpecificSchema = gameSchema || articleSchema || forumSchema || faqSchem
 <script type="application/ld+json" is:inline set:html={JSON.stringify(websiteSchema)} />
 <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
 
-<!-- Specific -->{gameSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(gameSchema)} />}
+<!-- Specific -->
+{gameSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(gameSchema)} />}
 {articleSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />}
 {forumSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(forumSchema)} />}
 {faqSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}
+{howToSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(howToSchema)} />}
 
 <!-- Fallback -->
 {!hasSpecificSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(webpageSchema)} />}
+

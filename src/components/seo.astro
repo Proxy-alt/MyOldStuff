@@ -26,6 +26,15 @@ export interface Props {
   tags?: string[];
   readingTime?: number;
 
+  // Product
+  price?: string;
+  currency?: string;
+
+  // Video
+  videoUrl?: string;
+  videoWidth?: number;
+  videoHeight?: number;
+
   // Robots
   noindex?: boolean;
   nofollow?: boolean;
@@ -54,6 +63,11 @@ const {
   section,
   tags = [],
   readingTime,
+  price,
+  currency,
+  videoUrl,
+  videoWidth,
+  videoHeight,
   noindex = false,
   nofollow = false,
   verification = {}
@@ -81,9 +95,19 @@ const socialImage = image
     : new URL(image, Astro.url.origin).href
   : new URL('./ogImage.avif', Astro.url.origin).href;
 const socialImageSafe = socialImage.startsWith('http://') ? socialImage.replace('http://', 'https://') : socialImage;
+const imageType = socialImage.split('.').pop() === 'avif' ? 'image/avif' : socialImage.split('.').pop() === 'png' ? 'image/png' : 'image/jpeg';
 
 // Type Logic
-const ogType = type === 'article' ? 'article' : type === 'profile' ? 'profile' : 'website';
+const ogTypeMap = {
+  website: 'website',
+  game: 'website',
+  article: 'article',
+  product: 'product',
+  profile: 'profile',
+  video: 'video.other',
+  discussion: 'website'
+};
+const ogType = ogTypeMap[type] || 'website';
 ---
 
 <!-- Basics -->
@@ -109,6 +133,8 @@ const ogType = type === 'article' ? 'article' : type === 'profile' ? 'profile' :
 <meta property="og:url" content={canonical} />
 <meta property="og:type" content={ogType} />
 <meta property="og:image" content={socialImageSafe} />
+<meta property="og:image:secure_url" content={socialImageSafe} />
+<meta property="og:image:type" content={imageType} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content={imageAlt || finalTitle} />
@@ -136,6 +162,33 @@ const ogType = type === 'article' ? 'article' : type === 'profile' ? 'profile' :
       {tags.map((tag) => (
         <meta property="article:tag" content={tag} />
       ))}
+    </>
+  )
+}
+
+<!-- Product Meta -->
+{
+  type === 'product' && price && currency && (
+    <>
+      <meta property="product:price:amount" content={price} />
+      <meta property="product:price:currency" content={currency} />
+    </>
+  )
+}
+
+<!-- Video Meta -->
+{
+  type === 'video' && videoUrl && (
+    <>
+      <meta property="og:video" content={videoUrl} />
+      <meta property="og:video:secure_url" content={videoUrl} />
+      <meta property="og:video:type" content="video/mp4" />
+      {videoWidth && <meta property="og:video:width" content={videoWidth.toString()} />}
+      {videoHeight && <meta property="og:video:height" content={videoHeight.toString()} />}
+      <meta name="twitter:card" content="player" />
+      <meta name="twitter:player" content={videoUrl} />
+      {videoWidth && <meta name="twitter:player:width" content={videoWidth.toString()} />}
+      {videoHeight && <meta name="twitter:player:height" content={videoHeight.toString()} />}
     </>
   )
 }

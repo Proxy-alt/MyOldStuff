@@ -19,7 +19,8 @@ interface Props {
 const { masterIconPath } = Astro.props;
 
 // Configuration
-const PUBLIC_DIR = './public';
+const isVercel = !!process.env.VERCEL;
+const PUBLIC_DIR = path.join(process.cwd(), 'public');
 const FAVICON_DIR = 'favicons'; // Will result in public/favicons
 const DESTINATION = path.join(PUBLIC_DIR, FAVICON_DIR);
 
@@ -57,7 +58,7 @@ const faviconSettings: FaviconSettings = {
   path: `/${FAVICON_DIR}/`
 };
 
-// 2. Generation Logic (Only runs if manifest is missing)
+// 2. Generation Logic (Only runs if manifest is missing and not in a read-only env)
 const manifestPath = path.join(DESTINATION, 'site.webmanifest');
 let filesExist = false;
 
@@ -68,24 +69,26 @@ try {
   filesExist = false;
 }
 
-if (!filesExist) {
+if (!filesExist && !isVercel) {
   console.log('Generating Favicons...');
 
   try {
     await fs.mkdir(DESTINATION, { recursive: true });
-  } catch (e) {}
 
-  const imageAdapter = await getNodeImageAdapter();
-  const masterIcon: MasterIcon = {
-    icon: await loadAndConvertToSvg(path.resolve(masterIconPath))
-  };
+    const imageAdapter = await getNodeImageAdapter();
+    const masterIcon: MasterIcon = {
+      icon: await loadAndConvertToSvg(path.resolve(masterIconPath))
+    };
 
-  const files = await generateFaviconFiles(masterIcon, faviconSettings, imageAdapter);
+    const files = await generateFaviconFiles(masterIcon, faviconSettings, imageAdapter);
 
-  for (const file of files) {
-    await fs.writeFile(path.join(DESTINATION, file.name), file.content);
+    for (const file of files) {
+      await fs.writeFile(path.join(DESTINATION, file.name), file.content);
+    }
+    console.log('Favicons generated in:', DESTINATION);
+  } catch (error) {
+    console.error('Error generating favicons:', error);
   }
-  console.log('Favicons generated in:', DESTINATION);
 }
 
 // 3. Generate HTML Tags

@@ -1,10 +1,9 @@
 import node from '@astrojs/node';
+import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import AstroPWA from '@vite-pwa/astro';
 import { defineConfig } from 'astro/config';
 import startFastifyServer from './src/server.ts';
-
-import react from '@astrojs/react';
 
 export default defineConfig({
   output: 'server',
@@ -12,23 +11,25 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  hooks: {
-    'astro:server:setup': async () => {
-      await startFastifyServer();
-    }
-  },
   integrations: [
+    // 1. Move your Fastify hook into an inline integration here:
+    {
+      name: 'fastify-startup',
+      hooks: {
+        'astro:server:setup': async () => {
+          await startFastifyServer();
+          console.log('🚀 Fastify server attached');
+        }
+      }
+    },
     AstroPWA({
       strategies: 'injectManifest',
       srcDir: 'src/scripts',
       filename: 'sw.ts',
-
-      // ⭐ THIS is the correct place for your glob settings
       injectManifest: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         globIgnores: ['storage/**']
       },
-
       devOptions: {
         enabled: true,
         type: 'module'

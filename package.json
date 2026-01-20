@@ -31,6 +31,8 @@
     "@mercuryworkshop/wisp-js": "^0.4.1",
     "@petezah-games/scramjet-controller": "^0.1.4",
     "@petezah-games/ultraviolet": "^3.2.13",
+    "@realfavicongenerator/generate-favicon": "^0.6.0",
+    "@realfavicongenerator/image-adapter-node": "^0.6.1",
     "@tailwindcss/vite": "^4.1.18",
     "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
     "@tomphttp/bare-server-node": "^2.0.6",
