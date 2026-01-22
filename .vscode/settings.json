@@ -23,5 +23,8 @@
   "files.associations": {
     "mdx": "markdown"
   },
-  "LIne": 150
+  "LIne": 150,
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

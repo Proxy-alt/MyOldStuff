@@ -681,7 +681,6 @@
                               n >= 0 && ((r -= o.length - n - 1), (o = +(o.slice(0, n) + o.slice(n + 1)) + '')),
                               c = 0;
                             48 === o.charCodeAt(o.length + c - 1);
-
                           )
                             --c;
                           return (
@@ -7598,7 +7597,6 @@
           ;
           e.treeAdapter.getNamespaceURI(e.openElements.current) !== ve.HTML &&
           !e._isIntegrationPoint(e.openElements.currentTagId, e.openElements.current);
-
         )
           e.openElements.pop();
       }
@@ -8176,7 +8174,6 @@
               s[i] = n,
               s[n] = n;
             0 !== r;
-
           ) {
             const e = r & Ia;
             ((r = s[e]), (s[e] = n));
@@ -17421,7 +17418,6 @@
                     : (Eu(e, 32768 | t, 20563), l && yp(e, 87), (l = 1)),
                     Eu(e, 32768 | t, 21);
                   20558 !== e.token && 1074790415 !== e.token && 20563 !== e.token;
-
                 )
                   p.push(Fu(e, 4096 | t, n, 2, { $: a }));
                 c.push(_u(e, t, s, i, o, { type: 'SwitchCase', test: r, consequent: p }));
@@ -17722,7 +17718,6 @@
           (u = 3840 & p),
           ((524288 & p && 268435456 & r) || (524288 & r && 268435456 & p)) && yp(e, 160),
           !(u + ((8457273 === p) << 8) - ((l === p) << 12) <= o));
-
         )
           (ru(e, 32768 | t),
             (c = _u(e, t, a, s, i, {
@@ -18228,7 +18223,6 @@
           (14 === e.token ? a.push(kd(e, t, e.tokenPos, e.linePos, e.colPos)) : a.push(ad(e, t, 1, 0, n, e.tokenPos, e.linePos, e.colPos)),
           18 === e.token) &&
           (ru(e, 32768 | t), 16 !== e.token);
-
         );
         return (Eu(e, t, 16), a);
       }
@@ -19751,7 +19745,7 @@
         return dh(n ^ (t | ~a), e, t, s, i, o);
       }
       function bh(e, t) {
-        ((e[t >> 5] |= 128 << t % 32), (e[14 + (((t + 64) >>> 9) << 4)] = t));
+        ((e[t >> 5] |= 128 << (t % 32)), (e[14 + (((t + 64) >>> 9) << 4)] = t));
         let n = 1732584193,
           a = -271733879,
           s = -1732584194,
@@ -19835,7 +19829,7 @@
       function xh(e) {
         let t = '';
         const n = 32 * e.length;
-        for (let a = 0; a < n; a += 8) t += String.fromCharCode((e[a >> 5] >>> a % 32) & 255);
+        for (let a = 0; a < n; a += 8) t += String.fromCharCode((e[a >> 5] >>> (a % 32)) & 255);
         return t;
       }
       function Eh(e) {
@@ -19843,7 +19837,7 @@
           n = e.length >> 2;
         for (let e = 0; e < n; e += 1) t[e] = 0;
         const a = 8 * e.length;
-        for (let n = 0; n < a; n += 8) t[n >> 5] |= (255 & e.charCodeAt(n / 8)) << n % 32;
+        for (let n = 0; n < a; n += 8) t[n >> 5] |= (255 & e.charCodeAt(n / 8)) << (n % 32);
         return t;
       }
       function vh(e) {

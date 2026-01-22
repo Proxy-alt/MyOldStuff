@@ -17,6 +17,9 @@ importers:
       '@fastify/static':
         specifier: ^9.0.0
         version: 9.0.0
+      '@fortawesome/fontawesome-free':
+        specifier: ^7.1.0
+        version: 7.1.0
       '@mercuryworkshop/bare-mux':
         specifier: ^2.1.8
         version: 2.1.8
@@ -86,6 +89,9 @@ importers:
       react-dom:
         specifier: ^19.2.3
         version: 19.2.3(react@19.2.3)
+      register-service-worker:
+        specifier: ^1.7.2
+        version: 1.7.2
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
@@ -957,6 +963,10 @@ packages:
 
   '@fastify/static@9.0.0':
     resolution: {integrity: sha512-r64H8Woe/vfilg5RTy7lwWlE8ZZcTrc3kebYFMEUBrMqlydhQyoiExQXdYAy2REVpST/G35+stAM8WYp1WGmMA==}
+
+  '@fortawesome/fontawesome-free@7.1.0':
+    resolution: {integrity: sha512-+WxNld5ZCJHvPQCr/GnzCTVREyStrAJjisUPtUxG5ngDA8TMlPnKp6dddlTpai4+1GNmltAeuk1hJEkBohwZYA==}
+    engines: {node: '>=6'}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3755,6 +3765,9 @@ packages:
     resolution: {integrity: sha512-0ghuzq67LI9bLXpOX/ISfve/Mq33a4aFRzoQYhnnok1JOFpmE/A2TBGkNVenOGEeSBCjIiWcc6MVOG5HEQv0sA==}
     engines: {node: '>=4'}
 
+  register-service-worker@1.7.2:
+    resolution: {integrity: sha512-CiD3ZSanZqcMPRhtfct5K9f7i3OLCcBBWsJjLh1gW9RO/nS94sVzY59iS+fgYBOBqaBpf4EzfqUF3j9IG+xo8A==}
+
   regjsgen@0.8.0:
     resolution: {integrity: sha512-RvwtGe3d7LvWiDQXeQw8p5asZUmfU1G/l6WbUXeHta7Y2PEIvBTwH6E2EfmYUK8pxcxEdEmaomqyp0vZZ7C+3Q==}
 
@@ -5765,6 +5778,8 @@ snapshots:
       fastify-plugin: 5.1.0
       fastq: 1.20.1
       glob: 13.0.0
+
+  '@fortawesome/fontawesome-free@7.1.0': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -8997,6 +9012,8 @@ snapshots:
       regjsparser: 0.13.0
       unicode-match-property-ecmascript: 2.0.0
       unicode-match-property-value-ecmascript: 2.2.1
+
+  register-service-worker@1.7.2: {}
 
   regjsgen@0.8.0: {}
 

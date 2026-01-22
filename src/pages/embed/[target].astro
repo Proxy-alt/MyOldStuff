@@ -1,72 +1,158 @@
 ---
-// Define Packages to pass to client
-export const prerender = false;
-import '../../scripts/browser';
+import controllerUrl from '@petezah-games/scramjet-controller?url';
+import scramjetUrl from '@mercuryworkshop/scramjet?url';
 import AppLayout from '../../layouts/AppLayout.astro';
-const { target } = Astro.params;
-let computedURL;
 
-/* Filter for bad domains */
-// Cache
+const { target } = Astro.params;
+let computedURL: string;
+
 let cachedList: Set<string> | null = null;
 let cachedAt = 0;
-
-// 2 hours in milliseconds
 const CACHE_DURATION = 2 * 60 * 60 * 1000;
 
 async function getBlockedDomains() {
   const now = Date.now();
+  if (cachedList && now - cachedAt < CACHE_DURATION) return cachedList;
 
-  if (cachedList && now - cachedAt < CACHE_DURATION) {
-    return cachedList;
-  }
+  try {
+    const response = await fetch('https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts');
+    const text = await response.text();
+    const domains = new Set<string>();
 
-  // Fetch the hosts file
-  const response = await fetch('https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts');
-  const text = await response.text();
-
-  // Parse into a Set of domains
-  const domains: Set<string> = new Set();
-
-  for (const line of text.split('\n')) {
-    const trimmed = line.trim();
-
-    // Skip comments and empty lines
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    const parts = trimmed.split(/\s+/);
-    if (parts.length < 2) continue;
-
-    const [ip, domain] = parts;
-
-    // Only accept 0.0.0.0 or 127.0.0.1 entries
-    if (ip === '0.0.0.0' || ip === '127.0.0.1') {
-      domains.add(domain.toLowerCase());
+    for (const line of text.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const parts = trimmed.split(/\s+/);
+      if (parts.length >= 2 && (parts[0] === '0.0.0.0' || parts[0] === '127.0.0.1')) {
+        domains.add(parts[1].toLowerCase());
+      }
     }
+    cachedList = domains;
+    cachedAt = now;
+    return domains;
+  } catch (e) {
+    console.error('Failed to fetch blocklist', e);
+    return new Set<string>(); // Fail open if list is down
   }
-
-  // Cache it
-  cachedList = domains;
-  cachedAt = now;
-
-  return domains;
 }
 
 try {
+  if (!target) throw new Error('No target specified');
+
   const decoded = decodeURIComponent(target);
   const parsed = new URL(decoded);
-  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+
+  if (!['http:', 'https:'].includes(parsed.protocol)) {
     throw new Error('Invalid protocol');
   }
+
+  // Check Blocklist
+  const blocked = await getBlockedDomains();
+  if (blocked.has(parsed.hostname)) {
+    return Astro.redirect('/blocked');
+  }
+
   computedURL = parsed.toString();
 } catch {
-  Astro.redirect('/404');
+  return Astro.redirect('/404');
 }
+
+// Configuration for Client
+const scramjetConfig = {
+  controllerUrl,
+  scramjetUrl, // This acts as the initPath
+  wispUrl: 'ws://localhost:4501/',
+  scope: '/petezah/scram/',
+  swPath: '../../scripts/SJsw.ts'
+};
 ---
 
-<AppLayout title="Scramjet Embed" description=`Embedded Site for ${computedURL}`>
-  <div id="status">Initializing...</div>
-  <iframe id="embedFrame" style="width: 100%; height: 100%"></iframe>
-  <script src="/scram/scramjet.js" is:inline></script>
-  <script src="/scramcontroller/controller.api.js" is:inline type="module"></script>
+<AppLayout title="Scramjet Embed" description={`Embedded Site for ${computedURL}`}>
+  <div id="status-container">
+    <h1 id="status">Initializing...</h1>
+  </div>
+
+  <iframe id="embedFrame" style="width: 100%; height: 100%; border: none;" data-url={computedURL} data-config={JSON.stringify(scramjetConfig)}
+  ></iframe>
+
+  <script>
+    import libcurlPKG from '@mercuryworkshop/libcurl-transport';
+    import { Controller, config } from '@petezah-games/scramjet-controller';
+
+    const { LibcurlClient } = libcurlPKG;
+    const computedURL = document.getElementById('embedFrame').dataset.url;
+    async function main() {
+      const frameEl = document.getElementById('embedFrame');
+      const statusEl = document.getElementById('status');
+
+      // Parse config passed from frontmatter
+      const cfg = JSON.parse(frameEl.dataset.config);
+
+      // Setup Scramjet Global Config
+      config.prefix = cfg.scope;
+      config.wasmPath = `${cfg.scramjetUrl}scramjet.wasm`;
+      config.scramjetPath = cfg.scramjetUrl;
+
+      // 1. Register Service Worker
+      statusEl.textContent = 'Registering service worker...';
+
+      try {
+        const registration = await navigator.serviceWorker.register(cfg.swPath, {
+          scope: cfg.scope,
+          type: 'module' // Ensure your SW integration outputs ESM
+        });
+
+        // 2. Wait for Activation
+        if (!navigator.serviceWorker.controller) {
+          statusEl.textContent = 'Waiting for service worker to activate...';
+
+          await new Promise((resolve) => {
+            if (registration.active) {
+              resolve();
+            } else {
+              const sw = registration.installing || registration.waiting;
+              if (sw) {
+                sw.addEventListener('statechange', (e) => {
+                  if (e.target.state === 'activated') resolve();
+                });
+              }
+            }
+          });
+
+          // Force claim implies we usually don't need a reload if the SW claims immediately
+          // but we wait for controller change to be safe
+          if (!navigator.serviceWorker.controller) {
+            await new Promise((resolve) => navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true }));
+          }
+        }
+
+        statusEl.textContent = 'Initializing controller...';
+
+        // 3. Initialize Transport and Controller
+        const transport = new LibcurlClient({ wisp: cfg.wispUrl });
+        const controller = new Controller({
+          serviceworker: registration.active,
+          transport
+        });
+
+        // 4. Start Scramjet
+        await controller.wait;
+        const frame = controller.createFrame(frameEl);
+
+        statusEl.textContent = ''; // Clear status on success
+        document.getElementById('status-container').style.display = 'none';
+
+        // 5. Navigate
+        if (computedURL) {
+          await frame.go(computedURL);
+        }
+      } catch (err: Error) {
+        statusEl.textContent = `Error: ${err.message}`;
+        console.error('Scramjet Init Error:', err);
+      }
+    }
+
+    // Run main
+    main();
+  </script>
 </AppLayout>

@@ -54,22 +54,7 @@ export interface Props {
 <html lang="en">
   <head>
     <SEO title={title} description={description} />
-    <SEOjson
-      title={title}
-      description={description}
-      publishDate={publishDate}
-      modifiedDate={modifiedDate}
-      type={type}
-      author={author}
-      ratingValue={ratingValue}
-      genre={genre}
-      platform={platform}
-      price={price}
-      currency={currency}
-      reviews={reviews}
-      forumThread={forumThread}
-      faq={faq}
-    />
+    <SEOjson {...Astro.props as Props} />
     <ClientRouter />
     <Analytics location="head" />
   </head>

@@ -8,9 +8,11 @@ interface Props {
   title?: string;
   description?: string;
   collection?: 'games' | 'apps';
+  hasCategories?: boolean;
 }
 
-const { title = 'Collection', description = 'Browse our collection', collection = 'games' } = Astro.props;
+const { title = 'Collection', description = 'Browse our collection', collection = 'games'} = Astro.props;
+let { hasCategories } = Astro.props;
 
 const items = collectionData[collection] || [];
 
@@ -22,7 +24,7 @@ items.forEach((item) => {
 });
 
 const sortedCategories = Array.from(uniqueCategories).sort();
-const hasCategories = sortedCategories.length > 0;
+hasCategories ??= sortedCategories.length > 0;
 
 const imageImports = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.{png,jpg,jpeg,webp,avif}', { eager: true });
 
@@ -35,7 +37,7 @@ for (const [path, module] of Object.entries(imageImports)) {
 }
 ---
 
-<AppLayout title={title} Description={description}>
+<AppLayout title={title} description={description}>
   <!-- Background Effects -->
   <div class="bg-effects"></div>
   <Fragment slot="header">

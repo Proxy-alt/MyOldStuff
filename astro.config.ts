@@ -2,7 +2,7 @@ import node from '@astrojs/node';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import AstroPWA from '@vite-pwa/astro';
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import startFastifyServer from './src/server.ts';
 
 export default defineConfig({
@@ -38,6 +38,15 @@ export default defineConfig({
     react()
   ],
   experimental: {
-    svgo: true
+    svgo: true,
+    failOnPrerenderConflict: true,
+    clientPrerender: true,
+    fonts: [
+      {
+        provider: fontProviders.googleicons(),
+        name: 'Material Symbols Rounded',
+        cssVariable: '--symbols-rounded'
+      }
+    ]
   }
 });

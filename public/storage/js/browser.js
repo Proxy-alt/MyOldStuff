@@ -110,7 +110,7 @@ function createTab(url = store.homepage) {
       if (doc && (doc.title.includes('Just a moment') || doc.title.includes('Checking your browser'))) {
         frame.frame.src = '/static/google-embed.html#' + tab.url;
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   frame.frame.style.transform = `scale(${tab.zoomLevel})`;
@@ -972,5 +972,5 @@ window.addEventListener('load', async () => {
         background-repeat: no-repeat;
       `
     );
-  } catch (e) {}
+  } catch (e) { }
 });

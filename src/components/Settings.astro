@@ -1,0 +1,143 @@
+<script>
+  const themes = {
+    'default': { bgColor: '#0A1D37', textColor: '#FFFFFF' },
+    'swampy-green': { bgColor: '#1A3C34', textColor: '#D4E4D9' },
+    'royal-purple': { bgColor: '#2A1A3C', textColor: '#E2D4E9' },
+    'blood-red': { bgColor: '#3C0A1A', textColor: '#E9D4D4' },
+    'midnight-forest': { bgColor: '#1F2A2F', textColor: '#CDE4D9' },
+    'cyber-neon': { bgColor: '#1A1A2E', textColor: '#E0E0FF' },
+    'desert-oasis': { bgColor: '#3C2F1A', textColor: '#E9E4D4' },
+    'glacial-frost': { bgColor: '#2A3C4F', textColor: '#D4E9E9' }
+  };
+
+  // --- Core Functions ---
+
+  const updateFavicon = (url: URL) => {
+    let favicon: HTMLLinkElement | null = document.querySelector("link[rel='icon']");
+    if (!favicon) {
+      favicon = document.createElement('link');
+      favicon.rel = 'icon';
+      document.head.appendChild(favicon);
+    }
+    favicon.href = url.toString();
+  };
+
+  const beforeUnloadHandler = (e) => {
+    e.preventDefault();
+    e.returnValue = '';
+  };
+
+  const rightClickHandler = (e) => e.preventDefault();
+
+  const applyParticleSettings = () => {
+    // Basic particle toggle logic for global context
+    const particleContainers = document.querySelectorAll('.particles');
+    const particles = document.querySelectorAll('.particle');
+    if (localStorage.getItem('disableParticles') === 'true') {
+      particleContainers.forEach((el) => el.remove());
+      particles.forEach((el) => el.remove());
+    }
+  };
+
+  const applyGlobalSettings = () => {
+    // 1. Title & Favicon
+    const savedTitle = localStorage.getItem('siteTitle');
+    if (savedTitle) document.title = savedTitle;
+
+    let savedLogo: URL | String | null = localStorage.getItem('siteLogo');
+    savedLogo ??= new URL('/favicon.ico', window.location.href);
+    try {
+      savedLogo = new URL(savedLogo.toString(), window.location.href);
+    } catch {
+      // Invalid URL, fallback to default
+      savedLogo = new URL('/favicon.ico', window.location.href);
+    } finally {
+      updateFavicon(savedLogo);
+    }
+    // 2. Theme & Background
+    const savedTheme = localStorage.getItem('theme') || 'default';
+    const themeData = themes[savedTheme] || themes['default'];
+
+    document.body.className = document.body.className.replace(/theme-\w+/g, '');
+    document.body.classList.add(`theme-${savedTheme}`);
+
+    const savedBackgroundImage = localStorage.getItem('backgroundImage');
+    const savedBackgroundColor = localStorage.getItem('backgroundColor') || themeData.bgColor;
+
+    if (savedBackgroundImage) {
+      document.body.style.backgroundImage = `url(${savedBackgroundImage})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundColor = '';
+    } else {
+      document.body.style.backgroundImage = 'none';
+      document.body.style.backgroundColor = savedBackgroundColor;
+    }
+    document.body.style.color = themeData.textColor;
+
+    // 3. Protection
+    document.removeEventListener('contextmenu', rightClickHandler);
+    if (localStorage.getItem('disableRightClick') === 'true') {
+      document.addEventListener('contextmenu', rightClickHandler);
+    }
+
+    if (localStorage.getItem('beforeUnload') === 'true') {
+      window.addEventListener('beforeunload', beforeUnloadHandler);
+    } else {
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+    }
+
+    applyParticleSettings();
+  };
+
+  // --- Auto Cloak Logic ---
+  const autocloak = () => {
+    const panicUrl = localStorage.getItem('panicUrl') || 'https://classroom.google.com';
+    const popup = window.open('about:blank', '_blank');
+    if (!popup || popup.closed) {
+      // Fallback if popups blocked
+      window.location.href = panicUrl;
+      return;
+    }
+
+    popup.document.title = localStorage.getItem('siteTitle') || 'Home';
+    const link = popup.document.createElement('link');
+    link.rel = 'icon';
+    link.href = localStorage.getItem('siteLogo') || '/favicon.ico';
+    popup.document.head.appendChild(link);
+
+    const iframe = popup.document.createElement('iframe');
+    iframe.src = window.location.origin; // Loads the current site inside the popup
+    iframe.style.cssText = 'width: 100vw; height: 100vh; border: none;';
+    popup.document.body.style.margin = '0';
+    popup.document.body.appendChild(iframe);
+
+    window.location.href = panicUrl; // Send original tab to panic URL
+  };
+
+  // --- Initialization ---
+  document.addEventListener('DOMContentLoaded', () => {
+    applyGlobalSettings();
+
+    // Listener for changes made in other tabs or the settings page
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'settingsUpdated') applyGlobalSettings();
+    });
+
+    // Panic Key Listener
+    window.addEventListener('keydown', (e) => {
+      const panicKey = localStorage.getItem('panicKey');
+      const panicUrl = localStorage.getItem('panicUrl');
+      if (panicKey && panicUrl && e.key === panicKey) {
+        window.location.href = panicUrl;
+      }
+    });
+
+    // Autocloak Check
+    const inIframe = window !== window.top;
+    if (!inIframe && localStorage.getItem('autocloak') === 'true' && !navigator.userAgent.includes('Firefox')) {
+      autocloak();
+    }
+  });
+</script>

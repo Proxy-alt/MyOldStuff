@@ -65,7 +65,7 @@ export interface Props {
 
   // FAQ
   faq?: FaqItem[]; // Kept!
-  
+
   // HowTo
   steps?: HowToStep[];
 }
@@ -328,8 +328,7 @@ const hasSpecificSchema = gameSchema || articleSchema || forumSchema || faqSchem
 <script type="application/ld+json" is:inline set:html={JSON.stringify(websiteSchema)} />
 <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
 
-<!-- Specific -->
-{gameSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(gameSchema)} />}
+<!-- Specific -->{gameSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(gameSchema)} />}
 {articleSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />}
 {forumSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(forumSchema)} />}
 {faqSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}
@@ -337,4 +336,3 @@ const hasSpecificSchema = gameSchema || articleSchema || forumSchema || faqSchem
 
 <!-- Fallback -->
 {!hasSpecificSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(webpageSchema)} />}
-

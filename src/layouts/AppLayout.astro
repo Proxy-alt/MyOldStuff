@@ -1,121 +1,80 @@
 ---
-import { ClientRouter } from 'astro:transitions';
+import Layout from './Layout.astro';
 import Particles from '../components/Particles.astro';
-import Analytics from '../components/Analytics.astro';
-import SEO from '../components/seo.astro';
-import SEOjson from '../components/SEOjson.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Widget from '../components/Widget.astro';
+import Settings from '../components/Settings.astro';
 
 import '../styles/layout.css';
-import '../styles/global.css';
 
 const hasHeader = !!Astro.slots.header;
 const hasFooter = !!Astro.slots.footer;
 
-const { title, description } = Astro.props;
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fortawesome/fontawesome-free/js/all.min.js';
+
+const {
+  title,
+  description,
+  publishDate,
+  modifiedDate,
+  type,
+  author,
+  ratingValue,
+  ratingCount,
+  genre,
+  platform,
+  price,
+  currency,
+  reviews,
+  forumThread,
+  faq
+} = Astro.props;
+import type { Props } from './Layout.astro';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <SEO title={title} description={description} />
-    <SEOjson />
-    <ClientRouter />
-    <Analytics location="head" />
-  </head>
-  <body>
-    <Analytics location="body" />
+<Layout {...Astro.props as Props}>
+  {
+    hasHeader && (
+      <header>
+        <slot name="header" />
+      </header>
+    )
+  }
 
-    <!-- Overlay -->
-    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+  <!-- Sidebar -->
+  <Sidebar transition:persist />
 
-    <!-- Floating Arrow Button -->
-    <button id="floating-toggle" aria-label="Open Menu">
-      <span class="material-symbols-rounded">arrow_forward_ios</span>
-    </button>
-    {
-      hasHeader && (
-        <header>
-          <!-- Header content -->
-          <slot name="header" />
-        </header>
-      )
-    }
+  <!-- Main Content -->
+  <main class="main-content">
+    <Particles />
+    <slot />
+    <Widget />
+  </main>
+  {
+    hasFooter && (
+      <footer>
+        <slot name="footer" />
+      </footer>
+    )
+  }
+  <script type="module" is:inline>
+    import { registerSW } from 'virtual:pwa-register';
 
-    <!-- Sidebar -->
-    <Sidebar transition:persist />
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <Particles />
-      <slot />
-      <Widget />
-    </main>
-    {
-      hasFooter && (
-        <footer>
-          <!-- Footer content -->
-          <slot name="footer" />
-        </footer>
-      )
-    }
-    <script type="module" is:inline>
-      import { registerSW } from 'virtual:pwa-register';
-
-      function initSW() {
-        registerSW({
-          immediate: true,
-          onNeedRefresh() {
-            console.log('New content available, reload to update.');
-          },
-          onOfflineReady() {
-            console.log('App is ready to work offline.');
-          }
-        });
-      }
-
-      initSW();
-      document.addEventListener('astro:after-swap', initSW);
-    </script>
-    <script is:inline>
-      function initSidebar() {
-        const body = document.body;
-        const floatBtn = document.getElementById('floating-toggle');
-        const overlay = document.getElementById('sidebar-overlay');
-        const internalToggler = document.querySelector('.sidebar-toggler'); // The button inside the sidebar
-
-        // Helper to Toggle
-        const toggleSidebar = (forceOpen) => {
-          const isOpen = forceOpen ?? !body.classList.contains('sidebar-open');
-
-          if (isOpen) {
-            body.classList.add('sidebar-open');
-            localStorage.setItem('sidebar-state', 'open');
-          } else {
-            body.classList.remove('sidebar-open');
-            localStorage.setItem('sidebar-state', 'closed');
-          }
-        };
-
-        // Event Listeners
-        floatBtn?.addEventListener('click', () => toggleSidebar(true));
-        overlay?.addEventListener('click', () => toggleSidebar(false));
-
-        // If you click the toggle button INSIDE the sidebar, it closes the sidebar
-        internalToggler?.addEventListener('click', () => toggleSidebar(false));
-
-        // Restore State on Load
-        // (Optional: If you want it to remember being open. Remove this block if you want it always closed on refresh)
-        const savedState = localStorage.getItem('sidebar-state');
-        if (savedState === 'open') {
-          body.classList.add('sidebar-open');
+    function initSW() {
+      registerSW({
+        immediate: true,
+        onNeedRefresh() {
+          console.log('New content available, reload to update.');
+        },
+        onOfflineReady() {
+          console.log('App is ready to work offline.');
         }
-      }
+      });
+    }
 
-      // Initialize on load and after Astro View Transitions
-      initSidebar();
-      document.addEventListener('astro:after-swap', initSidebar);
-    </script>
-  </body>
-</html>
+    initSW();
+    document.addEventListener('astro:after-swap', initSW);
+  </script>
+  <Settings />
+</Layout>

@@ -1,10 +1,20 @@
 ---
 import Logo from '../assets/images/svg/logo.svg';
+import { Font } from 'astro:assets';
+import '../styles/sidebar.css';
 ---
 
+<Font cssVariable="--symbols-rounded" preload />
+<!-- Overlay -->
+<div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+<!-- Floating Arrow Button -->
+<button id="floating-toggle" aria-label="Open Menu">
+  <span class="material-symbols-rounded">arrow_forward_ios</span>
+</button>
 <aside class="sidebar">
   <header class="sidebar-header">
-    <a href="/" class="header-logo" data-src="pages/home.html">
+    <a href="/" class="header-logo">
       <Logo aria-label="PeteZahGames Logo" height="40" width="40" />
     </a>
     <button class="toggler sidebar-toggler">
@@ -20,15 +30,12 @@ import Logo from '../assets/images/svg/logo.svg';
           <span class="nav-icon material-symbols-rounded">Home</span>
           <span class="nav-label">Home</span>
         </a>
-        <span class="nav-tooltip">Home</span>
       </li>
-
       <li class="nav-item">
         <a href="/games" class="nav-link">
           <span class="nav-icon material-symbols-rounded">sports_esports</span>
           <span class="nav-label">Games</span>
         </a>
-        <span class="nav-tooltip">Games</span>
       </li>
 
       <li class="nav-item">
@@ -36,7 +43,6 @@ import Logo from '../assets/images/svg/logo.svg';
           <span class="nav-icon material-symbols-rounded">apps</span>
           <span class="nav-label">Apps</span>
         </a>
-        <span class="nav-tooltip">Apps</span>
       </li>
 
       <li class="nav-item">
@@ -44,7 +50,6 @@ import Logo from '../assets/images/svg/logo.svg';
           <span class="nav-icon material-symbols-rounded">globe_book</span>
           <span class="nav-label">Proxy</span>
         </a>
-        <span class="nav-tooltip">Proxy</span>
       </li>
     </ul>
     <ul class="nav-list secondary-nav">
@@ -53,7 +58,6 @@ import Logo from '../assets/images/svg/logo.svg';
           <span class="nav-icon material-symbols-rounded">account_circle</span>
           <span class="nav-label">Profile</span>
         </a>
-        <span class="nav-tooltip">Profile</span>
       </li>
 
       <li class="nav-item">
@@ -61,8 +65,46 @@ import Logo from '../assets/images/svg/logo.svg';
           <span class="nav-icon material-symbols-rounded">settings</span>
           <span class="nav-label">Settings</span>
         </a>
-        <span class="nav-tooltip">Settings</span>
       </li>
     </ul>
   </nav>
 </aside>
+<script is:inline>
+  function initSidebar() {
+    const body = document.body;
+    const floatBtn = document.getElementById('floating-toggle');
+    const overlay = document.getElementById('sidebar-overlay');
+    const internalToggler = document.querySelector('.sidebar-toggler'); // The button inside the sidebar
+
+    // Helper to Toggle
+    const toggleSidebar = (forceOpen) => {
+      const isOpen = forceOpen ?? !body.classList.contains('sidebar-open');
+
+      if (isOpen) {
+        body.classList.add('sidebar-open');
+        localStorage.setItem('sidebar-state', 'open');
+      } else {
+        body.classList.remove('sidebar-open');
+        localStorage.setItem('sidebar-state', 'closed');
+      }
+    };
+
+    // Event Listeners
+    floatBtn?.addEventListener('click', () => toggleSidebar(true));
+    overlay?.addEventListener('click', () => toggleSidebar(false));
+
+    // If you click the toggle button INSIDE the sidebar, it closes the sidebar
+    internalToggler?.addEventListener('click', () => toggleSidebar(false));
+
+    // Restore State on Load
+    // (Optional: If you want it to remember being open. Remove this block if you want it always closed on refresh)
+    const savedState = localStorage.getItem('sidebar-state');
+    if (savedState === 'open') {
+      body.classList.add('sidebar-open');
+    }
+  }
+
+  // Initialize on load and after Astro View Transitions
+  initSidebar();
+  document.addEventListener('astro:after-swap', initSidebar);
+</script>

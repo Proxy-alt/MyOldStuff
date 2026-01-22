@@ -1,3 +1,6 @@
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import 'tailwindcss';
+
 body.theme-default {
   background-color: #0a1d37;
   color: #ffffff;

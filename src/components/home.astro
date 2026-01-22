@@ -1,0 +1,385 @@
+<script>
+  // --- General Page Load ---
+  document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(() => {
+      document.body.classList.add('loaded');
+    }, 1000);
+  });
+
+  function startGaming() {
+    window.location.href = 'g.html';
+  }
+
+  // --- INFINITE CAROUSEL LOGIC ---
+  const carouselTrack = document.querySelector('.carousel-track');
+  // Select all ORIGINAL items immediately (before cloning)
+  const originalItems = document.querySelectorAll('.carousel-item');
+  const carouselDots = document.getElementById('carouselDots');
+
+  let itemsPerView = 1;
+  let carouselIndex = 0; // The visual index (including clones)
+  let logicalIndex = 0; // The actual data index (0 to total-1)
+  let isTransitioning = false;
+  let slideWidth = 0;
+  let totalOriginal = originalItems.length;
+
+  // Touch variables
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let isDragging = false;
+
+  function initCarousel() {
+    if (!carouselTrack || originalItems.length === 0) return;
+
+    // 1. Calculate dimensions
+    const container = document.querySelector('.carousel-container');
+    const gap = 8; // CSS gap
+    const containerWidth = container.clientWidth;
+    // Measure one item to determine how many fit
+    const sampleItem = originalItems[0];
+    const itemWidth = sampleItem.offsetWidth;
+
+    slideWidth = itemWidth + gap;
+    itemsPerView = Math.floor(containerWidth / slideWidth);
+    if (itemsPerView < 1) itemsPerView = 1;
+
+    // 2. Clear existing track to prevent duplicate clones on resize
+    carouselTrack.innerHTML = '';
+
+    // 3. Create Clones
+    // We clone 'itemsPerView' amount of items for both ends to ensure no whitespace during transition
+    const fragment = document.createDocumentFragment();
+
+    // Prepend clones (Last 'n' items)
+    for (let i = totalOriginal - itemsPerView; i < totalOriginal; i++) {
+      let idx = (i + totalOriginal) % totalOriginal; // Handle negative wrap safety
+      let clone = originalItems[idx].cloneNode(true);
+      clone.classList.add('clone');
+      fragment.appendChild(clone);
+    }
+
+    // Add Original Items
+    originalItems.forEach((item) => fragment.appendChild(item));
+
+    // Append clones (First 'n' items)
+    for (let i = 0; i < itemsPerView; i++) {
+      let clone = originalItems[i].cloneNode(true);
+      clone.classList.add('clone');
+      fragment.appendChild(clone);
+    }
+
+    carouselTrack.appendChild(fragment);
+
+    // 4. Set Initial Position (Skip the first set of clones)
+    carouselIndex = itemsPerView;
+    updateTrackPosition(false); // false = no animation
+    updateCarouselDots();
+  }
+
+  function updateTrackPosition(animate = true) {
+    if (animate) {
+      carouselTrack.style.transition = 'transform 0.3s ease-in-out';
+    } else {
+      carouselTrack.style.transition = 'none';
+    }
+    carouselTrack.style.transform = `translateX(-${carouselIndex * slideWidth}px)`;
+  }
+
+  function moveCarousel(direction) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    carouselIndex += direction;
+
+    // Calculate logical index for dots
+    if (direction === 1) {
+      logicalIndex++;
+      if (logicalIndex >= totalOriginal) logicalIndex = 0;
+    } else {
+      logicalIndex--;
+      if (logicalIndex < 0) logicalIndex = totalOriginal - 1;
+    }
+
+    updateTrackPosition(true);
+    updateCarouselDots();
+  }
+
+  // Handle the "Loop" when transition finishes
+  carouselTrack?.addEventListener('transitionend', () => {
+    isTransitioning = false;
+
+    // If we scrolled past the last real item (into appended clones)
+    if (carouselIndex >= totalOriginal + itemsPerView) {
+      carouselIndex = itemsPerView; // Snap to start
+      updateTrackPosition(false);
+    }
+    // If we scrolled before the first real item (into prepended clones)
+    else if (carouselIndex < itemsPerView) {
+      carouselIndex = totalOriginal + itemsPerView - 1; // Snap to end
+      updateTrackPosition(false);
+    }
+  });
+
+  function updateCarouselDots() {
+    if (!carouselDots) return;
+    // Ensure logical index is always safe
+    let activeDot = logicalIndex;
+
+    // Generate dots based on TOTAL ORIGINAL items (minus those that don't need a scroll if desired, but usually 1 dot per item for infinite)
+    const dotsHtml = Array.from(
+      { length: totalOriginal },
+      (_, i) => `<div class="carousel-dot ${i === activeDot ? 'active' : ''}" onclick="goToCarouselSlide(${i})"></div>`
+    ).join('');
+
+    carouselDots.innerHTML = dotsHtml;
+  }
+
+  window.goToCarouselSlide = function (index) {
+    // Make global for onclick
+    if (isTransitioning) return;
+    logicalIndex = index;
+    carouselIndex = index + itemsPerView; // Add offset for clones
+    updateTrackPosition(true);
+    updateCarouselDots();
+  };
+
+  // --- Touch / Swipe Logic ---
+  function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    isDragging = true;
+  }
+  function handleTouchMove(e) {
+    if (!isDragging) return;
+    touchEndX = e.touches[0].clientX;
+  }
+  function handleTouchEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    handleSwipe();
+  }
+  function handleMouseDown(e) {
+    touchStartX = e.clientX;
+    isDragging = true;
+  }
+  function handleMouseMove(e) {
+    if (!isDragging) return;
+    touchEndX = e.clientX;
+  }
+  function handleMouseUp() {
+    isDragging = false;
+    handleSwipe();
+  }
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const swipeDistance = touchStartX - touchEndX;
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+      if (swipeDistance > 0) {
+        moveCarousel(1); // Next
+      } else {
+        moveCarousel(-1); // Prev
+      }
+    }
+  }
+
+  // Initialize Carousel
+  document.addEventListener('DOMContentLoaded', function () {
+    initCarousel();
+
+    // Event Listeners
+    carouselTrack.addEventListener('touchstart', handleTouchStart, { passive: true });
+    carouselTrack.addEventListener('touchmove', handleTouchMove, { passive: false });
+    carouselTrack.addEventListener('touchend', handleTouchEnd, { passive: true });
+    carouselTrack.addEventListener('mousedown', handleMouseDown);
+    carouselTrack.addEventListener('mousemove', handleMouseMove);
+    carouselTrack.addEventListener('mouseup', handleMouseUp);
+    carouselTrack.addEventListener('mouseleave', handleMouseUp);
+  });
+
+  // Handle Resize
+  window.addEventListener('resize', function () {
+    clearTimeout(window.resizeTimer);
+    window.resizeTimer = setTimeout(() => {
+      // Reset to original state to recalculate properly
+      initCarousel();
+    }, 200);
+  });
+
+  // --- REST OF THE UTILITIES (Typewriter, Battery, etc) ---
+
+  // Image Caption Rotator
+  const images = [
+    { src: '/storage/images/main/highway-racer.jpeg', caption: 'Highway Racer' },
+    { src: '/storage/images/main/buildnow.jpeg', caption: 'Buildnow.gg' },
+    { src: '/storage/ag/g/slope/IMG_5256.jpeg', caption: 'Slope' },
+    { src: '/storage/images/main/clash.jpeg', caption: 'Clash Royale' },
+    { src: '/storage/images/main/superstarcar.jpeg', caption: 'Superstar Car' },
+    { src: '/storage/ag/g/yohoho/IMG_5302.jpeg', caption: 'YoHoHo!' }
+  ];
+
+  let currentImgIndex = 0;
+  const imageElement = document.getElementById('large-image');
+  const captionElement = document.getElementById('large-image-caption');
+
+  if (imageElement && captionElement) {
+    function changeImage() {
+      currentImgIndex = (currentImgIndex + 1) % images.length;
+      const currentImage = images[currentImgIndex];
+      imageElement.src = currentImage.src;
+      captionElement.textContent = currentImage.caption;
+    }
+    setInterval(changeImage, 3000);
+  }
+
+  // Typewriter Effect
+  class TxtType {
+    constructor(el, toRotate, period) {
+      this.toRotate = toRotate;
+      this.el = el;
+      this.loopNum = 0;
+      this.period = parseInt(period, 10) || 2000;
+      this.txt = '';
+      this.tick();
+      this.isDeleting = false;
+    }
+
+    tick() {
+      const i = this.loopNum % this.toRotate.length;
+      const fullTxt = this.toRotate[i];
+
+      if (this.isDeleting) {
+        this.txt = fullTxt.substring(0, this.txt.length - 1);
+      } else {
+        this.txt = fullTxt.substring(0, this.txt.length + 1);
+      }
+
+      this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+      let delta = 200 - Math.random() * 100;
+
+      if (this.isDeleting) {
+        delta /= 2;
+      }
+
+      if (!this.isDeleting && this.txt === fullTxt) {
+        delta = this.period;
+        this.isDeleting = true;
+      } else if (this.isDeleting && this.txt === '') {
+        this.isDeleting = false;
+        this.loopNum++;
+        delta = 500;
+      }
+
+      setTimeout(() => this.tick(), delta);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const elements = document.getElementsByClassName('typewrite');
+    for (let i = 0; i < elements.length; i++) {
+      const toRotate = elements[i].getAttribute('data-type');
+      const period = elements[i].getAttribute('data-period');
+      if (toRotate) {
+        new TxtType(elements[i], JSON.parse(toRotate), period);
+      }
+    }
+    const css = document.createElement('style');
+    css.type = 'text/css';
+    css.innerHTML = '.typewrite > .wrap { border-right: 0.06em solid #0096FF}';
+    document.body.appendChild(css);
+  });
+
+  // Popup Logic
+  document.addEventListener('DOMContentLoaded', function () {
+    const popup = document.getElementById('discord-popup');
+    const closeBtn = document.getElementById('close-popup');
+
+    if (popup && closeBtn) {
+      function checkPopup() {
+        const lastPopupClose = localStorage.getItem('lastPopupClose');
+        const currentTime = new Date().getTime();
+        if (!lastPopupClose || currentTime - lastPopupClose > 3600000) {
+          popup.style.display = 'flex';
+        }
+      }
+      closeBtn.addEventListener('click', function () {
+        popup.style.display = 'none';
+        localStorage.setItem('lastPopupClose', new Date().getTime());
+      });
+      checkPopup();
+    }
+  });
+
+  // System Stats (Time, Battery, FPS)
+  document.addEventListener('DOMContentLoaded', function () {
+    const timeDisplay = document.getElementById('time-display');
+    const batteryIcon = document.getElementById('battery-icon');
+    const batteryPercentage = document.getElementById('battery-percentage');
+    const fpsElement = document.getElementById('fps');
+
+    let frameCount = 0;
+    let lastUpdateTime = performance.now();
+
+    function updateTime() {
+      if (!timeDisplay) return;
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      timeDisplay.textContent = ` ${timeString}`;
+    }
+
+    function updateBattery() {
+      if (!batteryPercentage || !batteryIcon) return;
+      if ('getBattery' in navigator) {
+        navigator.getBattery().then(function (battery) {
+          const level = battery.level * 100;
+          const percentage = Math.round(level);
+
+          batteryPercentage.textContent = `${percentage}%`;
+
+          batteryIcon.className = 'fas battery-icon';
+          if (percentage >= 90) {
+            batteryIcon.classList.add('fa-battery-full', 'battery-full');
+          } else if (percentage >= 70) {
+            batteryIcon.classList.add('fa-battery-three-quarters', 'battery-good');
+          } else if (percentage >= 50) {
+            batteryIcon.classList.add('fa-battery-half', 'battery-good');
+          } else if (percentage >= 30) {
+            batteryIcon.classList.add('fa-battery-quarter', 'battery-medium');
+          } else if (percentage >= 10) {
+            batteryIcon.classList.add('fa-battery-empty', 'battery-low');
+          } else {
+            batteryIcon.classList.add('fa-battery-empty', 'battery-low');
+          }
+        });
+      } else {
+        batteryPercentage.textContent = 'n/a';
+        batteryIcon.className = 'fas fa-battery-slash battery-icon';
+      }
+    }
+
+    function calculateFPS() {
+      if (!fpsElement) return;
+      frameCount++;
+      const now = performance.now();
+      const deltaTime = now - lastUpdateTime;
+
+      if (deltaTime >= 1000) {
+        const fps = frameCount;
+        fpsElement.textContent = `FPS: ${fps}`;
+        frameCount = 0;
+        lastUpdateTime = now;
+      }
+      requestAnimationFrame(calculateFPS);
+    }
+
+    updateTime();
+    updateBattery();
+    requestAnimationFrame(calculateFPS);
+
+    setInterval(updateTime, 60000);
+    setInterval(updateBattery, 30000);
+  });
+</script>
