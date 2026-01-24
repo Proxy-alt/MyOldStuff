@@ -1,7 +1,38 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import AppLayout from '../layouts/AppLayout.astro';
 import '../styles/index.css';
+
+// --- FontAwesome Integration (SVG Core) ---
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import { library, icon, config } from '@fortawesome/fontawesome-svg-core';
+import { faXTwitter, faDiscord } from '@fortawesome/free-brands-svg-icons';
+import {
+  faChevronLeft,
+  faChevronRight,
+  faBatteryFull,
+  faBatteryThreeQuarters,
+  faBatteryHalf,
+  faBatteryQuarter,
+  faBatteryEmpty
+} from '@fortawesome/free-solid-svg-icons';
+
+// Prevent FontAwesome from automatically adding CSS to the head
+config.autoAddCss = false;
+
+// Add icons to library (Good practice, though we use direct object reference below)
+library.add(
+  faXTwitter,
+  faDiscord,
+  faChevronLeft,
+  faChevronRight,
+  faBatteryFull,
+  faBatteryThreeQuarters,
+  faBatteryHalf,
+  faBatteryQuarter,
+  faBatteryEmpty
+);
+
 // Typewriter Text Data
 const typewriterText = [
   'PeteZah Games.',
@@ -17,7 +48,6 @@ const typewriterText = [
   'sustainability.'
 ];
 
-// Carousel Data
 const carouselGames = [
   { label: 'Highway Racer', img: '/storage/images/main/highway-racer.jpeg', url: '/storage/ag/g/highway-racer' },
   { label: 'Buildnow.gg', img: '/storage/images/main/buildnow.jpeg', url: '/storage/ag/g/buildnowgg' },
@@ -51,12 +81,9 @@ const highlightedGame = {
 ---
 
 <AppLayout title="Home">
-  <!-- Background Effects -->
   <div class="god-rays" aria-hidden="true"></div>
 
-  <!-- Main Content Wrapper -->
   <main>
-    <!-- Welcome Section -->
     <section class="welcome-section" aria-label="Welcome">
       <h2>
         Welcome to
@@ -73,22 +100,16 @@ const highlightedGame = {
         <span>Start Gaming</span>
       </a>
 
-      <!-- Social Media Navigation -->
       <nav class="social-media-tray" aria-label="Social Media Links">
         <a href="https://x.com/PeteZahGames/" target="_parent" aria-label="Twitter X">
-          <div class="social-media-icon-container shiny-btn">
-            <i class="fa-brands fa-x-twitter"></i>
-          </div>
+          <div class="social-media-icon-container shiny-btn" set:html={icon(faXTwitter).html[0]} />
         </a>
         <a href="https://discord.petezahgames.com" target="_parent" aria-label="Discord">
-          <div class="social-media-icon-container shiny-btn">
-            <i class="fa-brands fa-discord"></i>
-          </div>
+          <div class="social-media-icon-container shiny-btn" set:html={icon(faDiscord).html[0]} />
         </a>
       </nav>
     </section>
 
-    <!-- Featured Game Link -->
     <a href={`/iframe.html?url=${highlightedGame.url}`} class="large-image-container-link" aria-label={`Play ${highlightedGame.label}`}>
       <section class="large-image-container">
         <img src={highlightedGame.img} alt={highlightedGame.label} class="large-image" id="large-image" />
@@ -96,19 +117,16 @@ const highlightedGame = {
       </section>
     </a>
 
-    <!-- Carousel Section -->
     <section class="image-shuffler" aria-label="Game Carousel">
       <div class="carousel-container">
-        <button class="carousel-btn carousel-btn-prev" onclick="moveCarousel(-1)" aria-label="Previous Game">
-          <i class="fas fa-chevron-left"></i>
-        </button>
+        <button class="carousel-btn carousel-btn-prev" onclick="moveCarousel(-1)" aria-label="Previous Game" set:html={icon(faChevronLeft).html[0]} />
 
         <div class="carousel-track">
           {
             carouselGames.map((game) => (
               <article class="carousel-item">
                 <a href={`/iframe.html?url=${game.url}`} class="carousel-link" aria-label={`Play ${game.label}`}>
-                  <Image src={game.img} alt={game.label} height="2" width="3" class="image" loading="eager" />
+                  <Picture src={game.img} alt={game.label} formats={['avif', 'webp', 'png']} height="2" width="3" class="image" loading="eager" />
                   <div class="carousel-item-overlay">{game.label}</div>
                 </a>
               </article>
@@ -116,13 +134,10 @@ const highlightedGame = {
           }
         </div>
       </div>
-      <button class="carousel-btn carousel-btn-next" onclick="moveCarousel(1)" aria-label="Next Game">
-        <i class="fas fa-chevron-right"></i>
-      </button>
+      <button class="carousel-btn carousel-btn-next" onclick="moveCarousel(1)" aria-label="Next Game" set:html={icon(faChevronRight).html[0]} />
     </section>
   </main>
 
-  <!-- Popup -->
   <div id="discord-popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
     <div class="popup-content">
       <span id="close-popup" class="close-btn" aria-label="Close popup">×</span>
@@ -130,25 +145,25 @@ const highlightedGame = {
       <p>Click below to join our Discord community and follow us on Twitter/X to stay updated!</p>
       <div class="discord-btn">
         <a href="https://x.com/PeteZahGames/" target="_parent">
-          <div class="social-media-icon-container-2">
-            <i class="fa-brands fa-x-twitter"></i>
-          </div>
+          <div class="social-media-icon-container-2" set:html={icon(faXTwitter).html[0]} />
         </a>
         <a href="https://discord.petezahgames.com" target="_parent">
-          <div class="social-media-icon-container-2">
-            <i class="fa-brands fa-discord"></i>
-          </div>
+          <div class="social-media-icon-container-2" set:html={icon(faDiscord).html[0]} />
         </a>
       </div>
     </div>
   </div>
 
-  <!-- Footer / Info Box -->
   <aside id="info-box" class="info-box" aria-label="System Info">
     <div class="info-row">
       <span id="battery-display">
-        <span class="battery-container">
-          <i id="battery-icon" class="fas fa-battery-full battery-icon"></i>
+        <span class="battery-container" id="battery-wrapper">
+          <span id="bat-full" class="bat-icon" style="display:none" set:html={icon(faBatteryFull).html[0]} />
+          <span id="bat-three-quarters" class="bat-icon" style="display:none" set:html={icon(faBatteryThreeQuarters).html[0]} />
+          <span id="bat-half" class="bat-icon" style="display:none" set:html={icon(faBatteryHalf).html[0]} />
+          <span id="bat-quarter" class="bat-icon" style="display:none" set:html={icon(faBatteryQuarter).html[0]} />
+          <span id="bat-empty" class="bat-icon" style="display:none" set:html={icon(faBatteryEmpty).html[0]} />
+          <span id="bat-loading" class="bat-icon" set:html={icon(faBatteryEmpty).html[0]} />
         </span>
         <span id="battery-percentage">Loading...</span>
       </span>
@@ -161,6 +176,24 @@ const highlightedGame = {
   </aside>
 
   <script>
+    /**
+     * Typescript types for battery
+     */
+    interface BatteryManager extends EventTarget {
+      charging: boolean;
+      chargingTime: number;
+      dischargingTime: number;
+      level: number;
+      onchargingchange: ((this: BatteryManager, ev: Event) => any) | null;
+      onchargingtimechange: ((this: BatteryManager, ev: Event) => any) | null;
+      ondischargingtimechange: ((this: BatteryManager, ev: Event) => any) | null;
+      onlevelchange: ((this: BatteryManager, ev: Event) => any) | null;
+    }
+
+    interface Navigator {
+      getBattery?: () => Promise<BatteryManager>;
+    }
+
     // --- General Page Load ---
     document.addEventListener('DOMContentLoaded', function () {
       setTimeout(() => {
@@ -170,13 +203,12 @@ const highlightedGame = {
 
     // --- INFINITE CAROUSEL LOGIC ---
     const carouselTrack = document.querySelector('.carousel-track');
-    // Select all ORIGINAL items immediately (before cloning)
     const originalItems = document.querySelectorAll('.carousel-item');
     const carouselDots = document.getElementById('carouselDots');
 
     let itemsPerView = 1;
-    let carouselIndex = 0; // The visual index (including clones)
-    let logicalIndex = 0; // The actual data index (0 to total-1)
+    let carouselIndex = 0;
+    let logicalIndex = 0;
     let isTransitioning = false;
     let slideWidth = 0;
     let totalOriginal = originalItems.length;
@@ -189,11 +221,9 @@ const highlightedGame = {
     function initCarousel() {
       if (!carouselTrack || originalItems.length === 0) return;
 
-      // 1. Calculate dimensions
       const container = document.querySelector('.carousel-container');
-      const gap = 8; // CSS gap
+      const gap = 8;
       const containerWidth = container.clientWidth;
-      // Measure one item to determine how many fit
       const sampleItem = originalItems[0];
       const itemWidth = sampleItem.offsetWidth;
 
@@ -201,25 +231,19 @@ const highlightedGame = {
       itemsPerView = Math.floor(containerWidth / slideWidth);
       if (itemsPerView < 1) itemsPerView = 1;
 
-      // 2. Clear existing track to prevent duplicate clones on resize
       carouselTrack.innerHTML = '';
 
-      // 3. Create Clones
-      // We clone 'itemsPerView' amount of items for both ends to ensure no whitespace during transition
       const fragment = document.createDocumentFragment();
 
-      // Prepend clones (Last 'n' items)
       for (let i = totalOriginal - itemsPerView; i < totalOriginal; i++) {
-        let idx = (i + totalOriginal) % totalOriginal; // Handle negative wrap safety
+        let idx = (i + totalOriginal) % totalOriginal;
         let clone = originalItems[idx].cloneNode(true);
         clone.classList.add('clone');
         fragment.appendChild(clone);
       }
 
-      // Add Original Items
       originalItems.forEach((item) => fragment.appendChild(item));
 
-      // Append clones (First 'n' items)
       for (let i = 0; i < itemsPerView; i++) {
         let clone = originalItems[i].cloneNode(true);
         clone.classList.add('clone');
@@ -228,9 +252,8 @@ const highlightedGame = {
 
       carouselTrack.appendChild(fragment);
 
-      // 4. Set Initial Position (Skip the first set of clones)
       carouselIndex = itemsPerView;
-      updateTrackPosition(false); // false = no animation
+      updateTrackPosition(false);
       updateCarouselDots();
     }
 
@@ -249,7 +272,6 @@ const highlightedGame = {
 
       carouselIndex += direction;
 
-      // Calculate logical index for dots
       if (direction === 1) {
         logicalIndex++;
         if (logicalIndex >= totalOriginal) logicalIndex = 0;
@@ -262,28 +284,22 @@ const highlightedGame = {
       updateCarouselDots();
     }
 
-    // Handle the "Loop" when transition finishes
     carouselTrack?.addEventListener('transitionend', () => {
       isTransitioning = false;
 
-      // If we scrolled past the last real item (into appended clones)
       if (carouselIndex >= totalOriginal + itemsPerView) {
-        carouselIndex = itemsPerView; // Snap to start
+        carouselIndex = itemsPerView;
         updateTrackPosition(false);
-      }
-      // If we scrolled before the first real item (into prepended clones)
-      else if (carouselIndex < itemsPerView) {
-        carouselIndex = totalOriginal + itemsPerView - 1; // Snap to end
+      } else if (carouselIndex < itemsPerView) {
+        carouselIndex = totalOriginal + itemsPerView - 1;
         updateTrackPosition(false);
       }
     });
 
     function updateCarouselDots() {
       if (!carouselDots) return;
-      // Ensure logical index is always safe
       let activeDot = logicalIndex;
 
-      // Generate dots based on TOTAL ORIGINAL items (minus those that don't need a scroll if desired, but usually 1 dot per item for infinite)
       const dotsHtml = Array.from(
         { length: totalOriginal },
         (_, i) => `<div class="carousel-dot ${i === activeDot ? 'active' : ''}" onclick="goToCarouselSlide(${i})"></div>`
@@ -293,15 +309,13 @@ const highlightedGame = {
     }
 
     window.goToCarouselSlide = function (index) {
-      // Make global for onclick
       if (isTransitioning) return;
       logicalIndex = index;
-      carouselIndex = index + itemsPerView; // Add offset for clones
+      carouselIndex = index + itemsPerView;
       updateTrackPosition(true);
       updateCarouselDots();
     };
 
-    // --- Touch / Swipe Logic ---
     function handleTouchStart(e) {
       touchStartX = e.touches[0].clientX;
       isDragging = true;
@@ -333,18 +347,15 @@ const highlightedGame = {
       const swipeDistance = touchStartX - touchEndX;
       if (Math.abs(swipeDistance) > swipeThreshold) {
         if (swipeDistance > 0) {
-          moveCarousel(1); // Next
+          moveCarousel(1);
         } else {
-          moveCarousel(-1); // Prev
+          moveCarousel(-1);
         }
       }
     }
 
-    // Initialize Carousel
     document.addEventListener('DOMContentLoaded', function () {
       initCarousel();
-
-      // Event Listeners
       carouselTrack.addEventListener('touchstart', handleTouchStart, { passive: true });
       carouselTrack.addEventListener('touchmove', handleTouchMove, { passive: false });
       carouselTrack.addEventListener('touchend', handleTouchEnd, { passive: true });
@@ -354,18 +365,15 @@ const highlightedGame = {
       carouselTrack.addEventListener('mouseleave', handleMouseUp);
     });
 
-    // Handle Resize
     window.addEventListener('resize', function () {
       clearTimeout(window.resizeTimer);
       window.resizeTimer = setTimeout(() => {
-        // Reset to original state to recalculate properly
         initCarousel();
       }, 200);
     });
 
-    // --- REST OF THE UTILITIES (Typewriter, Battery, etc) ---
+    // --- REST OF THE UTILITIES ---
 
-    // Image Caption Rotator
     const images = [
       { src: '/storage/images/main/highway-racer.jpeg', caption: 'Highway Racer' },
       { src: '/storage/images/main/buildnow.jpeg', caption: 'Buildnow.gg' },
@@ -389,7 +397,6 @@ const highlightedGame = {
       setInterval(changeImage, 3000);
     }
 
-    // Typewriter Effect
     class TxtType {
       constructor(el, toRotate, period) {
         this.toRotate = toRotate;
@@ -447,14 +454,13 @@ const highlightedGame = {
       document.body.appendChild(css);
     });
 
-    // Popup Logic
     document.addEventListener('DOMContentLoaded', function () {
       const popup = document.getElementById('discord-popup');
       const closeBtn = document.getElementById('close-popup');
 
       if (popup && closeBtn) {
         function checkPopup() {
-          const lastPopupClose = localStorage.getItem('lastPopupClose');
+          const lastPopupClose = Number(localStorage.getItem('lastPopupClose'));
           const currentTime = new Date().getTime();
           if (!lastPopupClose || currentTime - lastPopupClose > 3600000) {
             popup.style.display = 'flex';
@@ -462,16 +468,16 @@ const highlightedGame = {
         }
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
-          localStorage.setItem('lastPopupClose', new Date().getTime());
+          localStorage.setItem('lastPopupClose', new Date().getTime().toString());
         });
         checkPopup();
       }
     });
 
-    // System Stats (Time, Battery, FPS)
+    // --- SYSTEM STATS (With New Battery Logic) ---
     document.addEventListener('DOMContentLoaded', function () {
       const timeDisplay = document.getElementById('time-display');
-      const batteryIcon = document.getElementById('battery-icon');
+      const batteryWrapper = document.getElementById('battery-wrapper'); // The container
       const batteryPercentage = document.getElementById('battery-percentage');
       const fpsElement = document.getElementById('fps');
 
@@ -489,32 +495,55 @@ const highlightedGame = {
       }
 
       function updateBattery() {
-        if (!batteryPercentage || !batteryIcon) return;
+        if (!batteryPercentage || !batteryWrapper) return;
+
         if ('getBattery' in navigator) {
-          navigator.getBattery().then(function (battery) {
+          (navigator as Navigator).getBattery().then(function (battery: BatteryManager) {
             const level = battery.level * 100;
             const percentage = Math.round(level);
 
             batteryPercentage.textContent = `${percentage}%`;
 
-            batteryIcon.className = 'fas battery-icon';
+            // 1. Reset Classes on Wrapper (remove old colors)
+            batteryWrapper.className = 'battery-container'; // Reset to base class
+
+            // 2. Hide all icons first
+            const allIcons = batteryWrapper.querySelectorAll('.bat-icon');
+            allIcons.forEach((el) => ((el as HTMLElement).style.display = 'none'));
+
+            // 3. Determine ID and Color Class
+            let iconId = 'bat-empty';
+            let colorClass = 'battery-low';
+
             if (percentage >= 90) {
-              batteryIcon.classList.add('fa-battery-full', 'battery-full');
+              iconId = 'bat-full';
+              colorClass = 'battery-full'; // Green
             } else if (percentage >= 70) {
-              batteryIcon.classList.add('fa-battery-three-quarters', 'battery-good');
+              iconId = 'bat-three-quarters';
+              colorClass = 'battery-good'; // Green/Yellow
             } else if (percentage >= 50) {
-              batteryIcon.classList.add('fa-battery-half', 'battery-good');
+              iconId = 'bat-half';
+              colorClass = 'battery-good';
             } else if (percentage >= 30) {
-              batteryIcon.classList.add('fa-battery-quarter', 'battery-medium');
-            } else if (percentage >= 10) {
-              batteryIcon.classList.add('fa-battery-empty', 'battery-low');
+              iconId = 'bat-quarter';
+              colorClass = 'battery-medium'; // Orange
             } else {
-              batteryIcon.classList.add('fa-battery-empty', 'battery-low');
+              iconId = 'bat-empty';
+              colorClass = 'battery-low'; // Red
             }
+
+            // 4. Apply changes
+            batteryWrapper.classList.add(colorClass); // Apply color to container (cascades to SVG)
+            const activeIcon = document.getElementById(iconId);
+            if (activeIcon) activeIcon.style.display = 'inline-block';
           });
         } else {
           batteryPercentage.textContent = 'n/a';
-          batteryIcon.className = 'fas fa-battery-slash battery-icon';
+          // Fallback view
+          const allIcons = batteryWrapper.querySelectorAll('.bat-icon');
+          allIcons.forEach((el) => ((el as HTMLElement).style.display = 'none'));
+          const loadingIcon = document.getElementById('bat-loading');
+          if (loadingIcon) loadingIcon.style.display = 'inline-block';
         }
       }
 
@@ -532,6 +561,9 @@ const highlightedGame = {
         }
         requestAnimationFrame(calculateFPS);
       }
+      document.addEventListener('astro:after-swap', updateTime);
+      document.addEventListener('astro:after-swap', updateBattery);
+      document.addEventListener('astro:after-swap', calculateFPS);
 
       updateTime();
       updateBattery();

@@ -46,6 +46,13 @@ export default defineConfig({
         provider: fontProviders.googleicons(),
         name: 'Material Symbols Rounded',
         cssVariable: '--symbols-rounded'
+      },
+      {
+        provider: fontProviders.google(),
+        name: 'Poppins',
+        cssVariable: '--font-poppins',
+        weights: ['400', '700'],
+        styles: ['normal']
       }
     ]
   }

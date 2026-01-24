@@ -82,11 +82,21 @@ const scramjetConfig = {
     const { LibcurlClient } = libcurlPKG;
     const computedURL = document.getElementById('embedFrame').dataset.url;
     async function main() {
-      const frameEl = document.getElementById('embedFrame');
+      const frameEl = document.querySelector<HTMLIFrameElement>('#embedFrame');
       const statusEl = document.getElementById('status');
-
+      if (!frameEl || !statusEl || !frameEl.dataset.config) {
+        console.error('Required elements missing');
+        return;
+      }
+      let cfg;
       // Parse config passed from frontmatter
-      const cfg = JSON.parse(frameEl.dataset.config);
+      try {
+        cfg = JSON.parse(frameEl.dataset.config);
+      } catch (e) {
+        statusEl.textContent = 'Error: Invalid configuration';
+        console.error('Config parse error', e);
+        return;
+      }
 
       // Setup Scramjet Global Config
       config.prefix = cfg.scope;
