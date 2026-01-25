@@ -1,4 +1,3 @@
-
 import { baremuxPath } from '@mercuryworkshop/bare-mux/node';
 import { epoxyPath } from '@mercuryworkshop/epoxy-transport';
 import { scramjetPath } from '@mercuryworkshop/scramjet/path';
@@ -1112,7 +1111,7 @@ app.use(conditionalGate);
 
 const authLimiter = rateLimit({
   windowMs: 60000,
-  max: 20,
+  max: 60,
   keyGenerator: (req) => toIPv4(null, req),
   standardHeaders: true,
   legacyHeaders: false,
