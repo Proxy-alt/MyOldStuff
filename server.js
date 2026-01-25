@@ -1,3 +1,4 @@
+
 import { baremuxPath } from '@mercuryworkshop/bare-mux/node';
 import { epoxyPath } from '@mercuryworkshop/epoxy-transport';
 import { scramjetPath } from '@mercuryworkshop/scramjet/path';
@@ -35,7 +36,6 @@ import { signinHandler } from './server/api/signin.js';
 import { signupHandler } from './server/api/signup.js';
 import db from './server/db.js';
 import { blockIPKernel } from './xdp-integration.js';
-import { redis, banIPCluster, checkClusterBan, updateIPReputationRedis, checkClusterRateLimit, setupClusterListeners, publishHeartbeat } from './redis-client.js';
 
 const { createBareServer } = bareServerPkg;
 
@@ -208,36 +208,26 @@ function createFingerprint(req) {
   return createHash('sha256').update(data).digest('hex').slice(0, 32);
 }
 
-async function updateIPReputation(ip, score) {
+function updateIPReputation(ip, score) {
   const current = ipReputation.get(ip) || { score: 0, lastSeen: 0, violations: [] };
   current.score += score;
   current.lastSeen = Date.now();
-  
   if (score < 0) {
     current.violations.push({ time: Date.now(), score });
-    if (current.violations.length > 100) current.violations.shift();
+    if (current.violations.length > 100) {
+      current.violations.shift();
+    }
   }
-  
   ipReputation.set(ip, current);
-  
-  try {
-    await updateIPReputationRedis(ip, score);
-  } catch {}
-  
+
   if (current.score < -100) {
     circuitBreakers.set(ip, { open: true, until: Date.now() + 3600000, violations: current.violations.length });
   }
 }
 
-async function checkCircuitBreaker(ip) {
+function checkCircuitBreaker(ip) {
   const breaker = circuitBreakers.get(ip);
-  if (!breaker) {
-    try {
-      return await checkClusterBan(ip);
-    } catch {
-      return false;
-    }
-  }
+  if (!breaker) return false;
 
   if (breaker.open && Date.now() > breaker.until) {
     circuitBreakers.delete(ip);
@@ -358,9 +348,6 @@ const systemState = {
 };
 
 discordClient.systemState = systemState;
-
-setupClusterListeners(shield, systemState, circuitBreakers);
-setInterval(() => publishHeartbeat(shield, systemState), 5000);
 
 const botVerificationCache = new Map();
 const VERIFICATION_CACHE_TTL = 3600000;
@@ -753,17 +740,6 @@ app.get('/scramjet.sync.js', (req, res) => res.sendFile(path.join(scramjetPath, 
 app.get('/scramjet.wasm.wasm', (req, res) => res.sendFile(path.join(scramjetPath, 'scramjet.wasm.wasm')));
 app.get('/scramjet.all.js.map', (req, res) => res.sendFile(path.join(scramjetPath, 'scramjet.all.js.map')));
 
-app.get('/health', async (req, res) => {
-  const cpu = shield.getCpuUsage();
-  const mem = process.memoryUsage().heapUsed / 1024 / 1024 / 1024;
-  
-  if (cpu > 75 || mem > 40 || systemState.state === 'ATTACK') {
-    return res.status(503).json({ status: 'degraded', cpu, memory: mem, state: systemState.state });
-  }
-  
-  res.status(200).json({ status: 'healthy', cpu, memory: mem });
-});
-
 app.use('/baremux/', express.static(baremuxPath));
 app.use('/epoxy/', express.static(epoxyPath));
 
@@ -830,18 +806,9 @@ app.post('/api/bot-verify', express.json(), (req, res) => {
 
 const gateMiddleware = async (req, res, next) => {
   systemState.totalRequests++;
-  
-  const ip = toIPv4(null, req);
-  
-  try {
-    const allowed = await checkClusterRateLimit(ip, 1000, 60);  
-    if (!allowed) {
-      shield.incrementBlocked(ip, 'cluster_ratelimit');
-      return res.status(429).send('Too many requests');
-    }
-  } catch {}
 
   const ua = req.headers['user-agent'] || '';
+  const ip = toIPv4(null, req);
   const isBrowser = /Mozilla|Chrome|Safari|Firefox|Edge/i.test(ua);
 
   const goodBots = [
@@ -1049,22 +1016,6 @@ const memoryProtection = (req, res, next) => {
   next();
 };
 
-const readOnlyLimiter = rateLimit({
-  windowMs: 60000,
-  max: 1000,
-  keyGenerator: (req) => {
-    if (req.session?.user?.id) return `user:${req.session.user.id}`;
-    return toIPv4(null, req);
-  },
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-app.use('/api/comments', readOnlyLimiter);
-app.use('/api/likes', readOnlyLimiter);
-app.use('/api/changelog', readOnlyLimiter);
-app.use('/api/feedback', readOnlyLimiter);
-
 const assetExtensions = new Set([
   '.js',
   '.css',
@@ -1137,6 +1088,10 @@ const conditionalGate = (req, res, next) => {
     return res.status(429).json({ error: 'Too many requests' });
   }
 
+  if (apiPaths.has(req.path)) {
+    return next();
+  }
+
   if (req.path.startsWith('/api/')) {
     return next();
   }
@@ -1157,7 +1112,7 @@ app.use(conditionalGate);
 
 const authLimiter = rateLimit({
   windowMs: 60000,
-  max: 500,
+  max: 20,
   keyGenerator: (req) => toIPv4(null, req),
   standardHeaders: true,
   legacyHeaders: false,
@@ -1174,14 +1129,14 @@ const authLimiter = rateLimit({
 });
 
 const apiLimiter = rateLimit({
-  windowMs: 60000,
+  windowMs: 15000,
   max: (req) => {
     const token = extractToken(req);
     const ip = toIPv4(null, req);
     const reputation = ipReputation.get(ip);
-    if (reputation && reputation.score < -50) return 30;
-    if (authPaths.has(req.path)) return 100; 
-    return verifyToken(token, req) ? 2000 : 500; 
+    if (reputation && reputation.score < -50) return 10;
+    if (authPaths.has(req.path)) return 20;
+    return verifyToken(token, req) ? 200 : 50;
   },
   keyGenerator: (req) => {
     const token = extractToken(req);
@@ -1192,10 +1147,7 @@ const apiLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => {
-    const readOnlyPaths = ['/api/comments', '/api/likes', '/api/changelog', '/api/feedback'];
-    return readOnlyPaths.some(path => req.path.startsWith(path));
-  },
+  skip: (req) => false,
   handler: (req, res) => {
     const ip = toIPv4(null, req);
     updateIPReputation(ip, -3);
@@ -1205,13 +1157,7 @@ const apiLimiter = rateLimit({
 });
 
 app.use('/bare/', apiLimiter);
-
 app.use('/api/', (req, res, next) => {
-  const readOnlyPaths = ['/api/comments', '/api/likes', '/api/changelog', '/api/feedback'];
-  if (readOnlyPaths.some(path => req.path.startsWith(path))) {
-    return next(); 
-  }
-  
   if (authPaths.has(req.path)) {
     return authLimiter(req, res, next);
   }
