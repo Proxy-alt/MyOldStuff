@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DMCA Policy</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a1d37;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 30px;
+  background: rgba(10, 29, 55, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(-100%);
+  animation: slideDown 0.5s ease-out 0.2s forwards;
+}
+
+@keyframes slideDown {
+  to {
+    transform: translateY(0);
+  }
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+
+.back-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateX(-4px);
+}
+
+.arrow {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.back-btn:hover .arrow {
+  transform: translateX(-4px);
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 120px 30px 60px;
+  transform: translateY(30px);
+  opacity: 0;
+  animation: slideUp 0.6s ease-out 0.4s forwards;
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #3b82f6;
+}
+
+.last-updated {
+  color: #94a3b8;
+  margin-bottom: 40px;
+  font-size: 0.95rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  color: #60a5fa;
+}
+
+p {
+  margin-bottom: 16px;
+  color: #e2e8f0;
+}
+
+ul {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+li {
+  margin-bottom: 8px;
+  color: #e2e8f0;
+}
+
+ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+ol li {
+  margin-bottom: 12px;
+  color: #e2e8f0;
+}
+
+a {
+  color: #3b82f6;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #60a5fa;
+  text-decoration: underline;
+}
+
+.highlight {
+  background: rgba(59, 130, 246, 0.1);
+  padding: 20px;
+  border-left: 3px solid #3b82f6;
+  border-radius: 4px;
+  margin: 24px 0;
+}
+
+.notice {
+  background: rgba(251, 191, 36, 0.1);
+  border-left: 3px solid #fbbf24;
+  padding: 20px;
+  border-radius: 4px;
+  margin: 24px 0;
+}
+
+code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .container {
+    padding: 100px 20px 40px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="/pages/home.html" class="back-btn">
+    <span class="arrow">←</span>
+    <span>Back to Home</span>
+  </a>
+</div>
+
+<div class="container">
+  <h1>DMCA Policy</h1>
+  <p class="last-updated">Last Updated: January 24, 2026</p>
+
+  <p>This Digital Millennium Copyright Act (DMCA) Policy outlines our procedures for responding to claims of copyright infringement. We respect the intellectual property rights of others and expect our users to do the same.</p>
+
+  <h2>Copyright Ownership</h2>
+  
+  <div class="notice">
+    <p><strong>Important Notice:</strong></p>
+    <p>All games, applications, images, videos, and other content accessible through our service belong to their respective copyright holders. We do not claim ownership of any third-party content hosted on external servers or accessed through our proxy service.</p>
+  </div>
+
+  <p>Our service acts as a technical conduit that allows users to access publicly available internet content. We do not host, store, or directly provide copyrighted materials belonging to third parties.</p>
+
+  <h2>Safe Harbor Provisions</h2>
+  
+  <p>We operate under the safe harbor provisions of the DMCA (17 U.S.C. § 512). As a service provider that merely transmits, routes, or provides connections for material through our system, we are not liable for copyright infringement by our users, provided we:</p>
+  <ul>
+    <li>Do not have actual knowledge of infringing activity</li>
+    <li>Do not receive financial benefit directly attributable to infringing activity</li>
+    <li>Respond expeditiously to remove or disable access upon notification</li>
+  </ul>
+
+  <h2>Filing a DMCA Takedown Notice</h2>
+  
+  <p>If you believe that content accessible through our service infringes your copyright, you may submit a DMCA takedown notice. To be effective, the notice must include:</p>
+
+  <ol>
+    <li><strong>Identification of the copyrighted work:</strong> A description of the copyrighted work you claim has been infringed, or if multiple works are covered by a single notification, a representative list of such works.</li>
+    
+    <li><strong>Identification of the infringing material:</strong> A description of where the material you claim is infringing is located on our service, with sufficient detail that we can locate it. Providing URLs or specific page locations is helpful.</li>
+    
+    <li><strong>Contact information:</strong> Your name, address, telephone number, and email address.</li>
+    
+    <li><strong>Good faith statement:</strong> A statement that you have a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law.</li>
+    
+    <li><strong>Accuracy statement:</strong> A statement that the information in the notification is accurate, and under penalty of perjury, that you are authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.</li>
+    
+    <li><strong>Signature:</strong> Your physical or electronic signature.</li>
+  </ol>
+
+  <h2>Where to Send DMCA Notices</h2>
+  
+  <div class="highlight">
+    <p>Please send your complete DMCA takedown notice to:</p>
+    <p><strong>Email:</strong> <a href="mailto:petezahgames@gmail.com">petezahgames@gmail.com</a></p>
+    <p><strong>Subject Line:</strong> DMCA Takedown Notice</p>
+  </div>
+
+  <p>We will review and process valid DMCA notices as expeditiously as possible, typically within 48-72 hours of receipt.</p>
+
+  <h2>Counter-Notification</h2>
+  
+  <p>If you believe that content you posted was removed or disabled by mistake or misidentification, you may file a counter-notification. A counter-notification must include:</p>
+
+  <ol>
+    <li>Your physical or electronic signature</li>
+    <li>Identification of the material that was removed and its location before removal</li>
+    <li>A statement under penalty of perjury that you have a good faith belief the material was removed as a result of mistake or misidentification</li>
+    <li>Your name, address, and telephone number</li>
+    <li>A statement consenting to the jurisdiction of the federal court in your district, or if outside the United States, any judicial district in which we may be found</li>
+    <li>A statement that you will accept service of process from the person who provided the original DMCA notice</li>
+  </ol>
+
+  <h2>Repeat Infringer Policy</h2>
+  
+  <p>In accordance with the DMCA and other applicable laws, we have adopted a policy of terminating accounts of users who are repeat infringers. We may also, in our sole discretion, limit access to our service and terminate the accounts of users who infringe intellectual property rights, whether or not there is repeat infringement.</p>
+
+  <h2>Limitations and Disclaimers</h2>
+  
+  <p>Please note the following:</p>
+  <ul>
+    <li>We are a proxy service and do not control content hosted on third-party websites</li>
+    <li>We cannot prevent users from accessing content that remains available on the public internet</li>
+    <li>Blocking access through our service does not remove content from its original source</li>
+    <li>For permanent removal, copyright holders should contact the original hosting provider or website</li>
+  </ul>
+
+  <h2>Misrepresentation Warning</h2>
+  
+  <div class="notice">
+    <p><strong>Warning:</strong></p>
+    <p>Under Section 512(f) of the DMCA, any person who knowingly materially misrepresents that material or activity is infringing, or that material or activity was removed or disabled by mistake or misidentification, may be subject to liability for damages, including costs and attorneys' fees.</p>
+  </div>
+
+  <h2>Fair Use Considerations</h2>
+  
+  <p>Before submitting a DMCA notice, please consider whether the use of copyrighted material constitutes fair use. Fair use is a legal doctrine that permits limited use of copyrighted material without permission for purposes such as:</p>
+  <ul>
+    <li>Criticism and commentary</li>
+    <li>News reporting</li>
+    <li>Teaching and education</li>
+    <li>Research and scholarship</li>
+  </ul>
+
+  <p>If you are unsure whether material constitutes fair use, we encourage you to consult with a legal professional before filing a DMCA notice.</p>
+
+  <h2>International Copyright</h2>
+  
+  <p>We respect international copyright laws and will respond to valid copyright notices from rights holders worldwide. Please note that copyright laws vary by jurisdiction, and we will evaluate notices according to applicable law.</p>
+
+  <h2>Changes to This Policy</h2>
+  
+  <p>We may update this DMCA Policy from time to time to reflect changes in our procedures or legal requirements. The current version will always be available on this page with the date of last update.</p>
+
+  <h2>Additional Resources</h2>
+  
+  <p>For more information about the DMCA and copyright law, you may wish to consult:</p>
+  <ul>
+    <li>The full text of the DMCA at <a href="https://www.copyright.gov/legislation/dmca.pdf" target="_blank">copyright.gov</a></li>
+    <li>The U.S. Copyright Office at <a href="https://www.copyright.gov" target="_blank">copyright.gov</a></li>
+    <li>A qualified intellectual property attorney</li>
+  </ul>
+
+  <h2>Contact Information</h2>
+  
+  <div class="highlight">
+    <p>For DMCA notices or questions about this policy:</p>
+    <p><strong>Email:</strong> <a href="mailto:petezahgames@gmail.com">petezahgames@gmail.com</a></p>
+    <p><strong>Discord:</strong> <a href="https://discord.petezahgames.com" target="_blank">discord.petezahgames.com</a></p>
+    <p><strong>Subject Line for DMCA Notices:</strong> DMCA Takedown Notice</p>
+  </div>
+
+  <p style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">This DMCA Policy is provided for informational purposes and does not constitute legal advice. For specific legal questions, please consult with a qualified attorney.</p>
+</div>
+</body>
+</html>

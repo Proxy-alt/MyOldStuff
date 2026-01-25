@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PeteZah | Profile</title>
+    <link rel="icon" type="image/x-icon" href="/storage/images/logo-png-removebg-preview.png" />
+    <link rel="stylesheet" href="/storage/css/themes.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Roboto, sans-serif;
+        background: #0a1d37;
+        min-height: 100vh;
+        padding: 20px;
+        color: #fff;
+        position: relative;
+        overflow-y: auto;
+      }
+      .god-rays {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        --stripes: repeating-linear-gradient(
+          100deg,
+          rgba(20, 40, 60, 0.8) 0%,
+          rgba(20, 40, 60, 0.8) 7%,
+          transparent 10%,
+          transparent 12%,
+          rgba(20, 40, 60, 0.8) 16%
+        );
+        --rays: repeating-linear-gradient(
+          100deg,
+          rgba(30, 50, 90, 0.9) 10%,
+          rgba(20, 40, 80, 0.9) 15%,
+          rgba(30, 50, 90, 0.9) 20%,
+          rgba(20, 40, 80, 0.9) 25%,
+          rgba(30, 50, 90, 0.9) 30%
+        );
+        background-image: var(--stripes), var(--rays);
+        background-size: 300%, 200%;
+        background-position:
+          50% 50%,
+          50% 50%;
+        animation: fadeIn 2s ease;
+        mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
+        -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .god-rays::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: var(--stripes), var(--rays);
+        background-size: 200%, 100%;
+        animation: god-rays 40s linear infinite;
+        background-attachment: fixed;
+        mix-blend-mode: difference;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes god-rays {
+        0% {
+          background-position:
+            0 0,
+            0 0;
+        }
+        100% {
+          background-position:
+            100% 100%,
+            100% 100%;
+        }
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .header h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .section {
+        background: linear-gradient(135deg, #111117, #182129);
+        border-radius: 24px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
+        border: 1px solid #3a4a5a;
+      }
+      .profile-section {
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+      }
+      .profile-left {
+        flex-shrink: 0;
+      }
+      .profile-pic-wrapper {
+        position: relative;
+      }
+      .profile-pic {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(59, 130, 246, 0.5);
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+      }
+      .profile-pic-upload {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        border: 3px solid #0a1d37;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+      .profile-pic-upload:hover {
+        transform: scale(1.1);
+      }
+      .profile-pic-upload input {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+      .profile-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        color: #cde;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        background: 0 0;
+        border: none;
+        border-bottom: 1px solid #456;
+        color: #fff;
+        padding: 0.5rem 0;
+        font-size: 0.95rem;
+        outline: 0;
+        transition: border-color 0.3s ease;
+        font-family: inherit;
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus {
+        border-bottom-color: #fff;
+        box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+      }
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: #678;
+      }
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 16px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #fff, #f0f0f0);
+        color: #0a1d37;
+      }
+      .btn-primary:hover:not(:disabled) {
+        background: linear-gradient(135deg, #f0f0f0, #ddd);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+      }
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .btn-secondary {
+        background: linear-gradient(135deg, #2a3a4a, #345);
+        color: #fff;
+        border: 1px solid #456;
+      }
+      .btn-secondary:hover {
+        border-color: #678;
+        background: linear-gradient(135deg, #345, #456);
+        transform: translateY(-2px) scale(1.02);
+      }
+      .btn-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: #fff;
+      }
+      .btn-danger:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+      }
+      .btn-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .btn-full {
+        width: 100%;
+      }
+      .data-display {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+      }
+      .data-display label {
+        display: block;
+        color: #9ab;
+        font-size: 0.75rem;
+        margin-bottom: 4px;
+      }
+      .data-display p {
+        color: #fff;
+        font-size: 0.95rem;
+      }
+      .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      }
+      .danger-zone {
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+      .danger-zone .section-title {
+        color: #ef4444;
+      }
+      .admin-section {
+        border: 1px solid rgba(59, 130, 246, 0.3);
+      }
+      .admin-section .section-title {
+        color: #3b82f6;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+      }
+      .stat-card .value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #3b82f6;
+        margin-bottom: 4px;
+      }
+      .stat-card .label {
+        font-size: 0.85rem;
+        color: #9ab;
+      }
+      .users-list {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .user-item {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .user-item .info {
+        flex: 1;
+      }
+      .user-item .email {
+        color: #fff;
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+      }
+      .user-item .meta {
+        color: #9ab;
+        font-size: 0.75rem;
+      }
+      @media (max-width: 768px) {
+        .profile-section {
+          flex-direction: column;
+        }
+        .btn-group {
+          flex-direction: column;
+        }
+        .btn-group .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="god-rays"></div>
+    <div class="container">
+      <div class="header"><h1>Profile Settings</h1></div>
+      <div class="section">
+        <div class="profile-section">
+          <div class="profile-left">
+            <div class="profile-pic-wrapper">
+              <img id="profile-pic" src="/storage/images/main/profile.png" alt="Profile" class="profile-pic" />
+              <div class="profile-pic-upload">
+                <input type="file" id="profile-upload" accept="image/*" /> <i class="fas fa-camera" style="color: #fff; font-size: 18px"></i>
+              </div>
+            </div>
+          </div>
+          <div class="profile-right">
+            <div class="data-display">
+              <label>Email</label>
+              <p id="email-display">Loading...</p>
+            </div>
+            <div class="form-group"><label for="username">Name</label> <input type="text" id="username" placeholder="Enter your name" /></div>
+            <div class="form-group"><label for="bio">Bio</label> <textarea id="bio" placeholder="Tell us about yourself"></textarea></div>
+            <button class="btn btn-primary" id="save-profile-btn"><i class="fas fa-save"></i> Save Profile</button>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title"><i class="fas fa-poll"></i> Profile Survey</div>
+        <form id="survey-form">
+          <div class="form-group">
+            <label for="survey-age">Your Age</label> <input type="number" id="survey-age" name="age" min="1" max="120" class="form-input" required />
+          </div>
+          <div class="form-group" id="school-group" style="display: none">
+            <label for="survey-school">Your School</label> <input type="text" id="survey-school" name="school" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="survey-favgame">Favorite Game Genre</label>
+            <select id="survey-favgame" name="favgame" class="form-input">
+              <option value="action">Action</option>
+              <option value="adventure">Adventure</option>
+              <option value="puzzle">Puzzle</option>
+              <option value="sports">Sports</option>
+              <option value="strategy">Strategy</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="survey-mood">How are you feeling today?</label>
+            <input type="text" id="survey-mood" name="mood" class="form-input" maxlength="40" />
+          </div>
+          <button type="submit" class="btn btn-primary">Save Survey</button>
+        </form>
+      </div>
+      <div class="section">
+        <div class="section-title"><i class="fas fa-key"></i> Change Password</div>
+        <div class="form-group">
+          <label for="current-password">Current Password</label> <input type="password" id="current-password" placeholder="Enter current password" />
+        </div>
+        <div class="form-group">
+          <label for="new-password">New Password</label> <input type="password" id="new-password" placeholder="Enter new password" />
+        </div>
+        <div class="form-group">
+          <label for="confirm-new-password">Confirm New Password</label>
+          <input type="password" id="confirm-new-password" placeholder="Confirm new password" />
+        </div>
+        <button class="btn btn-primary" id="change-password-btn"><i class="fas fa-lock"></i> Change Password</button>
+      </div>
+      <div class="section">
+        <div class="section-title"><i class="fas fa-gamepad"></i> Game Data</div>
+        <p style="color: #9ab; margin-bottom: 16px; font-size: 0.9rem">Save your game progress and localStorage data to your account.</p>
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="save-data-btn"><i class="fas fa-download"></i> Save Game Data</button>
+          <button class="btn btn-secondary" id="load-data-btn"><i class="fas fa-upload"></i> Load Game Data</button>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title"><i class="fas fa-bolt"></i> Quick Proxy & Tools</div>
+        <div class="btn-group" style="margin-bottom: 16px">
+          <button class="btn btn-secondary quick-proxy-btn" data-url="/bare/"><i class="fas fa-globe"></i> Open Proxy</button>
+          <button class="btn btn-secondary quick-proxy-btn" data-url="/pages/other/ai/index.html"><i class="fas fa-robot"></i> AI Playground</button>
+          <button class="btn btn-secondary quick-proxy-btn" data-url="/pages/g.html"><i class="fas fa-gamepad"></i> Games</button>
+        </div>
+        <div class="form-group">
+          <label for="favorite-games">Favorite Games (comma separated)</label>
+          <input type="text" id="favorite-games" placeholder="e.g. Slope, 2048, Run 3" />
+        </div>
+        <button class="btn btn-primary" id="save-extra-btn"><i class="fas fa-save"></i> Save Extras</button>
+      </div>
+      <div class="section admin-section" id="admin-section" style="display: none">
+        <div class="section-title"><i class="fas fa-shield-alt"></i> Admin Area</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="value" id="user-count">0</div>
+            <div class="label">Total Users</div>
+          </div>
+          <div class="stat-card">
+            <div class="value" id="feedback-count">0</div>
+            <div class="label">Feedback Posts</div>
+          </div>
+          <div class="stat-card">
+            <div class="value" id="changelog-count">0</div>
+            <div class="label">Changelog Entries</div>
+          </div>
+        </div>
+        <div class="section-title" style="font-size: 1rem; margin-top: 24px">User Search</div>
+        <input
+          type="text"
+          id="user-search"
+          class="form-input"
+          placeholder="Search users by name, email, or school..."
+          style="
+            margin-bottom: 16px;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 12px;
+            border: 1px solid #3a4a5a;
+            color: #fff;
+            padding: 10px 16px;
+            font-size: 1rem;
+          "
+        />
+        <div class="section-title" style="font-size: 1rem; margin-top: 8px">Recent Users</div>
+        <div class="users-list" id="users-list"><div style="color: #9ab; text-align: center; padding: 20px">Loading...</div></div>
+      </div>
+      <div class="section danger-zone" id="delete-section">
+        <div class="section-title"><i class="fas fa-exclamation-triangle"></i> Danger Zone</div>
+        <p style="color: #9ab; margin-bottom: 16px; font-size: 0.9rem">Permanently delete your account. This action cannot be undone.</p>
+        <button class="btn btn-danger btn-full" id="delete-account-btn"><i class="fas fa-trash"></i> Delete Account</button>
+      </div>
+    </div>
+    <div
+      id="admin-user-modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(10, 29, 55, 0.85);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: linear-gradient(135deg, #111117, #182129);
+          border-radius: 24px;
+          padding: 32px;
+          max-width: 400px;
+          width: 90vw;
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
+          border: 1px solid #3a4a5a;
+          position: relative;
+        "
+      >
+        <button
+          id="close-admin-user-modal"
+          style="position: absolute; top: 16px; right: 16px; background: 0 0; border: none; color: #9ab; font-size: 24px; cursor: pointer"
+        >
+          &times;
+        </button>
+        <h2 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 16px">Manage User</h2>
+        <div id="admin-user-modal-content" style="margin-bottom: 20px"></div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="make-staff-btn">Make Staff</button>
+          <button class="btn btn-secondary" id="suspend-user-btn">Suspend</button> <button class="btn btn-danger" id="ban-user-btn">Ban (IP)</button>
+          <button class="btn btn-danger" id="delete-user-btn">Delete</button>
+        </div>
+      </div>
+    </div>
+    <script src="/storage/js/popup.js"></script>
+    <script>
+      let userData = null,
+        isAdmin = !1;
+      async function loadProfile() {
+        try {
+          const e = await fetch('/api/profile', { credentials: 'include' }),
+            n = await e.json();
+          if (e.ok) {
+            userData = n.user;
+            const e = n.user.app_metadata?.role;
+            ((isAdmin = 'Owner' === e || 'Admin' === e || 'Staff' === e),
+              (document.getElementById('email-display').textContent = n.user.email),
+              (document.getElementById('username').value = n.user.user_metadata?.name || ''),
+              (document.getElementById('bio').value = n.user.user_metadata?.bio || ''),
+              n.user.user_metadata?.avatar_url && (document.getElementById('profile-pic').src = n.user.user_metadata.avatar_url),
+              isAdmin &&
+                ((document.getElementById('admin-section').style.display = 'block'),
+                (document.getElementById('delete-section').style.display = 'none'),
+                loadAdminStats(),
+                loadUsers()));
+          } else if (window.parent !== window) {
+            window.parent.postMessage({ type: 'logout' }, window.location.origin);
+            const e = window.frameElement;
+            e && (e.src = '/pages/settings/p.html');
+          } else window.location.href = '/pages/settings/p.html';
+        } catch (e) {
+          showPopup('Failed to load profile', 'error');
+        }
+      }
+      async function loadAdminStats() {
+        try {
+          const e = await fetch('/api/admin/stats', { credentials: 'include' }),
+            n = await e.json();
+          e.ok &&
+            ((document.getElementById('user-count').textContent = n.userCount),
+            (document.getElementById('feedback-count').textContent = n.feedbackCount),
+            (document.getElementById('changelog-count').textContent = n.changelogCount));
+        } catch (e) {
+          console.error('Failed to load admin stats:', e);
+        }
+      }
+      async function loadUsers() {
+        try {
+          const n = await fetch('/api/admin/users', { credentials: 'include' }),
+            t = await n.json();
+          if (n.ok) {
+            let o = t.users || [];
+            window.lastAdminUsers = o;
+            const a = document.getElementById('users-list'),
+              s = document.getElementById('user-search');
+            function e(e = '') {
+              let n = o;
+              if (e) {
+                const t = e.toLowerCase();
+                n = o.filter(
+                  (e) =>
+                    (e.username || '').toLowerCase().includes(t) ||
+                    (e.email || '').toLowerCase().includes(t) ||
+                    (e.school || '').toLowerCase().includes(t)
+                );
+              }
+              n.length > 0
+                ? (a.innerHTML = n
+                    .map((e) => {
+                      const n = new Date(e.created_at);
+                      let t = '';
+                      1 === e.is_admin &&
+                      e.email ===
+                        (window.lastAdminUsers && window.lastAdminUsers[0] && window.lastAdminUsers[0].email ? window.lastAdminUsers[0].email : '')
+                        ? (t = '<span style="color:#fbbf24">Owner</span>')
+                        : 3 === e.is_admin
+                          ? (t = '<span style="color:#3b82f6">Admin</span>')
+                          : 2 === e.is_admin && (t = '<span style="color:#8b5cf6">Staff</span>');
+                      let o = isCurrentUserAdmin() ? e.ip || 'N/A' : '';
+                      return `\n                  <div class="user-item">\n                    <img src="${e.avatar_url || '/storage/images/main/profile.png'}" alt="Profile" style="width:40px;height:40px;border-radius:50%;margin-right:12px;object-fit:cover;">\n                    <div class="info">\n                      <div class="email"><b>${e.username || 'No username'}</b> <span style="color:#99aabb;font-size:0.8em;">(${e.email})</span></div>\n                      <div class="meta">\n                        Joined: ${n.toLocaleDateString()} • School: ${e.school || 'N/A'} • Age: ${e.age || 'N/A'} ${t}\n                        ${isCurrentUserAdmin() ? `<br>IP: ${o}` : ''}\n                      </div>\n                    </div>\n                    <button class="btn btn-secondary" onclick="manageUser('${e.id}')">Manage</button>\n                  </div>\n                `;
+                    })
+                    .join(''))
+                : (a.innerHTML = '<div style="color: #99aabb; text-align: center; padding: 20px;">No users found</div>');
+            }
+            (e(), (s.oninput = (n) => e(n.target.value)));
+          }
+        } catch (r) {
+          console.error('Failed to load users:', r);
+        }
+      }
+      async function adminUserAction(e) {
+        if (!currentAdminUserId) return;
+        let n = '';
+        if (
+          ('delete' === e && (n = 'Are you sure you want to permanently delete this user? This cannot be undone.'),
+          'ban' === e && (n = 'Are you sure you want to ban this user and their IP?'),
+          'suspend' === e && (n = 'Suspend this user? They will not be able to log in.'),
+          'staff' === e && (n = 'Make this user staff? They will gain staff privileges.'),
+          !n || confirm(n))
+        )
+          try {
+            const n = await fetch('/api/admin/user-action', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ userId: currentAdminUserId, action: e })
+              }),
+              t = await n.json();
+            n.ok
+              ? (showPopup(t.message || 'Action successful', 'success'),
+                (document.getElementById('admin-user-modal').style.display = 'none'),
+                loadUsers())
+              : showPopup(t.error || 'Action failed', 'error');
+          } catch (e) {
+            showPopup('Network error', 'error');
+          }
+      }
+      function openInIframe(e) {
+        try {
+          window.parent !== window && window.parent.postMessage
+            ? window.parent.postMessage({ type: 'navigate', url: e }, '*')
+            : (window.location.href = e);
+        } catch {
+          window.location.href = e;
+        }
+      }
+      ((window.manageUser = function (e) {
+        const n = (window.lastAdminUsers || []).find((n) => n.id === e);
+        if (!n) return void showPopup('User not found', 'error');
+        currentAdminUserId = e;
+        const t = document.getElementById('admin-user-modal'),
+          o = document.getElementById('admin-user-modal-content');
+        let a = '';
+        1 === n.is_admin &&
+        n.email === (window.lastAdminUsers && window.lastAdminUsers[0] && window.lastAdminUsers[0].email ? window.lastAdminUsers[0].email : '')
+          ? (a = '<span style="color:#fbbf24">Owner</span>')
+          : 3 === n.is_admin
+            ? (a = '<span style="color:#3b82f6">Admin</span>')
+            : 2 === n.is_admin && (a = '<span style="color:#8b5cf6">Staff</span>');
+        let s = isCurrentUserAdmin() ? n.ip || 'N/A' : '';
+        ((o.innerHTML = `\n        <div style='display:flex;align-items:center;gap:12px;margin-bottom:10px;'>\n          <img src="${n.avatar_url || '/storage/images/main/profile.png'}" alt="Profile" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">\n          <div>\n            <b>${n.username || 'No username'}</b><br>\n            <span style='color:#99aabb;font-size:0.9em;'>${n.email}</span>\n          </div>\n        </div>\n        <div style='color:#99aabb;font-size:0.95em;'>School: ${n.school || 'N/A'}<br>Age: ${n.age || 'N/A'}<br>Joined: ${new Date(n.created_at).toLocaleDateString()}${isCurrentUserAdmin() ? `<br>IP: ${s}` : ''}<br>${a}</div>\n      `),
+          (t.style.display = 'flex'));
+      }),
+        (document.getElementById('close-admin-user-modal').onclick = () => {
+          ((document.getElementById('admin-user-modal').style.display = 'none'), (currentAdminUserId = null));
+        }),
+        (document.getElementById('make-staff-btn').onclick = () => adminUserAction('staff')),
+        (document.getElementById('suspend-user-btn').onclick = () => adminUserAction('suspend')),
+        (document.getElementById('ban-user-btn').onclick = () => adminUserAction('ban')),
+        (document.getElementById('delete-user-btn').onclick = () => adminUserAction('delete')),
+        document.getElementById('upload-btn')?.addEventListener('click', async () => {
+          const e = document.getElementById('profile-upload');
+          if (!e.files[0]) return void showPopup('Please select an image', 'error');
+          const n = new FormData();
+          n.append('file', e.files[0]);
+          try {
+            const e = await fetch('/api/upload-profile-pic', { method: 'POST', credentials: 'include', body: n }),
+              t = await e.json();
+            e.ok
+              ? ((document.getElementById('profile-pic').src = t.url), showPopup('Profile picture updated', 'success'))
+              : showPopup(t.error || 'Upload failed', 'error');
+          } catch (e) {
+            showPopup('Upload error', 'error');
+          }
+        }),
+        document.getElementById('profile-upload').addEventListener('change', async () => {
+          const e = document.getElementById('profile-upload');
+          if (!e.files[0]) return;
+          const n = new FormData();
+          n.append('file', e.files[0]);
+          try {
+            const e = await fetch('/api/upload-profile-pic', { method: 'POST', credentials: 'include', body: n }),
+              t = await e.json();
+            e.ok
+              ? ((document.getElementById('profile-pic').src = t.url), showPopup('Profile picture updated', 'success'))
+              : showPopup(t.error || 'Upload failed', 'error');
+          } catch (e) {
+            showPopup('Upload error', 'error');
+          }
+        }),
+        document.getElementById('save-profile-btn').addEventListener('click', async () => {
+          const e = document.getElementById('username').value,
+            n = document.getElementById('bio').value;
+          try {
+            const t = await fetch('/api/update-profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ username: e, bio: n })
+              }),
+              o = await t.json();
+            t.ok ? showPopup('Profile updated', 'success') : showPopup(o.error || 'Update failed', 'error');
+          } catch (e) {
+            showPopup('Update error', 'error');
+          }
+        }),
+        document.getElementById('change-password-btn').addEventListener('click', async () => {
+          const e = document.getElementById('current-password').value,
+            n = document.getElementById('new-password').value,
+            t = document.getElementById('confirm-new-password').value;
+          if (e && n && t)
+            if (n === t)
+              if (n.length < 8) showPopup('New password must be at least 8 characters', 'error');
+              else
+                try {
+                  const t = await fetch('/api/change-password', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      credentials: 'include',
+                      body: JSON.stringify({ currentPassword: e, newPassword: n })
+                    }),
+                    o = await t.json();
+                  t.ok
+                    ? (showPopup('Password changed successfully', 'success'),
+                      (document.getElementById('current-password').value = ''),
+                      (document.getElementById('new-password').value = ''),
+                      (document.getElementById('confirm-new-password').value = ''))
+                    : showPopup(o.error || 'Password change failed', 'error');
+                } catch (e) {
+                  showPopup('Password change error', 'error');
+                }
+            else showPopup('New passwords do not match', 'error');
+          else showPopup('All password fields are required', 'error');
+        }),
+        document.getElementById('save-data-btn').addEventListener('click', async () => {
+          const e = JSON.stringify(localStorage);
+          try {
+            const n = await fetch('/api/save-localstorage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ data: e })
+              }),
+              t = await n.json();
+            n.ok ? showPopup('Game data saved', 'success') : showPopup(t.error || 'Save failed', 'error');
+          } catch (e) {
+            showPopup('Save error', 'error');
+          }
+        }),
+        document.getElementById('load-data-btn').addEventListener('click', async () => {
+          try {
+            const e = await fetch('/api/load-localstorage', { credentials: 'include' }),
+              n = await e.json();
+            if (e.ok) {
+              const e = JSON.parse(n.data || '{}');
+              (Object.keys(e).forEach((n) => {
+                localStorage.setItem(n, e[n]);
+              }),
+                showPopup('Game data loaded', 'success'));
+            } else showPopup(n.error || 'Load failed', 'error');
+          } catch (e) {
+            showPopup('Load error', 'error');
+          }
+        }),
+        document.getElementById('delete-account-btn').addEventListener('click', async () => {
+          if (confirm('Are you sure you want to delete your account? This cannot be undone.'))
+            try {
+              const e = await fetch('/api/delete-account', { method: 'DELETE', credentials: 'include' }),
+                n = await e.json();
+              e.ok
+                ? (showPopup('Account deleted', 'success'),
+                  setTimeout(() => {
+                    if (window.parent !== window) {
+                      const e = window.frameElement;
+                      e && (e.src = '/pages/settings/p.html');
+                    } else window.location.href = '/pages/settings/p.html';
+                  }, 1e3))
+                : showPopup(n.error || 'Delete failed', 'error');
+            } catch (e) {
+              showPopup('Delete error', 'error');
+            }
+        }),
+        document.getElementById('save-extra-btn').addEventListener('click', async () => {
+          const e = document.getElementById('favorite-games').value;
+          (localStorage.setItem('favorite_games', e), showPopup('Extras saved!', 'success'));
+        }),
+        window.addEventListener('DOMContentLoaded', () => {
+          document.getElementById('favorite-games').value = localStorage.getItem('favorite_games') || '';
+        }),
+        (async function () {
+          try {
+            (await fetch('/api/profile', { credentials: 'include' })).ok &&
+              window.location.pathname.endsWith('/p.html') &&
+              (window.location.href = '/pages/settings/p2.html');
+          } catch {}
+        })(),
+        document.querySelectorAll('.quick-proxy-btn').forEach((e) => {
+          e.onclick = function (n) {
+            n.preventDefault();
+            const t = e.getAttribute('data-url') || e.href;
+            window.parent !== window && window.parent.postMessage
+              ? window.parent.postMessage({ type: 'navigate', url: t }, '*')
+              : (window.location.href = t);
+          };
+        }));
+      const style = document.createElement('style');
+      function isCurrentUserAdmin() {
+        return isAdmin && userData && ('Owner' === userData.app_metadata?.role || 'Admin' === userData.app_metadata?.role);
+      }
+      ((style.textContent =
+        '\n      select.form-input, select#survey-favgame {\n        background: rgba(30,41,59,0.7);\n        color: #fff;\n        border: 1px solid #3a4a5a;\n        border-radius: 12px;\n        padding: 10px 16px;\n        font-size: 1rem;\n        appearance: none;\n        -webkit-appearance: none;\n        -moz-appearance: none;\n        outline: none;\n        transition: border-color 0.3s;\n        box-shadow: none;\n      }\n      select.form-input:focus, select#survey-favgame:focus {\n        border-color: #3b82f6;\n        background: rgba(30,41,59,0.9);\n      }\n      select.form-input option, select#survey-favgame option {\n        color: #222;\n        background: #fff;\n      }\n    '),
+        document.head.appendChild(style));
+      const origLoadUsers = loadUsers;
+      loadUsers = async function () {
+        try {
+          const n = await fetch('/api/admin/users', { credentials: 'include' }),
+            t = await n.json();
+          if (n.ok) {
+            let o = t.users || [];
+            window.lastAdminUsers = o;
+            const a = document.getElementById('users-list'),
+              s = document.getElementById('user-search');
+            function e(e = '') {
+              let n = o;
+              if (e) {
+                const t = e.toLowerCase();
+                n = o.filter(
+                  (e) =>
+                    (e.username || '').toLowerCase().includes(t) ||
+                    (e.email || '').toLowerCase().includes(t) ||
+                    (e.school || '').toLowerCase().includes(t)
+                );
+              }
+              n.length > 0
+                ? (a.innerHTML = n
+                    .map((e) => {
+                      const n = new Date(e.created_at);
+                      let t = '';
+                      1 === e.is_admin &&
+                      e.email ===
+                        (window.lastAdminUsers && window.lastAdminUsers[0] && window.lastAdminUsers[0].email ? window.lastAdminUsers[0].email : '')
+                        ? (t = '<span style="color:#fbbf24">Owner</span>')
+                        : 3 === e.is_admin
+                          ? (t = '<span style="color:#3b82f6">Admin</span>')
+                          : 2 === e.is_admin && (t = '<span style="color:#8b5cf6">Staff</span>');
+                      let o = isCurrentUserAdmin() ? e.ip || 'N/A' : '';
+                      return `\n                  <div class="user-item">\n                    <img src="${e.avatar_url || '/storage/images/main/profile.png'}" alt="Profile" style="width:40px;height:40px;border-radius:50%;margin-right:12px;object-fit:cover;">\n                    <div class="info">\n                      <div class="email"><b>${e.username || 'No username'}</b> <span style="color:#99aabb;font-size:0.8em;">(${e.email})</span></div>\n                      <div class="meta">\n                        Joined: ${n.toLocaleDateString()} • School: ${e.school || 'N/A'} • Age: ${e.age || 'N/A'} ${t}\n                        ${isCurrentUserAdmin() ? `<br>IP: ${o}` : ''}\n                      </div>\n                    </div>\n                    <button class="btn btn-secondary" onclick="manageUser('${e.id}')">Manage</button>\n                  </div>\n                `;
+                    })
+                    .join(''))
+                : (a.innerHTML = '<div style="color: #99aabb; text-align: center; padding: 20px;">No users found</div>');
+            }
+            (e(), (s.oninput = (n) => e(n.target.value)));
+          }
+        } catch (r) {
+          console.error('Failed to load users:', r);
+        }
+      };
+      const origManageUser = window.manageUser;
+      ((window.manageUser = function (e) {
+        const n = (window.lastAdminUsers || []).find((n) => n.id === e);
+        if (!n) return void showPopup('User not found', 'error');
+        currentAdminUserId = e;
+        const t = document.getElementById('admin-user-modal'),
+          o = document.getElementById('admin-user-modal-content');
+        let a = '';
+        1 === n.is_admin &&
+        n.email === (window.lastAdminUsers && window.lastAdminUsers[0] && window.lastAdminUsers[0].email ? window.lastAdminUsers[0].email : '')
+          ? (a = '<span style="color:#fbbf24">Owner</span>')
+          : 3 === n.is_admin
+            ? (a = '<span style="color:#3b82f6">Admin</span>')
+            : 2 === n.is_admin && (a = '<span style="color:#8b5cf6">Staff</span>');
+        let s = isCurrentUserAdmin() ? n.ip || 'N/A' : '';
+        ((o.innerHTML = `\n        <div style='display:flex;align-items:center;gap:12px;margin-bottom:10px;'>\n          <img src="${n.avatar_url || '/storage/images/main/profile.png'}" alt="Profile" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">\n          <div>\n            <b>${n.username || 'No username'}</b><br>\n            <span style='color:#99aabb;font-size:0.9em;'>${n.email}</span>\n          </div>\n        </div>\n        <div style='color:#99aabb;font-size:0.95em;'>School: ${n.school || 'N/A'}<br>Age: ${n.age || 'N/A'}<br>Joined: ${new Date(n.created_at).toLocaleDateString()}${isCurrentUserAdmin() ? `<br>IP: ${s}` : ''}<br>${a}</div>\n      `),
+          (t.style.display = 'flex'));
+      }),
+        loadProfile());
+    </script>
+    <style>
+      .admin-section,
+      .admin-section .section-title {
+        color: #fff !important;
+      }
+    </style>
+  </body>
+</html>

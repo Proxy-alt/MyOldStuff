@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Processing Login...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: #1e3a8a;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Inter', sans-serif;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text-center">
+      <h2 class="text-2xl font-bold">Processing Login...</h2>
+      <p class="mt-2">Please wait while we complete your login.</p>
+    </div>
+
+    <script>
+      async function handleCallback() {
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        const access_token = params.get('access_token');
+        const refresh_token = params.get('refresh_token');
+        const error = params.get('error_description') || params.get('error');
+        const state = params.get('state');
+
+        if (error) {
+          console.error('OAuth error:', error);
+          alert(`Login error: ${error}`);
+          window.close();
+          return;
+        }
+
+        if (!access_token || !refresh_token) {
+          console.error('Missing tokens:', { access_token, refresh_token });
+          alert('Invalid callback parameters');
+          window.close();
+          return;
+        }
+
+        try {
+          const response = await fetch('/api/set-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ access_token, refresh_token, state }),
+            credentials: 'include'
+          });
+          const data = await response.json();
+          if (response.ok) {
+            if (window.opener) {
+              const targetOrigin = window.opener.location.origin || window.location.origin;
+              window.opener.postMessage(
+                {
+                  type: 'oauth_success',
+                  state: state || null
+                },
+                targetOrigin
+              );
+              window.close();
+            } else {
+              window.location.href = '/pages/settings/p2.html';
+            }
+          } else {
+            console.error('Set session error:', data.error);
+            alert(`Error: ${data.error}`);
+            window.close();
+          }
+        } catch (err) {
+          console.error('Fetch error:', err.message);
+          alert(`Error: ${err.message}`);
+          window.close();
+        }
+      }
+
+      handleCallback();
+    </script>
+  </body>
+</html>

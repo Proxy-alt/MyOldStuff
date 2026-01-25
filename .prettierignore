@@ -1,0 +1,29 @@
+# Ignore artifacts:
+node_modules
+public/storage/ag/g/**/*
+public/storage/ag/g2/**/*
+!public/storage/ag/g/**/*.html
+!public/storage/ag/g2/**/*.html
+public/storage/ag/a/emulatorjs/**/*
+!public/storage/ag/a/emulatorjs/**/*.html
+**/ag/a/**/*
+!**/ag/a/**/*.html
+**/*.min.*
+public/scram/*
+pnpm-lock.yaml
+**/*.min.css
+.sitemap-base.json
+# Ignore external
+external
+# Ignore images
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+**/dist
+**/build
+**/.git
+**/uv
+**/petezah
+test-results
