@@ -1,5 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
+import { Font } from 'astro:assets';
 import collectionData from '../data/games.json';
 import AppLayout from '../layouts/AppLayout.astro';
 import '../styles/grid.css';
@@ -11,37 +12,86 @@ interface Props {
   hasCategories?: boolean;
 }
 
-const { title = 'Collection', description = 'Browse our collection', collection = 'games'} = Astro.props;
+const { title = 'Collection', description = 'Browse our collection', collection = 'games' } = Astro.props;
 let { hasCategories } = Astro.props;
 
 const items = collectionData[collection] || [];
+hasCategories ??= false;
 
-const uniqueCategories = new Set<string>();
-items.forEach((item) => {
-  if (Array.isArray(item.categories)) {
-    item.categories.forEach((cat: string) => uniqueCategories.add(cat.toLowerCase()));
-  }
-});
+/**
+ * Image imports
+ */
+const rasterImports = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.{png,jpg,jpeg,webp,avif}', { eager: true });
+const svgImports = import.meta.glob<{ default: any }>('../assets/images/**/*.svg', { eager: true });
 
-const sortedCategories = Array.from(uniqueCategories).sort();
-hasCategories ??= sortedCategories.length > 0;
+const rasterMap = new Map<string, ImageMetadata>();
+const svgMap = new Map<string, any>();
 
-const imageImports = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.{png,jpg,jpeg,webp,avif}', { eager: true });
-
-const imageMap = new Map<string, ImageMetadata>();
-for (const [path, module] of Object.entries(imageImports)) {
+for (const [path, module] of Object.entries(rasterImports)) {
   const fileName = path.split('/').pop();
-  if (fileName) {
-    imageMap.set(fileName, module.default);
-  }
+  if (fileName) rasterMap.set(fileName, module.default);
 }
+
+for (const [path, module] of Object.entries(svgImports)) {
+  const fileName = path.split('/').pop();
+  if (fileName) svgMap.set(fileName, module.default);
+}
+
+/**
+ * Helper: Parses custom background syntax into valid CSS
+ * * SYNTAX EXAMPLES:
+ * 1. Default (to bottom right): "HEX: #000000 > #ffffff"
+ * 2. With Direction:            "HEX: #000000 > #ffffff | to top"
+ * 3. With Angle:                "RGB: 0 0 0 > 255 255 255 | 90deg"
+ */
+const parseBackground = (bg?: string) => {
+  if (!bg) return undefined;
+
+  // 1. Split color definition from optional direction
+  // Format: "COLORS | DIRECTION"
+  const [colorDef, directionDef] = bg.split('|').map((s) => s.trim());
+
+  // Default to 'to bottom right' if no direction is specified
+  const direction = directionDef || 'to bottom right';
+
+  const raw = colorDef;
+  const upper = raw.toUpperCase();
+
+  // Handle RGB Gradient: "RGB: 4 4 5 > 24 57 73"
+  if (upper.startsWith('RGB:') && upper.includes('>')) {
+    const colors = raw
+      .slice(4)
+      .split('>')
+      .map((part) => {
+        // Convert "4 4 5" -> "rgb(4,4,5)"
+        const numbers = part.trim().split(/\s+/).join(',');
+        return `rgb(${numbers})`;
+      });
+    return `linear-gradient(${direction}, ${colors[0]}, ${colors[1]})`;
+  }
+
+  // Handle HEX Gradient: "HEX: #040405 > #183949"
+  if (upper.startsWith('HEX:') && upper.includes('>')) {
+    const colors = raw
+      .slice(4)
+      .split('>')
+      .map((c) => c.trim());
+    return `linear-gradient(${direction}, ${colors[0]}, ${colors[1]})`;
+  }
+
+  // Fallback: return raw string (allows standard CSS values like "red" or "var(--my-color)")
+  return bg;
+};
 ---
 
 <AppLayout title={title} description={description}>
-  <!-- Background Effects -->
+  <Fragment slot="head">
+    <Font cssVariable="--font-poppins" />
+  </Fragment>
+
   <div class="bg-effects"></div>
+
   <Fragment slot="header">
-    <!-- Random Button -->
     <button class="random-btn" id="randomItemBtn">
       Random {collection.slice(0, -1).replace(/^\w/, (c) => c.toUpperCase())}
     </button>
@@ -51,46 +101,54 @@ for (const [path, module] of Object.entries(imageImports)) {
         list="datalist-items"
         type="text"
         id="search-input"
-        placeholder={`Search for YOUR Favorite ${collection.slice(0, -1)}…`}
+        placeholder={`Search for YOUR Favorite ${collection.slice(0, -1)}...`}
         autocomplete="on"
         aria-label="On this page"
       />
     </search>
 
     <datalist id="datalist-items">
-      {items.map((item) => <option value={item.label} />)}
+      {items.map((item: any) => <option value={item.label} />)}
     </datalist>
 
-    <div class="filter-container">
-      {
-        hasCategories && (
-          <select id="categoryFilter">
-            <option value="">Filter by Category</option>
-            {sortedCategories.map((cat) => (
-              <option value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
-            ))}
-          </select>
-        )
-      }
-    </div>
+    <div class="filter-container"></div>
   </Fragment>
-  <!-- Grid Container -->
+
   <section class="collection-container" id="imageContainer">
     {
-      items.map((item) => {
-        // Find local image or use URL
-        const fileName = item.imageUrl ? item.imageUrl.split('/').pop() : '';
-        const localImage = fileName ? imageMap.get(fileName) : undefined;
-        const isHttpUrl = item.imageUrl && (item.imageUrl.startsWith('http://') || item.imageUrl.startsWith('https://'));
+      items.map((item: any) => {
+        const imageUrl = item.img || item.imageUrl || '';
+        const fileName = imageUrl ? imageUrl.split('/').pop() : '';
+        const isHttpUrl = imageUrl && (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
         const mainCategory = item.categories?.[0]?.toLowerCase() || '';
 
+        // Parse background with new direction logic
+        const finalBackground = parseBackground(item.svgBackground);
+
+        const localRaster = fileName ? rasterMap.get(fileName) : undefined;
+        const SvgComponent = fileName ? svgMap.get(fileName) : undefined;
+
         return (
-          // Card Item
           <figure class="collection-card" data-label={item.label} data-category={mainCategory} data-url={item.url}>
-            <a href={`/play?url=${encodeURIComponent(item.url)}`} aria-label={`Open ${item.label}`}>
-              {localImage && (
+            <a
+              href={`/play?url=${encodeURIComponent(item.url)}`}
+              aria-label={`Open ${item.label}`}
+              style={finalBackground ? `background: ${finalBackground};` : undefined}
+            >
+              {/* SVG */}
+              {SvgComponent && (
+                <div
+                  class="svg-wrapper"
+                  style="width: 100%; height: 100%; min-height: 170px; display: flex; justify-content: center; align-items: center;"
+                >
+                  <SvgComponent width='95%' height='95%'' aria-label={item.label} />
+                </div>
+              )}
+
+              {/* Local Image */}
+              {localRaster && !SvgComponent && (
                 <Picture
-                  src={localImage}
+                  src={localRaster}
                   width={200}
                   height={170}
                   alt={item.label}
@@ -99,12 +157,14 @@ for (const [path, module] of Object.entries(imageImports)) {
                   decoding="async"
                   data-auto-detect
                   formats={['avif', 'webp', 'png']}
+                  style="width: 100%; height: 100%; object-fit: cover;"
                 />
               )}
 
-              {!localImage && isHttpUrl && (
+              {/* Remote Image */}
+              {!localRaster && !SvgComponent && isHttpUrl && (
                 <Picture
-                  src={item.imageUrl}
+                  src={imageUrl}
                   width={200}
                   height={170}
                   alt={item.label}
@@ -113,11 +173,13 @@ for (const [path, module] of Object.entries(imageImports)) {
                   decoding="async"
                   data-auto-detect
                   formats={['avif', 'webp', 'png']}
+                  style="width: 100%; height: 100%; object-fit: cover;"
                 />
               )}
 
-              {!localImage && !isHttpUrl && (
-                <div style="width:200px; height:170px; background: #333; display:flex; align-items:center; justify-content:center;">
+              {/* CASE 4: No Image Found */}
+              {!localRaster && !SvgComponent && !isHttpUrl && (
+                <div style="width: 100%; height: 100%; min-height: 170px; background: #333; display: flex; align-items: center; justify-content: center;">
                   <span>No Image</span>
                 </div>
               )}
@@ -130,13 +192,22 @@ for (const [path, module] of Object.entries(imageImports)) {
     }
   </section>
 
+  <style>
+    .collection-card a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+  </style>
+
   <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
       const searchInput = document.getElementById('search-input');
-      const filterSelect = document.getElementById('categoryFilter'); // Nullable if no categories
       const randomBtn = document.getElementById('randomItemBtn');
-
-      // Update selector to match the new neutral CSS class
       const allCards = Array.from(document.querySelectorAll('.collection-card'));
 
       /* -----------------------------
@@ -156,7 +227,6 @@ for (const [path, module] of Object.entries(imageImports)) {
         });
       });
 
-      // Observe every image
       autoImages.forEach((img) => observer.observe(img));
 
       /* -----------------------------
@@ -164,26 +234,14 @@ for (const [path, module] of Object.entries(imageImports)) {
       ------------------------------ */
       function filterItems() {
         const searchTerm = searchInput.value.toLowerCase();
-        // If select doesn't exist, default to empty string
-        const categoryFilter = filterSelect ? filterSelect.value.toLowerCase() : '';
 
         allCards.forEach((card) => {
           const label = card.getAttribute('data-label').toLowerCase();
-          const category = card.getAttribute('data-category');
-
           const matchesSearch = label.includes(searchTerm);
-          // If categoryFilter is empty, we ignore category matching
-          const matchesCategory = categoryFilter === '' || (category && category.includes(categoryFilter));
-
-          card.style.display = matchesSearch && matchesCategory ? '' : 'none';
+          card.style.display = matchesSearch ? '' : 'none';
         });
       }
 
-      /**
-       * -----------------------------
-       * RANDOM BUTTON
-       * -----------------------------
-       */
       randomBtn.addEventListener('click', () => {
         if (allCards.length > 0) {
           const randomIndex = Math.floor(Math.random() * allCards.length);
@@ -192,9 +250,6 @@ for (const [path, module] of Object.entries(imageImports)) {
         }
       });
 
-      /* -----------------------------
-         DEBOUNCE & EVENTS
-      ------------------------------ */
       function debounce(func, wait) {
         let timeout;
         return function (...args) {
@@ -205,10 +260,6 @@ for (const [path, module] of Object.entries(imageImports)) {
 
       if (searchInput) {
         searchInput.addEventListener('input', debounce(filterItems, 300));
-      }
-
-      if (filterSelect) {
-        filterSelect.addEventListener('change', filterItems);
       }
     });
   </script>

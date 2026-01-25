@@ -1,29 +1,13 @@
 {
   "editor.wordWrap": "wordWrapColumn",
   "editor.wordWrapColumn": 150,
-  "deno.enablePaths": ["supabase/functions"],
-  "deno.lint": true,
-  "deno.unstable": [
-    "bare-node-builtins",
-    "byonm",
-    "sloppy-imports",
-    "unsafe-proto",
-    "webgpu",
-    "broadcast-channel",
-    "worker-options",
-    "cron",
-    "kv",
-    "ffi",
-    "fs",
-    "http",
-    "net"
-  ],
-  "editor.defaultFormatter": "prettier.prettier-vscode",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
   "files.associations": {
     "mdx": "markdown"
   },
-  "LIne": 150,
   "[astro]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }

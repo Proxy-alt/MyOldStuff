@@ -1,0 +1,549 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const partners = [
+  { name: 'Benrogo', img: '/storage/images/main/benrogo.png', url: 'https://benrogo.net' },
+  { name: 'Camouflage', img: '/storage/images/main/flage.png', url: 'https://benrogo.net' },
+  { name: 'Orbiton', img: '/storage/images/main/orbiton.webp', url: 'https://sites.google.com/view/fatality-void' },
+  { name: 'Brunysixlwork', img: '/storage/images/main/brunys.ico', url: 'https://ixl.brunys.org' },
+  { name: 'AJH Vault', img: '/storage/images/main/ajh.webp', url: 'https://ajhmath.org' },
+  { name: 'Vortex', img: '/storage/images/main/vortex.png', url: 'https://vortexos.net' },
+  { name: 'GL Series', img: '/storage/images/main/marki.webp', url: 'https://geometrylearningv3.neocities.org' },
+  { name: 'Lupinevault', img: '/storage/images/main/lupine.webp', url: 'https://lupinevault.com' },
+  { name: "Kevin's Arcade", img: '/storage/images/main/donut.webp', url: 'https://ke1dn.s3.us-east-2.amazonaws.com/index.html' },
+  { name: 'Hypackel', img: '/storage/images/main/hypackel.png', url: 'https://hypackel.com' },
+  { name: 'Me > Him at Soccer', img: '/storage/images/main/mason.jpg', url: '#' },
+  { name: 'Monkey With Money', img: '/storage/images/main/safin.jpg', url: '#' }
+];
+---
+
+<Layout title="Settings" description="Customize PeteZah Games with cloaking, appearance, account settings, and more.">
+  <div class="god-rays" aria-hidden="true"></div>
+
+  <div class="settings-container">
+    <h1>Settings</h1>
+    <div class="tabs">
+      <button class="tab active" data-tab="cloaking">Cloaking</button>
+      <button class="tab" data-tab="account">Account</button>
+      <button class="tab" data-tab="appearance">Appearance</button>
+      <button class="tab" data-tab="panic">Panic Button</button>
+      <button class="tab" data-tab="partners">Partners</button>
+      <button class="tab" data-tab="legal">Legal</button>
+    </div>
+
+    <div class="content">
+      <!-- Cloaking Section -->
+      <div class="section active" id="cloaking">
+        <h2>Cloaking</h2>
+        <p>Control cloaking behavior to enhance privacy.</p>
+        <div class="checkbox-container">
+          <div class="checkbox-item">
+            <input type="checkbox" id="beforeUnloadToggle" />
+            <label for="beforeUnloadToggle">Anti-Close</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="autocloakToggle" />
+            <label for="autocloakToggle">Auto-about:blank</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="blockHeadersToggle" />
+            <label for="blockHeadersToggle">Block Headers</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="disableRightClickToggle" />
+            <label for="disableRightClickToggle">Disable Right Click</label>
+          </div>
+        </div>
+        <button id="openAboutBlank" class="about-blank-button">Open About:blank</button>
+        <hr />
+        <h2>Tab Cloaking</h2>
+        <p>Customize your site title and favicon.</p>
+        <label for="sitePreset">Select Preset:</label>
+        <select id="sitePreset">
+          <option value="custom">Custom</option>
+          <option value="petezah">PeteZah</option>
+          <option value="classroom">Google Classroom</option>
+          <option value="schoology">Schoology</option>
+          <option value="google">Google</option>
+        </select>
+        <label for="siteTitle">Site Title:</label>
+        <input type="text" id="siteTitle" placeholder="Enter site title" />
+        <label for="siteLogo">Site Favicon:</label>
+        <input type="file" id="siteLogo" accept="image/*" />
+        <button id="saveSettings">Save Settings</button>
+      </div>
+
+      <!-- Account Section -->
+      <div class="section" id="account">
+        <h2>Account Settings</h2>
+        <p>Manage your account data.</p>
+        <label>Import/Export Data:</label>
+        <div class="checkbox-container">
+          <button id="exportData">Export Data</button>
+          <input style="height: 150px" type="file" id="importData" accept=".json" />
+        </div>
+        <hr />
+        <label>Save All Data:</label>
+        <button class="save-button" id="exportDataBtn">Save your Data</button>
+        <label>Import Data:</label>
+        <input type="file" id="fileInput" accept="application/json" />
+        <button class="import-button" id="importDataBtn">Import your Data</button>
+        <label>Reset All Data:</label>
+        <button id="resetAllData" class="reset-button">Reset All Data</button>
+      </div>
+
+      <!-- Appearance Section -->
+      <div class="section" id="appearance">
+        <h2>Appearance</h2>
+        <p>Adjust the visual style of the site.</p>
+        <div class="checkbox-item">
+          <input type="checkbox" id="disableParticles" />
+          <label for="disableParticles">Disable Particles</label>
+        </div>
+        <br />
+        <label for="themeSelect">Select Theme:</label>
+        <select id="themeSelect">
+          <option value="default">Default</option>
+          <option value="swampy-green">Swampy Green</option>
+          <option value="royal-purple">Royal Purple</option>
+          <option value="blood-red">Blood Red</option>
+          <option value="midnight-forest">Midnight Forest</option>
+          <option value="cyber-neon">Cyber Neon</option>
+          <option value="desert-oasis">Desert Oasis</option>
+          <option value="glacial-frost">Glacial Frost</option>
+        </select>
+        <label for="backgroundColor">Background Color:</label>
+        <input type="color" id="backgroundColor" value="#0A1D37" />
+        <label for="backgroundImage">Background Image:</label>
+        <input type="file" id="backgroundImage" accept="image/*" />
+        <button id="removeBackgroundImage">Remove Background Image</button>
+        <br />
+        <button id="saveAppearance">Save Appearance</button>
+      </div>
+
+      <!-- Panic Button Section -->
+      <div class="section" id="panic">
+        <h2>Panic Button</h2>
+        <p>Set a key to quickly redirect to a safe URL.</p>
+        <label for="panicKey">Panic Key:</label>
+        <input type="text" id="panicKey" placeholder="e.g., ` (backtick)" maxlength="1" />
+        <label for="panicUrl">Panic URL:</label>
+        <input type="text" id="panicUrl" placeholder="e.g., https://classroom.google.com" />
+        <button id="savePanicSettings">Save Panic Settings</button>
+      </div>
+
+      <!-- Partners Section -->
+      <div class="section" id="partners">
+        <h2>Partners</h2>
+        <div class="partners-grid">
+          {
+            partners.map((partner) => (
+              <div class="partner-item" onclick={`window.location = '${partner.url}'`}>
+                <img src={partner.img} alt={partner.name} class="partner-image" />
+                <h3 class="partner-title">{partner.name}</h3>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Legal Section -->
+      <div class="section" id="legal">
+        <h2>Legal</h2>
+        <p>View our legal policies.</p>
+        <div class="legal-tabs">
+          <button class="legal-tab active" data-legal="privacy">Privacy Policy</button>
+          <button class="legal-tab" data-legal="dmca">DMCA</button>
+        </div>
+        <div class="legal-section active" id="privacy">
+          <a href="/legal/privacy-policy">View Privacy Policy</a>
+        </div>
+        <div class="legal-section" id="dmca">
+          <h3>DMCA</h3>
+          <p>
+            If you believe that any copyright infringement exists on the Site, please use the following process to notify us. We will act
+            expeditiously to remove infringing material once informed. All claims of copyright infringement should be in writing and should be
+            directed to: E-mail: contact@petezahgames.com.
+          </p>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="section">
+        <button id="resetSettings" class="reset-button">Reset All Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline src="/storage/js/settings.js"></script>
+  <script is:inline src="/storage/js/settings-page.js"></script>
+
+  <style>
+    .god-rays {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0, 150, 255, 0.15) 0%, rgba(0, 150, 255, 0.05) 30%, transparent 70%);
+      animation: rays 8s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes rays {
+      0%,
+      100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    .settings-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(15, 35, 60, 0.8);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 150, 255, 0.2);
+    }
+
+    .settings-container h1 {
+      color: #0096ff;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid rgba(0, 150, 255, 0.3);
+      padding-bottom: 1rem;
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: 2px solid rgba(0, 150, 255, 0.3);
+      color: #ccc;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .tab:hover {
+      border-color: #0096ff;
+      color: #0096ff;
+      background: rgba(0, 150, 255, 0.1);
+    }
+
+    .tab.active {
+      background: #0096ff;
+      border-color: #0096ff;
+      color: #fff;
+    }
+
+    .content {
+      margin-top: 2rem;
+    }
+
+    .section {
+      display: none;
+      padding: 2rem;
+      background: rgba(10, 25, 45, 0.6);
+      border-radius: 6px;
+      border: 1px solid rgba(0, 150, 255, 0.2);
+      margin-bottom: 2rem;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section h2 {
+      color: #0096ff;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .section p {
+      color: #aaa;
+      margin-bottom: 1.5rem;
+    }
+
+    .section label {
+      display: block;
+      color: #0096ff;
+      margin: 1rem 0 0.5rem 0;
+      font-weight: 500;
+    }
+
+    .section input[type='text'],
+    .section input[type='file'],
+    .section input[type='color'],
+    .section select {
+      width: 100%;
+      padding: 0.75rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 150, 255, 0.3);
+      color: #fff;
+      border-radius: 4px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section input[type='text']:focus,
+    .section input[type='file']:focus,
+    .section input[type='color']:focus,
+    .section select:focus {
+      outline: none;
+      border-color: #0096ff;
+      box-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
+    }
+
+    .checkbox-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .checkbox-item input[type='checkbox'] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #0096ff;
+    }
+
+    .checkbox-item label {
+      margin: 0;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      background: #0096ff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-right: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    button:hover {
+      background: #0075cc;
+      box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+    }
+
+    button.reset-button {
+      background: #cc2222;
+    }
+
+    button.reset-button:hover {
+      background: #bb0000;
+      box-shadow: 0 0 15px rgba(204, 34, 34, 0.4);
+    }
+
+    button.save-button {
+      background: #22cc22;
+    }
+
+    button.save-button:hover {
+      background: #00bb00;
+      box-shadow: 0 0 15px rgba(34, 204, 34, 0.4);
+    }
+
+    button.import-button {
+      background: #ff9500;
+    }
+
+    button.import-button:hover {
+      background: #e68400;
+      box-shadow: 0 0 15px rgba(255, 149, 0, 0.4);
+    }
+
+    .about-blank-button {
+      background: #8822ff;
+    }
+
+    .about-blank-button:hover {
+      background: #6600dd;
+      box-shadow: 0 0 15px rgba(136, 34, 255, 0.4);
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(0, 150, 255, 0.2);
+      margin: 2rem 0;
+    }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .partner-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      background: rgba(0, 150, 255, 0.1);
+      border: 1px solid rgba(0, 150, 255, 0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .partner-item:hover {
+      background: rgba(0, 150, 255, 0.2);
+      border-color: #0096ff;
+      box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+      transform: translateY(-5px);
+    }
+
+    .partner-image {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 0.75rem;
+      border-radius: 4px;
+    }
+
+    .partner-title {
+      color: #0096ff;
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .legal-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      border-bottom: 2px solid rgba(0, 150, 255, 0.3);
+      padding-bottom: 0.5rem;
+    }
+
+    .legal-tab {
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: 2px solid rgba(0, 150, 255, 0.3);
+      color: #ccc;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .legal-tab:hover {
+      border-color: #0096ff;
+      color: #0096ff;
+    }
+
+    .legal-tab.active {
+      background: #0096ff;
+      border-color: #0096ff;
+      color: #fff;
+    }
+
+    .legal-section {
+      display: none;
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      border: 1px solid rgba(0, 150, 255, 0.2);
+    }
+
+    .legal-section.active {
+      display: block;
+    }
+
+    .legal-section a {
+      color: #0096ff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .legal-section a:hover {
+      text-decoration: underline;
+    }
+
+    .legal-section h3 {
+      color: #0096ff;
+      margin-top: 0;
+    }
+
+    .legal-section p {
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .settings-container {
+        padding: 1rem;
+        margin: 1rem;
+      }
+
+      .settings-container h1 {
+        font-size: 1.8rem;
+      }
+
+      .tabs {
+        gap: 0.25rem;
+      }
+
+      .tab {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .partners-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+    }
+  </style>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.addEventListener('click', function () {
+        const tabName = this.getAttribute('data-tab');
+        document.querySelectorAll('.section').forEach((section) => section.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+        document.getElementById(tabName)?.classList.add('active');
+        this.classList.add('active');
+      });
+    });
+
+    // Legal tabs switching
+    document.querySelectorAll('.legal-tab').forEach((tab) => {
+      tab.addEventListener('click', function () {
+        const legalName = this.getAttribute('data-legal');
+        document.querySelectorAll('.legal-section').forEach((section) => section.classList.remove('active'));
+        document.querySelectorAll('.legal-tab').forEach((t) => t.classList.remove('active'));
+        document.getElementById(legalName)?.classList.add('active');
+        this.classList.add('active');
+      });
+    });
+  </script>
+</Layout>

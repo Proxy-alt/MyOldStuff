@@ -1,0 +1,98 @@
+.god-rays {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  --stripes: repeating-linear-gradient(
+    100deg,
+    rgba(20, 40, 60, 0.8) 0%,
+    rgba(20, 40, 60, 0.8) 7%,
+    transparent 10%,
+    transparent 12%,
+    rgba(20, 40, 60, 0.8) 16%
+  );
+  --rays: repeating-linear-gradient(
+    100deg,
+    rgba(30, 50, 90, 0.9) 10%,
+    rgba(20, 40, 80, 0.9) 15%,
+    rgba(30, 50, 90, 0.9) 20%,
+    rgba(20, 40, 80, 0.9) 25%,
+    rgba(30, 50, 90, 0.9) 30%
+  );
+  background-image: var(--stripes), var(--rays);
+  background-size: 300%, 200%;
+  background-position:
+    50% 50%,
+    50% 50%;
+  animation: fadeIn 2s ease;
+  mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.god-rays::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--stripes), var(--rays);
+  background-size: 200%, 100%;
+  animation: god-rays 40s linear infinite;
+  background-attachment: fixed;
+  mix-blend-mode: difference;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes god-rays {
+  0% {
+    background-position:
+      0% 0%,
+      0% 0%;
+  }
+  100% {
+    background-position:
+      100% 100%,
+      100% 100%;
+  }
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.content {
+  background: linear-gradient(135deg, #111117, #182129);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
+  border: 1px solid #3a4a5a;
+}

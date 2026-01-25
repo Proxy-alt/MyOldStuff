@@ -3,7 +3,7 @@ import { Picture } from 'astro:assets';
 import AppLayout from '../layouts/AppLayout.astro';
 import '../styles/index.css';
 
-// --- FontAwesome Integration (SVG Core) ---
+// --- FontAwesome Integration ---
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { library, icon, config } from '@fortawesome/fontawesome-svg-core';
 import { faXTwitter, faDiscord } from '@fortawesome/free-brands-svg-icons';
@@ -20,7 +20,6 @@ import {
 // Prevent FontAwesome from automatically adding CSS to the head
 config.autoAddCss = false;
 
-// Add icons to library (Good practice, though we use direct object reference below)
 library.add(
   faXTwitter,
   faDiscord,
@@ -33,7 +32,10 @@ library.add(
   faBatteryEmpty
 );
 
-// Typewriter Text Data
+// Import games data
+import gamesData from '../data/games.json';
+
+// Data
 const typewriterText = [
   'PeteZah Games.',
   'beauty.',
@@ -48,95 +50,76 @@ const typewriterText = [
   'sustainability.'
 ];
 
-const carouselGames = [
-  { label: 'Highway Racer', img: '/storage/images/main/highway-racer.jpeg', url: '/storage/ag/g/highway-racer' },
-  { label: 'Buildnow.gg', img: '/storage/images/main/buildnow.jpeg', url: '/storage/ag/g/buildnowgg' },
-  { label: 'Slope', img: '/storage/ag/g/slope/IMG_5256.jpeg', url: '/storage/ag/g/slope' },
-  { label: 'Clash Royale', img: '/storage/images/main/clash.jpeg', url: '/storage/ag/g/clash-royale' },
-  { label: 'Superstar Car', img: '/storage/images/main/superstarcar.jpeg', url: '/storage/ag/g/superstarcar' },
-  { label: 'Polytrack', img: '/storage/ag/g/polytrack/splash.png', url: '/storage/ag/g/polytrack' },
-  { label: 'Brawl Stars', img: '/storage/images/main/brawlstars1.jpg', url: '/storage/ag/g/brawlstars' },
-  { label: 'YoHoHo!', img: '/storage/ag/g/yohoho/IMG_5302.jpeg', url: '/storage/ag/g/yohoho' },
-  { label: 'Smashy Road', img: '/storage/images/main/smashy.jpg', url: '/storage/ag/g/smashyroad' },
-  { label: 'Ragdoll Archers', img: '/storage/images/main/ragdoll.jpg', url: '/storage/ag/g/ragdoll-archers' },
-  { label: 'Slither.io', img: '/storage/images/main/slitherio.jpg', url: '/storage/ag/g/slither' },
-  { label: 'Highway Racer', img: '/storage/images/main/highway-racer.jpeg', url: '/storage/ag/g/highway-racer' },
-  { label: 'Buildnow.gg', img: '/storage/images/main/buildnow.jpeg', url: '/storage/ag/g/buildnowgg' },
-  { label: 'Slope', img: '/storage/ag/g/slope/IMG_5256.jpeg', url: '/storage/ag/g/slope' },
-  { label: 'Clash Royale', img: '/storage/images/main/clash.jpeg', url: '/storage/ag/g/clash-royale' },
-  { label: 'Superstar Car', img: '/storage/images/main/superstarcar.jpeg', url: '/storage/ag/g/superstarcar' },
-  { label: 'Polytrack', img: '/storage/ag/g/polytrack/splash.png', url: '/storage/ag/g/polytrack' },
-  { label: 'Brawl Stars', img: '/storage/images/main/brawlstars1.jpg', url: '/storage/ag/g/brawlstars' },
-  { label: 'YoHoHo!', img: '/storage/ag/g/yohoho/IMG_5302.jpeg', url: '/storage/ag/g/yohoho' },
-  { label: 'Smashy Road', img: '/storage/images/main/smashy.jpg', url: '/storage/ag/g/smashyroad' },
-  { label: 'Ragdoll Archers', img: '/storage/images/main/ragdoll.jpg', url: '/storage/ag/g/ragdoll-archers' },
-  { label: 'Slither.io', img: '/storage/images/main/slitherio.jpg', url: '/storage/ag/g/slither' }
-];
+// Filter highlighted games for carousel and large image
+const highlightedGames = gamesData.games.filter((game) => game.isHighlighted);
 
-const highlightedGame = {
-  label: 'Highway Racer',
-  img: '/storage/images/main/highway-racer.jpeg',
-  url: '/storage/ag/g/highway-racer'
-};
+// Use highlighted games for carousel, fallback to first 11 if none highlighted
+const carouselGames = highlightedGames.length > 0 ? highlightedGames : gamesData.games.slice(0, 11);
+
+// Pick a random highlighted game for the large image display
+const highlightedGame = highlightedGames.length > 0 ? highlightedGames[Math.floor(Math.random() * highlightedGames.length)] : gamesData.games[0];
 ---
 
 <AppLayout title="Home">
   <div class="god-rays" aria-hidden="true"></div>
 
-  <main>
-    <section class="welcome-section" aria-label="Welcome">
-      <h2>
-        Welcome to
-        <br />
-        <span class="gradient-text">
-          <span class="typewrite" data-period="2000" data-type={JSON.stringify(typewriterText)}>
-            <span class="wrap"></span>
-          </span>
+  <section class="welcome-section" aria-label="Welcome">
+    <h2>
+      Welcome to
+      <br />
+      <span class="gradient-text">
+        <span class="typewrite" data-period="2000" data-type={JSON.stringify(typewriterText)}>
+          <span class="wrap"></span>
         </span>
-      </h2>
-      <p>Game on!</p>
+      </span>
+    </h2>
+    <p>Game on!</p>
 
-      <a href="/games" class="shiny-btn start-btn">
-        <span>Start Gaming</span>
-      </a>
-
-      <nav class="social-media-tray" aria-label="Social Media Links">
-        <a href="https://x.com/PeteZahGames/" target="_parent" aria-label="Twitter X">
-          <div class="social-media-icon-container shiny-btn" set:html={icon(faXTwitter).html[0]} />
-        </a>
-        <a href="https://discord.petezahgames.com" target="_parent" aria-label="Discord">
-          <div class="social-media-icon-container shiny-btn" set:html={icon(faDiscord).html[0]} />
-        </a>
-      </nav>
-    </section>
-
-    <a href={`/iframe.html?url=${highlightedGame.url}`} class="large-image-container-link" aria-label={`Play ${highlightedGame.label}`}>
-      <section class="large-image-container">
-        <img src={highlightedGame.img} alt={highlightedGame.label} class="large-image" id="large-image" />
-        <div class="large-image-caption" id="large-image-caption">{highlightedGame.label}</div>
-      </section>
+    <a href="/games" class="shiny-btn start-btn">
+      <span>Start Gaming</span>
     </a>
 
-    <section class="image-shuffler" aria-label="Game Carousel">
-      <div class="carousel-container">
-        <button class="carousel-btn carousel-btn-prev" onclick="moveCarousel(-1)" aria-label="Previous Game" set:html={icon(faChevronLeft).html[0]} />
+    <nav class="social-media-tray" aria-label="Social Media Links">
+      <a href="https://x.com/PeteZahGames/" target="_parent" aria-label="Twitter X">
+        <div class="social-media-icon-container shiny-btn" set:html={icon(faXTwitter).html[0]} />
+      </a>
+      <a href="https://discord.petezahgames.com" target="_parent" aria-label="Discord">
+        <div class="social-media-icon-container shiny-btn" set:html={icon(faDiscord).html[0]} />
+      </a>
+    </nav>
+  </section>
 
-        <div class="carousel-track">
-          {
-            carouselGames.map((game) => (
+  <a href={`/iframe.html?url=${highlightedGame.url}`} class="large-image-container-link" aria-label={`Play ${highlightedGame.label}`}>
+    <section class="large-image-container">
+      <img src={highlightedGame.img || '/storage/images/main/placeholder.png'} alt={highlightedGame.label} class="large-image" id="large-image" />
+      <div class="large-image-caption" id="large-image-caption">{highlightedGame.label}</div>
+    </section>
+  </a>
+
+  <section class="image-shuffler" aria-label="Game Carousel">
+    <div class="carousel-container">
+      <button id="btn-prev" class="carousel-btn carousel-btn-prev" aria-label="Previous Game" set:html={icon(faChevronLeft).html[0]} />
+
+      <div class="carousel-track">
+        {
+          carouselGames.map((game: any) => {
+            const imgUrl = (game.img || '/storage/images/main/placeholder.png') as string;
+            return (
               <article class="carousel-item">
                 <a href={`/iframe.html?url=${game.url}`} class="carousel-link" aria-label={`Play ${game.label}`}>
-                  <Picture src={game.img} alt={game.label} formats={['avif', 'webp', 'png']} height="2" width="3" class="image" loading="eager" />
+                  <img src={imgUrl} alt={game.label} height="200" width="300" class="image" loading="lazy" />
                   <div class="carousel-item-overlay">{game.label}</div>
                 </a>
               </article>
-            ))
-          }
-        </div>
+            );
+          })
+        }
       </div>
-      <button class="carousel-btn carousel-btn-next" onclick="moveCarousel(1)" aria-label="Next Game" set:html={icon(faChevronRight).html[0]} />
-    </section>
-  </main>
+    </div>
+    <button id="btn-next" class="carousel-btn carousel-btn-next" aria-label="Next Game" set:html={icon(faChevronRight).html[0]} />
+  </section>
+
+  <div id="carouselDots" class="carousel-dots"></div>
 
   <div id="discord-popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
     <div class="popup-content">
@@ -175,9 +158,27 @@ const highlightedGame = {
     <a href="https://discord.gg/arcgZTV9zX" target="_blank" class="discord-btn-two shiny-btn"> Join Discord</a>
   </aside>
 
+  <style>
+    /* Use :global because .wrap is created by JS */
+    :global(.typewrite > .wrap) {
+      border-right: 0.06em solid #0096ff;
+      animation: blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes blink-caret {
+      from,
+      to {
+        border-color: transparent;
+      }
+      50% {
+        border-color: #0096ff;
+      }
+    }
+  </style>
+
   <script>
     /**
-     * Typescript types for battery
+     * Typescript types for battery (Experimental API)
      */
     interface BatteryManager extends EventTarget {
       charging: boolean;
@@ -194,218 +195,329 @@ const highlightedGame = {
       getBattery?: () => Promise<BatteryManager>;
     }
 
-    // --- General Page Load ---
-    document.addEventListener('DOMContentLoaded', function () {
-      setTimeout(() => {
-        document.body.classList.add('loaded');
-      }, 1000);
-    });
+    // --- 1. SYSTEM MONITOR (FPS, Time, Battery) ---
+    function initSystemMonitor() {
+      const timeDisplay = document.getElementById('time-display');
+      const batteryWrapper = document.getElementById('battery-wrapper');
+      const batteryPercentage = document.getElementById('battery-percentage');
+      const fpsElement = document.getElementById('fps');
 
-    // --- INFINITE CAROUSEL LOGIC ---
-    const carouselTrack = document.querySelector('.carousel-track');
-    const originalItems = document.querySelectorAll('.carousel-item');
-    const carouselDots = document.getElementById('carouselDots');
+      let frameCount = 0;
+      let lastUpdateTime = performance.now();
+      let animFrameId: number;
 
-    let itemsPerView = 1;
-    let carouselIndex = 0;
-    let logicalIndex = 0;
-    let isTransitioning = false;
-    let slideWidth = 0;
-    let totalOriginal = originalItems.length;
-
-    // Touch variables
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let isDragging = false;
-
-    function initCarousel() {
-      if (!carouselTrack || originalItems.length === 0) return;
-
-      const container = document.querySelector('.carousel-container');
-      const gap = 8;
-      const containerWidth = container.clientWidth;
-      const sampleItem = originalItems[0];
-      const itemWidth = sampleItem.offsetWidth;
-
-      slideWidth = itemWidth + gap;
-      itemsPerView = Math.floor(containerWidth / slideWidth);
-      if (itemsPerView < 1) itemsPerView = 1;
-
-      carouselTrack.innerHTML = '';
-
-      const fragment = document.createDocumentFragment();
-
-      for (let i = totalOriginal - itemsPerView; i < totalOriginal; i++) {
-        let idx = (i + totalOriginal) % totalOriginal;
-        let clone = originalItems[idx].cloneNode(true);
-        clone.classList.add('clone');
-        fragment.appendChild(clone);
+      // Update Time
+      function updateTime() {
+        if (!timeDisplay) return;
+        const now = new Date();
+        timeDisplay.textContent = ` ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
       }
 
-      originalItems.forEach((item) => fragment.appendChild(item));
+      // Update Battery
+      function updateBattery() {
+        if (!batteryPercentage || !batteryWrapper) return;
 
-      for (let i = 0; i < itemsPerView; i++) {
-        let clone = originalItems[i].cloneNode(true);
-        clone.classList.add('clone');
-        fragment.appendChild(clone);
-      }
+        if ('getBattery' in navigator && (navigator as any).getBattery) {
+          (navigator as Navigator).getBattery!().then((battery: BatteryManager) => {
+            const percentage = Math.round(battery.level * 100);
+            batteryPercentage!.textContent = `${percentage}%`;
 
-      carouselTrack.appendChild(fragment);
+            batteryWrapper!.className = 'battery-container'; // Reset
+            batteryWrapper!.querySelectorAll('.bat-icon').forEach((el) => ((el as HTMLElement).style.display = 'none'));
 
-      carouselIndex = itemsPerView;
-      updateTrackPosition(false);
-      updateCarouselDots();
-    }
+            let iconId = 'bat-empty';
+            let colorClass = 'battery-low';
 
-    function updateTrackPosition(animate = true) {
-      if (animate) {
-        carouselTrack.style.transition = 'transform 0.3s ease-in-out';
-      } else {
-        carouselTrack.style.transition = 'none';
-      }
-      carouselTrack.style.transform = `translateX(-${carouselIndex * slideWidth}px)`;
-    }
+            if (percentage >= 90) {
+              iconId = 'bat-full';
+              colorClass = 'battery-full';
+            } else if (percentage >= 70) {
+              iconId = 'bat-three-quarters';
+              colorClass = 'battery-good';
+            } else if (percentage >= 50) {
+              iconId = 'bat-half';
+              colorClass = 'battery-good';
+            } else if (percentage >= 30) {
+              iconId = 'bat-quarter';
+              colorClass = 'battery-medium';
+            }
 
-    function moveCarousel(direction) {
-      if (isTransitioning) return;
-      isTransitioning = true;
-
-      carouselIndex += direction;
-
-      if (direction === 1) {
-        logicalIndex++;
-        if (logicalIndex >= totalOriginal) logicalIndex = 0;
-      } else {
-        logicalIndex--;
-        if (logicalIndex < 0) logicalIndex = totalOriginal - 1;
-      }
-
-      updateTrackPosition(true);
-      updateCarouselDots();
-    }
-
-    carouselTrack?.addEventListener('transitionend', () => {
-      isTransitioning = false;
-
-      if (carouselIndex >= totalOriginal + itemsPerView) {
-        carouselIndex = itemsPerView;
-        updateTrackPosition(false);
-      } else if (carouselIndex < itemsPerView) {
-        carouselIndex = totalOriginal + itemsPerView - 1;
-        updateTrackPosition(false);
-      }
-    });
-
-    function updateCarouselDots() {
-      if (!carouselDots) return;
-      let activeDot = logicalIndex;
-
-      const dotsHtml = Array.from(
-        { length: totalOriginal },
-        (_, i) => `<div class="carousel-dot ${i === activeDot ? 'active' : ''}" onclick="goToCarouselSlide(${i})"></div>`
-      ).join('');
-
-      carouselDots.innerHTML = dotsHtml;
-    }
-
-    window.goToCarouselSlide = function (index) {
-      if (isTransitioning) return;
-      logicalIndex = index;
-      carouselIndex = index + itemsPerView;
-      updateTrackPosition(true);
-      updateCarouselDots();
-    };
-
-    function handleTouchStart(e) {
-      touchStartX = e.touches[0].clientX;
-      isDragging = true;
-    }
-    function handleTouchMove(e) {
-      if (!isDragging) return;
-      touchEndX = e.touches[0].clientX;
-    }
-    function handleTouchEnd() {
-      if (!isDragging) return;
-      isDragging = false;
-      handleSwipe();
-    }
-    function handleMouseDown(e) {
-      touchStartX = e.clientX;
-      isDragging = true;
-    }
-    function handleMouseMove(e) {
-      if (!isDragging) return;
-      touchEndX = e.clientX;
-    }
-    function handleMouseUp() {
-      isDragging = false;
-      handleSwipe();
-    }
-
-    function handleSwipe() {
-      const swipeThreshold = 50;
-      const swipeDistance = touchStartX - touchEndX;
-      if (Math.abs(swipeDistance) > swipeThreshold) {
-        if (swipeDistance > 0) {
-          moveCarousel(1);
+            batteryWrapper!.classList.add(colorClass);
+            const activeIcon = document.getElementById(iconId);
+            if (activeIcon) activeIcon.style.display = 'inline-block';
+          });
         } else {
-          moveCarousel(-1);
+          batteryPercentage.textContent = 'n/a';
+          const loading = document.getElementById('bat-loading');
+          if (loading) loading.style.display = 'inline-block';
         }
       }
-    }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      initCarousel();
-      carouselTrack.addEventListener('touchstart', handleTouchStart, { passive: true });
-      carouselTrack.addEventListener('touchmove', handleTouchMove, { passive: false });
-      carouselTrack.addEventListener('touchend', handleTouchEnd, { passive: true });
-      carouselTrack.addEventListener('mousedown', handleMouseDown);
-      carouselTrack.addEventListener('mousemove', handleMouseMove);
-      carouselTrack.addEventListener('mouseup', handleMouseUp);
-      carouselTrack.addEventListener('mouseleave', handleMouseUp);
-    });
+      // Calculate FPS
+      function calculateFPS() {
+        frameCount++;
+        const now = performance.now();
+        const deltaTime = now - lastUpdateTime;
 
-    window.addEventListener('resize', function () {
-      clearTimeout(window.resizeTimer);
-      window.resizeTimer = setTimeout(() => {
-        initCarousel();
-      }, 200);
-    });
-
-    // --- REST OF THE UTILITIES ---
-
-    const images = [
-      { src: '/storage/images/main/highway-racer.jpeg', caption: 'Highway Racer' },
-      { src: '/storage/images/main/buildnow.jpeg', caption: 'Buildnow.gg' },
-      { src: '/storage/ag/g/slope/IMG_5256.jpeg', caption: 'Slope' },
-      { src: '/storage/images/main/clash.jpeg', caption: 'Clash Royale' },
-      { src: '/storage/images/main/superstarcar.jpeg', caption: 'Superstar Car' },
-      { src: '/storage/ag/g/yohoho/IMG_5302.jpeg', caption: 'YoHoHo!' }
-    ];
-
-    let currentImgIndex = 0;
-    const imageElement = document.getElementById('large-image');
-    const captionElement = document.getElementById('large-image-caption');
-
-    if (imageElement && captionElement) {
-      function changeImage() {
-        currentImgIndex = (currentImgIndex + 1) % images.length;
-        const currentImage = images[currentImgIndex];
-        imageElement.src = currentImage.src;
-        captionElement.textContent = currentImage.caption;
+        if (deltaTime >= 1000) {
+          if (fpsElement) fpsElement.textContent = `FPS: ${frameCount}`;
+          frameCount = 0;
+          lastUpdateTime = now;
+        }
+        animFrameId = requestAnimationFrame(calculateFPS);
       }
-      setInterval(changeImage, 3000);
+
+      // Initial Calls
+      updateTime();
+      updateBattery();
+      calculateFPS();
+
+      // Intervals
+      const timeInterval = setInterval(updateTime, 60000);
+      const batInterval = setInterval(updateBattery, 30000);
+
+      // Cleanup function (useful if component unmounts)
+      return () => {
+        clearInterval(timeInterval);
+        clearInterval(batInterval);
+        cancelAnimationFrame(animFrameId);
+      };
     }
 
+    // --- 2. CAROUSEL LOGIC ---
+    function initCarousel() {
+      const carouselTrack = document.querySelector('.carousel-track') as HTMLElement;
+      const originalItems = document.querySelectorAll('.carousel-item');
+      const carouselDots = document.getElementById('carouselDots');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+
+      if (!carouselTrack || originalItems.length === 0) return;
+
+      let itemsPerView = 1;
+      let carouselIndex = 0;
+      let logicalIndex = 0;
+      let isTransitioning = false;
+      let slideWidth = 0;
+      let totalOriginal = originalItems.length;
+      let touchStartX = 0;
+      let touchEndX = 0;
+      let isDragging = false;
+
+      function setup() {
+        const container = document.querySelector('.carousel-container') as HTMLElement;
+        const gap = 8;
+        const containerWidth = container.clientWidth;
+        const sampleItem = originalItems[0] as HTMLElement;
+        const itemWidth = sampleItem.offsetWidth;
+
+        slideWidth = itemWidth + gap;
+        itemsPerView = Math.floor(containerWidth / slideWidth) || 1;
+
+        carouselTrack.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+
+        // Clone Last Items (Prepend)
+        for (let i = totalOriginal - itemsPerView; i < totalOriginal; i++) {
+          let clone = originalItems[i].cloneNode(true) as HTMLElement;
+          clone.classList.add('clone');
+          fragment.appendChild(clone);
+        }
+
+        // Original Items
+        originalItems.forEach((item) => fragment.appendChild(item));
+
+        // Clone First Items (Append)
+        for (let i = 0; i < itemsPerView; i++) {
+          let clone = originalItems[i].cloneNode(true) as HTMLElement;
+          clone.classList.add('clone');
+          fragment.appendChild(clone);
+        }
+
+        carouselTrack.appendChild(fragment);
+        carouselIndex = itemsPerView;
+        updateTrackPosition(false);
+        updateDots();
+      }
+
+      function updateTrackPosition(animate = true) {
+        carouselTrack.style.transition = animate ? 'transform 0.3s ease-in-out' : 'none';
+        carouselTrack.style.transform = `translateX(-${carouselIndex * slideWidth}px)`;
+      }
+
+      function move(direction: number) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        carouselIndex += direction;
+
+        if (direction === 1) {
+          logicalIndex++;
+          if (logicalIndex >= totalOriginal) logicalIndex = 0;
+        } else {
+          logicalIndex--;
+          if (logicalIndex < 0) logicalIndex = totalOriginal - 1;
+        }
+
+        updateTrackPosition(true);
+        updateDots();
+      }
+
+      function updateDots() {
+        if (!carouselDots) return;
+        carouselDots.innerHTML = '';
+
+        for (let i = 0; i < totalOriginal; i++) {
+          const dot = document.createElement('div');
+          dot.className = `carousel-dot ${i === logicalIndex ? 'active' : ''}`;
+          // Event Listener instead of onclick attribute
+          dot.addEventListener('click', () => {
+            if (isTransitioning) return;
+            logicalIndex = i;
+            carouselIndex = i + itemsPerView;
+            updateTrackPosition(true);
+            updateDots();
+          });
+          carouselDots.appendChild(dot);
+        }
+      }
+
+      // Transition End Reset
+      carouselTrack.addEventListener('transitionend', () => {
+        isTransitioning = false;
+        if (carouselIndex >= totalOriginal + itemsPerView) {
+          carouselIndex = itemsPerView;
+          updateTrackPosition(false);
+        } else if (carouselIndex < itemsPerView) {
+          carouselIndex = totalOriginal + itemsPerView - 1;
+          updateTrackPosition(false);
+        }
+      });
+
+      // Swipe Logic
+      function handleSwipe() {
+        const threshold = 50;
+        const distance = touchStartX - touchEndX;
+        if (Math.abs(distance) > threshold) {
+          move(distance > 0 ? 1 : -1);
+        }
+      }
+
+      carouselTrack.addEventListener(
+        'touchstart',
+        (e) => {
+          touchStartX = e.touches[0].clientX;
+          isDragging = true;
+        },
+        { passive: true }
+      );
+      carouselTrack.addEventListener(
+        'touchmove',
+        (e) => {
+          if (isDragging) touchEndX = e.touches[0].clientX;
+        },
+        { passive: false }
+      );
+      carouselTrack.addEventListener(
+        'touchend',
+        () => {
+          if (isDragging) {
+            isDragging = false;
+            handleSwipe();
+          }
+        },
+        { passive: true }
+      );
+
+      // Mouse Drag
+      carouselTrack.addEventListener('mousedown', (e) => {
+        touchStartX = e.clientX;
+        isDragging = true;
+      });
+      carouselTrack.addEventListener('mousemove', (e) => {
+        if (isDragging) touchEndX = e.clientX;
+      });
+      carouselTrack.addEventListener('mouseup', () => {
+        isDragging = false;
+        handleSwipe();
+      });
+      carouselTrack.addEventListener('mouseleave', () => {
+        isDragging = false;
+      });
+
+      // Button Listeners
+      btnPrev?.addEventListener('click', () => move(-1));
+      btnNext?.addEventListener('click', () => move(1));
+
+      // Init
+      setup();
+
+      // Resize Handler
+      let resizeTimer: number;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(setup, 200);
+      });
+    }
+
+    // --- 3. IMAGE ROTATOR ---
+    function initImageRotator() {
+      // Use fallback images list - these are the highlighted games
+      const images = [
+        { src: '/storage/images/main/highway-racer.jpeg', caption: 'Highway Racer' },
+        { src: '/storage/images/main/buildnow.jpeg', caption: 'Buildnow.gg' },
+        { src: '/storage/ag/g/slope/IMG_5256.jpeg', caption: 'Slope' },
+        { src: '/storage/images/main/clash.jpeg', caption: 'Clash Royale' },
+        { src: '/storage/images/main/superstarcar.jpeg', caption: 'Superstar Car' },
+        { src: '/storage/ag/g/polytrack/splash.png', caption: 'Polytrack' },
+        { src: '/storage/images/main/brawlstars1.jpg', caption: 'Brawl Stars' },
+        { src: '/storage/ag/g/yohoho/IMG_5302.jpeg', caption: 'YoHoHo!' },
+        { src: '/storage/images/main/smashy.jpg', caption: 'Smashy Road' },
+        { src: '/storage/images/main/ragdoll.jpg', caption: 'Ragdoll Archers' },
+        { src: '/storage/images/main/slitherio.jpg', caption: 'Slither.io' }
+      ];
+
+      const imageElement = document.getElementById('large-image') as HTMLImageElement;
+      const captionElement = document.getElementById('large-image-caption');
+      let currentImgIndex = 0;
+      let intervalId: ReturnType<typeof setInterval> | undefined;
+
+      if (imageElement && captionElement) {
+        intervalId = setInterval(() => {
+          currentImgIndex = (currentImgIndex + 1) % images.length;
+          const currentImage = images[currentImgIndex];
+
+          // Preload next image for smoothness (optional optimization)
+          const nextImg = new Image();
+          nextImg.src = images[(currentImgIndex + 1) % images.length].src;
+
+          imageElement.style.opacity = '0';
+          setTimeout(() => {
+            imageElement.src = currentImage.src;
+            captionElement.textContent = currentImage.caption;
+            imageElement.style.opacity = '1';
+          }, 200); // Small fade effect if CSS transition exists
+        }, 3000);
+      }
+      return () => clearInterval(intervalId);
+    }
+
+    // --- 4. TYPEWRITER ---
     class TxtType {
-      constructor(el, toRotate, period) {
+      el: HTMLElement;
+      toRotate: string[];
+      period: number;
+      txt: string;
+      loopNum: number;
+      isDeleting: boolean;
+
+      constructor(el: HTMLElement, toRotate: string[], period: string) {
         this.toRotate = toRotate;
         this.el = el;
         this.loopNum = 0;
         this.period = parseInt(period, 10) || 2000;
         this.txt = '';
-        this.tick();
         this.isDeleting = false;
+        this.tick();
       }
 
       tick() {
@@ -439,140 +551,58 @@ const highlightedGame = {
       }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    function initTypewriter() {
       const elements = document.getElementsByClassName('typewrite');
       for (let i = 0; i < elements.length; i++) {
         const toRotate = elements[i].getAttribute('data-type');
         const period = elements[i].getAttribute('data-period');
         if (toRotate) {
-          new TxtType(elements[i], JSON.parse(toRotate), period);
+          new TxtType(elements[i] as HTMLElement, JSON.parse(toRotate), period || '2000');
         }
       }
-      const css = document.createElement('style');
-      css.type = 'text/css';
-      css.innerHTML = '.typewrite > .wrap { border-right: 0.06em solid #0096FF}';
-      document.body.appendChild(css);
-    });
+    }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    // --- 5. POPUP LOGIC ---
+    function initPopup() {
       const popup = document.getElementById('discord-popup');
       const closeBtn = document.getElementById('close-popup');
 
       if (popup && closeBtn) {
-        function checkPopup() {
-          const lastPopupClose = Number(localStorage.getItem('lastPopupClose'));
-          const currentTime = new Date().getTime();
-          if (!lastPopupClose || currentTime - lastPopupClose > 3600000) {
-            popup.style.display = 'flex';
-          }
+        const lastPopupClose = Number(localStorage.getItem('lastPopupClose'));
+        const currentTime = new Date().getTime();
+
+        if (!lastPopupClose || currentTime - lastPopupClose > 3600000) {
+          popup.style.display = 'flex';
         }
+
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
           localStorage.setItem('lastPopupClose', new Date().getTime().toString());
         });
-        checkPopup();
       }
-    });
+    }
 
-    // --- SYSTEM STATS (With New Battery Logic) ---
-    document.addEventListener('DOMContentLoaded', function () {
-      const timeDisplay = document.getElementById('time-display');
-      const batteryWrapper = document.getElementById('battery-wrapper'); // The container
-      const batteryPercentage = document.getElementById('battery-percentage');
-      const fpsElement = document.getElementById('fps');
+    // --- MASTER INIT ---
+    // astro:page-load handles both initial load AND View Transition swaps
+    document.addEventListener('astro:page-load', () => {
+      document.body.classList.add('loaded'); // Animation trigger
 
-      let frameCount = 0;
-      let lastUpdateTime = performance.now();
+      const cleanupMonitor = initSystemMonitor();
+      const cleanupRotator = initImageRotator();
 
-      function updateTime() {
-        if (!timeDisplay) return;
-        const now = new Date();
-        const timeString = now.toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        timeDisplay.textContent = ` ${timeString}`;
-      }
+      initCarousel();
+      initTypewriter();
+      initPopup();
 
-      function updateBattery() {
-        if (!batteryPercentage || !batteryWrapper) return;
-
-        if ('getBattery' in navigator) {
-          (navigator as Navigator).getBattery().then(function (battery: BatteryManager) {
-            const level = battery.level * 100;
-            const percentage = Math.round(level);
-
-            batteryPercentage.textContent = `${percentage}%`;
-
-            // 1. Reset Classes on Wrapper (remove old colors)
-            batteryWrapper.className = 'battery-container'; // Reset to base class
-
-            // 2. Hide all icons first
-            const allIcons = batteryWrapper.querySelectorAll('.bat-icon');
-            allIcons.forEach((el) => ((el as HTMLElement).style.display = 'none'));
-
-            // 3. Determine ID and Color Class
-            let iconId = 'bat-empty';
-            let colorClass = 'battery-low';
-
-            if (percentage >= 90) {
-              iconId = 'bat-full';
-              colorClass = 'battery-full'; // Green
-            } else if (percentage >= 70) {
-              iconId = 'bat-three-quarters';
-              colorClass = 'battery-good'; // Green/Yellow
-            } else if (percentage >= 50) {
-              iconId = 'bat-half';
-              colorClass = 'battery-good';
-            } else if (percentage >= 30) {
-              iconId = 'bat-quarter';
-              colorClass = 'battery-medium'; // Orange
-            } else {
-              iconId = 'bat-empty';
-              colorClass = 'battery-low'; // Red
-            }
-
-            // 4. Apply changes
-            batteryWrapper.classList.add(colorClass); // Apply color to container (cascades to SVG)
-            const activeIcon = document.getElementById(iconId);
-            if (activeIcon) activeIcon.style.display = 'inline-block';
-          });
-        } else {
-          batteryPercentage.textContent = 'n/a';
-          // Fallback view
-          const allIcons = batteryWrapper.querySelectorAll('.bat-icon');
-          allIcons.forEach((el) => ((el as HTMLElement).style.display = 'none'));
-          const loadingIcon = document.getElementById('bat-loading');
-          if (loadingIcon) loadingIcon.style.display = 'inline-block';
-        }
-      }
-
-      function calculateFPS() {
-        if (!fpsElement) return;
-        frameCount++;
-        const now = performance.now();
-        const deltaTime = now - lastUpdateTime;
-
-        if (deltaTime >= 1000) {
-          const fps = frameCount;
-          fpsElement.textContent = `FPS: ${fps}`;
-          frameCount = 0;
-          lastUpdateTime = now;
-        }
-        requestAnimationFrame(calculateFPS);
-      }
-      document.addEventListener('astro:after-swap', updateTime);
-      document.addEventListener('astro:after-swap', updateBattery);
-      document.addEventListener('astro:after-swap', calculateFPS);
-
-      updateTime();
-      updateBattery();
-      requestAnimationFrame(calculateFPS);
-
-      setInterval(updateTime, 60000);
-      setInterval(updateBattery, 30000);
+      // Cleanup listeners on swap to prevent memory leaks/duplicate intervals
+      document.addEventListener(
+        'astro:before-swap',
+        () => {
+          if (cleanupMonitor) cleanupMonitor();
+          if (cleanupRotator) cleanupRotator();
+        },
+        { once: true }
+      );
     });
   </script>
-
-  <script src="/storage/js/settings.js" is:inline></script>
 </AppLayout>

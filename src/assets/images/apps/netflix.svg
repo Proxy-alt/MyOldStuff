@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="1902.6667"
+   height="511.20001"
+   viewBox="0 0 1902.6667 511.20001"
+   sodipodi:docname="Netflix_Logo_RGB.eps"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:page
+       x="0"
+       y="0"
+       inkscape:label="1"
+       id="page1"
+       width="1902.6667"
+       height="511.20001"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <g
+     id="g1"
+     inkscape:groupmode="layer"
+     inkscape:label="1">
+    <g
+       id="group-R5">
+      <path
+         id="path2"
+         d="M 9494.5,3833.96 H 8893.61 V 473.27 c 546.12,-18.801 1089.95,-46.348 1631.59,-82.461 v 592.089 c -342.6,22.862 -686.2,42.232 -1030.7,58.262 z m 4775.5,-0.34 h -660 l -435.2,-1008.51 -390.9,1008.51 h -650.1 l 698.6,-1802.07 -762.7,-1767.89 c 211,-20.582 421.5,-42.531 631.6,-65.738 L 13144.9,1225.83 13584.2,92.7109 C 13813,63.2891 14041.3,32.5898 14269.1,0.0820313 L 14270,0.46875 13487.2,2019.38 Z M 6830.91,502.629 l 600.93,0.133 V 1869.81 h 814.56 v 592.09 h -814.56 v 774.28 h 1076.59 v 597.41 H 6830.91 Z m -2244,2733.581 h 628.93 V 467.43 c 199.96,7.55 400.33,13.769 600.91,19.019 V 3236.21 h 628.9 v 597.41 H 4586.91 Z M 2532.51,295.34 c 553.85,50.332 1110.26,91.801 1669.18,124 v 592.17 C 3844.58,990.859 3488.48,966.43 3133.43,938.5 v 896.41 c 232.97,2.33 539.73,9.43 811.5,6.06 v 592.14 c -217.12,0.52 -566.07,-3.04 -811.5,-6.18 v 809.25 h 1068.26 v 597.41 H 2532.51 Z M 1353.75,1664.17 571.102,3833.62 H 0 V 0 C 199.922,28.4609 400.219,55.7109 600.914,81.8516 V 2166.57 L 1296.82,167.449 c 218.88,25.379 438.15,49.43 657.85,72.02 V 3833.62 H 1353.75 Z M 11020.6,355.172 c 200.6,-15.352 400.9,-31.832 600.9,-49.633 V 3833.62 h -600.9 V 355.172"
+         style="fill:#e50914;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(0.13333333,0,0,-0.13333333,0,511.2)" />
+    </g>
+  </g>
+</svg>

@@ -57,9 +57,125 @@ export interface Props {
     <SEOjson {...Astro.props as Props} />
     <ClientRouter />
     <Analytics location="head" />
+    <slot name="head" />
+    <style is:global>
+      #astro-progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        appearance: none;
+        background: transparent;
+        border: none;
+        /* We handle the width/value transition in JS for tighter control,
+           only animating opacity in CSS */
+        transition: opacity 0.4s ease;
+      }
+
+      /* Webkit */
+      #astro-progress-bar::-webkit-progress-bar {
+        background: transparent;
+      }
+      #astro-progress-bar::-webkit-progress-value {
+        background: #4ba1ff;
+        box-shadow: 0 0 10px #4ba1ff;
+        transition: width 0.1s ease-out; /* Smooths out the JS ticks */
+      }
+
+      /* Firefox */
+      #astro-progress-bar::-moz-progress-bar {
+        background: #4ba1ff;
+        box-shadow: 0 0 10px #4ba1ff;
+      }
+    </style>
   </head>
   <body>
+    <progress id="astro-progress-bar" max="100" value="0" transition:persist></progress>
+
     <Analytics location="body" />
     <slot />
+
+    <script>
+      const progressBar = document.getElementById('astro-progress-bar') as HTMLProgressElement;
+      let progress = 0;
+      let target = 0;
+      let interval: number | undefined;
+
+      // Fake progress bar physics
+      function tick() {
+        if (!progressBar) return;
+
+        // Distance to target
+        const diff = target - progress;
+
+        // Move 5% of the remaining distance per tick (easing)
+        // plus a tiny constant so it doesn't freeze completely
+        const increment = diff * 0.05 + 0.1;
+
+        progress += increment;
+
+        // Cap at 99.5% until explicitly finished
+        if (progress >= 99.5) progress = 99.5;
+
+        progressBar.value = progress;
+      }
+
+      function startPhysics() {
+        clearInterval(interval);
+        interval = window.setInterval(tick, 20); // 50fps updates
+      }
+
+      if (progressBar) {
+        // 1. CLICK (Start)
+        // Network Request begins.
+        document.addEventListener('astro:before-preparation', () => {
+          progress = 0;
+          target = 20; // Aim for 20% while connecting
+          progressBar.value = 0;
+          progressBar.style.opacity = '1';
+          startPhysics();
+        });
+
+        // 2. DATA LOADED (Network Done)
+        // Browser has the new HTML, but hasn't touched the DOM yet.
+        document.addEventListener('astro:after-preparation', () => {
+          if (progress < 40) progress = 40; // Bump
+          target = 60; // Aim for 60% while parsing
+        });
+
+        // 3. ABOUT TO SWAP (Processing)
+        // Browser is calculating the diff and preparing to replace body.
+        document.addEventListener('astro:before-swap', () => {
+          if (progress < 60) progress = 60; // Bump
+          target = 80; // Aim for 80% during the heavy DOM manipulation
+        });
+
+        // 4. SWAP DONE (Rendering)
+        // New HTML is on screen, but scripts/images might still be hydrating.
+        document.addEventListener('astro:after-swap', () => {
+          if (progress < 85) progress = 85; // Bump
+          target = 95; // Creep to the finish line
+        });
+
+        // 5. FINISH (Idle)
+        // Everything is done.
+        document.addEventListener('astro:page-load', () => {
+          clearInterval(interval);
+          progressBar.value = 100;
+
+          setTimeout(() => {
+            progressBar.style.opacity = '0';
+            setTimeout(() => {
+              progress = 0;
+              target = 0;
+            }, 400);
+          }, 200);
+        });
+      }
+    </script>
   </body>
 </html>

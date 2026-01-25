@@ -1,5 +1,4 @@
 ---
-// src/components/Favicons.astro
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {
@@ -93,8 +92,8 @@ if (!filesExist && !isVercel) {
 
 // 3. Generate HTML Tags
 // The library returns a single string containing all tags
-const html = await generateFaviconHtml(faviconSettings);
+const result = await generateFaviconHtml(faviconSettings);
+const htmlString = result.markups.join('\n');
 ---
 
-<!-- Render the HTML string directly -->
-<Fragment set:html={html} />
+<Fragment set:html={htmlString} />
