@@ -1062,6 +1062,7 @@ const assetPaths = [
   '/api/alt-wisp-2/',
   '/api/alt-wisp-3/',
   '/api/alt-wisp-4/',
+  '/api/alt-wisp-5/',
   '/pages/'
 ];
 
@@ -1753,6 +1754,7 @@ server.on('upgrade', (req, socket, head) => {
     else if (url.startsWith('/api/alt-wisp-2/')) req.url = '/wisp/' + url.slice(16);
     else if (url.startsWith('/api/alt-wisp-3/')) req.url = '/wisp/' + url.slice(16);
     else if (url.startsWith('/api/alt-wisp-4/')) req.url = '/wisp/' + url.slice(16);
+    else if (url.startsWith('/api/alt-wisp-5/')) req.url = '/wisp/' + url.slice(16);
     // this is because in my caddyfile I rewrite these to go to my vpn servers
     // if you are self hosting just ignore this
     try {
