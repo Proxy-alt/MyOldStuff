@@ -5,106 +5,105 @@ import '../styles/sidebar.css';
 ---
 
 <Font cssVariable="--symbols-rounded" preload />
-<!-- Overlay -->
-<div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-<!-- Floating Arrow Button -->
-<button id="floating-toggle" aria-label="Open Menu">
-  <span class="material-symbols-rounded">arrow_forward_ios</span>
+<!-- Overlay -->
+<div id="sidebar-overlay" class="sidebar-overlay" tabindex="-1"></div>
+
+<!-- Floating Toggle Button -->
+<button id="floating-toggle" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+  <span class="material-symbols-rounded" aria-hidden="true">arrow_forward_ios</span>
 </button>
-<aside class="sidebar">
+
+<aside id="sidebar" class="sidebar" aria-label="Main navigation">
   <header class="sidebar-header">
     <a href="/" class="header-logo">
       <Logo aria-label="PeteZahGames Logo" height="40" width="40" />
     </a>
-    <button class="toggler sidebar-toggler">
-      <span class="material-symbols-rounded">chevron_left</span>
+
+    <!-- Internal close button -->
+    <button class="toggler sidebar-toggler" aria-label="Close menu" aria-controls="sidebar" aria-expanded="true">
+      <span class="material-symbols-rounded" aria-hidden="true">chevron_left</span>
     </button>
   </header>
+
   <nav class="sidebar-nav">
     <ul class="nav-list primary-nav">
-      <hr />
-      <br />
       <li class="nav-item">
         <a href="/" class="nav-link">
-          <span class="nav-icon material-symbols-rounded">Home</span>
+          <span class="nav-icon material-symbols-rounded" aria-hidden="true">home</span>
           <span class="nav-label">Home</span>
         </a>
       </li>
+
       <li class="nav-item">
         <a href="/games" class="nav-link">
-          <span class="nav-icon material-symbols-rounded">sports_esports</span>
+          <span class="nav-icon material-symbols-rounded" aria-hidden="true">sports_esports</span>
           <span class="nav-label">Games</span>
         </a>
       </li>
 
       <li class="nav-item">
         <a href="/apps" class="nav-link">
-          <span class="nav-icon material-symbols-rounded">apps</span>
+          <span class="nav-icon material-symbols-rounded" aria-hidden="true">apps</span>
           <span class="nav-label">Apps</span>
         </a>
       </li>
 
       <li class="nav-item">
         <a href="/proxy" class="nav-link">
-          <span class="nav-icon material-symbols-rounded">globe_book</span>
+          <span class="nav-icon material-symbols-rounded" aria-hidden="true">globe_book</span>
           <span class="nav-label">Proxy</span>
         </a>
       </li>
     </ul>
+
     <ul class="nav-list secondary-nav">
       <li class="nav-item">
         <a href="/profile" class="nav-link">
-          <span class="nav-icon material-symbols-rounded">account_circle</span>
+          <span class="nav-icon material-symbols-rounded" aria-hidden="true">account_circle</span>
           <span class="nav-label">Profile</span>
         </a>
       </li>
 
       <li class="nav-item">
         <a href="/settings" class="nav-link">
-          <span class="nav-icon material-symbols-rounded">settings</span>
+          <span class="nav-icon material-symbols-rounded" aria-hidden="true">settings</span>
           <span class="nav-label">Settings</span>
         </a>
       </li>
     </ul>
   </nav>
 </aside>
-<script is:inline>
+
+<script>
   function initSidebar() {
     const body = document.body;
-    const floatBtn = document.getElementById('floating-toggle');
-    const overlay = document.getElementById('sidebar-overlay');
-    const internalToggler = document.querySelector('.sidebar-toggler'); // The button inside the sidebar
+    const floatBtn = document.getElementById('floating-toggle') as HTMLElement;
+    const overlay = document.getElementById('sidebar-overlay') as HTMLElement;
+    const internalToggler = document.querySelector('.sidebar-toggler') as HTMLElement;
 
-    // Helper to Toggle
-    const toggleSidebar = (forceOpen) => {
+    const toggleSidebar = (forceOpen: boolean) => {
       const isOpen = forceOpen ?? !body.classList.contains('sidebar-open');
+      body.classList.toggle('sidebar-open', isOpen);
 
-      if (isOpen) {
-        body.classList.add('sidebar-open');
-        localStorage.setItem('sidebar-state', 'open');
-      } else {
-        body.classList.remove('sidebar-open');
-        localStorage.setItem('sidebar-state', 'closed');
-      }
+      floatBtn.setAttribute('aria-expanded', isOpen.toString());
+      internalToggler.setAttribute('aria-expanded', isOpen.toString());
+
+      localStorage.setItem('sidebar-state', isOpen ? 'open' : 'closed');
     };
 
-    // Event Listeners
     floatBtn?.addEventListener('click', () => toggleSidebar(true));
     overlay?.addEventListener('click', () => toggleSidebar(false));
-
-    // If you click the toggle button INSIDE the sidebar, it closes the sidebar
     internalToggler?.addEventListener('click', () => toggleSidebar(false));
 
-    // Restore State on Load
-    // (Optional: If you want it to remember being open. Remove this block if you want it always closed on refresh)
     const savedState = localStorage.getItem('sidebar-state');
     if (savedState === 'open') {
       body.classList.add('sidebar-open');
+      floatBtn.setAttribute('aria-expanded', true.toString());
+      internalToggler.setAttribute('aria-expanded', true.toString());
     }
   }
 
-  // Initialize on load and after Astro View Transitions
   initSidebar();
   document.addEventListener('astro:after-swap', initSidebar);
 </script>

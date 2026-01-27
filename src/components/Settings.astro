@@ -1,5 +1,9 @@
 <script>
-  const themes = {
+  /**
+   * Color theme definitions with background and text colors
+   * @type {Record<string, { bgColor: string; textColor: string }>}
+   */
+  const themes: Record<string, { bgColor: string; textColor: string }> = {
     'default': { bgColor: '#0A1D37', textColor: '#FFFFFF' },
     'swampy-green': { bgColor: '#1A3C34', textColor: '#D4E4D9' },
     'royal-purple': { bgColor: '#2A1A3C', textColor: '#E2D4E9' },
@@ -10,27 +14,41 @@
     'glacial-frost': { bgColor: '#2A3C4F', textColor: '#D4E9E9' }
   };
 
-  // --- Core Functions ---
-
-  const updateFavicon = (url: URL) => {
-    let favicon: HTMLLinkElement | null = document.querySelector("link[rel='icon']");
+  /**
+   * Update the favicon in the document head
+   * @param {URL | string} url - The favicon URL to apply
+   * @returns {void}
+   */
+  function updateFavicon(url: string | URL): void {
+    let favicon = document.querySelector("link[rel='icon']") as HTMLLinkElement | null;
     if (!favicon) {
-      favicon = document.createElement('link');
+      favicon = document.createElement('link') as HTMLLinkElement;
       favicon.rel = 'icon';
       document.head.appendChild(favicon);
     }
     favicon.href = url.toString();
-  };
+  }
 
-  const beforeUnloadHandler = (e) => {
-    e.preventDefault();
-    e.returnValue = '';
-  };
+  /**
+   * Handler to prevent page unload
+   * @param {Event} e - The beforeunload event
+   * @returns {void}
+   */
+  function beforeUnloadHandler(e: Event): void {
+    const event = e as BeforeUnloadEvent;
+    event.preventDefault();
+  }
 
-  const rightClickHandler = (e) => e.preventDefault();
+  /**
+   * Handler to prevent right-click context menu
+   * @param {Event} e - The context menu event
+   * @returns {void}
+   */
+  function rightClickHandler(e: Event): void {
+    (e as MouseEvent).preventDefault();
+  }
 
-  const applyParticleSettings = () => {
-    // Basic particle toggle logic for global context
+  const applyParticleSettings = (): void => {
     const particleContainers = document.querySelectorAll('.particles');
     const particles = document.querySelectorAll('.particle');
     if (localStorage.getItem('disableParticles') === 'true') {
@@ -39,24 +57,23 @@
     }
   };
 
-  const applyGlobalSettings = () => {
+  const applyGlobalSettings = (): void => {
     // 1. Title & Favicon
     const savedTitle = localStorage.getItem('siteTitle');
     if (savedTitle) document.title = savedTitle;
 
-    let savedLogo: URL | String | null = localStorage.getItem('siteLogo');
-    savedLogo ??= new URL('/favicon.ico', window.location.href);
+    let savedLogo = localStorage.getItem('siteLogo') || new URL('/favicon.ico', window.location.href).href;
     try {
-      savedLogo = new URL(savedLogo.toString(), window.location.href);
+      savedLogo = new URL(savedLogo.toString(), window.location.href).href;
     } catch {
       // Invalid URL, fallback to default
-      savedLogo = new URL('/favicon.ico', window.location.href);
-    } finally {
-      updateFavicon(savedLogo);
+      savedLogo = new URL('/favicon.ico', window.location.href).href;
     }
+    updateFavicon(savedLogo);
+
     // 2. Theme & Background
     const savedTheme = localStorage.getItem('theme') || 'default';
-    const themeData = themes[savedTheme] || themes['default'];
+    const themeData = themes[savedTheme as keyof typeof themes] || themes['default'];
 
     document.body.className = document.body.className.replace(/theme-\w+/g, '');
     document.body.classList.add(`theme-${savedTheme}`);
@@ -91,8 +108,7 @@
     applyParticleSettings();
   };
 
-  // --- Auto Cloak Logic ---
-  const autocloak = () => {
+  const autocloak = (): void => {
     const panicUrl = localStorage.getItem('panicUrl') || 'https://classroom.google.com';
     const popup = window.open('about:blank', '_blank');
     if (!popup || popup.closed) {
@@ -120,12 +136,12 @@
   document.addEventListener('DOMContentLoaded', () => {
     applyGlobalSettings();
 
-    // Listener for changes made in other tabs or the settings page
+    // Listen for changes made in other tabs or the settings page
     window.addEventListener('storage', (e) => {
       if (e.key === 'settingsUpdated') applyGlobalSettings();
     });
 
-    // Panic Key Listener
+    // Panic key listener for quick redirect
     window.addEventListener('keydown', (e) => {
       const panicKey = localStorage.getItem('panicKey');
       const panicUrl = localStorage.getItem('panicUrl');
@@ -134,7 +150,7 @@
       }
     });
 
-    // Autocloak Check
+    // Autocloak check for automatic panic redirect
     const inIframe = window !== window.top;
     if (!inIframe && localStorage.getItem('autocloak') === 'true' && !navigator.userAgent.includes('Firefox')) {
       autocloak();

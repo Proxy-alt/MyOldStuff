@@ -79,21 +79,21 @@ const scramjetConfig = {
     import libcurlPKG from '@mercuryworkshop/libcurl-transport';
     import { Controller, config } from '@petezah-games/scramjet-controller';
 
-    const { LibcurlClient } = libcurlPKG;
-    const computedURL = document.getElementById('embedFrame').dataset.url;
-    async function main() {
+    const { LibcurlClient } = libcurlPKG as any;
+    const computedURL = document.getElementById('embedFrame')?.dataset.url;
+    async function main(): Promise<void> {
       const frameEl = document.querySelector<HTMLIFrameElement>('#embedFrame');
-      const statusEl = document.getElementById('status');
+      const statusEl = document.getElementById('status') as HTMLElement | null;
       if (!frameEl || !statusEl || !frameEl.dataset.config) {
         console.error('Required elements missing');
         return;
       }
-      let cfg;
+      let cfg: any;
       // Parse config passed from frontmatter
       try {
         cfg = JSON.parse(frameEl.dataset.config);
       } catch (e) {
-        statusEl.textContent = 'Error: Invalid configuration';
+        if (statusEl) statusEl.textContent = 'Error: Invalid configuration';
         console.error('Config parse error', e);
         return;
       }
@@ -104,7 +104,7 @@ const scramjetConfig = {
       config.scramjetPath = cfg.scramjetUrl;
 
       // 1. Register Service Worker
-      statusEl.textContent = 'Registering service worker...';
+      if (statusEl) statusEl.textContent = 'Registering service worker...';
 
       try {
         const registration = await navigator.serviceWorker.register(cfg.swPath, {
@@ -114,16 +114,17 @@ const scramjetConfig = {
 
         // 2. Wait for Activation
         if (!navigator.serviceWorker.controller) {
-          statusEl.textContent = 'Waiting for service worker to activate...';
+          if (statusEl) statusEl.textContent = 'Waiting for service worker to activate...';
 
-          await new Promise((resolve) => {
+          await new Promise<void>((resolve): void => {
             if (registration.active) {
               resolve();
             } else {
               const sw = registration.installing || registration.waiting;
               if (sw) {
-                sw.addEventListener('statechange', (e) => {
-                  if (e.target.state === 'activated') resolve();
+                sw.addEventListener('statechange', (e: Event): void => {
+                  const target = e.target as ServiceWorker | null;
+                  if (target && target.state === 'activated') resolve();
                 });
               }
             }
@@ -132,32 +133,38 @@ const scramjetConfig = {
           // Force claim implies we usually don't need a reload if the SW claims immediately
           // but we wait for controller change to be safe
           if (!navigator.serviceWorker.controller) {
-            await new Promise((resolve) => navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true }));
+            await new Promise<void>((resolve): void => navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true }));
           }
         }
 
-        statusEl.textContent = 'Initializing controller...';
+        if (statusEl) statusEl.textContent = 'Initializing controller...';
 
         // 3. Initialize Transport and Controller
         const transport = new LibcurlClient({ wisp: cfg.wispUrl });
+        const activeServiceWorker = registration.active;
+        if (!activeServiceWorker) {
+          throw new Error('Service worker failed to activate');
+        }
         const controller = new Controller({
-          serviceworker: registration.active,
+          serviceworker: activeServiceWorker as ServiceWorker,
           transport
         });
 
         // 4. Start Scramjet
-        await controller.wait;
+        controller.wait;
         const frame = controller.createFrame(frameEl);
 
-        statusEl.textContent = ''; // Clear status on success
-        document.getElementById('status-container').style.display = 'none';
+        if (statusEl) statusEl.textContent = ''; // Clear status on success
+        const statusContainer = document.getElementById('status-container') as HTMLElement | null;
+        if (statusContainer) statusContainer.style.display = 'none';
 
         // 5. Navigate
         if (computedURL) {
-          await frame.go(computedURL);
+          frame.go(computedURL);
         }
-      } catch (err: Error) {
-        statusEl.textContent = `Error: ${err.message}`;
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        if (statusEl) statusEl.textContent = `Error: ${errMsg}`;
         console.error('Scramjet Init Error:', err);
       }
     }

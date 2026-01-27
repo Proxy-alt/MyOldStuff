@@ -14,6 +14,6 @@ ai-store: disallowed
 ai-scrape: disallowed
 `;
 
-export const GET: APIRoute = ({ site }) => {
+export const GET: APIRoute = () => {
   return new Response(getRobotsTxt);
 };

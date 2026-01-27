@@ -3,32 +3,57 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename: string = fileURLToPath(import.meta.url);
+const __dirname: string = path.dirname(__filename);
 
-const dbPath = path.join(__dirname, '..', 'data', 'users.db');
-const dbDir = path.dirname(dbPath);
-// Types
+const dbPath: string = path.join(__dirname, '..', 'data', 'users.db');
+const dbDir: string = path.dirname(dbPath);
+
+/**
+ * User database record interface.
+ * Represents a user account in the system.
+ */
 export interface User {
+  /** Unique identifier for the user */
   id: string;
+  /** Email address (unique) */
   email: string;
+  /** Hashed password */
   password_hash: string;
+  /** Optional username */
   username: string | null;
+  /** User biography */
   bio: string | null;
+  /** Avatar image URL */
   avatar_url: string | null;
+  /** Timestamp when user was created */
   created_at: number;
+  /** Timestamp when user was last updated */
   updated_at: number;
-  email_verified: number; // SQLite uses 0/1 for booleans
+  /** Email verification status (SQLite uses 0/1 for booleans) */
+  email_verified: number;
+  /** Admin status flag (0=user, 1=admin, 2=super admin, 3=full admin) */
   is_admin: number;
+  /** Optional school affiliation */
   school: string | null;
+  /** Optional age */
   age: number | null;
+  /** User IP address */
   ip: string | null;
 }
 
+/**
+ * User session record interface.
+ * Represents an active user session.
+ */
 export interface UserSession {
+  /** Unique session identifier */
   session_id: string;
+  /** Foreign key referencing the user */
   user_id: string;
+  /** Timestamp when session was created */
   created_at: number;
+  /** Timestamp when session expires */
   expires_at: number;
 }
 
@@ -36,7 +61,8 @@ if (!fs.existsSync(dbDir)) {
   fs.mkdirSync(dbDir, { recursive: true });
 }
 
-const db = new Database(dbPath);
+/** The better-sqlite3 database instance */
+const db: Database.Database = new Database(dbPath);
 
 db.pragma('journal_mode = WAL');
 
@@ -55,8 +81,8 @@ db.exec(`
 
 try {
   const tableInfo = db.prepare('PRAGMA table_info(users)').all();
-  const columnNames = tableInfo.map((col: any) => col.name);
-  const hasExistingUsers = db.prepare('SELECT COUNT(*) as count FROM users').get().count > 0;
+  const columnNames: string[] = tableInfo.map((col: any) => col.name);
+  const hasExistingUsers: boolean = (db.prepare('SELECT COUNT(*) as count FROM users').get() as any).count > 0;
 
   if (!columnNames.includes('email_verified')) {
     db.exec('ALTER TABLE users ADD COLUMN email_verified INTEGER DEFAULT 0');
@@ -83,6 +109,10 @@ try {
   console.error('Migration error:', error);
 }
 
+/**
+ * Initialize database tables for changelogs, feedback, user settings, sessions, comments, and likes.
+ * Also creates indexes for commonly queried columns.
+ */
 db.exec(`
 
   CREATE TABLE IF NOT EXISTS changelog (
@@ -120,7 +150,7 @@ db.exec(`
 
   CREATE TABLE IF NOT EXISTS comments (
     id TEXT PRIMARY KEY,
-    type TEXT NOT NULL, -- 'changelog' or 'feedback'
+    type TEXT NOT NULL,
     target_id TEXT NOT NULL,
     user_id TEXT NOT NULL,
     content TEXT NOT NULL,
@@ -130,7 +160,7 @@ db.exec(`
 
   CREATE TABLE IF NOT EXISTS likes (
     id TEXT PRIMARY KEY,
-    type TEXT NOT NULL, -- 'changelog' or 'feedback'
+    type TEXT NOT NULL,
     target_id TEXT NOT NULL,
     user_id TEXT NOT NULL,
     created_at INTEGER NOT NULL,

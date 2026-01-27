@@ -145,3 +145,6 @@ vite.config.ts.timestamp-*
 
 # SQLite
 *.db
+
+# Sitemap
+.sitemap-cache

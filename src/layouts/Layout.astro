@@ -9,43 +9,63 @@ import '../styles/global.css';
 const {
   title,
   description,
-  publishDate,
-  modifiedDate,
-  type,
-  author,
-  ratingValue,
-  ratingCount,
-  genre,
-  platform,
-  price,
-  currency,
-  reviews,
-  forumThread,
-  faq
+  publishDate: _publishDate,
+  modifiedDate: _modifiedDate,
+  type: _type,
+  author: _author,
+  ratingValue: _ratingValue,
+  ratingCount: _ratingCount,
+  genre: _genre,
+  platform: _platform,
+  price: _price,
+  currency: _currency,
+  reviews: _reviews,
+  forumThread: _forumThread,
+  faq: _faq
 } = Astro.props;
+
+/**
+ * Props interface for the Layout component.
+ * Defines all supported properties for SEO, game/product metadata, and discussion/article content.
+ */
 export interface Props {
+  /** Page title for SEO */
   title: string;
+  /** Page description for meta tags */
   description?: string;
+  /** Publication date (ISO format) */
   publishDate?: string;
+  /** Last modification date (ISO format) */
   modifiedDate?: string;
+  /** Content type: website, game, article, or discussion */
   type?: 'website' | 'game' | 'article' | 'discussion';
+  /** Author name */
   author?: string;
 
   // Game / Product Specifics
-  ratingValue?: number; // Aggregate rating (e.g. 4.5)
-  ratingCount?: number; // Total votes
+  /** Aggregate rating value (e.g., 4.5) */
+  ratingValue?: number;
+  /** Total number of rating votes */
+  ratingCount?: number;
+  /** Game genres (e.g., "Action", "Puzzle") */
   genre?: string[];
+  /** Supported platforms (e.g., "Web Browser") */
   platform?: string[];
+  /** Price as string */
   price?: string;
+  /** Currency code (e.g., "USD") */
   currency?: string;
 
   // Reviews (Individual user reviews)
+  /** Array of user reviews */
   reviews?: Review[];
 
   // Discussion Forum Specifics
-  forumThread?: ForumPost; // The main post of the thread
+  /** Main post of a forum thread */
+  forumThread?: ForumPost;
 
   // FAQ
+  /** Frequently asked questions */
   faq?: { question: string; answer: string }[];
 }
 ---

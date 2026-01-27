@@ -10,7 +10,10 @@ export const GET: APIRoute = async ({ request }) => {
     const targetId = url.searchParams.get('targetId');
     if (!['changelog', 'feedback'].includes(type || '') || !targetId)
       return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400 });
-    const count = db.prepare('SELECT COUNT(*) as count FROM likes WHERE type = ? AND target_id = ?').get(type, targetId)?.count || 0;
+    const result = db.prepare('SELECT COUNT(*) as count FROM likes WHERE type = ? AND target_id = ?').get(type, targetId) as
+      | { count: number }
+      | undefined;
+    const count = result?.count || 0;
     return new Response(JSON.stringify({ count }), { status: 200 });
   } catch (err) {
     console.error('Get likes error:', err);

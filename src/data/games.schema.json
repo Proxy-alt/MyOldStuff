@@ -1,67 +1,123 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Games.json schema",
+  "title": "Collections.json schema",
   "type": "object",
+
   "properties": {
     "$schema": {
       "type": "string",
       "description": "Optional schema identifier for this document",
       "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+|[^\\s]+\\.json)$"
     },
+
     "games": {
       "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "label": {
-            "type": "string",
-            "description": "Display name of the game entry"
-          },
-          "url": {
-            "type": "string",
-            "description": "Link to the game or form",
-            "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+|[^\\s]+\\.json)$"
-          },
-          "igdbId": {
-            "type": ["integer", "null"],
-            "minimum": 1,
-            "description": "The numeric IGDB game ID, or null if unknown."
-          },
-          "imageUrl": {
-            "type": "string",
-            "description": "Path or URL to the image thumbnail",
-            "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+|[^\\s]+\\.json)$"
-          },
-          "height": {
-            "type": "integer",
-            "description": "Height of the image thumbnail in pixels",
-            "minimum": 1
-          },
-          "width": {
-            "type": "integer",
-            "description": "Width of the image thumbnail in pixels",
-            "minimum": 1
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": ["action", "racing", "strategy", "sports", "skill", "shooting", "2 player", "io"]
-            },
-            "description": "Categories assigned to the game",
-            "minItems": 0
-          },
-          "featured": {
-            "type": "boolean",
-            "description": "Whether the game is featured or not",
-            "default": false
-          }
-        },
-        "required": ["label", "url", "imageUrl", "categories", "igdbId"],
-        "additionalProperties": false
-      }
+      "description": "Collection of game entries",
+      "items": { "$ref": "#/$defs/collectionItem" }
+    },
+
+    "apps": {
+      "type": "array",
+      "description": "Collection of app entries",
+      "items": { "$ref": "#/$defs/collectionItem" }
     }
   },
-  "required": ["games"],
-  "additionalProperties": false
+
+  "required": ["games", "apps"],
+  "additionalProperties": false,
+
+  "$defs": {
+    "collectionItem": {
+      "type": "object",
+      "description": "A single game or app entry",
+
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the entry"
+        },
+
+        "label": {
+          "type": "string",
+          "description": "Display name of the entry"
+        },
+
+        "url": {
+          "type": "string",
+          "description": "Link to the game or app",
+          "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+)$"
+        },
+
+        "igdbId": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Numeric IGDB ID (games only), or null"
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Path or URL to the image thumbnail",
+          "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+\\.(png|jpg|jpeg|webp|avif|svg))$"
+        },
+
+        "img": {
+          "type": "string",
+          "description": "Alias for imageUrl",
+          "pattern": "^(https?://[^\\s]+|\\./[^\\s]+|\\.\\./[^\\s]+|/[^\\s]+\\.(png|jpg|jpeg|webp|avif|svg))$"
+        },
+        "categories": {
+          "type": "array",
+          "description": "Categories assigned to the entry",
+          "items": { "type": "string" },
+          "minItems": 0
+        },
+
+        "featured": {
+          "type": "boolean",
+          "description": "Whether the entry is featured",
+          "default": false
+        },
+
+        "isHighlighted": {
+          "type": "boolean",
+          "description": "Optional UI highlight flag",
+          "default": false
+        },
+        "width": {
+          "type": ["string", "number"],
+          "description": "Width of the image or SVG (default: 95%)"
+        },
+
+        "height": {
+          "type": ["string", "number"],
+          "description": "Height of the image or SVG (default: 95%)"
+        },
+
+        "objectFit": {
+          "type": "string",
+          "description": "CSS object-fit for raster images (default: cover)",
+          "enum": ["fill", "contain", "cover", "none", "scale-down"]
+        },
+
+        "aspectRatio": {
+          "type": "string",
+          "description": "CSS aspect-ratio value (default: auto)"
+        },
+
+        "backgroundColor": {
+          "type": "string",
+          "description": "Custom gradient syntax or CSS color"
+        },
+        "style": {
+          "type": "object",
+          "description": "Arbitrary CSS overrides applied inline",
+          "additionalProperties": { "type": "string" }
+        }
+      },
+
+      "required": ["label", "url"],
+      "additionalProperties": false,
+
+      "oneOf": [{ "required": ["imageUrl"] }, { "required": ["img"] }]
+    }
+  }
 }

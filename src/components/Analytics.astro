@@ -1,5 +1,18 @@
 ---
-const { location } = Astro.props;
+/**
+ * Google Tag Manager Analytics Component
+ * Injects GTM script in head and noscript fallback in body
+ */
+
+/**
+ * Props for the Analytics component
+ */
+interface Props {
+  /** Location to inject the analytics code: 'head' or 'body' */
+  location: 'head' | 'body';
+}
+
+const { location }: Props = Astro.props;
 ---
 
 {location === "head" && (

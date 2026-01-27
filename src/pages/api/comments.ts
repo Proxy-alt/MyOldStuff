@@ -61,13 +61,13 @@ export const POST: APIRoute = async (context) => {
 
 export const DELETE: APIRoute = async (context) => {
   try {
-    const user = requireAuth(context as any);
+    const user = requireAuth(context as any) as any;
     const body = await context.request.json();
     const commentId = body.commentId;
     if (!commentId || typeof commentId !== 'string') return new Response(JSON.stringify({ error: 'Invalid commentId' }), { status: 400 });
-    const comment = db.prepare('SELECT * FROM comments WHERE id = ?').get(commentId);
+    const comment = db.prepare('SELECT * FROM comments WHERE id = ?').get(commentId) as any;
     if (!comment) return new Response(JSON.stringify({ error: 'Comment not found' }), { status: 404 });
-    if (comment.user_id !== (user as any).id && !(user as any).is_admin) return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
+    if (comment.user_id !== user.id && !user.is_admin) return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
     db.prepare('DELETE FROM comments WHERE id = ?').run(commentId);
     return new Response(JSON.stringify({ message: 'Comment deleted.' }), { status: 200 });
   } catch (err) {
@@ -80,11 +80,11 @@ export const DELETE: APIRoute = async (context) => {
 export const PUT: APIRoute = async (context) => {
   // Admin cleanup endpoint: expects admin session
   try {
-    const user = requireAuth(context as any);
-    if (!(user as any).is_admin) return new Response(JSON.stringify({ error: 'Admin access required' }), { status: 403 });
+    const user = requireAuth(context as any) as any;
+    if (!user.is_admin) return new Response(JSON.stringify({ error: 'Admin access required' }), { status: 403 });
     // perform cleanup similar to server version
-    const allComments = db.prepare('SELECT id, content FROM comments').all();
-    let deletedCount = 0;
+    const allComments = db.prepare('SELECT id, content FROM comments').all() as any[];
+    let deletedCount: number = 0;
     for (const comment of allComments) {
       if (!validateContent(comment.content)) {
         db.prepare('DELETE FROM comments WHERE id = ?').run(comment.id);

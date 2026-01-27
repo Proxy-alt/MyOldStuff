@@ -63,8 +63,6 @@ const config: RouteConfig[] = [
 
 class RaceStrategy extends Strategy {
   async _handle(request: Request, handler: StrategyHandler): Promise<Response> {
-    const cacheKey = await this.cacheName;
-
     // Create promises for both
     const networkPromise = handler.fetch(request).catch(() => null);
     const cachePromise = handler.cacheMatch(request).catch(() => null);

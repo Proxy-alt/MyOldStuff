@@ -5,21 +5,43 @@ import collectionData from '../data/games.json';
 import AppLayout from '../layouts/AppLayout.astro';
 import '../styles/grid.css';
 
+/**
+ * TYPE DEFINITIONS BASED ON JSON SCHEMA
+ */
+interface CollectionItem {
+  id?: string;
+  label: string;
+  url: string;
+  igdbId?: number | null;
+  // Handle 'oneOf' img vs imageUrl
+  imageUrl?: string;
+  img?: string;
+  categories?: string[];
+  featured?: boolean;
+  isHighlighted?: boolean;
+  // Visual overrides
+  width?: string | number;
+  height?: string | number;
+  objectFit?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
+  aspectRatio?: string;
+  backgroundColor?: string;
+  style?: Record<string, string>;
+}
+
 interface Props {
   title?: string;
   description?: string;
   collection?: 'games' | 'apps';
-  hasCategories?: boolean;
 }
 
 const { title = 'Collection', description = 'Browse our collection', collection = 'games' } = Astro.props;
-let { hasCategories } = Astro.props;
 
-const items = collectionData[collection] || [];
-hasCategories ??= false;
+// Safe casting assuming JSON validates against schema
+const items = (collectionData[collection] || []) as CollectionItem[];
 
 /**
- * Image imports
+ * IMAGE IMPORTS
+ * Supports raster (PNG, JPG, WebP, AVIF) and vector (SVG) formats
  */
 const rasterImports = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.{png,jpg,jpeg,webp,avif}', { eager: true });
 const svgImports = import.meta.glob<{ default: any }>('../assets/images/**/*.svg', { eager: true });
@@ -38,20 +60,13 @@ for (const [path, module] of Object.entries(svgImports)) {
 }
 
 /**
- * Helper: Parses custom background syntax into valid CSS
- * * SYNTAX EXAMPLES:
- * 1. Default (to bottom right): "HEX: #000000 > #ffffff"
- * 2. With Direction:            "HEX: #000000 > #ffffff | to top"
- * 3. With Angle:                "RGB: 0 0 0 > 255 255 255 | 90deg"
+ * HELPER: Parse custom background syntax into valid CSS
  */
-const parseBackground = (bg?: string) => {
+const parseBackground = (bg?: string): string | undefined => {
   if (!bg) return undefined;
 
-  // 1. Split color definition from optional direction
   // Format: "COLORS | DIRECTION"
   const [colorDef, directionDef] = bg.split('|').map((s) => s.trim());
-
-  // Default to 'to bottom right' if no direction is specified
   const direction = directionDef || 'to bottom right';
 
   const raw = colorDef;
@@ -63,7 +78,6 @@ const parseBackground = (bg?: string) => {
       .slice(4)
       .split('>')
       .map((part) => {
-        // Convert "4 4 5" -> "rgb(4,4,5)"
         const numbers = part.trim().split(/\s+/).join(',');
         return `rgb(${numbers})`;
       });
@@ -79,7 +93,7 @@ const parseBackground = (bg?: string) => {
     return `linear-gradient(${direction}, ${colors[0]}, ${colors[1]})`;
   }
 
-  // Fallback: return raw string (allows standard CSS values like "red" or "var(--my-color)")
+  // Fallback: return raw string
   return bg;
 };
 ---
@@ -108,7 +122,7 @@ const parseBackground = (bg?: string) => {
     </search>
 
     <datalist id="datalist-items">
-      {items.map((item: any) => <option value={item.label} />)}
+      {items.map((item) => <option value={item.label} />)}
     </datalist>
 
     <div class="filter-container"></div>
@@ -116,36 +130,68 @@ const parseBackground = (bg?: string) => {
 
   <section class="collection-container" id="imageContainer">
     {
-      items.map((item: any) => {
-        const imageUrl = item.img || item.imageUrl || '';
-        const fileName = imageUrl ? imageUrl.split('/').pop() : '';
-        const isHttpUrl = imageUrl && (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
+      items.map((item) => {
+        // 1. Normalize Image Source (Schema allows 'img' or 'imageUrl')
+        const rawImg = item.img || item.imageUrl || '';
+        const fileName = rawImg ? rawImg.split('/').pop() : '';
+        const isHttpUrl = rawImg && (rawImg.startsWith('http://') || rawImg.startsWith('https://'));
+
+        // 2. Resolve Categories
         const mainCategory = item.categories?.[0]?.toLowerCase() || '';
 
-        // Parse background with new direction logic
-        const finalBackground = parseBackground(item.svgBackground);
+        // 3. Resolve Styling
+        const bgParsed = parseBackground(item.backgroundColor);
 
+        // Merge arbitrary 'style' object with the parsed background
+        const cardStyles = {
+          ...(item.style || {}),
+          ...(bgParsed ? { background: bgParsed } : {})
+        };
+
+        // 4. Resolve Dimensions & Object Fit
+        // Default to 100% dimensions via CSS if not specified
+        const cssWidth = item.width ? (typeof item.width === 'number' ? `${item.width}px` : item.width) : '100%';
+        const cssHeight = item.height ? (typeof item.height === 'number' ? `${item.height}px` : item.height) : '100%';
+        const objectFit = item.objectFit || 'cover';
+        const aspectRatio = item.aspectRatio || 'auto';
+
+        // 5. Check for local assets
         const localRaster = fileName ? rasterMap.get(fileName) : undefined;
         const SvgComponent = fileName ? svgMap.get(fileName) : undefined;
 
+        // Common styles applied to the image/SVG element
+        const imgStyle = {
+          width: cssWidth,
+          height: cssHeight,
+          objectFit: objectFit,
+          aspectRatio: aspectRatio
+        };
+
         return (
           <figure class="collection-card" data-label={item.label} data-category={mainCategory} data-url={item.url}>
-            <a
-              href={`/play?url=${encodeURIComponent(item.url)}`}
-              aria-label={`Open ${item.label}`}
-              style={finalBackground ? `background: ${finalBackground};` : undefined}
-            >
-              {/* SVG */}
+            <a href={`/play?url=${encodeURIComponent(item.url)}`} aria-label={`Open ${item.label}`} style={cardStyles}>
+              {/* SVG Component (Local) */}
               {SvgComponent && (
                 <div
                   class="svg-wrapper"
-                  style="width: 100%; height: 100%; min-height: 170px; display: flex; justify-content: center; align-items: center;"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%'
+                  }}
                 >
-                  <SvgComponent width='95%' height='95%'' aria-label={item.label} />
+                  <SvgComponent
+                    width={typeof item.width === 'number' ? item.width : 200}
+                    height={typeof item.height === 'number' ? item.height : 170}
+                    style={imgStyle}
+                    aria-label={item.label}
+                  />
                 </div>
               )}
 
-              {/* Local Image */}
+              {/* Local Raster Image */}
               {localRaster && !SvgComponent && (
                 <Picture
                   src={localRaster}
@@ -157,14 +203,14 @@ const parseBackground = (bg?: string) => {
                   decoding="async"
                   data-auto-detect
                   formats={['avif', 'webp', 'png']}
-                  style="width: 100%; height: 100%; object-fit: cover;"
+                  style={imgStyle}
                 />
               )}
 
               {/* Remote Image */}
               {!localRaster && !SvgComponent && isHttpUrl && (
                 <Picture
-                  src={imageUrl}
+                  src={rawImg}
                   width={200}
                   height={170}
                   alt={item.label}
@@ -173,11 +219,11 @@ const parseBackground = (bg?: string) => {
                   decoding="async"
                   data-auto-detect
                   formats={['avif', 'webp', 'png']}
-                  style="width: 100%; height: 100%; object-fit: cover;"
+                  style={imgStyle}
                 />
               )}
 
-              {/* CASE 4: No Image Found */}
+              {/* Fallback: No Image */}
               {!localRaster && !SvgComponent && !isHttpUrl && (
                 <div style="width: 100%; height: 100%; min-height: 170px; background: #333; display: flex; align-items: center; justify-content: center;">
                   <span>No Image</span>

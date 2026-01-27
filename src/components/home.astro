@@ -1,43 +1,39 @@
 <script>
   // --- General Page Load ---
-  document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(() => {
+  document.addEventListener('DOMContentLoaded', (): void => {
+    setTimeout((): void => {
       document.body.classList.add('loaded');
     }, 1000);
   });
 
-  function startGaming() {
-    window.location.href = 'g.html';
-  }
-
   // --- INFINITE CAROUSEL LOGIC ---
-  const carouselTrack = document.querySelector('.carousel-track');
+  const carouselTrack = document.querySelector<HTMLElement>('.carousel-track');
   // Select all ORIGINAL items immediately (before cloning)
-  const originalItems = document.querySelectorAll('.carousel-item');
+  const originalItems = document.querySelectorAll<HTMLElement>('.carousel-item');
   const carouselDots = document.getElementById('carouselDots');
 
-  let itemsPerView = 1;
-  let carouselIndex = 0; // The visual index (including clones)
-  let logicalIndex = 0; // The actual data index (0 to total-1)
-  let isTransitioning = false;
-  let slideWidth = 0;
-  let totalOriginal = originalItems.length;
+  let itemsPerView: number = 1;
+  let carouselIndex: number = 0; // The visual index (including clones)
+  let logicalIndex: number = 0; // The actual data index (0 to total-1)
+  let isTransitioning: boolean = false;
+  let slideWidth: number = 0;
+  let totalOriginal: number = originalItems.length;
 
   // Touch variables
-  let touchStartX = 0;
-  let touchEndX = 0;
-  let isDragging = false;
+  let touchStartX: number = 0;
+  let touchEndX: number = 0;
+  let isDragging: boolean = false;
 
-  function initCarousel() {
+  function initCarousel(): void {
     if (!carouselTrack || originalItems.length === 0) return;
 
     // 1. Calculate dimensions
-    const container = document.querySelector('.carousel-container');
+    const container = document.querySelector('.carousel-container') as HTMLElement | null;
     const gap = 8; // CSS gap
-    const containerWidth = container.clientWidth;
+    const containerWidth = container?.clientWidth || 0;
     // Measure one item to determine how many fit
-    const sampleItem = originalItems[0];
-    const itemWidth = sampleItem.offsetWidth;
+    const sampleItem = originalItems[0] as HTMLElement | undefined;
+    const itemWidth = sampleItem?.offsetWidth || 0;
 
     slideWidth = itemWidth + gap;
     itemsPerView = Math.floor(containerWidth / slideWidth);
@@ -53,7 +49,7 @@
     // Prepend clones (Last 'n' items)
     for (let i = totalOriginal - itemsPerView; i < totalOriginal; i++) {
       let idx = (i + totalOriginal) % totalOriginal; // Handle negative wrap safety
-      let clone = originalItems[idx].cloneNode(true);
+      let clone = originalItems[idx].cloneNode(true) as HTMLElement;
       clone.classList.add('clone');
       fragment.appendChild(clone);
     }
@@ -63,12 +59,14 @@
 
     // Append clones (First 'n' items)
     for (let i = 0; i < itemsPerView; i++) {
-      let clone = originalItems[i].cloneNode(true);
+      let clone = originalItems[i].cloneNode(true) as HTMLElement;
       clone.classList.add('clone');
       fragment.appendChild(clone);
     }
 
-    carouselTrack.appendChild(fragment);
+    if (carouselTrack) {
+      carouselTrack.appendChild(fragment);
+    }
 
     // 4. Set Initial Position (Skip the first set of clones)
     carouselIndex = itemsPerView;
@@ -76,16 +74,18 @@
     updateCarouselDots();
   }
 
-  function updateTrackPosition(animate = true) {
+  function updateTrackPosition(animate: boolean = true): void {
+    if (!carouselTrack) return;
+    const track = carouselTrack as HTMLElement;
     if (animate) {
-      carouselTrack.style.transition = 'transform 0.3s ease-in-out';
+      track.style.transition = 'transform 0.3s ease-in-out';
     } else {
-      carouselTrack.style.transition = 'none';
+      track.style.transition = 'none';
     }
-    carouselTrack.style.transform = `translateX(-${carouselIndex * slideWidth}px)`;
+    track.style.transform = `translateX(-${carouselIndex * slideWidth}px)`;
   }
 
-  function moveCarousel(direction) {
+  function moveCarousel(direction: number): void {
     if (isTransitioning) return;
     isTransitioning = true;
 
@@ -134,7 +134,7 @@
     carouselDots.innerHTML = dotsHtml;
   }
 
-  window.goToCarouselSlide = function (index) {
+  (window as any).goToCarouselSlide = function (index: number): void {
     // Make global for onclick
     if (isTransitioning) return;
     logicalIndex = index;
@@ -144,33 +144,33 @@
   };
 
   // --- Touch / Swipe Logic ---
-  function handleTouchStart(e) {
+  function handleTouchStart(e: TouchEvent): void {
     touchStartX = e.touches[0].clientX;
     isDragging = true;
   }
-  function handleTouchMove(e) {
+  function handleTouchMove(e: TouchEvent): void {
     if (!isDragging) return;
     touchEndX = e.touches[0].clientX;
   }
-  function handleTouchEnd() {
+  function handleTouchEnd(): void {
     if (!isDragging) return;
     isDragging = false;
     handleSwipe();
   }
-  function handleMouseDown(e) {
+  function handleMouseDown(e: MouseEvent): void {
     touchStartX = e.clientX;
     isDragging = true;
   }
-  function handleMouseMove(e) {
+  function handleMouseMove(e: MouseEvent): void {
     if (!isDragging) return;
     touchEndX = e.clientX;
   }
-  function handleMouseUp() {
+  function handleMouseUp(): void {
     isDragging = false;
     handleSwipe();
   }
 
-  function handleSwipe() {
+  function handleSwipe(): void {
     const swipeThreshold = 50;
     const swipeDistance = touchStartX - touchEndX;
     if (Math.abs(swipeDistance) > swipeThreshold) {
@@ -183,23 +183,26 @@
   }
 
   // Initialize Carousel
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', (): void => {
     initCarousel();
 
     // Event Listeners
-    carouselTrack.addEventListener('touchstart', handleTouchStart, { passive: true });
-    carouselTrack.addEventListener('touchmove', handleTouchMove, { passive: false });
-    carouselTrack.addEventListener('touchend', handleTouchEnd, { passive: true });
-    carouselTrack.addEventListener('mousedown', handleMouseDown);
-    carouselTrack.addEventListener('mousemove', handleMouseMove);
-    carouselTrack.addEventListener('mouseup', handleMouseUp);
-    carouselTrack.addEventListener('mouseleave', handleMouseUp);
+    if (carouselTrack) {
+      carouselTrack.addEventListener('touchstart', handleTouchStart, { passive: true });
+      carouselTrack.addEventListener('touchmove', handleTouchMove, { passive: false });
+      carouselTrack.addEventListener('touchend', handleTouchEnd, { passive: true });
+      carouselTrack.addEventListener('mousedown', handleMouseDown);
+      carouselTrack.addEventListener('mousemove', handleMouseMove);
+      carouselTrack.addEventListener('mouseup', handleMouseUp);
+      carouselTrack.addEventListener('mouseleave', handleMouseUp);
+    }
   });
 
   // Handle Resize
-  window.addEventListener('resize', function () {
-    clearTimeout(window.resizeTimer);
-    window.resizeTimer = setTimeout(() => {
+  (window as any).resizeTimer = null;
+  window.addEventListener('resize', (): void => {
+    clearTimeout((window as any).resizeTimer);
+    (window as any).resizeTimer = setTimeout((): void => {
       // Reset to original state to recalculate properly
       initCarousel();
     }, 200);
@@ -217,33 +220,43 @@
     { src: '/storage/ag/g/yohoho/IMG_5302.jpeg', caption: 'YoHoHo!' }
   ];
 
-  let currentImgIndex = 0;
-  const imageElement = document.getElementById('large-image');
-  const captionElement = document.getElementById('large-image-caption');
+  let currentImgIndex: number = 0;
+  const imageElement = document.getElementById('large-image') as HTMLImageElement | null;
+  const captionElement = document.getElementById('large-image-caption') as HTMLElement | null;
 
   if (imageElement && captionElement) {
-    function changeImage() {
+    const imgEl = imageElement as HTMLImageElement;
+    const captionEl = captionElement as HTMLElement;
+
+    function changeImage(): void {
       currentImgIndex = (currentImgIndex + 1) % images.length;
       const currentImage = images[currentImgIndex];
-      imageElement.src = currentImage.src;
-      captionElement.textContent = currentImage.caption;
+      imgEl.src = currentImage.src;
+      captionEl.textContent = currentImage.caption;
     }
     setInterval(changeImage, 3000);
   }
 
   // Typewriter Effect
   class TxtType {
-    constructor(el, toRotate, period) {
+    el: HTMLElement;
+    toRotate: string[];
+    loopNum: number;
+    period: number;
+    txt: string;
+    isDeleting: boolean;
+
+    constructor(el: HTMLElement, toRotate: string[], period: number | string) {
       this.toRotate = toRotate;
       this.el = el;
       this.loopNum = 0;
-      this.period = parseInt(period, 10) || 2000;
+      this.period = parseInt(period.toString(), 10) || 2000;
       this.txt = '';
-      this.tick();
       this.isDeleting = false;
+      this.tick();
     }
 
-    tick() {
+    tick(): void {
       const i = this.loopNum % this.toRotate.length;
       const fullTxt = this.toRotate[i];
 
@@ -255,7 +268,7 @@
 
       this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
 
-      let delta = 200 - Math.random() * 100;
+      let delta: number = 200 - Math.random() * 100;
 
       if (this.isDeleting) {
         delta /= 2;
@@ -270,57 +283,58 @@
         delta = 500;
       }
 
-      setTimeout(() => this.tick(), delta);
+      setTimeout((): void => this.tick(), delta);
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', (): void => {
     const elements = document.getElementsByClassName('typewrite');
     for (let i = 0; i < elements.length; i++) {
       const toRotate = elements[i].getAttribute('data-type');
       const period = elements[i].getAttribute('data-period');
       if (toRotate) {
-        new TxtType(elements[i], JSON.parse(toRotate), period);
+        new TxtType(elements[i] as HTMLElement, JSON.parse(toRotate), period || '2000');
       }
     }
     const css = document.createElement('style');
-    css.type = 'text/css';
+    (css as any).type = 'text/css';
     css.innerHTML = '.typewrite > .wrap { border-right: 0.06em solid #0096FF}';
     document.body.appendChild(css);
   });
 
   // Popup Logic
-  document.addEventListener('DOMContentLoaded', function () {
-    const popup = document.getElementById('discord-popup');
-    const closeBtn = document.getElementById('close-popup');
+  document.addEventListener('DOMContentLoaded', (): void => {
+    const popup = document.getElementById('discord-popup') as HTMLElement | null;
+    const closeBtn = document.getElementById('close-popup') as HTMLElement | null;
 
     if (popup && closeBtn) {
-      function checkPopup() {
+      function checkPopup(): void {
         const lastPopupClose = localStorage.getItem('lastPopupClose');
         const currentTime = new Date().getTime();
-        if (!lastPopupClose || currentTime - lastPopupClose > 3600000) {
-          popup.style.display = 'flex';
+        const lastClose = lastPopupClose ? parseInt(lastPopupClose, 10) : 0;
+        if (!lastPopupClose || currentTime - lastClose > 3600000) {
+          (popup as HTMLElement).style.display = 'flex';
         }
       }
-      closeBtn.addEventListener('click', function () {
+      closeBtn.addEventListener('click', (): void => {
         popup.style.display = 'none';
-        localStorage.setItem('lastPopupClose', new Date().getTime());
+        localStorage.setItem('lastPopupClose', new Date().getTime().toString());
       });
       checkPopup();
     }
   });
 
   // System Stats (Time, Battery, FPS)
-  document.addEventListener('DOMContentLoaded', function () {
-    const timeDisplay = document.getElementById('time-display');
-    const batteryIcon = document.getElementById('battery-icon');
-    const batteryPercentage = document.getElementById('battery-percentage');
-    const fpsElement = document.getElementById('fps');
+  document.addEventListener('DOMContentLoaded', (): void => {
+    const timeDisplay = document.getElementById('time-display') as HTMLElement | null;
+    const batteryIcon = document.getElementById('battery-icon') as HTMLElement | null;
+    const batteryPercentage = document.getElementById('battery-percentage') as HTMLElement | null;
+    const fpsElement = document.getElementById('fps') as HTMLElement | null;
 
-    let frameCount = 0;
-    let lastUpdateTime = performance.now();
+    let frameCount: number = 0;
+    let lastUpdateTime: number = performance.now();
 
-    function updateTime() {
+    function updateTime(): void {
       if (!timeDisplay) return;
       const now = new Date();
       const timeString = now.toLocaleTimeString([], {
@@ -330,10 +344,10 @@
       timeDisplay.textContent = ` ${timeString}`;
     }
 
-    function updateBattery() {
+    function updateBattery(): void {
       if (!batteryPercentage || !batteryIcon) return;
       if ('getBattery' in navigator) {
-        navigator.getBattery().then(function (battery) {
+        (navigator as any).getBattery().then((battery: any) => {
           const level = battery.level * 100;
           const percentage = Math.round(level);
 
@@ -360,7 +374,7 @@
       }
     }
 
-    function calculateFPS() {
+    function calculateFPS(): void {
       if (!fpsElement) return;
       frameCount++;
       const now = performance.now();

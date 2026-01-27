@@ -1,16 +1,40 @@
 ---
-const count = 40;
+/**
+ * Particles background animation component
+ * Generates random particles with staggered animations
+ */
 
-const particles = Array.from({ length: count }, () => ({
-  left: Math.random() * 100,
-  top: Math.random() * 100,
-  delay: Math.random() * 10,
-  duration: 5 + Math.random() * 10
-}));
+/** Number of particles to generate */
+const count: number = 40;
+
+/**
+ * Particle data interface
+ */
+interface Particle {
+  /** Horizontal position (0-100 vw) */
+  left: number;
+  /** Vertical position (0-100 vh) */
+  top: number;
+  /** Animation start delay in seconds */
+  delay: number;
+  /** Animation duration in seconds */
+  duration: number;
+}
+
+/** Generate random particles with varying positions and animation timings */
+const particles: Particle[] = Array.from(
+  { length: count },
+  (): Particle => ({
+    left: Math.random() * 100,
+    top: Math.random() * 100,
+    delay: Math.random() * 10,
+    duration: 5 + Math.random() * 10
+  })
+);
 ---
 
 {
-  particles.map((p) => (
+  particles.map((p: Particle) => (
     <div class="particle" style={`left:${p.left}vw; top:${p.top}vh; animation-delay:${p.delay}s; animation-duration:${p.duration}s`} />
   ))
 }

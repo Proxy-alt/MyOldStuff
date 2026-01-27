@@ -1,72 +1,124 @@
 ---
 import type { Organization, WithContext, WebSite, BreadcrumbList, Game, Article, DiscussionForumPosting, FAQPage, WebPage, HowTo } from 'schema-dts';
 
-// --- Interfaces ---
-
+/**
+ * User review for Schema.org structured data
+ */
 export interface Review {
+  /** Author of the review */
   author: string;
+  /** Publication date (ISO format) */
   datePublished: string;
+  /** Review text content */
   reviewBody: string;
-  reviewRating: number; // 1-5
+  /** Rating value from 1-5 */
+  reviewRating: number;
 }
 
+/**
+ * Frequently asked question item
+ */
 export interface FaqItem {
+  /** Question text */
   question: string;
+  /** Answer text */
   answer: string;
 }
 
+/**
+ * Step in a "How To" guide
+ */
 export interface HowToStep {
+  /** Step name/title */
   name: string;
+  /** Step description/instructions */
   text: string;
 }
 
+/**
+ * Forum post/thread information for Schema.org DiscussionForumPosting
+ */
 export interface ForumPost {
+  /** Post title/headline */
   headline: string;
+  /** Post author name */
   author: string;
+  /** Publication date (ISO format) */
   datePublished: string;
+  /** Post text content */
   text: string;
+  /** Optional interaction count (comments, replies) */
   interactionCount?: number;
 }
 
+/**
+ * Props interface for SEOjson component
+ * Supports website, game, article, discussion, profile, howto, and collection content types
+ */
 export interface Props {
-  // Global
+  // Global metadata
+  /** Page title */
   title?: string;
+  /** Page description for meta tags and schema.org */
   description?: string;
+  /** Image URL for Open Graph and Schema.org */
   image?: string;
+  /** Publication date (ISO format) */
   publishDate?: string;
+  /** Last modification date (ISO format) */
   modifiedDate?: string;
+  /** Author name */
   author?: string;
+  /** Content type: website | game | article | discussion | profile | howto | collection */
   type?: 'website' | 'game' | 'article' | 'discussion' | 'profile' | 'howto' | 'collection';
 
-  // Organization Details (New)
+  // Organization Details
+  /** Organization information including founding date, founders, and knowledge areas */
   org?: {
-    foundingDate?: string; // ISO Date e.g. "2025-02-05"
+    /** Founding date (ISO Date e.g. "2025-02-05") */
+    foundingDate?: string;
+    /** Founders' names */
     founders?: string[];
+    /** Organization slogan */
     slogan?: string;
-    knowsAbout?: string[]; // e.g. ["Game Development", "Web Apps"]
+    /** Areas of expertise (e.g., ["Game Development", "Web Apps"]) */
+    knowsAbout?: string[];
   };
 
-  // Article Specifics (New)
+  // Article Specifics
+  /** Article type for Schema.org: BlogPosting | NewsArticle | Article | TechArticle */
   articleType?: 'BlogPosting' | 'NewsArticle' | 'Article' | 'TechArticle';
+  /** Word count for articles */
   wordCount?: number;
 
   // Game / Product Specifics
+  /** Aggregate rating value (e.g., 4.5) */
   ratingValue?: number;
+  /** Total number of rating votes */
   ratingCount?: number;
+  /** Game genres (e.g., ["Action", "Puzzle"]) */
   genre?: string[];
+  /** Supported platforms (e.g., ["Web Browser"]) */
   platform?: string[];
+  /** Price as string */
   price?: string;
+  /** Currency code (e.g., "USD") */
   currency?: string;
-  reviews?: Review[]; // Kept!
+  /** Array of user reviews */
+  reviews?: Review[];
+  /** Play modes: SinglePlayer, MultiPlayer, or both */
   playMode?: ('SinglePlayer' | 'MultiPlayer')[];
 
   // Discussion
+  /** Main post of a forum thread */
   forumThread?: ForumPost;
 
   // FAQ
-  faq?: FaqItem[]; // Kept!
+  /** Frequently asked questions */
+  faq?: FaqItem[];
 
   // HowTo
+  /** Steps for a "How To" guide */
   steps?: HowToStep[];
 }
 
@@ -100,21 +152,31 @@ const {
 
   // HowTo
   steps = []
-} = Astro.props;
+}: Props = Astro.props;
 
 // --- Logic ---
-const url = Astro.site ? Astro.site.origin : Astro.url.origin;
-const path = Astro.url.pathname;
-const fullUrl = `${url}${path}`;
+/** Full URL of the current page */
+const url: string = Astro.site ? Astro.site.origin : Astro.url.origin;
+/** Current page pathname */
+const path: string = Astro.url.pathname;
+/** Complete page URL */
+const fullUrl: string = `${url}${path}`;
 
-const isGame = path.startsWith('/games') || type === 'game';
-const isArticle = type === 'article';
-const isDiscussion = type === 'discussion';
-const isHowTo = type === 'howto';
+/** Determine if current page is a game page */
+const isGame: boolean = path.startsWith('/games') || type === 'game';
+/** Determine if current page is an article */
+const isArticle: boolean = type === 'article';
+/** Determine if current page is a discussion/forum post */
+const isDiscussion: boolean = type === 'discussion';
+/** Determine if current page is a "How To" guide */
+const isHowTo: boolean = type === 'howto';
 
-const computedName = title || 'PeteZah Games';
-const computedDescription = propDescription || 'Play free online games and use web apps on PeteZah Games.';
-const computedImage = image ? (image.startsWith('http') ? image : `${url}${image}`) : `${url}/assets/images/Social-preview-index.png`;
+/** Computed page title for Schema.org */
+const computedName: string = title || 'PeteZah Games';
+/** Computed page description */
+const computedDescription: string = propDescription || 'Play free online games and use web apps on PeteZah Games.';
+/** Computed image URL, ensuring absolute URL */
+const computedImage: string = image ? (image.startsWith('http') ? image : `${url}${image}`) : `${url}/assets/images/Social-preview-index.png`;
 
 // --- 1. Organization Schema ---
 const organizationSchema: WithContext<Organization> = {
@@ -167,9 +229,8 @@ const websiteSchema: WithContext<WebSite> = {
     'target': {
       '@type': 'EntryPoint',
       'urlTemplate': `${url}/search?q={search_term_string}`
-    },
-    'query-input': 'required name=search_term_string'
-  }
+    }
+  } as any
 };
 
 // --- 3. Breadcrumbs ---
@@ -179,13 +240,16 @@ const breadcrumbSchema: WithContext<BreadcrumbList> = {
   '@type': 'BreadcrumbList',
   'itemListElement': [
     { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': `${url}/` },
-    ...segments.map((segment, index) => ({
-      '@type': 'ListItem',
-      'position': index + 2,
-      'name': segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' '),
-      'item': `${url}/${segments.slice(0, index + 1).join('/')}`
-    }))
-  ]
+    ...segments.map(
+      (segment, index) =>
+        ({
+          '@type': 'ListItem',
+          'position': index + 2,
+          'name': segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' '),
+          'item': `${url}/${segments.slice(0, index + 1).join('/')}`
+        }) as any
+    )
+  ] as any
 };
 
 // --- 4. VideoGame Schema (With Reviews) ---
@@ -270,9 +334,9 @@ if (isDiscussion && forumThread) {
     'datePublished': forumThread.datePublished,
     'interactionStatistic': {
       '@type': 'InteractionCounter',
-      'interactionType': 'https://schema.org/CommentAction',
+      'interactionType': 'https://schema.org/CommentAction' as any,
       'userInteractionCount': forumThread.interactionCount || 0
-    },
+    } as any,
     'publisher': organizationSchema
   };
 }

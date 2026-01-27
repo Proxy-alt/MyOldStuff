@@ -6,7 +6,6 @@ services:
     repo: https://github.com/PeteZah-Games/PeteZahGames
     branch: main
     env: node
-    plan: free
     envVars:
       - key: SESSION_SECRET
         generateValue: true

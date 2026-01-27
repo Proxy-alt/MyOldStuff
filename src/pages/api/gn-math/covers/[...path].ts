@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 
-export const GET: APIRoute = async ({ params, request }) => {
+export const GET: APIRoute = async ({ params }) => {
   const target = 'https://cdn.jsdelivr.net/gh/gn-math/covers@main';
   const path = params.path || '';
 

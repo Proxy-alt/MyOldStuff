@@ -1,49 +1,79 @@
 ---
-// SEO.astro
 import Favicons from './Favicon.astro';
 
+/**
+ * Props for the SEO component
+ * Configures all Open Graph, Meta, and SEO-related tags
+ */
 export interface Props {
-  // Core
+  // Core SEO
+  /** Page title */
   title?: string;
+  /** Page meta description */
   description?: string;
+  /** Keywords for search engines */
   keywords?: string;
+  /** Social media image URL */
   image?: string;
+  /** Alternative text for image */
   imageAlt?: string;
+  /** Current page path */
   path?: string;
+  /** Canonical URL to prevent duplicate content issues */
   canonicalUrl?: string;
 
-  // Types
+  // Content Types
+  /** Content type: website | game | article | product | profile | video | discussion */
   type?: 'website' | 'game' | 'article' | 'product' | 'profile' | 'video' | 'discussion';
 
   // Article Settings
+  /** Article type: blog | news | tech | general */
   articleType?: 'blog' | 'news' | 'tech' | 'general';
 
   // Dates & Author
+  /** Publication date (ISO format) */
   publishDate?: string;
+  /** Last modification date (ISO format) */
   modifiedDate?: string;
+  /** Article author name */
   author?: string;
+  /** Article section/category */
   section?: string;
+  /** Article tags */
   tags?: string[];
+  /** Estimated reading time in minutes */
   readingTime?: number;
 
   // Product
+  /** Product price */
   price?: string;
+  /** Currency code */
   currency?: string;
 
   // Video
+  /** Video URL for video metadata */
   videoUrl?: string;
+  /** Video width in pixels */
   videoWidth?: number;
+  /** Video height in pixels */
   videoHeight?: number;
 
-  // Robots
+  // Robots & Indexing
+  /** Prevent search engine indexing */
   noindex?: boolean;
+  /** Prevent search engine following links */
   nofollow?: boolean;
 
   // Verification
+  /** Search engine verification codes */
   verification?: {
+    /** Google Search Console verification code */
     google?: string;
+    /** Bing Webmaster Tools verification code */
     bing?: string;
+    /** Yandex Webmaster Tools verification code */
     yandex?: string;
+    /** Pinterest Site Verification code */
     pinterest?: string;
   };
 }
@@ -71,13 +101,18 @@ const {
   noindex = false,
   nofollow = false,
   verification = {}
-} = Astro.props;
+}: Props = Astro.props;
 
-const siteTitle = 'PeteZah Games';
-const finalTitle = title ? `${title} | ${siteTitle}` : siteTitle;
-const finalDescription = description || 'Play free online games and use web apps on PeteZah Games.';
-const finalKeywords = keywords || 'PeteZah, PeteZah Games, Free Games, Online Games, Browser Games';
-const canonical = canonicalUrl || new URL(path || Astro.url.pathname, Astro.site || Astro.url.origin).href.replace(/\/+$/, '/');
+/** Site title */
+const siteTitle: string = 'PeteZah Games';
+/** Final page title with site name */
+const finalTitle: string = title ? `${title} | ${siteTitle}` : siteTitle;
+/** Final description or default */
+const finalDescription: string = description || 'Play free online games and use web apps on PeteZah Games.';
+/** Final keywords or default */
+const finalKeywords: string = keywords || 'PeteZah, PeteZah Games, Free Games, Online Games, Browser Games';
+/** Final canonical URL */
+const canonical: string = canonicalUrl || new URL(path || Astro.url.pathname, Astro.site || Astro.url.origin).href.replace(/\/+$/, '/');
 
 // Robots Logic
 const robotsParts = [];

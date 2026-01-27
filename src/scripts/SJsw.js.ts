@@ -1,14 +1,16 @@
-import { shouldRoute, route } from '@petezah-games/scramjet-controller/worker'
+import { route, shouldRoute } from '@petezah-games/scramjet-controller/worker';
 
-self.addEventListener("install", () => {
+declare const self: ServiceWorkerGlobalScope;
+
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
-self.addEventListener("activate", (event) => {
+self.addEventListener('activate', (event: ExtendableEvent) => {
   event.waitUntil(self.clients.claim());
 });
 
-addEventListener("fetch", (e) => {
+self.addEventListener('fetch', (e: FetchEvent) => {
   if (shouldRoute(e)) {
     e.respondWith(route(e));
   }

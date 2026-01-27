@@ -8,7 +8,7 @@ const CACHE_DURATION = 1000 * 60 * 5; // 5 Minutes
 
 const JSDELIVR_BASE = 'https://cdn.jsdelivr.net/gh/PeteZah-Games/Games-lib/';
 
-export const GET: APIRoute = async ({ params, request, redirect }) => {
+export const GET: APIRoute = async ({ params, redirect }) => {
   // 2. sanitize the path
   const path = params.path;
   if (!path) {

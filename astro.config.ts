@@ -3,9 +3,12 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import AstroPWA from '@vite-pwa/astro';
 import { defineConfig, fontProviders } from 'astro/config';
+import sitemapPlus from './src/lib/sitemap';
 import startFastifyServer from './src/server.ts';
+
 export default defineConfig({
   output: 'server',
+  site: process.env.SITE_URL || 'http://localhost:3000',
   adapter: node({ mode: 'standalone' }),
   vite: {
     plugins: [tailwindcss()]
@@ -16,10 +19,13 @@ export default defineConfig({
       hooks: {
         'astro:server:setup': async () => {
           await startFastifyServer();
-          console.log('🚀 Fastify server attached');
         }
       }
     },
+    sitemapPlus({
+      entryLimit: 45000, // Optional
+      debug: true
+    }),
     AstroPWA({
       strategies: 'injectManifest',
       srcDir: 'src/scripts',
@@ -43,7 +49,12 @@ export default defineConfig({
       {
         provider: fontProviders.googleicons(),
         name: 'Material Symbols Rounded',
-        cssVariable: '--symbols-rounded'
+        cssVariable: '--symbols-rounded',
+        options: {
+          experimental: {
+            glyphs: ['arrow_forward_ios', 'chevron_left', 'home', 'sports_esports', 'apps', 'globe_book', 'account_circle', 'settings']
+          }
+        }
       },
       {
         provider: fontProviders.google(),
@@ -68,7 +79,7 @@ export default defineConfig({
       },
       {
         provider: fontProviders.google(),
-        name: 'Inter-Tight',
+        name: 'Inter Tight',
         cssVariable: '--font-inter-tight',
         weights: ['400', '500'],
         styles: ['normal']

@@ -11,6 +11,6 @@ Allow: /
 Disallow: /api/
 `;
 
-export const GET: APIRoute = ({ site }) => {
+export const GET: APIRoute = () => {
   return new Response(getRobotsTxt);
 };
