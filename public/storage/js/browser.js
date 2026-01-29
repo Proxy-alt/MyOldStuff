@@ -1,976 +1,802 @@
-const { ScramjetController } = $scramjetLoadController();
-const scramjet = new ScramjetController({
-  prefix: '/scramjet/',
-  files: {
-    wasm: '/scram/scramjet.wasm.wasm',
-    all: '/scram/scramjet.all.js',
-    sync: '/scram/scramjet.sync.js'
-  }
-});
-scramjet.init();
-navigator.serviceWorker.register('./sw.js');
 
-const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
-
-const regionConfig = {
-  default: { wisp: '/wisp/', config: 'config.js' },
-  1: { wisp: '/api/alt-wisp-1/', config: '/static/alt-config-1.js' },
-  2: { wisp: '/api/alt-wisp-2/', config: '/static/alt-config-2.js' },
-  3: { wisp: '/api/alt-wisp-3/', config: '/static/alt-config-3.js' }
-};
-
-const savedRegion = localStorage.getItem('selectedVpnRegion') || 'default';
-const currentConfig = regionConfig[savedRegion];
-
-const store = {
-  url: 'https://',
-  wispurl: _CONFIG?.wispurl || (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + currentConfig.wisp,
-  bareurl: _CONFIG?.bareurl || (location.protocol === 'https:' ? 'https' : 'http') + '://' + location.host + '/bare/',
-  proxy: '',
-  transport: '/epoxy/index.mjs',
-  theme: 'dark',
-  homepage: 'petezah://newtab',
-  history: JSON.parse(localStorage.getItem('browserHistory') || '[]'),
-  zoomLevel: 1,
-  favorites: JSON.parse(localStorage.getItem('browserFavorites') || '[]')
-};
-
+const { ScramjetController: ScramjetController } = $scramjetLoadController(),
+  scramjet = new ScramjetController({
+    prefix: '/scramjet/',
+    files: { wasm: '/scram/scramjet.wasm.wasm', all: '/scram/scramjet.all.js', sync: '/scram/scramjet.sync.js' }
+  });
+(scramjet.init(), navigator.serviceWorker.register('./sw.js'));
+const connection = new BareMux.BareMuxConnection('/baremux/worker.js'),
+  regionConfig = {
+    default: { wisp: '/wisp/', config: 'config.js' },
+    1: { wisp: '/api/alt-wisp-1/', config: '/static/alt-config-1.js' },
+    2: { wisp: '/api/alt-wisp-2/', config: '/static/alt-config-2.js' },
+    3: { wisp: '/api/alt-wisp-3/', config: '/static/alt-config-3.js' }
+  },
+  savedRegion = localStorage.getItem('selectedVpnRegion') || 'default',
+  currentConfig = regionConfig[savedRegion],
+  store = {
+    url: 'https://',
+    wispurl: _CONFIG?.wispurl || ('https:' === location.protocol ? 'wss' : 'ws') + '://' + location.host + currentConfig.wisp,
+    bareurl: _CONFIG?.bareurl || ('https:' === location.protocol ? 'https' : 'http') + '://' + location.host + '/bare/',
+    proxy: '',
+    transport: '/epoxy/index.mjs',
+    theme: 'dark',
+    homepage: 'petezah://newtab',
+    history: JSON.parse(localStorage.getItem('browserHistory') || '[]'),
+    zoomLevel: 1,
+    favorites: JSON.parse(localStorage.getItem('browserFavorites') || '[]')
+  };
 async function waitForTransport() {
-  let attempts = 0;
-  const maxAttempts = 10;
-
-  while (attempts < maxAttempts) {
+  let e = 0;
+  for (; e < 10; )
     try {
-      await connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]);
-      return;
-    } catch (e) {
+      return void (await connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]));
+    } catch (t) {
       try {
-        await connection.setTransport('/baremux/index.mjs', [store.bareurl]);
-        return;
-      } catch (e2) {
+        return void (await connection.setTransport('/baremux/index.mjs', [store.bareurl]));
+      } catch (t) {
         try {
-          await connection.setTransport('/libcurl/index.mjs', [{ wisp: store.wispurl }]);
-          return;
-        } catch (e3) {
-          attempts++;
-          if (attempts >= maxAttempts) {
-            console.error('Failed to set any transport after', maxAttempts, 'attempts');
-            throw new Error('No bare clients available');
-          }
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          return void (await connection.setTransport('/libcurl/index.mjs', [{ wisp: store.wispurl }]));
+        } catch (t) {
+          if ((e++, e >= 10)) throw (console.error('Failed to set any transport after', 10, 'attempts'), new Error('No bare clients available'));
+          await new Promise((e) => setTimeout(e, 100));
         }
       }
     }
-  }
 }
-
 waitForTransport();
 
+let debounceTimer;
+function debounce(func, timeout = 300) {
+  return (...args) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => { func.apply(this, args); }, timeout);
+  };
+}
+
 window.addEventListener('storage', (e) => {
-  if (e.key === 'selectedVpnRegion' && e.newValue) {
-    const newConfig = regionConfig[e.newValue];
-    if (newConfig) {
-      store.wispurl = (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + newConfig.wisp;
-      connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]);
-    }
+  if ('selectedVpnRegion' === e.key && e.newValue) {
+    const t = regionConfig[e.newValue];
+    t &&
+      ((store.wispurl = ('https:' === location.protocol ? 'wss' : 'ws') + '://' + location.host + t.wisp),
+      connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]));
   }
 });
-
-let tabs = [];
-let activeTabId = 1;
-let nextTabId = 2;
-let sortableInstance = null;
-
-function getFaviconUrl(url) {
+let tabs = [],
+  activeTabId = 1,
+  nextTabId = 2,
+  sortableInstance = null;
+function getFaviconUrl(e) {
   try {
-    const domain = new URL(url).origin;
-    return `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(domain)}`;
+    const t = new URL(e).origin;
+    return `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(t)}`;
   } catch {
-    return `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(url)}`;
+    return `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(e)}`;
   }
 }
-
-function createTab(url = store.homepage) {
-  const frame = scramjet.createFrame();
-  const tab = {
-    id: nextTabId++,
-    title: 'New Tab',
-    url: url,
-    frame: frame,
-    favicon: getFaviconUrl(url),
-    zoomLevel: store.zoomLevel,
-    muted: false,
-    pinned: false
-  };
-
-  frame.frame.src = url === 'petezah://newtab' ? '/newpage.html' : url;
-  frame.frame.onload = function () {
+function setupFrameInterception(frame) {
+    if (!frame || !frame.frame) return;
+    
+    const iframe = frame.frame;
+    
     try {
-      const doc = frame.frame.contentDocument;
-      if (doc && (doc.title.includes('Just a moment') || doc.title.includes('Checking your browser'))) {
-        frame.frame.src = '/static/google-embed.html#' + tab.url;
-      }
+        const iframeWin = iframe.contentWindow;
+        const iframeDoc = iframe.contentDocument;
+        
+        if (!iframeDoc || !iframeWin) return;
+        
+        iframeDoc.addEventListener('mousedown', function() {
+            const menu = document.getElementById("menu-dropdown");
+            if (menu) menu.classList.remove("show");
+            
+            const suggestionList = document.getElementById("suggestion-list");
+            if (suggestionList) suggestionList.style.display = "none";
+            
+            const contextMenu = document.getElementById("tab-context-menu");
+            if (contextMenu) contextMenu.remove();
+            
+            const securePopup = document.getElementById("secure-popup");
+            if (securePopup) securePopup.remove();
+        });
+        
+        if (iframeWin.__interceptionSetup) return;
+        iframeWin.__interceptionSetup = true;
+        
+        const originalWindowOpen = iframeWin.open;
+        iframeWin.open = function(url, target, features) {
+            if (url) {
+                try {
+                    var fullUrl = new URL(url, iframeWin.location.href).href;
+                    window.postMessage({
+                        action: 'openInNewTab',
+                        url: fullUrl
+                    }, '*');
+                    return null;
+                } catch(e) {}
+            }
+            return originalWindowOpen.call(iframeWin, url, target, features);
+        };
+        
+        iframeDoc.addEventListener('click', function(e) {
+            var link = e.target.closest('a');
+            if (link && link.href) {
+                var target = link.target;
+                if (target === '_blank' || target === '_top' || target === '_parent') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    window.postMessage({
+                        action: 'openInNewTab',
+                        url: link.href
+                    }, '*');
+                    return false;
+                }
+            }
+        }, true);
+        
+        iframeDoc.addEventListener('auxclick', function(e) {
+            if (e.button === 1) { // Middle mouse button
+                var link = e.target.closest('a');
+                if (link && link.href) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.postMessage({
+                        action: 'openInNewTab',
+                        url: link.href
+                    }, '*');
+                    return false;
+                }
+            }
+        }, true);
+        
+        iframeDoc.addEventListener('submit', function(e) {
+            var form = e.target;
+            if (form && (form.target === '_top' || form.target === '_parent' || form.target === '_blank')) {
+                e.preventDefault();
+                window.postMessage({
+                    action: 'openInNewTab',
+                    url: form.action || iframeWin.location.href
+                }, '*');
+            }
+        }, true);
+        
+        var observer = new MutationObserver(function(mutations) {
+            var allFrames = iframeDoc.querySelectorAll('iframe');
+            allFrames.forEach(function(childFrame) {
+                try { 
+                    setupFrameInterception({ frame: childFrame }); 
+                } catch(e) {}
+            });
+        });
+        
+        observer.observe(iframeDoc.body || iframeDoc.documentElement, {
+            childList: true,
+            subtree: true
+        });
+        
     } catch (e) {}
-  };
-
-  frame.frame.style.transform = `scale(${tab.zoomLevel})`;
-  frame.frame.style.transformOrigin = '0 0';
-  frame.frame.style.width = `${100 / tab.zoomLevel}%`;
-  frame.frame.style.height = `${100 / tab.zoomLevel}%`;
-
-  frame.addEventListener('urlchange', (e) => {
-    if (!e.url) return;
-    tab.url = e.url;
-    tab.favicon = getFaviconUrl(e.url);
-
-    try {
-      const title = frame.frame.contentWindow?.document?.title || new URL(e.url).hostname;
-      tab.title = title || '...';
-    } catch (err) {
-      tab.title = new URL(e.url).hostname || '...';
-    }
-
-    if (e.url !== 'petezah://newtab') {
-      store.history.push({ url: e.url, title: tab.title, timestamp: new Date() });
-      localStorage.setItem('browserHistory', JSON.stringify(store.history));
-    }
-
-    updateTabsUI();
-    updateAddressBar();
-  });
-
-  tabs.push(tab);
-  return tab;
 }
+function createTab(e = store.homepage) {
+  const t = scramjet.createFrame(),
+    n = { id: nextTabId++, title: 'New Tab', url: e, frame: t, favicon: getFaviconUrl(e), zoomLevel: store.zoomLevel, muted: !1, pinned: !1 };
+  return (
+    (t.frame.src = 'petezah://newtab' === e ? '/newpage.html' : e),
+    (t.frame.onload = function () {
+      try {
+        const e = t.frame.contentDocument;
+        e && (e.title.includes('Just a moment') || e.title.includes('Checking your browser')) && (t.frame.src = '/static/google-embed.html#' + n.url);
+      } catch (e) {}
 
+      setupFrameInterception(t);
+    }),
+    (t.frame.style.transform = `scale(${n.zoomLevel})`),
+    (t.frame.style.transformOrigin = '0 0'),
+    (t.frame.style.width = 100 / n.zoomLevel + '%'),
+    (t.frame.style.height = 100 / n.zoomLevel + '%'),
+    t.addEventListener('urlchange', (e) => {
+      if (e.url) {
+        ((n.url = e.url), (n.favicon = getFaviconUrl(e.url)));
+        try {
+          const s = t.frame.contentWindow?.document?.title || new URL(e.url).hostname;
+          n.title = s || '...';
+        } catch (t) {
+          n.title = new URL(e.url).hostname || '...';
+        }
+        ('petezah://newtab' !== e.url &&
+          (store.history.push({ url: e.url, title: n.title, timestamp: new Date() }),
+          localStorage.setItem('browserHistory', JSON.stringify(store.history))),
+          updateTabsUI(),
+          updateAddressBar());
+
+          setTimeout(() => setupFrameInterception(t), 500);
+      }
+    }),
+    tabs.push(n),
+    n
+  );
+}
 function getActiveTab() {
-  return tabs.find((tab) => tab.id === activeTabId);
+  return tabs.find((e) => e.id === activeTabId);
 }
-
-function switchTab(tabId) {
-  tabs.forEach((tab) => {
-    if (tab.frame && tab.frame.frame) {
-      tab.frame.frame.classList.add('hidden');
-    }
-  });
-
-  activeTabId = tabId;
-  const activeTab = getActiveTab();
-  if (activeTab && activeTab.frame && activeTab.frame.frame) {
-    activeTab.frame.frame.classList.remove('hidden');
-  }
-
-  updateTabsUI();
-  updateAddressBar();
+function switchTab(e) {
+  (tabs.forEach((e) => {
+    e.frame && e.frame.frame && e.frame.frame.classList.add('hidden');
+  }),
+    (activeTabId = e));
+  const t = getActiveTab();
+  (t && t.frame && t.frame.frame && t.frame.frame.classList.remove('hidden'), updateTabsUI(), updateAddressBar());
 }
-
-function closeTab(tabId) {
-  const tabIndex = tabs.findIndex((tab) => tab.id === tabId);
-  if (tabIndex === -1) return;
-
-  const tab = tabs[tabIndex];
-
-  if (tab.frame && tab.frame.frame && tab.frame.frame.parentNode) {
-    tab.frame.frame.parentNode.removeChild(tab.frame.frame);
-  }
-
-  if (tab.frame && typeof tab.frame.destroy === 'function') {
+function closeTab(e) {
+  const t = tabs.findIndex((t) => t.id === e);
+  if (-1 === t) return;
+  const n = tabs[t];
+  if (
+    (n.frame && n.frame.frame && n.frame.frame.parentNode && n.frame.frame.parentNode.removeChild(n.frame.frame),
+    n.frame && 'function' == typeof n.frame.destroy)
+  )
     try {
-      tab.frame.destroy();
+      n.frame.destroy();
     } catch (e) {
       console.error('Error destroying frame:', e);
     }
+  if ((tabs.splice(t, 1), 0 === tabs.length)) {
+    const e = createTab(),
+      t = document.getElementById('iframe-container');
+    (t && t.appendChild(e.frame.frame), (activeTabId = e.id));
+  } else if (activeTabId === e) {
+    const e = Math.min(t, tabs.length - 1);
+    ((activeTabId = tabs[e]?.id), activeTabId && switchTab(activeTabId));
   }
-
-  tabs.splice(tabIndex, 1);
-
-  if (tabs.length === 0) {
-    const newTab = createTab();
-    const iframeContainer = document.getElementById('iframe-container');
-    if (iframeContainer) {
-      iframeContainer.appendChild(newTab.frame.frame);
-    }
-    activeTabId = newTab.id;
-  } else if (activeTabId === tabId) {
-    const newActiveIndex = Math.min(tabIndex, tabs.length - 1);
-    activeTabId = tabs[newActiveIndex]?.id;
-    if (activeTabId) {
-      switchTab(activeTabId);
-    }
-  }
-
   updateTabsUI();
 }
-
-function muteTab(tabId) {
-  const tab = tabs.find((tab) => tab.id === tabId);
-  if (tab && tab.frame && tab.frame.frame) {
-    tab.muted = !tab.muted;
-    tab.frame.frame.muted = tab.muted;
-    updateTabsUI();
-  }
+function muteTab(e) {
+  const t = tabs.find((t) => t.id === e);
+  t && t.frame && t.frame.frame && ((t.muted = !t.muted), (t.frame.frame.muted = t.muted), updateTabsUI());
 }
-
-function pinTab(tabId) {
-  const tab = tabs.find((tab) => tab.id === tabId);
-  if (tab) {
-    tab.pinned = !tab.pinned;
-    tabs.sort((a, b) => (b.pinned ? 1 : a.pinned ? -1 : 0));
-    updateTabsUI();
-  }
+function pinTab(e) {
+  const t = tabs.find((t) => t.id === e);
+  t && ((t.pinned = !t.pinned), tabs.sort((e, t) => (t.pinned ? 1 : e.pinned ? -1 : 0)), updateTabsUI());
 }
-
 function updateTabsUI() {
-  const tabsContainer = document.getElementById('tabs-container');
-  if (!tabsContainer) return;
-
-  tabsContainer.innerHTML = '';
-
-  tabs.forEach((tab, index) => {
-    if (!tab || !tab.frame) return;
-    const tabElement = document.createElement('div');
-    tabElement.className = `tab ${tab.id === activeTabId ? 'active' : ''} ${tab.pinned ? 'pinned' : ''}`;
-    tabElement.setAttribute('data-tab-id', tab.id);
-    tabElement.onclick = () => switchTab(tab.id);
-    tabElement.style.animationDelay = `${index * 0.1}s`;
-
-    const faviconImg = document.createElement('img');
-    faviconImg.className = 'tab-favicon';
-    faviconImg.src = tab.favicon;
-    faviconImg.alt = '';
-    faviconImg.onerror = () => {
-      faviconImg.style.display = 'none';
-    };
-
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'tab-title';
-    titleSpan.textContent = tab.title;
-
-    const closeButton = document.createElement('button');
-    closeButton.className = 'tab-close';
-    closeButton.innerHTML = '<i class="fas fa-times"></i>';
-    closeButton.onclick = (e) => {
-      e.stopPropagation();
-      closeTab(tab.id);
-    };
-
-    const statusIcons = document.createElement('span');
-    statusIcons.className = 'tab-status-icons';
-    if (tab.muted) {
-      const muteIcon = document.createElement('i');
-      muteIcon.className = 'fas fa-volume-mute';
-      statusIcons.appendChild(muteIcon);
-    }
-    if (tab.pinned) {
-      const pinIcon = document.createElement('i');
-      pinIcon.className = 'fas fa-thumbtack';
-      statusIcons.appendChild(pinIcon);
-    }
-
-    const infoBox = document.createElement('div');
-    infoBox.className = 'tab-info-box';
-    infoBox.innerHTML = `
-      <img src="${tab.favicon}" class="info-favicon" alt="">
-      <div>
-        <div class="info-title">${tab.title}</div>
-        <div class="info-url">${tab.url}</div>
-      </div>
-    `;
-
-    tabElement.appendChild(faviconImg);
-    tabElement.appendChild(titleSpan);
-    tabElement.appendChild(statusIcons);
-    tabElement.appendChild(closeButton);
-    tabElement.appendChild(infoBox);
-    tabsContainer.appendChild(tabElement);
-  });
-
-  const newTabButton = document.createElement('button');
-  newTabButton.className = 'new-tab';
-  newTabButton.textContent = '+';
-  newTabButton.onclick = () => {
-    const newTab = createTab();
-    const iframeContainer = document.getElementById('iframe-container');
-    if (iframeContainer) {
-      iframeContainer.appendChild(newTab.frame.frame);
-    }
-    switchTab(newTab.id);
-  };
-  tabsContainer.appendChild(newTabButton);
-
-  if (sortableInstance) {
-    sortableInstance.destroy();
-  }
-
-  sortableInstance = new Sortable(tabsContainer, {
-    animation: 300,
-    direction: 'horizontal',
-    ghostClass: 'sortable-ghost',
-    dragClass: 'sortable-drag',
-    filter: '.new-tab',
-    onStart: () => {
-      tabsContainer.querySelectorAll('.tab:not(.sortable-ghost)').forEach((t) => {
-        t.style.opacity = '0.5';
-      });
-    },
-    onEnd: (evt) => {
-      tabsContainer.querySelectorAll('.tab').forEach((t) => {
-        t.style.opacity = '1';
-      });
-
-      if (evt.oldIndex !== evt.newIndex) {
-        const movedTab = tabs.splice(evt.oldIndex, 1)[0];
-        tabs.splice(evt.newIndex, 0, movedTab);
+  const e = document.getElementById('tabs-container');
+  if (!e) return;
+  ((e.innerHTML = ''),
+    tabs.forEach((t, n) => {
+      if (!t || !t.frame) return;
+      const s = document.createElement('div');
+      ((s.className = `tab ${t.id === activeTabId ? 'active' : ''} ${t.pinned ? 'pinned' : ''}`),
+        s.setAttribute('data-tab-id', t.id),
+        (s.onclick = () => switchTab(t.id)),
+        (s.style.animationDelay = 0.1 * n + 's'));
+      const o = document.createElement('img');
+      ((o.className = 'tab-favicon'),
+        (o.src = t.favicon),
+        (o.alt = ''),
+        (o.onerror = () => {
+          o.style.display = 'none';
+        }));
+      const a = document.createElement('span');
+      ((a.className = 'tab-title'), (a.textContent = t.title));
+      const i = document.createElement('button');
+      ((i.className = 'tab-close'),
+        (i.innerHTML = '<i class="fas fa-times"></i>'),
+        (i.onclick = (e) => {
+          (e.stopPropagation(), closeTab(t.id));
+        }));
+      const r = document.createElement('span');
+      if (((r.className = 'tab-status-icons'), t.muted)) {
+        const e = document.createElement('i');
+        ((e.className = 'fas fa-volume-mute'), r.appendChild(e));
       }
-    }
-  });
-
-  tabsContainer.querySelectorAll('.tab').forEach((tabElement) => {
-    tabElement.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      const tabId = parseInt(tabElement.getAttribute('data-tab-id'));
-      showTabContextMenu(e, tabId);
-    });
-  });
+      if (t.pinned) {
+        const e = document.createElement('i');
+        ((e.className = 'fas fa-thumbtack'), r.appendChild(e));
+      }
+      const c = document.createElement('div');
+      ((c.className = 'tab-info-box'),
+        (c.innerHTML = `\n      <img src="${t.favicon}" class="info-favicon" alt="">\n      <div>\n        <div class="info-title">${t.title}</div>\n        <div class="info-url">${t.url}</div>\n      </div>\n    `),
+        s.appendChild(o),
+        s.appendChild(a),
+        s.appendChild(r),
+        s.appendChild(i),
+        s.appendChild(c),
+        e.appendChild(s));
+    }));
+  const t = document.createElement('button');
+  ((t.className = 'new-tab'),
+    (t.textContent = '+'),
+    (t.onclick = () => {
+      const e = createTab(),
+        t = document.getElementById('iframe-container');
+      (t && t.appendChild(e.frame.frame), switchTab(e.id));
+    }),
+    e.appendChild(t),
+    sortableInstance && sortableInstance.destroy(),
+    (sortableInstance = new Sortable(e, {
+      animation: 300,
+      direction: 'horizontal',
+      ghostClass: 'sortable-ghost',
+      dragClass: 'sortable-drag',
+      filter: '.new-tab',
+      onStart: () => {
+        e.querySelectorAll('.tab:not(.sortable-ghost)').forEach((e) => {
+          e.style.opacity = '0.5';
+        });
+      },
+      onEnd: (t) => {
+        if (
+          (e.querySelectorAll('.tab').forEach((e) => {
+            e.style.opacity = '1';
+          }),
+          t.oldIndex !== t.newIndex)
+        ) {
+          const e = tabs.splice(t.oldIndex, 1)[0];
+          tabs.splice(t.newIndex, 0, e);
+        }
+      }
+    })),
+    e.querySelectorAll('.tab').forEach((e) => {
+      e.addEventListener('contextmenu', (t) => {
+        (t.preventDefault(), showTabContextMenu(t, parseInt(e.getAttribute('data-tab-id'))));
+      });
+    }));
 }
-
-function showTabContextMenu(event, tabId) {
-  const existingMenu = document.getElementById('tab-context-menu');
-  if (existingMenu) existingMenu.remove();
-
-  const menu = document.createElement('div');
-  menu.id = 'tab-context-menu';
-  menu.className = 'tab-context-menu';
-  const tab = tabs.find((t) => t.id === tabId);
-
-  const options = [
+function showTabContextMenu(e, t) {
+  const n = document.getElementById('tab-context-menu');
+  n && n.remove();
+  const s = document.createElement('div');
+  ((s.id = 'tab-context-menu'), (s.className = 'tab-context-menu'));
+  const o = tabs.find((e) => e.id === t);
+  ([
     {
       label: 'New Tab',
       icon: 'fa-plus',
       action: () => {
-        const newTab = createTab();
-        const iframeContainer = document.getElementById('iframe-container');
-        if (iframeContainer) {
-          iframeContainer.appendChild(newTab.frame.frame);
-        }
-        switchTab(newTab.id);
+        const e = createTab(),
+          t = document.getElementById('iframe-container');
+        (t && t.appendChild(e.frame.frame), switchTab(e.id));
       }
     },
-    { label: 'Close Tab', icon: 'fa-times', action: () => closeTab(tabId) },
-    { label: tab.muted ? 'Unmute Tab' : 'Mute Tab', icon: tab.muted ? 'fa-volume-up' : 'fa-volume-mute', action: () => muteTab(tabId) },
-    { label: tab.pinned ? 'Unpin Tab' : 'Pin Tab', icon: 'fa-thumbtack', action: () => pinTab(tabId) }
-  ];
-
-  options.forEach(({ label, icon, action }) => {
-    const item = document.createElement('div');
-    item.className = 'context-menu-item';
-    item.innerHTML = `<i class="fas ${icon}"></i><span>${label}</span>`;
-    item.onclick = (e) => {
-      e.stopPropagation();
-      action();
-      menu.remove();
-    };
-    menu.appendChild(item);
-  });
-
-  menu.style.top = `${event.clientY}px`;
-  menu.style.left = `${event.clientX}px`;
-  document.body.appendChild(menu);
-
-  const closeMenu = (e) => {
-    if (!menu.contains(e.target)) {
-      menu.remove();
-      document.removeEventListener('click', closeMenu);
-    }
+    { label: 'Close Tab', icon: 'fa-times', action: () => closeTab(t) },
+    { label: o.muted ? 'Unmute Tab' : 'Mute Tab', icon: o.muted ? 'fa-volume-up' : 'fa-volume-mute', action: () => muteTab(t) },
+    { label: o.pinned ? 'Unpin Tab' : 'Pin Tab', icon: 'fa-thumbtack', action: () => pinTab(t) }
+  ].forEach(({ label: e, icon: t, action: n }) => {
+    const o = document.createElement('div');
+    ((o.className = 'context-menu-item'),
+      (o.innerHTML = `<i class="fas ${t}"></i><span>${e}</span>`),
+      (o.onclick = (e) => {
+        (e.stopPropagation(), n(), s.remove());
+      }),
+      s.appendChild(o));
+  }),
+    (s.style.top = `${e.clientY}px`),
+    (s.style.left = `${e.clientX}px`),
+    document.body.appendChild(s));
+  const a = (e) => {
+    s.contains(e.target) || (s.remove(), document.removeEventListener('click', a));
   };
-  document.addEventListener('click', closeMenu);
+  document.addEventListener('click', a);
 }
-
 function updateAddressBar() {
-  const addressBar = document.getElementById('address-bar');
-  const favoriteButton = document.getElementById('favorite-button');
-  const activeTab = getActiveTab();
-  if (addressBar && activeTab) {
-    addressBar.value = activeTab.url;
-    const url = activeTab.url;
-    if (url.startsWith('petezah://newtab')) {
-      activeTab.frame.frame.src = '/newpage.html';
-    }
-    if (url.startsWith('https://www.youtube.com') || url.startsWith('youtube.com') || url === 'www.youtube.com') {
-      activeTab.frame.frame.src = '/static/google-embed.html#' + url;
-    }
-    if (
-      url.startsWith('https://vortexos.net') ||
-      url.startsWith('vortexos.net') ||
-      url === 'https://vtx.chat' ||
-      url.startsWith('vtx.chat') ||
-      url.startsWith('https://vtx.chat.cdn.cloudflare.net') ||
-      url === 'vtx.chat.cdn.cloudflare.net'
-    ) {
-      activeTab.frame.frame.src = 'https://vtx.chat';
-    }
-    if (
-      url.startsWith('https://www.google.com') ||
-      url.startsWith('www.google.com') ||
-      url === 'www.google.com' ||
-      url.startsWith('https://www.google.ca') ||
-      url.startsWith('www.google.ca') ||
-      url === 'www.google.ca'
-    ) {
-      activeTab.frame.frame.src = '/static/google-embed.html';
-    }
-    const isFavorited = store.favorites.includes(url);
-    favoriteButton.innerHTML = `<i class="fas fa-star ${isFavorited ? 'favorited' : ''}"></i>`;
+  const e = document.getElementById('address-bar'),
+    t = document.getElementById('favorite-button'),
+    n = getActiveTab();
+  if (e && n) {
+    e.value = n.url;
+    const s = n.url;
+    (s.startsWith('petezah://newtab') && (n.frame.frame.src = '/newpage.html'),
+      (s.startsWith('https://www.youtube.com') || s.startsWith('youtube.com') || 'www.youtube.com' === s) &&
+        (n.frame.frame.src = '/static/google-embed.html#' + s),
+      (s.startsWith('https://vortexos.net') ||
+        s.startsWith('vortexos.net') ||
+        'https://vtx.chat' === s ||
+        s.startsWith('vtx.chat') ||
+        s.startsWith('https://vtx.chat.cdn.cloudflare.net') ||
+        'vtx.chat.cdn.cloudflare.net' === s) &&
+        (n.frame.frame.src = 'https://vtx.chat'),
+      (s.startsWith('https://www.google.com') ||
+        s.startsWith('www.google.com') ||
+        'www.google.com' === s ||
+        s.startsWith('https://www.google.ca') ||
+        s.startsWith('www.google.ca') ||
+        'www.google.ca' === s) &&
+        (n.frame.frame.src = '/static/google-embed.html'));
+    const o = store.favorites.includes(s);
+    t.innerHTML = `<i class="fas fa-star ${o ? 'favorited' : ''}"></i>`;
   }
 }
-
 function toggleFavorite() {
-  const activeTab = getActiveTab();
-  if (!activeTab) return;
-  const url = activeTab.url;
-  const index = store.favorites.indexOf(url);
-  if (index === -1) {
-    store.favorites.push(url);
-  } else {
-    store.favorites.splice(index, 1);
-  }
-  localStorage.setItem('browserFavorites', JSON.stringify(store.favorites));
-  updateAddressBar();
+  const e = getActiveTab();
+  if (!e) return;
+  const t = e.url,
+    n = store.favorites.indexOf(t);
+  (-1 === n ? store.favorites.push(t) : store.favorites.splice(n, 1),
+    localStorage.setItem('browserFavorites', JSON.stringify(store.favorites)),
+    updateAddressBar());
 }
-
 function handleSubmit() {
-  const activeTab = getActiveTab();
-  const addressBar = document.getElementById('address-bar');
-  if (!activeTab || !addressBar) return;
-
-  let url = addressBar.value.trim();
-
-  if (!url.startsWith('http') && !url.includes('.')) {
-    url = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
-  } else if (!url.startsWith('http') && !url.startsWith('petezah://')) {
-    url = 'https://' + url;
-  }
-
-  if (url.startsWith('https://www.youtube.com') || url === 'www.youtube.com') {
-    activeTab.frame.frame.src = '/static/youtube-embed.html#https://youtube.com';
-    activeTab.url = url;
-    activeTab.favicon = getFaviconUrl(url);
-    updateTabsUI();
-    updateAddressBar();
-    return;
-  }
-
-  activeTab.url = url;
-  activeTab.favicon = getFaviconUrl(url);
-  return activeTab.frame.go(url);
+  const e = getActiveTab(),
+    t = document.getElementById('address-bar');
+  if (!e || !t) return;
+  let n = t.value.trim();
+  return (
+    n.startsWith('http') || n.includes('.')
+      ? n.startsWith('http') || n.startsWith('petezah://') || (n = 'https://' + n)
+      : (n = 'https://duckduckgo.com/?q=' + encodeURIComponent(n)),
+    n.startsWith('https://www.youtube.com') || 'www.youtube.com' === n
+      ? ((e.frame.frame.src = '/static/youtube-embed.html#https://youtube.com'),
+        (e.url = n),
+        (e.favicon = getFaviconUrl(n)),
+        updateTabsUI(),
+        void updateAddressBar())
+      : ((e.url = n), (e.favicon = getFaviconUrl(n)), e.frame.go(n))
+  );
 }
-
 function showConfig() {
   document.getElementById('config-modal').showModal();
 }
-
 function closeConfig() {
-  const modal = document.getElementById('config-modal');
-  modal.style.opacity = 0;
-  setTimeout(() => {
-    modal.close();
-    modal.style.opacity = 1;
-  }, 250);
+  const e = document.getElementById('config-modal');
+  ((e.style.opacity = 0),
+    setTimeout(() => {
+      (e.close(), (e.style.opacity = 1));
+    }, 250));
 }
-
 function toggleMenu() {
-  const menu = document.getElementById('menu-dropdown');
-  menu.classList.toggle('show');
+  document.getElementById('menu-dropdown').classList.toggle('show');
 }
-
 function closeAllTabs() {
-  tabs.forEach((tab) => {
-    if (tab.frame && tab.frame.frame && tab.frame.frame.parentNode) {
-      tab.frame.frame.parentNode.removeChild(tab.frame.frame);
-    }
-    if (tab.frame && typeof tab.frame.destroy === 'function') {
-      tab.frame.destroy();
-    }
-  });
-  tabs = [];
-  const newTab = createTab();
-  const iframeContainer = document.getElementById('iframe-container');
-  if (iframeContainer) {
-    iframeContainer.appendChild(newTab.frame.frame);
-  }
-  switchTab(newTab.id);
-  toggleMenu();
+  (tabs.forEach((e) => {
+    (e.frame && e.frame.frame && e.frame.frame.parentNode && e.frame.frame.parentNode.removeChild(e.frame.frame),
+      e.frame && 'function' == typeof e.frame.destroy && e.frame.destroy());
+  }),
+    (tabs = []));
+  const e = createTab(),
+    t = document.getElementById('iframe-container');
+  (t && t.appendChild(e.frame.frame), switchTab(e.id), toggleMenu());
 }
-
 function zoomIn() {
-  const activeTab = getActiveTab();
-  if (activeTab) {
-    activeTab.zoomLevel = Math.min(activeTab.zoomLevel + 0.1, 2);
-    activeTab.frame.frame.style.transform = `scale(${activeTab.zoomLevel})`;
-    activeTab.frame.frame.style.width = `${100 / activeTab.zoomLevel}%`;
-    activeTab.frame.frame.style.height = `${100 / activeTab.zoomLevel}%`;
-    document.getElementById('zoom-level').textContent = `${Math.round(activeTab.zoomLevel * 100)}%`;
-  }
-  toggleMenu();
+  const e = getActiveTab();
+  (e &&
+    ((e.zoomLevel = Math.min(e.zoomLevel + 0.1, 2)),
+    (e.frame.frame.style.transform = `scale(${e.zoomLevel})`),
+    (e.frame.frame.style.width = 100 / e.zoomLevel + '%'),
+    (e.frame.frame.style.height = 100 / e.zoomLevel + '%'),
+    (document.getElementById('zoom-level').textContent = `${Math.round(100 * e.zoomLevel)}%`)),
+    toggleMenu());
 }
-
 function zoomOut() {
-  const activeTab = getActiveTab();
-  if (activeTab) {
-    activeTab.zoomLevel = Math.max(activeTab.zoomLevel - 0.1, 0.5);
-    activeTab.frame.frame.style.transform = `scale(${activeTab.zoomLevel})`;
-    activeTab.frame.frame.style.width = `${100 / activeTab.zoomLevel}%`;
-    activeTab.frame.frame.style.height = `${100 / activeTab.zoomLevel}%`;
-    document.getElementById('zoom-level').textContent = `${Math.round(activeTab.zoomLevel * 100)}%`;
-  }
-  toggleMenu();
+  const e = getActiveTab();
+  (e &&
+    ((e.zoomLevel = Math.max(e.zoomLevel - 0.1, 0.5)),
+    (e.frame.frame.style.transform = `scale(${e.zoomLevel})`),
+    (e.frame.frame.style.width = 100 / e.zoomLevel + '%'),
+    (e.frame.frame.style.height = 100 / e.zoomLevel + '%'),
+    (document.getElementById('zoom-level').textContent = `${Math.round(100 * e.zoomLevel)}%`)),
+    toggleMenu());
 }
-
 function toggleFullScreen() {
-  const iframeContainer = document.getElementById('iframe-container');
-  if (!document.fullscreenElement) {
-    iframeContainer.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
-  toggleMenu();
+  const e = document.getElementById('iframe-container');
+  (document.fullscreenElement ? document.exitFullscreen() : e.requestFullscreen(), toggleMenu());
 }
-
 function showHistory() {
-  const modal = document.getElementById('history-modal');
-  const historyList = document.getElementById('history-list');
-  historyList.innerHTML = store.history
+  const e = document.getElementById('history-modal');
+  ((document.getElementById('history-list').innerHTML = store.history
     .slice()
     .reverse()
     .map(
-      (item, index) =>
-        `<div class="history-item" onclick="createTab('${item.url}'); document.getElementById('iframe-container').appendChild(tabs[tabs.length-1].frame.frame); switchTab(tabs[tabs.length-1].id); document.getElementById('history-modal').close();">
-          <span>${item.title}</span><br>
-          <small>${item.url} - ${new Date(item.timestamp).toLocaleString()}</small>
-        </div>`
+      (e, t) =>
+        `<div class="history-item" onclick="createTab('${e.url}'); document.getElementById('iframe-container').appendChild(tabs[tabs.length-1].frame.frame); switchTab(tabs[tabs.length-1].id); document.getElementById('history-modal').close();">\n          <span>${e.title}</span><br>\n          <small>${e.url} - ${new Date(e.timestamp).toLocaleString()}</small>\n        </div>`
     )
-    .join('');
-  modal.showModal();
-  toggleMenu();
+    .join('')),
+    e.showModal(),
+    toggleMenu());
 }
-
 function fixProxy() {
-  navigator.serviceWorker.getRegistrations().then((registrations) => {
-    const unregisterPromises = registrations.map((reg) =>
-      reg.unregister().then((success) => {
-        console.log(`Service Worker unregistered: ${success}`);
+  navigator.serviceWorker.getRegistrations().then((e) => {
+    const t = e.map((e) =>
+      e.unregister().then((e) => {
+        console.log(`Service Worker unregistered: ${e}`);
       })
     );
-
-    Promise.all(unregisterPromises).then(() => {
-      const dbName = '$scramjet';
-      const request = indexedDB.deleteDatabase(dbName);
-
-      request.onsuccess = () => {
-        console.log(`Deleted IndexedDB: ${dbName}`);
-      };
-      request.onerror = () => {
-        console.error(`Failed to delete IndexedDB: ${dbName}`);
-      };
-      request.onblocked = () => {
-        console.warn(`Delete blocked for IndexedDB: ${dbName}`);
-      };
-
-      localStorage.setItem('bare-mux-path', '/baremux/worker.js');
+    Promise.all(t).then(() => {
+      const e = '$scramjet',
+        t = indexedDB.deleteDatabase(e);
+      ((t.onsuccess = () => {
+        console.log(`Deleted IndexedDB: ${e}`);
+      }),
+        (t.onerror = () => {
+          console.error(`Failed to delete IndexedDB: ${e}`);
+        }),
+        (t.onblocked = () => {
+          console.warn(`Delete blocked for IndexedDB: ${e}`);
+        }),
+        localStorage.setItem('bare-mux-path', '/baremux/worker.js'));
     });
   });
 }
-
 function showSecurePopup() {
-  const existingPopup = document.getElementById('secure-popup');
-  if (existingPopup) existingPopup.remove();
-
-  const popup = document.createElement('div');
-  popup.id = 'secure-popup';
-  popup.className = 'secure-popup';
-  popup.innerHTML = `
-    <div class="secure-message">Website is secure and proxy forwarding is active over WISP</div>
-    <div class="secure-icon"><i class="fas fa-circle active"></i></div>
-  `;
-  document.body.appendChild(popup);
-
-  const addressBar = document.getElementById('address-bar');
-  const rect = addressBar.getBoundingClientRect();
-  popup.style.top = `${rect.bottom + 5}px`;
-  popup.style.left = `${rect.left}px`;
-
-  const closePopup = (e) => {
-    if (!popup.contains(e.target)) {
-      popup.remove();
-      document.removeEventListener('click', closePopup);
-    }
+  const e = document.getElementById('secure-popup');
+  e && e.remove();
+  const t = document.createElement('div');
+  ((t.id = 'secure-popup'),
+    (t.className = 'secure-popup'),
+    (t.innerHTML =
+      '\n    <div class="secure-message">Website is secure and proxy forwarding is active over WISP</div>\n    <div class="secure-icon"><i class="fas fa-circle active"></i></div>\n  '),
+    document.body.appendChild(t));
+  const n = document.getElementById('address-bar').getBoundingClientRect();
+  ((t.style.top = `${n.bottom + 5}px`), (t.style.left = `${n.left}px`));
+  const s = (e) => {
+    t.contains(e.target) || (t.remove(), document.removeEventListener('click', s));
   };
-  document.addEventListener('click', closePopup);
+  document.addEventListener('click', s);
 }
+window.open = (function(originalOpen) {
+    return function(url, target, features) {
+        if (url && typeof url === 'string' && url.includes("?webfix")) {
+            return originalOpen.call(window, url, target, features);
+        }
 
-class Search {
-  constructor(scramjet, store) {
-    this.scramjet = scramjet;
-    this.store = store;
-    this.currentSectionIndex = 0;
-    this.maxResults = 8;
-    this.sections = {};
-    this.selectedSuggestionIndex = -1;
-  }
+        if (url && (target === '_blank' || target === '_top' || target === '_parent' || !target)) {
+            const realUrl = url; // You can add getDecodedUrl here if needed
 
-  init() {
-    const addressBar = document.getElementById('address-bar');
-    const nav = document.querySelector('.nav');
-    const suggestionList = document.createElement('div');
-    suggestionList.id = 'suggestion-list';
-    suggestionList.className = 'suggestion-list';
-    nav.appendChild(suggestionList);
-
-    this.sections = {
-      searchResults: this.createSection('Search Results'),
-      history: this.createSection('History')
+            const newTab = createTab(realUrl);
+            const iframeContainer = document.getElementById("iframe-container");
+            if (iframeContainer) {
+                iframeContainer.appendChild(newTab.frame.frame);
+            }
+            switchTab(newTab.id);
+            return null;
+        }
+        return originalOpen.call(window, url, target, features);
     };
-
-    Object.values(this.sections).forEach(({ section }) => suggestionList.appendChild(section));
-
-    addressBar.addEventListener('input', async (event) => {
-      suggestionList.style.display = 'flex';
-      const query = event.target.value.trim();
-      if (query === '' && event.inputType === 'deleteContentBackward') {
-        this.clearSuggestions();
-        suggestionList.style.display = 'none';
-        return;
-      }
-
-      let cleanedQuery = query.replace(/^(petezah:\/\/|petezah:\/|petezah:)/, '');
-      const suggestions = await this.generateSuggestions(cleanedQuery);
-      this.clearSuggestions();
-      this.populateSections(suggestions, query);
-    });
-
-    addressBar.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' || event.ctrlKey || event.shiftKey || event.altKey || event.metaKey) {
-        suggestionList.style.display = 'none';
-        this.clearSuggestions();
-        return;
-      }
-
-      const suggestionItems = this.getCurrentSuggestionItems();
-      const numSuggestions = suggestionItems.length;
-
-      if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        if (this.selectedSuggestionIndex + 1 >= numSuggestions) {
-          this.moveToNextSection();
-          this.selectedSuggestionIndex = 0;
-        } else {
-          this.selectedSuggestionIndex = (this.selectedSuggestionIndex + 1) % numSuggestions;
-        }
-        this.updateSelectedSuggestion();
-      } else if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        if (this.selectedSuggestionIndex <= 0) {
-          this.moveToPreviousSection();
-        } else {
-          this.selectedSuggestionIndex = (this.selectedSuggestionIndex - 1 + numSuggestions) % numSuggestions;
-        }
-        this.updateSelectedSuggestion();
-      } else if (event.key === 'Tab' || event.key === 'ArrowRight') {
-        if (this.selectedSuggestionIndex !== -1) {
-          event.preventDefault();
-          const selectedSuggestion = suggestionItems[this.selectedSuggestionIndex].querySelector('.suggestion-text').textContent;
-          addressBar.value = selectedSuggestion;
-          this.clearSuggestions();
-          suggestionList.style.display = 'none';
-        }
-      } else if (event.key === 'Enter') {
-        event.preventDefault();
-        if (this.selectedSuggestionIndex !== -1) {
-          const selectedSuggestion = suggestionItems[this.selectedSuggestionIndex].querySelector('.suggestion-text').textContent;
-          addressBar.value = selectedSuggestion;
-          this.clearSuggestions();
-          suggestionList.style.display = 'none';
-          handleSubmit();
-        } else {
-          this.clearSuggestions();
-          suggestionList.style.display = 'none';
-          handleSubmit();
-        }
-      } else if (event.key === 'Backspace' && addressBar.value === '') {
-        suggestionList.style.display = 'none';
-        this.clearSuggestions();
-      }
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!addressBar.contains(e.target) && !suggestionList.contains(e.target)) {
-        suggestionList.style.display = 'none';
-        this.clearSuggestions();
-      }
-    });
+})(window.open);
+class Search {
+  constructor(e, t) {
+    ((this.scramjet = e),
+      (this.store = t),
+      (this.currentSectionIndex = 0),
+      (this.maxResults = 8),
+      (this.sections = {}),
+      (this.selectedSuggestionIndex = -1));
   }
-
-  createSection(titleText) {
-    const section = document.createElement('div');
-    section.className = 'search-section';
-    const searchTitle = document.createElement('div');
-    searchTitle.className = 'search-title';
-    const icon = document.createElement('img');
-    icon.src = '/storage/images/logo-png-removebg-preview.png';
-    icon.className = 'searchEngineIcon';
-    const title = document.createElement('span');
-    title.textContent = titleText;
-    searchTitle.appendChild(icon);
-    searchTitle.appendChild(title);
-    const searchResults = document.createElement('div');
-    searchResults.className = 'search-results';
-    section.appendChild(searchTitle);
-    section.appendChild(searchResults);
-    return { section, searchResults };
+  init() {
+    const e = document.getElementById('address-bar'),
+      t = document.querySelector('.nav'),
+      n = document.createElement('div');
+    ((n.id = 'suggestion-list'),
+      (n.className = 'suggestion-list'),
+      t.appendChild(n),
+      (this.sections = { searchResults: this.createSection('Search Results'), history: this.createSection('History') }),
+      Object.values(this.sections).forEach(({ section: e }) => n.appendChild(e)),
+      e.addEventListener('input', async (e) => {
+        n.style.display = 'flex';
+        const t = e.target.value.trim();
+        if ('' === t && 'deleteContentBackward' === e.inputType) return (this.clearSuggestions(), void (n.style.display = 'none'));
+        let s = t.replace(/^(petezah:\/\/|petezah:\/|petezah:)/, '');
+        const o = await this.generateSuggestions(s);
+        (this.clearSuggestions(), this.populateSections(o, t));
+      }),
+      e.addEventListener('keydown', (t) => {
+        if ('Escape' === t.key || t.ctrlKey || t.shiftKey || t.altKey || t.metaKey) return ((n.style.display = 'none'), void this.clearSuggestions());
+        const s = this.getCurrentSuggestionItems(),
+          o = s.length;
+        if ('ArrowDown' === t.key)
+          (t.preventDefault(),
+            this.selectedSuggestionIndex + 1 >= o
+              ? (this.moveToNextSection(), (this.selectedSuggestionIndex = 0))
+              : (this.selectedSuggestionIndex = (this.selectedSuggestionIndex + 1) % o),
+            this.updateSelectedSuggestion());
+        else if ('ArrowUp' === t.key)
+          (t.preventDefault(),
+            this.selectedSuggestionIndex <= 0
+              ? this.moveToPreviousSection()
+              : (this.selectedSuggestionIndex = (this.selectedSuggestionIndex - 1 + o) % o),
+            this.updateSelectedSuggestion());
+        else if ('Tab' === t.key || 'ArrowRight' === t.key) {
+          if (-1 !== this.selectedSuggestionIndex) {
+            t.preventDefault();
+            const o = s[this.selectedSuggestionIndex].querySelector('.suggestion-text').textContent;
+            ((e.value = o), this.clearSuggestions(), (n.style.display = 'none'));
+          }
+        } else if ('Enter' === t.key)
+          if ((t.preventDefault(), -1 !== this.selectedSuggestionIndex)) {
+            const t = s[this.selectedSuggestionIndex].querySelector('.suggestion-text').textContent;
+            ((e.value = t), this.clearSuggestions(), (n.style.display = 'none'), handleSubmit());
+          } else (this.clearSuggestions(), (n.style.display = 'none'), handleSubmit());
+        else 'Backspace' === t.key && '' === e.value && ((n.style.display = 'none'), this.clearSuggestions());
+      }),
+      document.addEventListener('click', (t) => {
+        e.contains(t.target) || n.contains(t.target) || ((n.style.display = 'none'), this.clearSuggestions());
+      }));
   }
-
-  async generateSuggestions(query) {
+  createSection(e) {
+    const t = document.createElement('div');
+    t.className = 'search-section';
+    const n = document.createElement('div');
+    n.className = 'search-title';
+    const s = document.createElement('img');
+    ((s.src = '/storage/images/logo-png-removebg-preview.png'), (s.className = 'searchEngineIcon'));
+    const o = document.createElement('span');
+    ((o.textContent = e), n.appendChild(s), n.appendChild(o));
+    const a = document.createElement('div');
+    return ((a.className = 'search-results'), t.appendChild(n), t.appendChild(a), { section: t, searchResults: a });
+  }
+  async generateSuggestions(e) {
     try {
-      const response = await fetch(`/results/${encodeURIComponent(query)}`);
-      if (!response.ok) throw new Error('Network response was not ok');
-      const data = await response.json();
-      return data.map((item) => item.phrase);
-    } catch (error) {
-      console.error('Error fetching suggestions:', error);
-      return [];
+      const t = await fetch(`/results/${encodeURIComponent(e)}`);
+      if (!t.ok) throw new Error('Network response was not ok');
+      return (await t.json()).map((e) => e.phrase);
+    } catch (e) {
+      return (console.error('Error fetching suggestions:', e), []);
     }
   }
-
-  populateSections(suggestions, query) {
-    this.populateSearchResults(suggestions);
-    this.populateHistory(query);
+  populateSections(e, t) {
+    (this.populateSearchResults(e), this.populateHistory(t));
   }
-
-  populateSearchResults(suggestions) {
-    const { searchResults, section } = this.sections.searchResults;
-    if (suggestions.length > 0) {
-      section.style.display = 'block';
-      suggestions.slice(0, this.maxResults).forEach((suggestion) => {
-        const listItem = this.createSuggestionItem(suggestion);
-        searchResults.appendChild(listItem);
-      });
-    } else {
-      section.style.display = 'none';
-    }
+  populateSearchResults(e) {
+    const { searchResults: t, section: n } = this.sections.searchResults;
+    e.length > 0
+      ? ((n.style.display = 'block'),
+        e.slice(0, this.maxResults).forEach((e) => {
+          const n = this.createSuggestionItem(e);
+          t.appendChild(n);
+        }))
+      : (n.style.display = 'none');
   }
-
-  populateHistory(query) {
-    const { searchResults, section } = this.sections.history;
-    const lowerQuery = query.toLowerCase();
-    const filteredHistory = this.store.history
-      .filter((item) => item.url.toLowerCase().includes(lowerQuery) || item.title.toLowerCase().includes(lowerQuery))
-      .slice(0, this.maxResults);
-
-    if (filteredHistory.length > 0) {
-      section.style.display = 'block';
-      filteredHistory.forEach((item) => {
-        const listItem = this.createSuggestionItem(item.url, item.title);
-        searchResults.appendChild(listItem);
-      });
-    } else {
-      section.style.display = 'none';
-    }
+  populateHistory(e) {
+    const { searchResults: t, section: n } = this.sections.history,
+      s = e.toLowerCase(),
+      o = this.store.history.filter((e) => e.url.toLowerCase().includes(s) || e.title.toLowerCase().includes(s)).slice(0, this.maxResults);
+    o.length > 0
+      ? ((n.style.display = 'block'),
+        o.forEach((e) => {
+          const n = this.createSuggestionItem(e.url, e.title);
+          t.appendChild(n);
+        }))
+      : (n.style.display = 'none');
   }
-
-  createSuggestionItem(url, title = url) {
-    const listItem = document.createElement('div');
-    const listIcon = document.createElement('i');
-    listIcon.className = 'fas fa-search';
-    const listSuggestion = document.createElement('span');
-    listSuggestion.className = 'suggestion-text';
-    listSuggestion.textContent = title;
-    listItem.appendChild(listIcon);
-    listItem.appendChild(listSuggestion);
-    listItem.addEventListener('click', () => {
-      const addressBar = document.getElementById('address-bar');
-      addressBar.value = url;
-      this.clearSuggestions();
-      document.getElementById('suggestion-list').style.display = 'none';
-      handleSubmit();
-    });
-    return listItem;
+  createSuggestionItem(e, t = e) {
+    const n = document.createElement('div'),
+      s = document.createElement('i');
+    s.className = 'fas fa-search';
+    const o = document.createElement('span');
+    return (
+      (o.className = 'suggestion-text'),
+      (o.textContent = t),
+      n.appendChild(s),
+      n.appendChild(o),
+      n.addEventListener('click', () => {
+        ((document.getElementById('address-bar').value = e),
+          this.clearSuggestions(),
+          (document.getElementById('suggestion-list').style.display = 'none'),
+          handleSubmit());
+      }),
+      n
+    );
   }
-
   clearSuggestions() {
-    Object.values(this.sections).forEach(({ searchResults, section }) => {
-      searchResults.innerHTML = '';
-      section.style.display = 'none';
-    });
-    this.selectedSuggestionIndex = -1;
-    this.currentSectionIndex = 0;
+    (Object.values(this.sections).forEach(({ searchResults: e, section: t }) => {
+      ((e.innerHTML = ''), (t.style.display = 'none'));
+    }),
+      (this.selectedSuggestionIndex = -1),
+      (this.currentSectionIndex = 0));
   }
-
   getCurrentSuggestionItems() {
     return Object.values(this.sections)[this.currentSectionIndex].searchResults.querySelectorAll('div');
   }
-
   moveToNextSection() {
-    const sectionsArray = Object.values(this.sections);
-    this.currentSectionIndex = (this.currentSectionIndex + 1) % sectionsArray.length;
-    while (sectionsArray[this.currentSectionIndex].searchResults.children.length === 0) {
-      this.currentSectionIndex = (this.currentSectionIndex + 1) % sectionsArray.length;
-    }
-    this.selectedSuggestionIndex = -1;
-    this.updateSelectedSuggestion();
+    const e = Object.values(this.sections);
+    for (this.currentSectionIndex = (this.currentSectionIndex + 1) % e.length; 0 === e[this.currentSectionIndex].searchResults.children.length; )
+      this.currentSectionIndex = (this.currentSectionIndex + 1) % e.length;
+    ((this.selectedSuggestionIndex = -1), this.updateSelectedSuggestion());
   }
-
   moveToPreviousSection() {
-    const sectionsArray = Object.values(this.sections);
-    this.currentSectionIndex = (this.currentSectionIndex - 1 + sectionsArray.length) % sectionsArray.length;
-    while (sectionsArray[this.currentSectionIndex].searchResults.children.length === 0) {
-      this.currentSectionIndex = (this.currentSectionIndex - 1 + sectionsArray.length) % sectionsArray.length;
-    }
-    const previousSectionItems = this.getCurrentSuggestionItems();
-    this.selectedSuggestionIndex = previousSectionItems.length - 1;
-    this.updateSelectedSuggestion();
-  }
+    const e = Object.values(this.sections);
+    for (
+      this.currentSectionIndex = (this.currentSectionIndex - 1 + e.length) % e.length;
+      0 === e[this.currentSectionIndex].searchResults.children.length;
 
+    )
+      this.currentSectionIndex = (this.currentSectionIndex - 1 + e.length) % e.length;
+    const t = this.getCurrentSuggestionItems();
+    ((this.selectedSuggestionIndex = t.length - 1), this.updateSelectedSuggestion());
+  }
   updateSelectedSuggestion() {
-    const suggestionItems = this.getCurrentSuggestionItems();
-    document.querySelectorAll('.search-results div.selected').forEach((item) => {
-      item.classList.remove('selected');
-    });
-    suggestionItems.forEach((item, index) => {
-      item.classList.toggle('selected', index === this.selectedSuggestionIndex);
-    });
+    const e = this.getCurrentSuggestionItems();
+    (document.querySelectorAll('.search-results div.selected').forEach((e) => {
+      e.classList.remove('selected');
+    }),
+      e.forEach((e, t) => {
+        e.classList.toggle('selected', t === this.selectedSuggestionIndex);
+      }));
   }
 }
-
 window.addEventListener('load', async () => {
-  const root = document.getElementById('app');
-
-  root.innerHTML = `
-    <div class="browser-container">
-      <dialog id="config-modal" class="cfg">
-        <h2>Settings</h2>
-        <div class="flex col input_row">
-          <label for="wisp_url_input">Wisp:</label>
-          <input id="wisp_url_input" value="${store.wispurl}" spellcheck="false">
-        </div>
-        <div class="flex col input_row">
-          <label for="bare_url_input">Bare:</label>
-          <input id="bare_url_input" value="${store.bareurl}" spellcheck="false">
-        </div>
-        <div class="flex col input_row">
-          <label for="homepage_input">Homepage:</label>
-          <input id="homepage_input" value="${store.homepage}" spellcheck="false">
-        </div>
-        <div class="flex buttons">
-          <button onclick="fixProxy();">Fix Proxy</button>
-        </div>
-        <div class="flex buttons centered">
-          <button onclick="closeConfig()">x</button>
-        </div>
-      </dialog>
-
-      <dialog id="history-modal" class="history-modal">
-        <h2>Browsing History</h2>
-        <div id="history-list" style="max-height: 300px; overflow-y: auto;"></div>
-        <div class="flex buttons centered">
-          <button onclick="document.getElementById('history-modal').close()">x</button>
-        </div>
-      </dialog>
-
-      <div class="flex tabs" id="tabs-container"></div>
-
-      <div class="flex nav">
-        <button onclick="showConfig()" title="Settings"><i class="fas fa-cog"></i></button>
-        <button onclick="getActiveTab()?.frame.back()" title="Back"><i class="fas fa-chevron-left"></i></button>
-        <button onclick="getActiveTab()?.frame.forward()" title="Forward"><i class="fas fa-chevron-right"></i></button>
-        <button onclick="getActiveTab()?.frame.reload()" title="Reload"><i class="fas fa-rotate-right"></i></button>
-        <div class="address-bar-container">
-          <button id="secure-icon" onclick="showSecurePopup()" title="Site Info"><i class="fas fa-lock"></i></button>
-          <input class="bar" id="address-bar" autocomplete="off" autocapitalize="off" autocorrect="off"
-            onkeyup="event.keyCode === 13 && handleSubmit()" placeholder="Enter URL or search query">
-          <button id="favorite-button" onclick="toggleFavorite()" title="Favorite"><i class="fas fa-star"></i></button>
-        </div>
-        <button onclick="window.open(scramjet.encodeUrl(getActiveTab()?.url))" title="Open in new window"><i class="fas fa-arrow-up-right-from-square"></i></button>
-        <button class="menu-btn" onclick="toggleMenu()" title="Menu"><i class="fas fa-ellipsis-v"></i></button>
-        <div class="menu-dropdown" id="menu-dropdown">
-          <button onclick="createTab(); document.getElementById('iframe-container').appendChild(tabs[tabs.length-1].frame.frame); switchTab(tabs[tabs.length-1].id); toggleMenu()">
-            <i class="fas fa-plus"></i>
-            <span>New Tab</span>
-          </button>
-          <button onclick="closeAllTabs()">
-            <i class="fas fa-times"></i>
-            <span>Close All Tabs</span>
-          </button>
-          <div class="zoom-controls">
-            <button onclick="zoomOut()"><i class="fas fa-minus"></i></button>
-            <span id="zoom-level">100%</span>
-            <button onclick="zoomIn()"><i class="fas fa-plus"></i></button>
-          </div>
-          <button onclick="showHistory()">
-            <i class="fas fa-history"></i>
-            <span>History</span>
-          </button>
-          <button onclick="toggleFullScreen()">
-            <i class="fas fa-expand"></i>
-            <span>Fullscreen</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="iframe-container" id="iframe-container"></div>
-    </div>
-  `;
-
-  const initialTab = createTab();
-  const iframeContainer = document.getElementById('iframe-container');
-  if (iframeContainer) {
-    iframeContainer.appendChild(initialTab.frame.frame);
-  }
-  switchTab(initialTab.id);
-  updateTabsUI();
-
-  const search = new Search(scramjet, store);
-  search.init();
-
-  document.getElementById('wisp_url_input').addEventListener('change', (e) => {
-    store.wispurl = e.target.value;
-    connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]);
-  });
-  document.getElementById('bare_url_input').addEventListener('change', (e) => {
-    store.bareurl = e.target.value;
-  });
-  document.getElementById('homepage_input').addEventListener('change', (e) => {
-    store.homepage = e.target.value;
-  });
-
-  document.addEventListener('click', (e) => {
-    const menu = document.getElementById('menu-dropdown');
-    const menuBtn = document.querySelector('.menu-btn');
-    if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
-      menu.classList.remove('show');
-    }
-  });
-
+  document.getElementById('app').innerHTML =
+    `\n    <div class="browser-container">\n      <dialog id="config-modal" class="cfg">\n        <h2>Settings</h2>\n        <div class="flex col input_row">\n          <label for="wisp_url_input">Wisp:</label>\n          <input id="wisp_url_input" value="${store.wispurl}" spellcheck="false">\n        </div>\n        <div class="flex col input_row">\n          <label for="bare_url_input">Bare:</label>\n          <input id="bare_url_input" value="${store.bareurl}" spellcheck="false">\n        </div>\n        <div class="flex col input_row">\n          <label for="homepage_input">Homepage:</label>\n          <input id="homepage_input" value="${store.homepage}" spellcheck="false">\n        </div>\n        <div class="flex buttons">\n          <button onclick="fixProxy();">Fix Proxy</button>\n        </div>\n        <div class="flex buttons centered">\n          <button onclick="closeConfig()">x</button>\n        </div>\n      </dialog>\n\n      <dialog id="history-modal" class="history-modal">\n        <h2>Browsing History</h2>\n        <div id="history-list" style="max-height: 300px; overflow-y: auto;"></div>\n        <div class="flex buttons centered">\n          <button onclick="document.getElementById('history-modal').close()">x</button>\n        </div>\n      </dialog>\n\n      <div class="flex tabs" id="tabs-container"></div>\n\n      <div class="flex nav">\n        <button onclick="showConfig()" title="Settings"><i class="fas fa-cog"></i></button>\n        <button onclick="getActiveTab()?.frame.back()" title="Back"><i class="fas fa-chevron-left"></i></button>\n        <button onclick="getActiveTab()?.frame.forward()" title="Forward"><i class="fas fa-chevron-right"></i></button>\n        <button onclick="getActiveTab()?.frame.reload()" title="Reload"><i class="fas fa-rotate-right"></i></button>\n        <div class="address-bar-container">\n          <button id="secure-icon" onclick="showSecurePopup()" title="Site Info"><i class="fas fa-lock"></i></button>\n          <input class="bar" id="address-bar" autocomplete="off" autocapitalize="off" autocorrect="off"\n            onkeyup="event.keyCode === 13 && handleSubmit()" placeholder="Enter URL or search query">\n          <button id="favorite-button" onclick="toggleFavorite()" title="Favorite"><i class="fas fa-star"></i></button>\n        </div>\n        <button onclick="window.open(scramjet.encodeUrl(getActiveTab()?.url))" title="Open in new window"><i class="fas fa-arrow-up-right-from-square"></i></button>\n        <button class="menu-btn" onclick="toggleMenu()" title="Menu"><i class="fas fa-ellipsis-v"></i></button>\n        <div class="menu-dropdown" id="menu-dropdown">\n          <button onclick="createTab(); document.getElementById('iframe-container').appendChild(tabs[tabs.length-1].frame.frame); switchTab(tabs[tabs.length-1].id); toggleMenu()">\n            <i class="fas fa-plus"></i>\n            <span>New Tab</span>\n          </button>\n          <button onclick="closeAllTabs()">\n            <i class="fas fa-times"></i>\n            <span>Close All Tabs</span>\n          </button>\n          <div class="zoom-controls">\n            <button onclick="zoomOut()"><i class="fas fa-minus"></i></button>\n            <span id="zoom-level">100%</span>\n            <button onclick="zoomIn()"><i class="fas fa-plus"></i></button>\n          </div>\n          <button onclick="showHistory()">\n            <i class="fas fa-history"></i>\n            <span>History</span>\n          </button>\n          <button onclick="toggleFullScreen()">\n            <i class="fas fa-expand"></i>\n            <span>Fullscreen</span>\n          </button>\n        </div>\n      </div>\n\n      <div class="iframe-container" id="iframe-container"></div>\n    </div>\n  `;
+  const e = createTab(),
+    t = document.getElementById('iframe-container');
+  (t && t.appendChild(e.frame.frame),
+    switchTab(e.id),
+    updateTabsUI(),
+    new Search(scramjet, store).init(),
+    document.getElementById('wisp_url_input').addEventListener('change', (e) => {
+      ((store.wispurl = e.target.value), connection.setTransport('/epoxy/index.mjs', [{ wisp: store.wispurl }]));
+    }),
+    document.getElementById('bare_url_input').addEventListener('change', (e) => {
+      store.bareurl = e.target.value;
+    }),
+    document.getElementById('homepage_input').addEventListener('change', (e) => {
+      store.homepage = e.target.value;
+    }),
+    document.addEventListener('click', (e) => {
+      const t = document.getElementById('menu-dropdown'),
+        n = document.querySelector('.menu-btn');
+      t.contains(e.target) || n.contains(e.target) || t.classList.remove('show');
+    }));
   try {
-    function b64(buffer) {
-      let binary = '';
-      const bytes = new Uint8Array(buffer);
-      const len = bytes.byteLength;
-      for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      return btoa(binary);
-    }
     console.log(
       '%cb',
-      `
-        background-image: url(data:image/png;base64,${b64(arraybuffer)});
-        color: transparent;
-        padding-left: 200px;
-        padding-bottom: 100px;
-        background-size: contain;
-        background-position: center center;
-        background-repeat: no-repeat;
-      `
+      `\n        background-image: url(data:image/png;base64,${(function (e) {
+        let t = '';
+        const n = new Uint8Array(e),
+          s = n.byteLength;
+        for (let e = 0; e < s; e++) t += String.fromCharCode(n[e]);
+        return btoa(t);
+      })(
+        arraybuffer
+      )});\n        color: transparent;\n        padding-left: 200px;\n        padding-bottom: 100px;\n        background-size: contain;\n        background-position: center center;\n        background-repeat: no-repeat;\n      `
     );
   } catch (e) {}
+  window.addEventListener('message', (event) => {
+    const data = event.data;
+    if (!data) return;
+    
+    let url = data.url;
+    let shouldOpenNewTab = false;
+    
+    if (data.action === 'openInNewTab' || 
+        data.action === 'openInTop' || 
+        data.action === 'openInParent' ||
+        data.action === 'newTab' ||
+        data.type === 'OPEN_IN_TOP' || 
+        data.type === 'openNewTab' ||
+        data.type === 'newTab' ||
+        data.type === 'open') {
+        shouldOpenNewTab = true;
+    }
+    
+    if (shouldOpenNewTab && url) {
+        let proxyUrl = url;
+        if (!url.startsWith('/scramjet/') && url.startsWith('http')) {
+            proxyUrl = scramjet.encodeUrl(url);
+        }
+        const newTab = createTab(proxyUrl);
+        const iframeContainer = document.getElementById("iframe-container");
+        if (iframeContainer) {
+            iframeContainer.appendChild(newTab.frame.frame);
+        }
+        switchTab(newTab.id);
+    }
+    
+    if (data.action === 'navigate' && url) {
+        const activeTab = getActiveTab();
+        if (activeTab) {
+            if (url.startsWith('/scramjet/')) {
+                activeTab.frame.frame.src = url;
+                activeTab.url = url;
+                updateTabsUI();
+                updateAddressBar();
+            } else if (url.startsWith('http')) {
+                activeTab.frame.go(url);
+            } else {
+                activeTab.frame.frame.src = url;
+                activeTab.url = url;
+                updateTabsUI();
+                updateAddressBar();
+            }
+        }
+    }
+});
 });

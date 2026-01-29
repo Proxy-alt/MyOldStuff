@@ -101,6 +101,7 @@ const parseBackground = (bg?: string): string | undefined => {
 <AppLayout title={title} description={description}>
   <Fragment slot="head">
     <Font cssVariable="--font-poppins" />
+    <Font cssVariable="--font-poppins-obfuscated" />
   </Fragment>
 
   <div class="bg-effects"></div>
@@ -231,7 +232,9 @@ const parseBackground = (bg?: string): string | undefined => {
               )}
             </a>
 
-            <figcaption class="label">{item.label}</figcaption>
+            <figcaption class="label game-name" style="font-family: var(--font-poppins-obfuscated);">
+              {item.label}
+            </figcaption>
           </figure>
         );
       })

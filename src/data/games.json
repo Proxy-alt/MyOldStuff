@@ -37,6 +37,12 @@
       "isHighlighted": false
     },
     {
+      "label": "Poly Track v0.5.2",
+      "url": "/iframe.html?url=/embed.html#https://www.kodub.com/apps/polytrack",
+      "imageUrl": "/storage/images/main/polytrack-v2.jpeg",
+      "categories": ["racing"]
+    },
+    {
       "id": "polytrack",
       "label": "Polytrack",
       "img": "/storage/ag/g/polytrack/splash.png",

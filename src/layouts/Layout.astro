@@ -150,38 +150,29 @@ export interface Props {
       }
 
       if (progressBar) {
-        // 1. CLICK (Start)
-        // Network Request begins.
+        // Network Request begins here
         document.addEventListener('astro:before-preparation', () => {
           progress = 0;
-          target = 20; // Aim for 20% while connecting
+          target = 20; // Goes around 20%
           progressBar.value = 0;
           progressBar.style.opacity = '1';
           startPhysics();
         });
-
-        // 2. DATA LOADED (Network Done)
         // Browser has the new HTML, but hasn't touched the DOM yet.
         document.addEventListener('astro:after-preparation', () => {
           if (progress < 40) progress = 40; // Bump
-          target = 60; // Aim for 60% while parsing
+          target = 60; // Goes around 60%
         });
-
-        // 3. ABOUT TO SWAP (Processing)
         // Browser is calculating the diff and preparing to replace body.
         document.addEventListener('astro:before-swap', () => {
           if (progress < 60) progress = 60; // Bump
-          target = 80; // Aim for 80% during the heavy DOM manipulation
+          target = 80; // Goes around 80% during the heavy DOM manipulation
         });
-
-        // 4. SWAP DONE (Rendering)
         // New HTML is on screen, but scripts/images might still be hydrating.
         document.addEventListener('astro:after-swap', () => {
           if (progress < 85) progress = 85; // Bump
           target = 95; // Creep to the finish line
         });
-
-        // 5. FINISH (Idle)
         // Everything is done.
         document.addEventListener('astro:page-load', () => {
           clearInterval(interval);

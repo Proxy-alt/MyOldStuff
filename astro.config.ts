@@ -3,7 +3,8 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import AstroPWA from '@vite-pwa/astro';
 import { defineConfig, fontProviders } from 'astro/config';
-import sitemapPlus from './src/lib/sitemap';
+import { fontObfuscatorIntegration as fontObfuscator, obfuscate } from './src/integrations/obfuscator';
+import sitemapPlus from './src/integrations/sitemap';
 import startFastifyServer from './src/server.ts';
 
 export default defineConfig({
@@ -23,7 +24,6 @@ export default defineConfig({
       }
     },
     sitemapPlus({
-      entryLimit: 45000, // Optional
       debug: true
     }),
     AstroPWA({
@@ -39,7 +39,24 @@ export default defineConfig({
         type: 'module'
       }
     }),
-    react()
+    react(),
+    fontObfuscator({
+      dev: true,
+      blocklist: ['localhost', process.env.SITE_URL?.replace(/^https?:\/\//, '') || ''],
+      defaultStripAriaLabel: true,
+      pairs: [
+        {
+          targets: ['.obfuscate', '.obfuscated-text', '[data-obfuscate]'],
+          cssVariable: '--font-inter-obfuscated',
+          stripAriaLabel: true
+        },
+        {
+          targets: ['.obfuscate-poppins', '.obfuscated-text-poppins', '[data-obfuscate-poppins]', '.game-name'],
+          cssVariable: '--font-poppins-obfuscated',
+          stripAriaLabel: true
+        }
+      ]
+    })
   ],
   experimental: {
     svgo: true,
@@ -75,6 +92,20 @@ export default defineConfig({
         name: 'Inter',
         cssVariable: '--font-inter',
         weights: ['400', '500'],
+        styles: ['normal']
+      },
+      {
+        provider: obfuscate(fontProviders.google()),
+        name: 'Inter',
+        cssVariable: '--font-inter-obfuscated',
+        weights: [400, 500],
+        styles: ['normal']
+      },
+      {
+        provider: obfuscate(fontProviders.google()),
+        name: 'Poppins',
+        cssVariable: '--font-poppins-obfuscated',
+        weights: [400, 500, 600, 700],
         styles: ['normal']
       },
       {

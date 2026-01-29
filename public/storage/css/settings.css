@@ -2,30 +2,24 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: Poppins, sans-serif;
 }
-
 body {
   background-color: #0a1d37;
-  color: #ffffff;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 20px;
   overflow: hidden;
-  transition: background-color 0.5s ease;
-}
-
-body::-webkit-scrollbar {
-  display: none;
-}
-
-body {
+  transition: background-color 0.5s;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
+body::-webkit-scrollbar {
+  display: none;
+}
 .god-rays {
   position: fixed;
   top: 0;
@@ -53,29 +47,27 @@ body {
   background-position:
     50% 50%,
     50% 50%;
-  animation: fadeIn 2s ease;
+  animation: 2s fadeIn;
   mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
   -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
   pointer-events: none;
   z-index: -1;
 }
-
 .god-rays::after {
   content: '';
   position: absolute;
   inset: 0;
   background-image: var(--stripes), var(--rays);
   background-size: 200%, 100%;
-  animation: god-rays 40s linear infinite;
+  animation: 40s linear infinite god-rays;
   background-attachment: fixed;
   mix-blend-mode: difference;
 }
-
 @keyframes god-rays {
   0% {
     background-position:
-      0% 0%,
-      0% 0%;
+      0 0,
+      0 0;
   }
   100% {
     background-position:
@@ -83,7 +75,6 @@ body {
       200% 200%;
   }
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -92,7 +83,6 @@ body {
     opacity: 1;
   }
 }
-
 .settings-container {
   background: linear-gradient(145deg, rgba(15, 30, 55, 0.95), rgba(20, 45, 75, 0.95));
   border: 2px solid #08152a;
@@ -108,10 +98,9 @@ body {
   gap: 25px;
   height: 95vh;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: 0.3s;
   position: relative;
 }
-
 .settings-container::before {
   content: '';
   position: absolute;
@@ -124,20 +113,18 @@ body {
   pointer-events: none;
   z-index: -1;
 }
-
 h1 {
-  grid-column: 1 / -1;
+  grid-column: 1/-1;
   text-align: center;
   margin-bottom: 10px;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #fff;
   text-shadow:
     0 3px 8px rgba(60, 91, 142, 0.7),
     0 0 15px rgba(255, 255, 255, 0.2);
   letter-spacing: 1px;
 }
-
 .tabs {
   display: flex;
   flex-direction: column;
@@ -148,7 +135,6 @@ h1 {
   border-radius: 15px;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
 }
-
 .tab {
   padding: 12px 18px;
   background: linear-gradient(90deg, #1a3559, #2a4366);
@@ -157,13 +143,12 @@ h1 {
   cursor: pointer;
   font-weight: 500;
   font-size: 1rem;
-  color: #ffffff;
+  color: #fff;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: 0.3s;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
-
 .tab::before {
   content: '';
   position: absolute;
@@ -172,20 +157,17 @@ h1 {
   width: 100%;
   height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  transition: all 0.5s ease;
+  transition: 0.5s;
 }
-
 .tab:hover::before {
   left: 100%;
 }
-
-.tab:hover,
-.tab.active {
+.tab.active,
+.tab:hover {
   background: linear-gradient(90deg, #3c5b8e, #4a6fa5);
   transform: translateX(5px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
-
 .content {
   padding: 20px;
   overflow-y: auto;
@@ -193,70 +175,60 @@ h1 {
   border: 2px solid #08152a;
   border-radius: 15px;
   height: 100%;
-  transition: all 0.3s ease;
+  transition: 0.3s;
   box-shadow:
     inset 0 0 5px rgba(0, 0, 0, 0.4),
     0 4px 15px rgba(0, 0, 0, 0.3);
 }
-
 .content::-webkit-scrollbar {
   width: 10px;
 }
-
 .content::-webkit-scrollbar-track {
   background: rgba(15, 40, 71, 0.4);
   border-radius: 5px;
 }
-
 .content::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #4a6fa5, #3c5b8e);
   border-radius: 5px;
   border: 1px solid #0a1d37;
 }
-
 .content::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #5c83ba, #4a6fa5);
 }
-
 .section {
   display: none;
   padding: 25px;
   background: rgba(15, 40, 71, 0.75);
   border: 2px solid #08152a;
   border-radius: 12px;
-  animation: fadeIn 0.4s ease;
+  animation: 0.4s fadeIn;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
-
 .section.active {
   display: block;
 }
-
 h2 {
   font-size: 1.9rem;
   margin-bottom: 22px;
-  color: #ffffff;
+  color: #fff;
   font-weight: 600;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
-
 p {
   font-size: 1.15rem;
   color: #b0c2d4;
   margin-bottom: 25px;
   line-height: 1.7;
 }
-
 label {
   font-weight: 500;
-  color: #ffffff;
+  color: #fff;
   margin-bottom: 12px;
   display: block;
 }
-
-input[type='text'],
-input[type='file'],
 input[type='color'],
+input[type='file'],
+input[type='text'],
 select {
   width: 100%;
   padding: 14px 16px;
@@ -264,40 +236,35 @@ select {
   border: 1px solid #0a1d37;
   border-radius: 8px;
   background: rgba(30, 60, 100, 0.9);
-  color: #ffffff;
-  transition: all 0.3s ease;
+  color: #fff;
+  transition: 0.3s;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
-
-input[type='text']:focus,
-input[type='file']:focus,
 input[type='color']:focus,
+input[type='file']:focus,
+input[type='text']:focus,
 select:focus {
   background: rgba(40, 80, 130, 0.9);
   transform: scale(1.02);
-  outline: none;
+  outline: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
-
 .checkbox-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 22px;
   margin-bottom: 25px;
 }
-
 .checkbox-container button {
   width: auto;
   padding: 10px 20px;
   margin-right: 10px;
 }
-
 .checkbox-item {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-
 input[type='checkbox'] {
   appearance: none;
   width: 22px;
@@ -306,40 +273,36 @@ input[type='checkbox'] {
   background: rgba(30, 60, 100, 0.9);
   cursor: pointer;
   position: relative;
-  transition: all 0.3s ease;
+  transition: 0.3s;
   border: 1px solid #0a1d37;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
-
 input[type='checkbox']:checked {
   background: linear-gradient(135deg, #3c5b8e, #4a6fa5);
 }
-
 input[type='checkbox']:checked::after {
   content: '✔';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #ffffff;
+  color: #fff;
   font-size: 16px;
 }
-
 button {
   width: 100%;
   padding: 16px;
   background: linear-gradient(90deg, #3c5b8e, #4a6fa5);
   border: 1px solid #0a1d37;
   border-radius: 8px;
-  color: #ffffff;
+  color: #fff;
   font-weight: 500;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s ease;
+  transition: 0.4s;
   box-shadow: 0 4px 15px rgba(60, 91, 142, 0.4);
 }
-
 button::before {
   content: '';
   position: absolute;
@@ -348,13 +311,11 @@ button::before {
   width: 100%;
   height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  transition: all 0.6s ease;
+  transition: 0.6s;
 }
-
 button:hover::before {
   left: 100%;
 }
-
 button:hover {
   background: linear-gradient(90deg, #2a3c5f, #3c5b8e);
   transform: translateY(-3px) scale(1.02);
@@ -363,10 +324,6 @@ button:hover {
 .save-button {
   background: linear-gradient(90deg, #52c242, #00c254);
   border: 1px solid #8b1a1a;
-}
-
-.save-button:hover {
-  background: linear-gradient(90deg, #00ff69, #00a142);
 }
 .import-button {
   background: linear-gradient(90deg, #42a5f5, #1e88e5);
@@ -382,40 +339,34 @@ button:hover {
   background: linear-gradient(90deg, #d32f2f, #e64a4a);
   border: 1px solid #8b1a1a;
 }
-
 .reset-button:hover {
   background: linear-gradient(90deg, #b02323, #d32f2f);
 }
-
 .about-blank-button {
   background: linear-gradient(90deg, #2a6f97, #4096c1);
   border: 1px solid #1a3d5c;
   margin-top: 20px;
 }
-
 .about-blank-button:hover {
   background: linear-gradient(90deg, #1e506f, #2a6f97);
 }
-
 .legal-tabs {
   display: flex;
   gap: 15px;
   margin-bottom: 25px;
 }
-
 .legal-tab {
   padding: 10px 25px;
   background: linear-gradient(90deg, #1a3559, #2a4366);
   border: 1px solid #0a1d37;
   border-radius: 8px;
   cursor: pointer;
-  color: #ffffff;
+  color: #fff;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: 0.3s;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
-
 .legal-tab::before {
   content: '';
   position: absolute;
@@ -424,75 +375,62 @@ button:hover {
   width: 100%;
   height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  transition: all 0.5s ease;
+  transition: 0.5s;
 }
-
 .legal-tab:hover::before {
   left: 100%;
 }
-
-.legal-tab:hover,
-.legal-tab.active {
+.legal-tab.active,
+.legal-tab:hover {
   background: linear-gradient(90deg, #3c5b8e, #4a6fa5);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
-
 .legal-section {
   display: none;
 }
-
 .legal-section.active {
   display: block;
 }
-
 hr {
   border: 1px solid rgba(255, 255, 255, 0.15);
   margin: 30px 0;
 }
-
 @media (max-width: 768px) {
   .settings-container {
     grid-template-columns: 1fr;
     padding: 15px;
     height: auto;
   }
-
   .tabs {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
     padding: 10px;
   }
-
   .tab {
     padding: 8px 14px;
     font-size: 0.95rem;
     border-radius: 10px;
   }
-
-  .tab:hover,
-  .tab.active {
+  .tab.active,
+  .tab:hover {
     transform: translateY(-3px);
   }
-
   .content {
     padding: 15px;
   }
-
   h1 {
     font-size: 2rem;
     margin-bottom: 8px;
   }
 }
-
 .partners-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 15px;
   padding: 10px;
 }
-
 .partner-item {
   display: flex;
   flex-direction: column;
@@ -502,16 +440,14 @@ hr {
   border-radius: 12px;
   padding: 10px;
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.3s,
+    box-shadow 0.3s;
   cursor: pointer;
 }
-
 .partner-item:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
 }
-
 .partner-image {
   width: 100px;
   height: 100px;
@@ -521,15 +457,13 @@ hr {
   object-fit: cover;
   margin-bottom: 10px;
 }
-
 .partner-title {
   font-size: 1.1rem;
-  color: #ffffff;
+  color: #fff;
   font-weight: 600;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   text-align: center;
 }
-
 input[type='file'] {
   width: 100%;
   padding: 14px 16px;
@@ -537,38 +471,32 @@ input[type='file'] {
   border: 1px solid #0a1d37;
   border-radius: 8px;
   background: rgba(30, 60, 100, 0.9);
-  color: #ffffff;
-  transition: all 0.3s ease;
+  color: #fff;
+  transition: 0.3s;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  -webkit-appearance: none;
+  appearance: none;
 }
-
 input[type='file']::-webkit-file-upload-button,
 input[type='file']::file-selector-button {
   background: linear-gradient(90deg, #3c5b8e, #4a6fa5);
   border: 1px solid #0a1d37;
   border-radius: 6px;
   padding: 8px 16px;
-  color: #ffffff;
+  color: #fff;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
-
 input[type='file']::-webkit-file-upload-button:hover,
 input[type='file']::file-selector-button:hover {
   background: linear-gradient(90deg, #2a3c5f, #3c5b8e);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(60, 91, 142, 0.6);
 }
-
 input[type='file']:focus::-webkit-file-upload-button,
 input[type='file']:focus::file-selector-button {
-  outline: none;
+  outline: 0;
   background: linear-gradient(90deg, #4a6fa5, #5c83ba);
-}
-
-input[type='file'] {
-  -webkit-appearance: none;
-  appearance: none;
 }
