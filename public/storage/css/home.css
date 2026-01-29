@@ -75,9 +75,8 @@ h1 {
   background-color: #0a1d37;
   padding: 14px;
   position: relative;
-  box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 4px rgba(255, 255, 255, 0.2);
   margin: 0 auto;
-  border: 2px solid #fff;
 }
 .carousel-container {
   position: relative;
@@ -310,7 +309,6 @@ h1 {
 .large-image {
   height: 200px;
   width: auto;
-  border: 5px solid #fff;
   border-radius: 12px;
   box-shadow: 0 12px 35px rgba(255, 255, 255, 0.3);
   transition:
@@ -394,7 +392,7 @@ h1 {
   color: #fff;
   padding: 10px 14px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   z-index: 999;
   font-size: 12px;
   width: auto;
