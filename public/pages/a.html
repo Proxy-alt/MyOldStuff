@@ -22,6 +22,7 @@
     <script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
     <title>PeteZah | Apps</title>
     <link rel="icon" type="icon/x-icon" href="/storage/images/logo-png-removebg-preview.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="/storage/css/themes.css" />
     <link rel="stylesheet" type="text/css" href="/storage/css/apps.css" />
     <meta name="description" content="Pete Zah, game on" />
@@ -32,7 +33,15 @@
       ><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WPH7NCG4" height="0" width="0" style="display: none; visibility: hidden"></iframe
     ></noscript>
     <div class="god-rays"></div>
-    <div class="search-container"><input type="text" id="search-games" placeholder="Search apps" onkeyup="filterItems()" /></div>
+
+    <button class="add-app-btn" onclick="openAddAppPopup()">
+      <i class="fas fa-plus"></i> Add App
+    </button>
+    
+    <div class="search-container">
+      <input type="text" id="search-games" placeholder="Search apps" onkeyup="filterItems()" />
+    </div>
+    
     <div class="game-container" id="imageContainer">
       <div class="image-item" data-label="app request">
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSfDWiLkFUAcAsVVzb57HFW1xfGY3dSUwbMUhDdinsyESCCYeg/viewform?usp=sf_link"
@@ -250,7 +259,7 @@
           <div class="label">Vortex</div></a
         >
       </div>
-      <div class="image-item" data-label="espn">
+      <div class="image-item" data-label="fifa">
         <a href="/iframe.html?url=/storage/ag/a/fifa"
           ><img src="/storage/images/main/fifarosters.jpg" />
           <div class="label">Fifa Rosters</div></a
@@ -299,6 +308,70 @@
         >
       </div>
     </div>
+
+    <div id="addAppPopup" class="popup-overlay">
+      <div class="popup-content">
+        <div class="popup-header">
+          <h2>Add Custom App</h2>
+          <button class="popup-close" onclick="closeAddAppPopup()">&times;</button>
+        </div>
+        <form id="addAppForm" onsubmit="addCustomApp(event)">
+          <div class="form-group">
+            <label for="appTitle">App Title</label>
+            <input type="text" id="appTitle" required placeholder="Enter app name">
+          </div>
+          <div class="form-group">
+            <label for="appUrl">App URL</label>
+            <input type="url" id="appUrl" required placeholder="https://example.com">
+          </div>
+          <div class="form-group">
+            <label for="appImage">App Image</label>
+            <input type="file" id="appImage" required accept="image/*">
+            <div id="imagePreview" class="image-preview"></div>
+          </div>
+          <button type="submit" class="submit-btn">Add App</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="appOptionsPopup" class="popup-overlay">
+      <div class="popup-content small">
+        <div class="popup-header">
+          <h3>App Options</h3>
+          <button class="popup-close" onclick="closeAppOptionsPopup()">&times;</button>
+        </div>
+        <div class="options-menu">
+          <button class="option-btn" onclick="toggleFavorite()">
+            <i class="far fa-star"></i> <span id="favoriteText">Favorite</span>
+          </button>
+          <button class="option-btn" onclick="shareApp()">
+            <i class="fas fa-share"></i> Share App
+          </button>
+          <button class="option-btn remove" onclick="removeApp()">
+            <i class="fas fa-trash"></i> Remove App
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sharePopup" class="popup-overlay">
+      <div class="popup-content small">
+        <div class="popup-header">
+          <h3>Share App</h3>
+          <button class="popup-close" onclick="closeSharePopup()">&times;</button>
+        </div>
+        <div class="share-content">
+          <p>Share this app with others:</p>
+          <div class="share-link-container">
+            <input type="text" id="shareLink" readonly>
+            <button class="copy-btn" onclick="copyShareLink()">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <script type="text/javascript">
       atOptions = { key: 'fee48967b89db2d0bd32a6c670ffa744', format: 'iframe', height: 50, width: 320, params: {} };
     </script>

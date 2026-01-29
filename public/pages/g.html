@@ -22,6 +22,7 @@
     <script type="text/javascript" src="//pl27983175.effectivegatecpm.com/c1/07/27/c10727dadb32856a5f427df5cc7f44ab.js"></script>
     <title>PeteZah | Games</title>
     <link rel="icon" type="icon/x-icon" href="/storage/images/logo-png-removebg-preview.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="/storage/css/themes2.css" />
     <link rel="stylesheet" type="text/css" href="/storage/css/games.css" />
     <meta name="description" content="Pete Zah, game on" />
@@ -32,24 +33,110 @@
       ><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WPH7NCG4" height="0" width="0" style="display: none; visibility: hidden"></iframe
     ></noscript>
     <div class="god-rays"></div>
-    <button class="randomGameOpensBtn" onclick="randomGameOpen()">Random Game</button>
+    
+    <button class="randomGameOpensBtn" onclick="randomGameOpen()">
+      <i class="fas fa-dice"></i> Random Game
+    </button>
+    
+    <button class="add-game-btn" onclick="openAddGamePopup()">
+      <i class="fas fa-plus"></i> Add Game
+    </button>
+    
     <div class="search-container">
-      <input type="text" id="search-games" placeholder="Search for YOUR Favorite Game....." onkeyup="filterItems()" />
+      <input type="text" id="search-games" placeholder="Search Space for Games..." onkeyup="filterItems()" />
     </div>
-    <div class="filter-container">
-      <select id="gameFilter" onchange="filterByCategory()">
-        <option value="">Filter by Category</option>
-        <option value="action">Action</option>
-        <option value="racing">Racing</option>
-        <option value="strategy">Strategy</option>
-        <option value="sports">Sports</option>
-        <option value="skill">Skill</option>
-        <option value="shooting">Shooting</option>
-        <option value="2 player">2 Player</option>
-        <option value="io">Io</option>
-      </select>
+    
+    <div class="category-container">
+      <button class="category-btn active" data-category="">All</button>
+      <button class="category-btn" data-category="action">Action</button>
+      <button class="category-btn" data-category="racing">Racing</button>
+      <button class="category-btn" data-category="strategy">Strategy</button>
+      <button class="category-btn" data-category="sports">Sports</button>
+      <button class="category-btn" data-category="skill">Skill</button>
+      <button class="category-btn" data-category="shooting">Shooting</button>
+      <button class="category-btn" data-category="2 player">2 Player</button>
+      <button class="category-btn" data-category="io">Io</button>
     </div>
+    
     <div class="game-container" id="imageContainer"></div>
+
+    <div id="addGamePopup" class="popup-overlay">
+      <div class="popup-content">
+        <div class="popup-header">
+          <h2>Add Custom Game</h2>
+          <button class="popup-close" onclick="closeAddGamePopup()">&times;</button>
+        </div>
+        <form id="addGameForm" onsubmit="addCustomGame(event)">
+          <div class="form-group">
+            <label for="gameTitle">Game Title</label>
+            <input type="text" id="gameTitle" required placeholder="Enter game name">
+          </div>
+          <div class="form-group">
+            <label for="gameUrl">Game URL</label>
+            <input type="url" id="gameUrl" required placeholder="https://example.com/game">
+          </div>
+          <div class="form-group">
+            <label for="gameImage">Game Image</label>
+            <input type="file" id="gameImage" required accept="image/*">
+            <div id="imagePreview" class="image-preview"></div>
+          </div>
+          <div class="form-group">
+            <label for="gameCategory">Category</label>
+            <select id="gameCategory" required>
+              <option value="">Select Category</option>
+              <option value="action">Action</option>
+              <option value="racing">Racing</option>
+              <option value="strategy">Strategy</option>
+              <option value="sports">Sports</option>
+              <option value="skill">Skill</option>
+              <option value="shooting">Shooting</option>
+              <option value="2 player">2 Player</option>
+              <option value="io">Io</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Add Game</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="gameOptionsPopup" class="popup-overlay">
+      <div class="popup-content small">
+        <div class="popup-header">
+          <h3>Game Options</h3>
+          <button class="popup-close" onclick="closeGameOptionsPopup()">&times;</button>
+        </div>
+        <div class="options-menu">
+          <button class="option-btn" onclick="toggleFavorite()">
+            <i class="far fa-star"></i> <span id="favoriteText">Favorite</span>
+          </button>
+          <button class="option-btn" onclick="shareGame()">
+            <i class="fas fa-share"></i> Share Game
+          </button>
+          <button class="option-btn remove" onclick="removeGame()">
+            <i class="fas fa-trash"></i> Remove Game
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sharePopup" class="popup-overlay">
+      <div class="popup-content small">
+        <div class="popup-header">
+          <h3>Share Game</h3>
+          <button class="popup-close" onclick="closeSharePopup()">&times;</button>
+        </div>
+        <div class="share-content">
+          <p>Share this game with others:</p>
+          <div class="share-link-container">
+            <input type="text" id="shareLink" readonly>
+            <button class="copy-btn" onclick="copyShareLink()">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <script type="text/javascript">
       atOptions = { key: 'fee48967b89db2d0bd32a6c670ffa744', format: 'iframe', height: 50, width: 320, params: {} };
     </script>

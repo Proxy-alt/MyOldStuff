@@ -186,22 +186,37 @@ body {
   bottom: 30px;
 }
 @media (max-width: 1024px) {
-  .sidebar {
-    height: 56px;
-    margin: 13px;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    width: calc(100% - 26px);
-    max-height: calc(100vh - 26px);
+  body {
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  .sidebar.menu-active {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: auto;
+    margin: 0;
+    overflow: hidden;
+    scrollbar-width: none;
+    width: 100%;
+    max-height: 56px;
+    transition: max-height 0.4s ease;
+    z-index: 1000;
+    border-radius: 0;
+  }
+  .sidebar.mobile-hidden {
+    max-height: 56px;
+  }
+  .sidebar.mobile-visible {
+    max-height: 100vh;
     overflow-y: auto;
   }
   .sidebar .sidebar-header {
     position: sticky;
     top: 0;
     z-index: 20;
-    border-radius: 16px;
+    border-radius: 0;
     background: #151a2d;
     padding: 8px 10px;
   }
@@ -236,6 +251,39 @@ body {
     position: relative;
     bottom: 0;
     margin: 40px 0 30px;
+  }
+  .main-content {
+    position: fixed !important;
+    top: 56px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 56px) !important;
+    border-radius: 0 !important;
+    transition: none;
+    overflow: hidden;
+    background: #151a2d;
+  }
+  .mainiframe-container {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  iframe {
+    border-radius: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
   }
 }
 .main-content {
@@ -366,4 +414,10 @@ iframe {
   width: 100%;
   height: 100%;
   border: none;
+}
+@media (min-width: 1025px) {
+  .sidebar.mobile-hidden,
+  .sidebar.mobile-visible {
+    max-height: none !important;
+  }
 }

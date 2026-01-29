@@ -8,6 +8,11 @@ const sidebar = document.querySelector('.sidebar'),
   widgetPopup = document.querySelector('.widget-popup'),
   widgetOptions = document.querySelectorAll('.widget-option');
 
+// Check if device is mobile
+function isMobile() {
+  return window.innerWidth <= 1024;
+}
+
 if ((location.pathname.endsWith('index.html') && '#blank' === location.hash) || location.href.endsWith('#blank')) {
   const e = window.open(),
     t = e.document.createElement('iframe');
@@ -20,12 +25,56 @@ if ((location.pathname.endsWith('index.html') && '#blank' === location.hash) || 
     (window.location = 'about:blank'));
 }
 
-sidebar.classList.add('collapsed');
-mainContent.classList.remove('sidebar-expanded');
+// Initialize: collapse sidebar on desktop only
+if (!isMobile()) {
+  sidebar.classList.add('collapsed');
+  mainContent.classList.remove('sidebar-expanded');
+} else {
+  // On mobile, start with sidebar in collapsed state
+  sidebar.classList.add('mobile-hidden');
+}
 
-sidebarToggler.addEventListener('click', () => {
-  sidebar.classList.toggle('collapsed');
-  mainContent.classList.toggle('sidebar-expanded');
+// Make BOTH togglers work
+function handleToggle() {
+  if (isMobile()) {
+    // On mobile, toggle visibility
+    sidebar.classList.toggle('mobile-hidden');
+    sidebar.classList.toggle('mobile-visible');
+  } else {
+    // Desktop behavior
+    sidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('sidebar-expanded');
+  }
+}
+
+// Add event listener to both togglers
+sidebarToggler.addEventListener('click', handleToggle);
+if (menuToggler) {
+  menuToggler.addEventListener('click', handleToggle);
+}
+
+// Handle window resize
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (isMobile()) {
+      // Remove desktop classes on mobile
+      sidebar.classList.remove('collapsed');
+      mainContent.classList.remove('sidebar-expanded');
+      // Ensure mobile classes are properly set
+      if (!sidebar.classList.contains('mobile-visible')) {
+        sidebar.classList.add('mobile-hidden');
+      }
+    } else {
+      // Remove mobile classes on desktop
+      sidebar.classList.remove('mobile-hidden', 'mobile-visible');
+      // Restore desktop collapsed state
+      if (!sidebar.classList.contains('collapsed')) {
+        sidebar.classList.add('collapsed');
+      }
+    }
+  }, 250);
 });
 
 function updateActiveNavLink(src) {

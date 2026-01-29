@@ -93,16 +93,6 @@ img {
     transform: scale(1.05);
   }
 }
-@keyframes slideIn {
-  from {
-    transform: translateX(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
 @keyframes glow {
   0%,
   100% {
