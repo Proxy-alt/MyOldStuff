@@ -1,7 +1,7 @@
 import { baremuxPath } from '@mercuryworkshop/bare-mux/node';
 import { epoxyPath } from '@mercuryworkshop/epoxy-transport';
 import { scramjetPath } from '@mercuryworkshop/scramjet/path';
-import { server as wisp } from '@mercuryworkshop/wisp-js/server';
+// wisp-server-python handles WebSocket transport on port 3004
 import bareServerPkg from '@tomphttp/bare-server-node';
 import bcrypt from 'bcrypt';
 import CleanCSS from 'clean-css';
@@ -76,6 +76,10 @@ const ipReputation = new Map();
 const circuitBreakers = new Map();
 const activeRequests = new Map();
 let requestIdCounter = 0;
+
+// Track WISP connections for monitoring (Python handles actual WS)
+const wispConnectionStats = new Map();
+const WISP_PYTHON_ENABLED = process.env.WISP_PYTHON_ENABLED !== 'false'; // Default true
 
 async function minifyFiles() {
   if (minificationInProgress) return;
@@ -1737,6 +1741,7 @@ server.on('upgrade', (req, socket, head) => {
   socket.once('close', cleanup);
   socket.once('error', cleanup);
 
+  // Handle Bare WebSocket upgrades
   if (isBare) {
     try {
       if (bare.shouldRoute(req)) {
@@ -1748,19 +1753,31 @@ server.on('upgrade', (req, socket, head) => {
       console.error('Bare server upgrade error:', error.message);
       socket.destroy();
     }
-  } else {
-    if (url.startsWith('/api/wisp-premium/')) req.url = '/wisp/' + url.slice(18);
-    else if (url.startsWith('/api/alt-wisp-1/')) req.url = '/wisp/' + url.slice(16);
-    else if (url.startsWith('/api/alt-wisp-2/')) req.url = '/wisp/' + url.slice(16);
-    else if (url.startsWith('/api/alt-wisp-3/')) req.url = '/wisp/' + url.slice(16);
-    else if (url.startsWith('/api/alt-wisp-4/')) req.url = '/wisp/' + url.slice(16);
-    else if (url.startsWith('/api/alt-wisp-5/')) req.url = '/wisp/' + url.slice(16);
-    // this is because in my caddyfile I rewrite these to go to my vpn servers
-    // if you are self hosting just ignore this
-    try {
-      wisp.routeRequest(req, socket, head);
-    } catch (error) {
-      console.error('WISP server error:', error.message);
+    return;
+  }
+
+  // WISP connections: Track for monitoring but don't handle
+  // wisp-server-python on port 3004 handles the actual WebSocket
+  if (isWisp) {
+    // Track connection for stats
+    const wispStats = wispConnectionStats.get(ip) || { count: 0, lastSeen: Date.now() };
+    wispStats.count++;
+    wispStats.lastSeen = Date.now();
+    wispConnectionStats.set(ip, wispStats);
+
+    if (WISP_PYTHON_ENABLED) {
+      // nginx/HAProxy will proxy this to wisp-server-python:3004
+      // Just log and close - the actual upgrade happens at reverse proxy level
+      console.log(`[WISP] Connection from ${ip} - proxied to Python server`);
+      shield.trackWS(ip, 1);
+      
+      // Don't handle the upgrade here - let nginx do it
+      // Just destroy the socket since nginx already forwarded it
+      socket.destroy();
+    } else {
+      // Fallback: If Python server is disabled, reject
+      console.log(`[WISP] Python server disabled, rejecting connection from ${ip}`);
+      shield.incrementBlocked(ip, 'wisp_disabled');
       socket.destroy();
     }
   }
@@ -1864,6 +1881,13 @@ function startCleanupInterval() {
         systemState.lastPowSolve.delete(ip);
       }
     }
+
+    // Cleanup WISP connection stats
+    for (const [ip, stats] of wispConnectionStats.entries()) {
+      if (now - stats.lastSeen > 600000) {
+        wispConnectionStats.delete(ip);
+      }
+    }
   }, 60000);
 }
 
@@ -1883,6 +1907,8 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 minifyFiles().catch((err) => console.error('Minification failed:', err));
+
+console.log(`[WISP] Python server ${WISP_PYTHON_ENABLED ? 'ENABLED' : 'DISABLED'} - nginx proxies to port 3004`);
 
 server.listen({ port }, () => {
   const address = server.address();
