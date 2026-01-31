@@ -106,11 +106,9 @@ package-lock.json
 *.lock
 !pnpm-lock.yaml
 
-# ==========================
 # PeteZah Specific Secrets 
-# ==========================
 
-# 1. All .env files
+# 1. All .env files / files containing secrets
 .env
 .env.*
 *.env
@@ -118,6 +116,7 @@ package-lock.json
 .env.development
 .env.production
 .env.test
+external-apis.js
 
 # 2. SQLite database 
 storage/data/users.db

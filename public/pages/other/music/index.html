@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <style>
       :root {
         --bg-start: #0a1a2e;
@@ -26,13 +29,7 @@
         justify-content: center;
         min-height: 100vh;
         background: linear-gradient(135deg, var(--bg-start) 0, var(--bg-end) 100%);
-        font-family:
-          Inter,
-          -apple-system,
-          BlinkMacSystemFont,
-          'Segoe UI',
-          Roboto,
-          sans-serif;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         color: var(--highlight);
         padding: 20px;
       }
@@ -60,9 +57,7 @@
         );
         background-image: var(--stripes), var(--rays);
         background-size: 300%, 200%;
-        background-position:
-          50% 50%,
-          50% 50%;
+        background-position: 50% 50%, 50% 50%;
         animation: fadeIn 2s ease;
         mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
         -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
@@ -80,24 +75,12 @@
         mix-blend-mode: difference;
       }
       @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
       @keyframes god-rays {
-        0% {
-          background-position:
-            0 0,
-            0 0;
-        }
-        100% {
-          background-position:
-            400% 400%,
-            400% 400%;
-        }
+        0% { background-position: 0 0, 0 0; }
+        100% { background-position: 400% 400%, 400% 400%; }
       }
       .search-container {
         width: 100%;
@@ -433,14 +416,7 @@
         opacity: 0.7;
         margin-top: 4px;
         color: var(--highlight);
-      }
-      #ytPlayer {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 1px;
-        height: 1px;
-        opacity: 0.01;
+        font-family: 'Inconsolata', monospace;
       }
       .loading {
         text-align: center;
@@ -550,438 +526,60 @@
   </head>
   <body>
     <div class="god-rays"></div>
-    <div class="search-container"><input type="text" class="search-input" placeholder="Search for any song..." id="searchInput" /></div>
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Search for any song..." id="searchInput" />
+    </div>
     <div class="search-results" id="searchResults"></div>
     <div class="main-container">
       <div class="player">
-        <div class="album-art">
-          <i class="fa-solid fa-music" id="musicIcon"></i> <img src="" alt="Album" id="albumCover" crossorigin="anonymous" style="display: none" />
+        <div class="album-art" id="coverArt">
+          <i class="fa-solid fa-music" id="musicIcon"></i>
+          <img src="" alt="Album" id="albumCover" crossorigin="anonymous" style="display: none" />
         </div>
         <div class="info" id="playerInfo">
-          <div class="top-icons"><i id="favoritesBtn" class="fa-solid fa-star"></i></div>
+          <div class="top-icons">
+            <i id="favoritesBtn" class="fa-solid fa-star"></i>
+          </div>
           <div class="track-title" id="trackTitle">Not Playing</div>
           <div class="artist" id="artistName"></div>
           <div class="controls">
             <div class="control-row">
-              <i id="backward10" class="fas fa-backward control-btn"></i> <i id="backward5" class="fa-solid fa-chevron-left control-btn"></i>
-              <i id="playPause" class="fa-solid fa-play control-btn"></i> <i id="forward5" class="fa-solid fa-chevron-right control-btn"></i>
+              <i id="backward10" class="fas fa-backward control-btn"></i>
+              <i id="backward5" class="fa-solid fa-chevron-left control-btn"></i>
+              <i id="playPause" class="fa-solid fa-play control-btn"></i>
+              <i id="forward5" class="fa-solid fa-chevron-right control-btn"></i>
               <i id="forward10" class="fas fa-forward control-btn"></i>
             </div>
             <div class="control-row">
-              <i id="loopToggle" class="fa-solid fa-repeat control-btn"></i> <i id="volumeBtn" class="fa-solid fa-volume-high control-btn"></i>
+              <i id="loopToggle" class="fa-solid fa-repeat control-btn"></i>
+              <i id="volumeBtn" class="fa-solid fa-volume-high control-btn"></i>
               <i id="favoriteBtn" class="fa-regular fa-heart control-btn"></i>
             </div>
           </div>
-          <div id="seekbar" class="seekbar"><div id="progress"></div></div>
-          <div class="timecodes"><span id="currentTime">0:00</span> <span id="remainingTime">-0:00</span></div>
+          <div id="seekbar" class="seekbar">
+            <div id="progress"></div>
+          </div>
+          <div class="timecodes">
+            <span id="currentTime">0:00</span>
+            <span id="remainingTime">-0:00</span>
+          </div>
         </div>
-        <div class="lyrics-info" id="lyricsInfo"><div class="lyrics-content" id="lyricsContent"></div></div>
+        <div class="lyrics-info" id="lyricsInfo">
+          <div class="lyrics-content" id="lyricsContent"></div>
+        </div>
       </div>
       <div class="favorites-column" id="favoritesColumn">
         <div class="favorites-title">Favorites</div>
-        <div class="play-favorites-btn" id="playFavoritesBtn"><i class="fas fa-play"></i> Play Favorites</div>
+        <div class="play-favorites-btn" id="playFavoritesBtn">
+          <i class="fas fa-play"></i> Play Favorites
+        </div>
       </div>
-      <div class="lyrics-toggle" id="lyricsToggle"><i class="fa-solid fa-align-left"></i></div>
-      <div id="player-container"><div id="ytPlayer"></div></div>
-      <script>
-        const YT_KEY = 'AIzaSyBNuc_E58vDMnPSk_OMlqztgsiOHSXwRyQ',
-          SEARCH_EP = 'https://itunes.apple.com/search?term=',
-          searchInput = document.querySelector('#searchInput'),
-          searchResults = document.querySelector('#searchResults'),
-          trackTitle = document.querySelector('#trackTitle'),
-          artistName = document.querySelector('#artistName'),
-          albumCover = document.querySelector('#albumCover'),
-          musicIcon = document.querySelector('#musicIcon'),
-          playPauseBtn = document.querySelector('#playPause'),
-          volumeBtn = document.querySelector('#volumeBtn'),
-          seekBar = document.querySelector('#seekbar'),
-          progressBar = document.querySelector('#progress'),
-          currentTimeSpan = document.querySelector('#currentTime'),
-          remainingTimeSpan = document.querySelector('#remainingTime'),
-          lyricsToggle = document.querySelector('#lyricsToggle'),
-          playerInfo = document.querySelector('#playerInfo'),
-          lyricsInfo = document.querySelector('#lyricsInfo'),
-          lyricsContent = document.querySelector('#lyricsContent'),
-          favoriteBtn = document.querySelector('#favoriteBtn'),
-          favoritesBtn = document.querySelector('#favoritesBtn'),
-          favoritesColumn = document.querySelector('#favoritesColumn'),
-          playFavoritesBtn = document.querySelector('#playFavoritesBtn');
-        let searchTimeout,
-          showingLyrics = !1,
-          isMuted = !1,
-          player = null,
-          isPlaying = !1,
-          isDragging = !1,
-          playerReady = !1,
-          currentTrack = { title: 'Not Playing', artist: '', artwork: '', genre: '' },
-          isFavorite = !1,
-          favorites = JSON.parse(localStorage.getItem('favorites')) || [],
-          currentFavoriteIndex = -1;
-        async function loadYouTubeAPI(e = 3, t = 2e3) {
-          return new Promise((r, a) => {
-            if (window.YT && window.YT.Player) return void r();
-            const i = document.createElement('script');
-            ((i.src = 'https://www.youtube.com/iframe_api'),
-              (i.onerror = () => {
-                e > 0 ? setTimeout(() => loadYouTubeAPI(e - 1, t), t) : a(new Error('Failed to load YouTube API'));
-              }));
-            const n = document.getElementsByTagName('script')[0];
-            (n.parentNode.insertBefore(i, n), (window.onYouTubeIframeAPIReady = () => r()));
-          });
-        }
-        async function initPlayer() {
-          try {
-            (await loadYouTubeAPI(),
-              (player = new window.YT.Player('ytPlayer', {
-                height: '1',
-                width: '1',
-                videoId: '',
-                host: 'https://www.youtube-nocookie.com',
-                playerVars: { playsinline: 1, enablejsapi: 1, modestbranding: 1, rel: 0, showinfo: 0, autoplay: 0 },
-                events: {
-                  onReady: () => {
-                    if (
-                      ((playerReady = !0),
-                      playPauseBtn.addEventListener('click', togglePlayback),
-                      volumeBtn.addEventListener('click', toggleMute),
-                      seekBar.addEventListener('mousedown', startSeek),
-                      document.addEventListener('mousemove', dragSeek),
-                      document.addEventListener('mouseup', endSeek),
-                      setInterval(updateProgress, 500),
-                      favorites.length > 0)
-                    ) {
-                      const e = JSON.parse(localStorage.getItem('lastPlayed'));
-                      e && playSong(e.title, e.artist, e.artwork, e.genre);
-                    }
-                  },
-                  onStateChange: (e) => {
-                    (e.data === window.YT.PlayerState.PLAYING
-                      ? ((isPlaying = !0), playPauseBtn.classList.remove('fa-play'), playPauseBtn.classList.add('fa-pause'))
-                      : (e.data !== window.YT.PlayerState.PAUSED && e.data !== window.YT.PlayerState.ENDED) ||
-                        ((isPlaying = !1), playPauseBtn.classList.remove('fa-pause'), playPauseBtn.classList.add('fa-play')),
-                      e.data === window.YT.PlayerState.ENDED && isLooping
-                        ? (player.seekTo(0), player.playVideo())
-                        : e.data === window.YT.PlayerState.ENDED &&
-                          currentFavoriteIndex >= 0 &&
-                          currentFavoriteIndex < favorites.length - 1 &&
-                          playNextFavorite());
-                  },
-                  onError: (e) => {
-                    searchResults.innerHTML = '<div class="error-message">Failed to load video. Please try another song.</div>';
-                  }
-                }
-              })));
-          } catch (e) {
-            searchResults.innerHTML = '<div class="error-message">Unable to initialize player. Please refresh the page.</div>';
-          }
-        }
-        function toggleMute() {
-          player &&
-            playerReady &&
-            (isMuted
-              ? (player.unMute(), (volumeBtn.className = 'fa-solid fa-volume-high control-btn'), (isMuted = !1))
-              : (player.mute(), (volumeBtn.className = 'fa-solid fa-volume-xmark control-btn'), (isMuted = !0)));
-        }
-        async function searchSongs(e) {
-          ((searchResults.innerHTML = '<div class="loading">Searching...</div>'), showSearchResults());
-          const t = `${SEARCH_EP}${encodeURIComponent(e)}&media=music&limit=10`;
-          try {
-            const e = await fetch(t);
-            displaySearchResults((await e.json()).results);
-          } catch (e) {
-            searchResults.innerHTML = '<div class="error-message">Search failed. Please try again.</div>';
-          }
-        }
-        function displaySearchResults(e) {
-          e && 0 !== e.length
-            ? ((searchResults.innerHTML = ''),
-              e.forEach((e) => {
-                if (!e.trackName || !e.artistName) return;
-                const t = document.createElement('div');
-                ((t.className = 'result-item'),
-                  (t.innerHTML = `\n<div class="result-img">\n<img src="${e.artworkUrl100}" alt="${e.trackName}" crossorigin="anonymous">\n</div>\n<div class="result-info">\n<div class="result-title">${e.trackName}</div>\n<div class="result-artist">${e.artistName}</div>\n</div>\n`),
-                  t.addEventListener('click', () => {
-                    (playSong(e.trackName, e.artistName, e.artworkUrl100, e.primaryGenreName),
-                      hideSearchResults(),
-                      (searchInput.value = ''),
-                      (currentFavoriteIndex = -1));
-                  }),
-                  searchResults.appendChild(t));
-              }))
-            : (searchResults.innerHTML = '<div class="loading">No results found</div>');
-        }
-        function showSearchResults() {
-          searchResults.classList.add('active');
-        }
-        function hideSearchResults() {
-          searchResults.classList.remove('active');
-        }
-        function playSong(e, t, r, a = '') {
-          ((trackTitle.textContent = e),
-            (artistName.textContent = t),
-            (albumCover.src = r.replace('100x100', '600x600')),
-            (albumCover.style.display = 'block'),
-            (musicIcon.style.display = 'none'),
-            showingLyrics && fetchLyrics(t, e),
-            (currentTrack = { title: e, artist: t, artwork: r, genre: a }),
-            localStorage.setItem('lastPlayed', JSON.stringify(currentTrack)),
-            (isFavorite = favorites.some((r) => r.title === e && r.artist === t)),
-            (favoriteBtn.className = isFavorite ? 'fa-solid fa-heart control-btn' : 'fa-regular fa-heart control-btn'),
-            getYT(`${e} ${t}`));
-        }
-        function getYT(e) {
-          const t = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(e)}&key=${YT_KEY}&type=video&maxResults=1`;
-          fetch(t)
-            .then((e) => e.json())
-            .then((e) => {
-              e.items && e.items.length > 0
-                ? loadVid(e.items[0].id.videoId)
-                : (searchResults.innerHTML = '<div class="error-message">No YouTube results found</div>');
-            })
-            .catch((e) => {
-              searchResults.innerHTML = '<div class="error-message">Failed to search YouTube. Please try again.</div>';
-            });
-        }
-        function loadVid(e) {
-          player && playerReady && player.loadVideoById
-            ? (player.loadVideoById(e),
-              setTimeout(() => {
-                (isMuted || player.unMute(), player.playVideo());
-              }, 100))
-            : initPlayer().then(() => {
-                player && playerReady && player.loadVideoById
-                  ? (player.loadVideoById(e),
-                    setTimeout(() => {
-                      (isMuted || player.unMute(), player.playVideo());
-                    }, 100))
-                  : (searchResults.innerHTML = '<div class="error-message">Unable to initialize player. Please refresh the page.</div>');
-              });
-        }
-        async function fetchLyrics(e, t) {
-          lyricsContent.textContent = 'Loading lyrics...';
-          const r = encodeURIComponent(e.trim()),
-            a = encodeURIComponent(t.trim());
-          try {
-            const e = await fetch(`https://lrclib.net/api/get?artist_name=${r}&track_name=${a}`);
-            if (!e.ok) throw new Error('Lyrics not found');
-            const t = await e.json();
-            if (t.syncedLyrics) {
-              const e = t.syncedLyrics
-                .trim()
-                .split('\n')
-                .map((e) => {
-                  const t = e.match(/^\[(\d+):(\d+\.\d+)](.*)$/);
-                  return t ? { time: 60 * parseInt(t[1], 10) + parseFloat(t[2]), text: t[3].trim() } : null;
-                })
-                .filter(Boolean);
-              ((lyricsContent.innerHTML = e.map((e, t) => `<div class="lyric-line" data-time="${e.time}" id="lyric-${t}">${e.text}</div>`).join('')),
-                window.lyricsSyncInterval && clearInterval(window.lyricsSyncInterval),
-                (window.lyricsSyncInterval = setInterval(() => {
-                  const t = player && playerReady && player.getCurrentTime ? player.getCurrentTime() : 0;
-                  let r = -1;
-                  for (let a = 0; a < e.length && t >= e[a].time; a++) r = a;
-                  document.querySelectorAll('.lyric-line').forEach((e, t) => {
-                    (e.classList.remove('active', 'prev', 'next'),
-                      t === r
-                        ? (e.classList.add('active'),
-                          lyricsContent.scrollTo({ top: e.offsetTop - lyricsContent.clientHeight / 2 + e.clientHeight / 2, behavior: 'smooth' }))
-                        : t === r - 1
-                          ? e.classList.add('prev')
-                          : t === r + 1 && e.classList.add('next'));
-                  });
-                }, 300)));
-            } else if (t.lyrics) {
-              const e = t.lyrics.replace(/\n/g, '<br>');
-              lyricsContent.innerHTML = e;
-            } else lyricsContent.textContent = 'No lyrics available.';
-          } catch (e) {
-            lyricsContent.textContent = 'No lyrics available.';
-          }
-        }
-        function togglePlayback() {
-          player && playerReady && (isPlaying ? player.pauseVideo() : player.playVideo());
-        }
-        function startSeek(e) {
-          player && playerReady && ((isDragging = !0), seekBar.classList.add('active'), updateSeekPosition(e));
-        }
-        function dragSeek(e) {
-          isDragging && updateSeekPosition(e);
-        }
-        function endSeek() {
-          isDragging && ((isDragging = !1), seekBar.classList.remove('active'));
-        }
-        function updateSeekPosition(e) {
-          if (!player || !playerReady || !player.getDuration) return;
-          const t = seekBar.getBoundingClientRect(),
-            r = (e.clientX - t.left) / t.width,
-            a = Math.min(Math.max(r, 0), 1);
-          progressBar.style.width = 100 * a + '%';
-          const i = player.getDuration();
-          player.seekTo(a * i, !0);
-        }
-        function updateProgress() {
-          if (player && playerReady && player.getDuration && !isDragging)
-            try {
-              const e = player.getDuration() || 0,
-                t = player.getCurrentTime() || 0,
-                r = (t / e) * 100;
-              ((progressBar.style.width = r + '%'),
-                (currentTimeSpan.textContent = formatTime(t)),
-                (remainingTimeSpan.textContent = '-' + formatTime(e - t)));
-            } catch (e) {}
-        }
-        function formatTime(e) {
-          return `${Math.floor(e / 60)}:${Math.floor(e % 60)
-            .toString()
-            .padStart(2, '0')}`;
-        }
-        function minustenseconds() {
-          if (!(player && playerReady && player.getCurrentTime && player.getDuration)) return;
-          const e = player.getCurrentTime(),
-            t = Math.max(0, e - 10);
-          player.seekTo(t, !0);
-        }
-        function minusfiveseconds() {
-          if (!(player && playerReady && player.getCurrentTime && player.getDuration)) return;
-          const e = player.getCurrentTime(),
-            t = Math.max(0, e - 5);
-          player.seekTo(t, !0);
-        }
-        function plusfiveseconds() {
-          if (!(player && playerReady && player.getCurrentTime && player.getDuration)) return;
-          const e = player.getCurrentTime(),
-            t = player.getDuration(),
-            r = Math.min(e + 5, t);
-          player.seekTo(r, !0);
-        }
-        function plustenseconds() {
-          if (!(player && playerReady && player.getCurrentTime && player.getDuration)) return;
-          const e = player.getCurrentTime(),
-            t = player.getDuration(),
-            r = Math.min(e + 10, t);
-          player.seekTo(r, !0);
-        }
-        function updateFavorites() {
-          favoritesColumn.innerHTML = `\n<div class="favorites-title">Favorites</div>\n<div class="play-favorites-btn" id="playFavoritesBtn"><i class="fas fa-play"></i> Play Favorites</div>\n${favorites.map((e) => `\n<div class="favorite-item" onclick="playSong('${e.title}', '${e.artist}', '${e.artwork}', '${e.genre}');currentFavoriteIndex=${favorites.findIndex((e) => '${fav.title}' === e.title && '${fav.artist}' === e.artist)}">\n<div class="result-img"><img src="${e.artwork.replace('100x100', '600x600')}" alt="${e.title}"></div>\n<div class="result-info">\n<div class="result-title">${e.title}</div>\n<div class="result-artist">${e.artist}</div>\n</div>\n<i class="fa-solid fa-times remove-fav" onclick="event.stopPropagation();removeFavorite('${e.title}', '${e.artist}')"></i>\n<i class="fa-solid fa-step-backward skip-prev" onclick="event.stopPropagation();skipFavoritePrev('${e.title}', '${e.artist}')"></i>\n<i class="fa-solid fa-step-forward skip-next" onclick="event.stopPropagation();skipFavoriteNext('${e.title}', '${e.artist}')"></i>\n</div>\n`).join('')}\n`;
-          const e = document.querySelector('#playFavoritesBtn');
-          e && e.addEventListener('click', playFavorites);
-        }
-        function removeFavorite(e, t) {
-          ((favorites = favorites.filter((r) => r.title !== e || r.artist !== t)),
-            localStorage.setItem('favorites', JSON.stringify(favorites)),
-            currentFavoriteIndex >= favorites.length && (currentFavoriteIndex = -1),
-            updateFavorites());
-        }
-        function skipFavoritePrev(e, t) {
-          const r = favorites.findIndex((r) => r.title === e && r.artist === t);
-          r > 0
-            ? ((currentFavoriteIndex = r - 1),
-              playSong(
-                favorites[currentFavoriteIndex].title,
-                favorites[currentFavoriteIndex].artist,
-                favorites[currentFavoriteIndex].artwork,
-                favorites[currentFavoriteIndex].genre
-              ))
-            : ((currentFavoriteIndex = favorites.length - 1),
-              playSong(
-                favorites[currentFavoriteIndex].title,
-                favorites[currentFavoriteIndex].artist,
-                favorites[currentFavoriteIndex].artwork,
-                favorites[currentFavoriteIndex].genre
-              ));
-        }
-        function skipFavoriteNext(e, t) {
-          const r = favorites.findIndex((r) => r.title === e && r.artist === t);
-          r < favorites.length - 1
-            ? ((currentFavoriteIndex = r + 1),
-              playSong(
-                favorites[currentFavoriteIndex].title,
-                favorites[currentFavoriteIndex].artist,
-                favorites[currentFavoriteIndex].artwork,
-                favorites[currentFavoriteIndex].genre
-              ))
-            : ((currentFavoriteIndex = 0),
-              playSong(
-                favorites[currentFavoriteIndex].title,
-                favorites[currentFavoriteIndex].artist,
-                favorites[currentFavoriteIndex].artwork,
-                favorites[currentFavoriteIndex].genre
-              ));
-        }
-        function playFavorites() {
-          0 !== favorites.length &&
-            ((currentFavoriteIndex = 0), playSong(favorites[0].title, favorites[0].artist, favorites[0].artwork, favorites[0].genre));
-        }
-        function playNextFavorite() {
-          currentFavoriteIndex < favorites.length - 1
-            ? (currentFavoriteIndex++,
-              playSong(
-                favorites[currentFavoriteIndex].title,
-                favorites[currentFavoriteIndex].artist,
-                favorites[currentFavoriteIndex].artwork,
-                favorites[currentFavoriteIndex].genre
-              ))
-            : ((currentFavoriteIndex = 0), playSong(favorites[0].title, favorites[0].artist, favorites[0].artwork, favorites[0].genre));
-        }
-        (searchInput.addEventListener('input', function () {
-          (clearTimeout(searchTimeout),
-            (searchTimeout = setTimeout(() => {
-              const e = searchInput.value.trim();
-              e.length > 1 ? searchSongs(e) : hideSearchResults();
-            }, 500)));
-        }),
-          searchInput.addEventListener('keypress', function (e) {
-            if ('Enter' === e.key) {
-              clearTimeout(searchTimeout);
-              const e = searchInput.value.trim();
-              e.length > 1 && searchSongs(e);
-            }
-          }),
-          lyricsToggle.addEventListener('click', function () {
-            ((showingLyrics = !showingLyrics),
-              showingLyrics
-                ? ((playerInfo.style.display = 'none'),
-                  (albumCover.style.display = 'none'),
-                  (musicIcon.style.display = 'none'),
-                  (lyricsInfo.style.display = 'flex'),
-                  fetchLyrics(currentTrack.artist, currentTrack.title),
-                  (lyricsToggle.innerHTML = '<i class="fa-solid fa-align-left"></i>'))
-                : ((playerInfo.style.display = 'flex'),
-                  (albumCover.style.display = 'Not Playing' === currentTrack.title ? 'none' : 'block'),
-                  (musicIcon.style.display = 'Not Playing' === currentTrack.title ? 'block' : 'none'),
-                  (lyricsInfo.style.display = 'none'),
-                  (lyricsToggle.innerHTML = '<i class="fa-solid fa-align-left"></i>')));
-          }),
-          document.addEventListener('click', function (e) {
-            searchResults.contains(e.target) || e.target === searchInput || (hideSearchResults(), favoritesColumn.classList.remove('active'));
-          }),
-          favoriteBtn.addEventListener('click', () => {
-            if (favorites.length >= 10) return void alert('Maximum 10 favorites allowed!');
-            const e = { title: currentTrack.title, artist: currentTrack.artist, artwork: currentTrack.artwork, genre: currentTrack.genre };
-            (isFavorite ? (favorites = favorites.filter((t) => t.title !== e.title || t.artist !== e.artist)) : favorites.push(e),
-              localStorage.setItem('favorites', JSON.stringify(favorites)),
-              (isFavorite = !isFavorite),
-              (favoriteBtn.className = isFavorite ? 'fa-solid fa-heart control-btn' : 'fa-regular fa-heart control-btn'),
-              updateFavorites());
-          }),
-          favoritesBtn.addEventListener('click', () => {
-            (favoritesColumn.classList.toggle('active'), updateFavorites());
-          }),
-          window.addEventListener('DOMContentLoaded', () => {
-            (document.querySelector('#backward10')?.addEventListener('click', minustenseconds),
-              document.querySelector('#backward5')?.addEventListener('click', minusfiveseconds),
-              document.querySelector('#forward5')?.addEventListener('click', plusfiveseconds),
-              document.querySelector('#forward10')?.addEventListener('click', plustenseconds));
-            const e = document.querySelector('#loopToggle');
-            let t = !1;
-            (e.addEventListener('click', () => {
-              ((t = !t), (e.className = t ? 'fa-solid fa-repeat-1 control-btn' : 'fa-solid fa-repeat control-btn'));
-            }),
-              updateFavorites(),
-              initPlayer());
-          }));
-      </script>
-      <script src="/storage/js/settings.js"></script>
+      <div class="lyrics-toggle" id="lyricsToggle">
+        <i class="fa-solid fa-align-left"></i>
+      </div>
     </div>
+    <script>
+      !function(){var e={w:15,v:"default_music_provider",u:"favorites",t:"lastPlayed",s:10},t={r:localStorage.getItem(e.v)||"tidal",q:"",p:0,o:!1,n:!0,m:[],l:-1,k:!1,j:!1,i:!1,h:null,g:[],f:-1,d:!1,c:!1,b:!1,a:JSON.parse(localStorage.getItem(e.u))||[],z:-1},r={y:new Audio,x:document.getElementById("searchInput"),A:document.getElementById("searchResults"),B:document.getElementById("trackTitle"),C:document.getElementById("artistName"),D:document.getElementById("albumCover"),E:document.getElementById("musicIcon"),F:document.getElementById("playPause"),G:document.getElementById("volumeBtn"),H:document.getElementById("seekbar"),I:document.getElementById("progress"),J:document.getElementById("currentTime"),K:document.getElementById("remainingTime"),L:document.getElementById("lyricsToggle"),M:document.getElementById("playerInfo"),N:document.getElementById("lyricsInfo"),O:document.getElementById("lyricsContent"),P:document.getElementById("favoriteBtn"),Q:document.getElementById("favoritesBtn"),R:document.getElementById("favoritesColumn"),S:document.getElementById("playFavoritesBtn")};function a(){n(),i(),o(),s(),l(),c(),u()}function n(){r.x.addEventListener("input",d),r.x.addEventListener("keypress",f),document.addEventListener("click",y)}function i(){r.F.addEventListener("click",p),r.G.addEventListener("click",h),r.H.addEventListener("mousedown",g),document.addEventListener("mousemove",v),document.addEventListener("mouseup",m)}function o(){r.L.addEventListener("click",k)}function s(){r.P.addEventListener("click",j),r.Q.addEventListener("click",z),r.S.addEventListener("click",q)}function l(){document.querySelector("#backward10")?.addEventListener("click",(()=>{r.y.currentTime=Math.max(0,r.y.currentTime-10)})),document.querySelector("#backward5")?.addEventListener("click",(()=>{r.y.currentTime=Math.max(0,r.y.currentTime-5)})),document.querySelector("#forward5")?.addEventListener("click",(()=>{r.y.currentTime=Math.min(r.y.duration,r.y.currentTime+5)})),document.querySelector("#forward10")?.addEventListener("click",(()=>{r.y.currentTime=Math.min(r.y.duration,r.y.currentTime+10)}));const e=document.querySelector("#loopToggle");e.addEventListener("click",(()=>{t.j=!t.j,e.className=t.j?"fa-solid fa-repeat-1 control-btn":"fa-solid fa-repeat control-btn"}))}function c(){r.y.addEventListener("loadedmetadata",w),r.y.addEventListener("play",T),r.y.addEventListener("pause",b),r.y.addEventListener("ended",x),r.y.addEventListener("timeupdate",A)}function u(){B()}function d(){clearTimeout(t.h),t.h=setTimeout((()=>{const e=r.x.value.trim();e.length>1?C(e):D()}),500)}function f(e){"Enter"===e.key&&(clearTimeout(t.h),r.x.value.trim().length>1&&C(r.x.value.trim()))}function y(e){r.A.contains(e.target)||e.target===r.x||(D(),r.R.classList.remove("active"))}async function C(a){t.q=a,t.p=0,t.n=!0,t.m=[],E(),r.A.innerHTML='<div class="loading">Searching...</div>';const n=encodeURIComponent(a),i=Math.floor(0/e.w)+1,o="tidal"===t.r?"/api/music-search-1/".concat(n,"&max=").concat(e.w,"&page=").concat(i):"/api/music-search-2/".concat(n,"?max=").concat(e.w,"&offset=0");try{const e=await fetch(o);F(await e.json())}catch(e){r.A.innerHTML='<div class="error-message">Search failed. Please try again.</div>'}}function F(e){if(r.A.innerHTML="",!e||"tidal"===t.r&&!e.items||"soundcloud"===t.r&&!e.results)return void(r.A.innerHTML='<div class="loading">No results found</div>');const a=G(e);t.m=a,H(a)}function G(e){return"tidal"===t.r?e.items.map((e=>{var t=function(e){const t=e.split("-");return["https:","","resources.tidal.com","images",...t,"320x320.jpg"].join("/")}(e.album.cover);return{W:e.id,V:e.title,U:e.artists.map((e=>e.name)).join(", "),aa:e.album?t:null,Z:"tidal",Y:"",X:e.mediaMetadata?e.mediaMetadata.tags:[]}})):e.results.map((e=>({W:e.url.split("/").pop(),V:e.title,U:e.artist,aa:e.artwork,Z:"soundcloud",Y:e.url,X:[]})))}function H(e){e.forEach(((e,t)=>{const a=document.createElement("div");a.className="result-item",a.innerHTML='\n              <div class="result-img">\n                <img src="'.concat(e.aa||"",'" alt="').concat(e.V,'" crossorigin="anonymous" onerror="this.style.display=\'none\'">\n              </div>\n              <div class="result-info">\n                <div class="result-title">').concat(e.V,'</div>\n                <div class="result-artist">').concat(e.U,"</div>\n              </div>\n            "),a.addEventListener("click",(()=>{I(e),D(),r.x.value="",t.z=-1})),r.A.appendChild(a)}))}function E(){r.A.classList.add("active")}function D(){r.A.classList.remove("active")}function I(e){r.B.textContent=e.V,r.C.textContent=e.U,r.D.src=e.aa?e.aa.replace("100x100","600x600"):"",r.D.style.display=e.aa?"block":"none",r.E.style.display=e.aa?"none":"block",t.c&&J(e.U,e.V),localStorage.setItem("lastPlayed",JSON.stringify(e));const a=t.a.some((t=>t.title===e.V&&t.artist===e.U));t.b=a,r.P.className=a?"fa-solid fa-heart control-btn":"fa-regular fa-heart control-btn","tidal"===e.Z?K(e):L(e)}async function K(e){let a="low";e.X&&e.X.includes("LOSSLESS")?a="lossless":e.X&&e.X.includes("HIGH")&&(a="high");try{const t=await fetch("/api/music-lyric-1/".concat(a,"/").concat(e.W)),n=await t.json();n&&n.streamUrl?(r.y.src=n.streamUrl,r.y.load(),r.y.play()):r.A.innerHTML='<div class="error-message">No stream URL found</div>'}catch(e){r.A.innerHTML='<div class="error-message">Failed to load track</div>'}}async function L(e){const t=e.Y.split("/").slice(-2).join("/");try{const e=await fetch("/api/music-lyric-2/".concat(t)),a=await e.json();a&&a.streamUrl&&(r.y.src=a.streamUrl,r.y.load(),r.y.play())}catch(e){r.A.innerHTML='<div class="error-message">Track not available</div>'}}function p(){r.y.src||0===t.m.length?r.y.src&&(r.y.paused?r.y.play():r.y.pause()):I(t.m[0])}function h(){t.i=!t.i,r.y.muted=t.i,r.G.className=t.i?"fa-solid fa-volume-xmark control-btn":"fa-solid fa-volume-high control-btn"}function g(e){t.k=!0,M(e)}function v(e){t.k&&M(e)}function m(){t.k=!1}function M(e){const a=r.H.getBoundingClientRect(),n=Math.max(0,Math.min(1,(e.clientX-a.left)/a.width));r.I.style.width=100*n+"%",r.y.currentTime=n*r.y.duration}function w(){r.K.textContent="-"+N(r.y.duration),r.J.textContent="0:00"}function T(){r.F.classList.remove("fa-play"),r.F.classList.add("fa-pause")}function b(){r.F.classList.remove("fa-pause"),r.F.classList.add("fa-play")}function x(){if(t.j)return r.y.currentTime=0,void r.y.play();r.F.classList.remove("fa-pause"),r.F.classList.add("fa-play"),t.z>=0&&t.z<t.a.length-1&&O()}function A(){if(!t.k){const e=r.y.currentTime/r.y.duration*100;r.I.style.width=e+"%",r.J.textContent=N(r.y.currentTime),r.K.textContent="-"+N(r.y.duration-r.y.currentTime),P(r.y.currentTime)}}function N(e){if(isNaN(e)||e<0)return"0:00";const t=Math.floor(e/60),r=Math.floor(e%60);return"".concat(t,":").concat(r<10?"0":"").concat(r)}function j(){if(t.a.length>=e.s)return void alert("Maximum 10 favorites allowed!");const a={title:r.B.textContent,artist:r.C.textContent,artwork:r.D.src,genre:""};t.b?t.a=t.a.filter((e=>e.title!==a.title||e.artist!==a.artist)):t.a.push(a),localStorage.setItem(e.u,JSON.stringify(t.a)),t.b=!t.b,r.P.className=t.b?"fa-solid fa-heart control-btn":"fa-regular fa-heart control-btn",B()}function z(){r.R.classList.toggle("active"),B()}function B(){r.R.innerHTML='\n            <div class="favorites-title">Favorites</div>\n            <div class="play-favorites-btn" id="playFavoritesBtn">\n              <i class="fas fa-play"></i> Play Favorites\n            </div>\n            '.concat(t.a.map(((e,t)=>'\n              <div class="favorite-item" data-index="'.concat(t,'">\n                <div class="result-img">\n                  <img src="').concat(e.artwork.replace("100x100","600x600"),'" alt="').concat(e.title,'">\n                </div>\n                <div class="result-info">\n                  <div class="result-title">').concat(e.title,'</div>\n                  <div class="result-artist">').concat(e.artist,'</div>\n                </div>\n                <i class="fa-solid fa-times remove-fav" data-action="remove"></i>\n                <i class="fa-solid fa-step-backward skip-prev" data-action="prev"></i>\n                <i class="fa-solid fa-step-forward skip-next" data-action="next"></i>\n              </div>\n            '))).join(""),""),r.R.querySelectorAll(".favorite-item").forEach((e=>{const r=parseInt(e.dataset.index);e.addEventListener("click",(e=>{if(e.target.hasAttribute("data-action")){e.stopPropagation();const a=e.target.getAttribute("data-action");"remove"===a?Q(r):"prev"===a?R(r):"next"===a&&S(r)}else U(r)}))}));const a=document.querySelector("#playFavoritesBtn");a&&a.addEventListener("click",q)}function U(e){t.z=e;const r=t.a[e];I({V:r.title,U:r.artist,aa:r.artwork,Z:t.r,W:"",Y:"",X:[]})}function Q(r){t.a.splice(r,1),localStorage.setItem(e.u,JSON.stringify(t.a)),t.z>=t.a.length&&(t.z=-1),B()}function R(e){const r=e>0?e-1:t.a.length-1;U(r)}function S(e){const r=e<t.a.length-1?e+1:0;U(r)}function q(){0!==t.a.length&&U(0)}function O(){t.z<t.a.length-1?(t.z++,U(t.z)):(t.z=0,U(0))}function k(){t.c=!t.c,t.c?(r.M.style.display="none",r.D.style.display="none",r.E.style.display="none",r.N.style.display="flex",J(r.C.textContent,r.B.textContent)):(r.M.style.display="flex",r.D.style.display="Not Playing"===r.B.textContent?"none":"block",r.E.style.display="Not Playing"===r.B.textContent?"block":"none",r.N.style.display="none")}async function J(e,t){r.O.textContent="Loading lyrics...",t.g=[],t.f=-1,t.d=!1;const a=encodeURIComponent("".concat(e," ").concat(t));try{const e=await fetch("/api/verbal-lyrics/".concat(a)),r=await e.json();let a=null;if(Array.isArray(r)&&r.length>0&&(a=r.find((e=>e.syncedLyrics&&e.trackName.toLowerCase()===t.toLowerCase())),!a&&(a=r[0])),a&&a.syncedLyrics)V(a.syncedLyrics),W();else{if(!a||!a.plainLyrics)throw new Error("No lyrics");r.O.innerHTML=a.plainLyrics.replace(/\n/g,"<br>")}}catch(e){r.O.textContent="No lyrics available."}}function V(e){const r=/^\[(\d{2}):(\d{2})\.(\d{2,3})\](.*)/;t.g=[],e.split("\n").forEach((e=>{const a=e.match(r);if(a){const e=60*parseInt(a[1])+parseInt(a[2])+parseInt(3===a[3].length?a[3]:10*a[3])/1e3,r=a[4].trim();r&&t.g.push({time:e,text:r})}}))}function W(){r.O.innerHTML="",t.g.forEach(((e,t)=>{const a=document.createElement("div");a.className="lyric-line",a.id="lyric-".concat(t),a.textContent=e.text,r.O.appendChild(a)})),t.d=!0}function P(e){if(!t.d||0===t.g.length)return;let r=-1;for(let a=0;a<t.g.length&&!(t.g[a].time>e);a++)r=a;r!==t.f&&(t.f=r,X())}function X(){document.querySelectorAll(".lyric-line").forEach(((e,r)=>{e.className="lyric-line",r<t.f?e.classList.add("prev"):r===t.f?(e.classList.add("active"),e.scrollIntoView({behavior:"smooth",block:"center"})):r===t.f+1&&e.classList.add("next")}))}a()}();
+    </script>
   </body>
 </html>
