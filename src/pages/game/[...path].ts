@@ -7,11 +7,35 @@ const cache = new Map<string, { content: string; timestamp: number }>();
 const CACHE_DURATION = 1000 * 60 * 5; // 5 Minutes
 
 // --- Configuration ---
-const JSDELIVR_BASE = 'https://cdn.jsdelivr.net/gh/PeteZah-Games/Games-lib/';
-const RAW_BASE_PETEZAH = 'https://raw.githubusercontent.com/PeteZah-Games/Games-lib/master/';
 
-const GN_BASE = 'https://cdn.jsdelivr.net/gh/gn-math/html@main/';
-const RAW_BASE_GN = 'https://raw.githubusercontent.com/gn-math/html/main/';
+interface SourceMapping {
+  prefix: string; // The URL prefix to match (e.g., 'gn/')
+  cdnBase: string; // The jsDelivr base URL
+  rawBase: string; // The Raw GitHub base URL
+}
+
+/**
+ * Configure your sources here.
+ * Order matters: The first matching prefix is used.
+ * The empty prefix ('') acts as a catch-all/default and should be last.
+ */
+const SOURCE_MAPPINGS: SourceMapping[] = [
+  {
+    prefix: 'gn/',
+    cdnBase: 'https://cdn.jsdelivr.net/gh/gn-math/html@main/',
+    rawBase: 'https://raw.githubusercontent.com/gn-math/html/main/'
+  },
+  {
+    prefix: 'covers/',
+    cdnBase: 'https://cdn.jsdelivr.net/gh/gn-math/covers@main/',
+    rawBase: 'https://raw.githubusercontent.com/gn-math/covers/main/'
+  },
+  {
+    prefix: '', // Default (Catch-all for PeteZah-Games)
+    cdnBase: 'https://cdn.jsdelivr.net/gh/PeteZah-Games/Games-lib/',
+    rawBase: 'https://raw.githubusercontent.com/PeteZah-Games/Games-lib/master/'
+  }
+];
 
 const REDIRECT_CODE = import.meta.env.DEV ? 307 : 308;
 
@@ -23,8 +47,6 @@ export const GET: APIRoute = async ({ params, redirect, request }) => {
   }
 
   // 1. Force Trailing Slash for Folders
-  // If we don't do this, removing the <base> tag breaks relative links (e.g., ./Build/game.wasm)
-  // because the browser will resolve them against the parent directory instead of the game directory.
   const hasExtension = /\.[a-zA-Z0-9]+$/.test(path);
   if (!hasExtension) {
     const currentUrl = new URL(request.url);
@@ -36,23 +58,24 @@ export const GET: APIRoute = async ({ params, redirect, request }) => {
     path = `${path}/index.html`;
   }
 
-  // 2. Construct URLs
-  // Use encodeURI to handle spaces in filenames (e.g., "Super star car.wasm")
-  let upstreamUrl;
-  let rawGitHubUrl;
+  // 2. Resolve Source from Mappings
+  const matchedSource = SOURCE_MAPPINGS.find((source) => path.startsWith(source.prefix));
 
-  if (path.startsWith('gn/')) {
-    const stripped = path.replace(/^gn\//, '');
-    upstreamUrl = `${GN_BASE}${encodeURI(stripped)}`;
-    rawGitHubUrl = `${RAW_BASE_GN}${encodeURI(stripped)}`;
-  } else {
-    upstreamUrl = `${JSDELIVR_BASE}${encodeURI(path)}`;
-    rawGitHubUrl = `${RAW_BASE_PETEZAH}${encodeURI(path)}`;
+  if (!matchedSource) {
+    return new Response('Invalid path source', { status: 404 });
   }
+
+  // Remove the prefix from the path to get the relative file path
+  // e.g., 'gn/folder/game.html' becomes 'folder/game.html'
+  const relativePath = path.slice(matchedSource.prefix.length);
+
+  // 3. Construct URLs
+  const upstreamUrl = `${matchedSource.cdnBase}${encodeURI(relativePath)}`;
+  const rawGitHubUrl = `${matchedSource.rawBase}${encodeURI(relativePath)}`;
 
   const isHtml = path.endsWith('.html');
 
-  // 3. Serve Cached HTML
+  // 4. Serve Cached HTML
   if (isHtml) {
     const cachedEntry = cache.get(upstreamUrl);
     if (cachedEntry && Date.now() - cachedEntry.timestamp < CACHE_DURATION) {
@@ -67,17 +90,15 @@ export const GET: APIRoute = async ({ params, redirect, request }) => {
     }
   }
 
-  // 4. Fetch/Check Upstream
-  // For HTML, we need the body. For assets, we use HEAD to save bandwidth while checking for 403s.
+  // 5. Fetch/Check Upstream
   const fetchMethod = isHtml ? 'GET' : 'HEAD';
   let response = await fetch(upstreamUrl, { method: fetchMethod });
 
-  // 5. Error Handling & Smart Redirect
+  // 6. Error Handling & Smart Redirect
   if (!response.ok) {
     const status = response.status;
     let isSizeExceeded = false;
 
-    // Only try to read text if we did a GET (HEAD has no body) and it's a 404/403
     if (fetchMethod === 'GET') {
       try {
         const text = await response.clone().text();
@@ -85,50 +106,35 @@ export const GET: APIRoute = async ({ params, redirect, request }) => {
       } catch (e) {}
     }
 
-    // REDIRECT CONDITION:
-    // 1. Status 403 (Forbidden) -> standard for jsDelivr blocked files
-    // 2. "Package size exceeded" text found
+    // Redirect to Raw GitHub if blocked or too large
     if (status === 403 || isSizeExceeded) {
       return redirect(rawGitHubUrl, REDIRECT_CODE);
     }
 
     // Handle Folder Logic (jsDelivr 404s on folders)
     if (status === 404 && isHtml) {
-      // Double check: maybe jsDelivr returned 404 because it's a folder limit issue?
-      // In the HTML case, we usually want to just fail if index.html is missing,
-      // but if it's a size limit on index.html (rare), fallback to raw.
       if (isSizeExceeded) return redirect(rawGitHubUrl, REDIRECT_CODE);
-
       return new Response(`Upstream Error: ${response.statusText}`, { status: response.status });
     }
 
     // Generic Error
     if (status !== 200) {
-      // If HEAD failed with 404/405, we might want to try GET just to be sure,
-      // but usually 403 is distinct.
-      // If it's an asset and we got 404, it just doesn't exist.
       return new Response(null, { status: response.status, statusText: response.statusText });
     }
   }
 
-  // 6. Success Handling
+  // 7. Success Handling
 
   // Non-HTML: Redirect to jsDelivr
-  // We verified it exists and isn't 403. Redirect client to CDN to save our bandwidth.
   if (!isHtml) {
     return redirect(upstreamUrl, REDIRECT_CODE);
   }
 
-  // HTML: Inject Analytics (NO BASE TAG)
+  // HTML: Inject Analytics
   let content = await response.text();
 
   const analyticsHead = await container.renderToString(Analytics, { props: { location: 'head' } });
   const analyticsBody = await container.renderToString(Analytics, { props: { location: 'body' } });
-
-  // Note: We REMOVED the <base> tag injection.
-  // Relative links will now resolve against the current page URL (the proxy).
-  // This ensures subsequent requests (like .wasm files) hit this route again,
-  // allowing us to catch the 403 errors.
 
   content = content.replace(/<head([^>]*)>/i, `<head$1>${analyticsHead}`);
   content = content.replace(/<body([^>]*)>/i, `<body$1>${analyticsBody}`);

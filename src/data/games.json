@@ -118,7 +118,7 @@
     },
     {
       "label": "Drive Mad",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/35.png",
+      "imageUrl": "/game/covers/35.png",
       "url": "/game/gn/35.html",
       "categories": [],
       "id": "drive-mad",
@@ -126,7 +126,7 @@
     },
     {
       "label": "Retro Bowl",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/33.png",
+      "imageUrl": "/game/covers/33.png",
       "url": "/game/gn/33.html",
       "categories": [],
       "id": "retro-bowl",
@@ -134,7 +134,7 @@
     },
     {
       "label": "Retro Bowl College",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/34.png",
+      "imageUrl": "/game/covers/34.png",
       "url": "/game/gn/34.html",
       "categories": [],
       "id": "retro-bowl-college",
@@ -182,7 +182,7 @@
     },
     {
       "label": "Bad Parenting 1",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/166.png",
+      "imageUrl": "/game/covers/166.png",
       "url": "/game/gn/166.html",
       "featured": true,
       "categories": [],
@@ -223,7 +223,7 @@
     },
     {
       "label": "Gladihoppers",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/4.png",
+      "imageUrl": "/game/covers/4.png",
       "url": "/game/gn/4.html",
       "categories": [],
       "id": "gladihoppers",
@@ -431,7 +431,7 @@
     },
     {
       "label": "Ice Dodo",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/5.png",
+      "imageUrl": "/game/covers/5.png",
       "url": "/game/gn/5.html",
       "categories": [],
       "id": "ice-dodo",
@@ -439,7 +439,7 @@
     },
     {
       "label": "Block Blast",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/6.png",
+      "imageUrl": "/game/covers/6.png",
       "url": "/game/gn/6.html",
       "categories": [],
       "id": "block-blast",
@@ -447,7 +447,7 @@
     },
     {
       "label": "Jetpack Joyride",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/7.png",
+      "imageUrl": "/game/covers/7.png",
       "url": "/game/gn/7.html",
       "categories": [],
       "id": "jetpack-joyride",
@@ -455,7 +455,7 @@
     },
     {
       "label": "Friday Night Funkin",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/8.png",
+      "imageUrl": "/game/covers/8.png",
       "url": "/game/gn/8-a.html",
       "categories": [],
       "id": "friday-night-funkin",
@@ -463,7 +463,7 @@
     },
     {
       "label": "Sprunki",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/9.png",
+      "imageUrl": "/game/covers/9.png",
       "url": "/game/gn/9.html",
       "categories": [],
       "id": "sprunki",
@@ -471,7 +471,7 @@
     },
     {
       "label": "Temple Run 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/10.png",
+      "imageUrl": "/game/covers/10.png",
       "url": "/game/gn/10.html",
       "categories": [],
       "id": "temple-run-2",
@@ -479,7 +479,7 @@
     },
     {
       "label": "Stickman Hook",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/11.png",
+      "imageUrl": "/game/covers/11.png",
       "url": "/game/gn/11.html",
       "categories": [],
       "id": "stickman-hook",
@@ -487,7 +487,7 @@
     },
     {
       "label": "Subway Surfers: San Francisco",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/12.png",
+      "imageUrl": "/game/covers/12.png",
       "url": "/game/gn/12.html",
       "categories": [],
       "id": "subway-surfers-san-francisco",
@@ -495,7 +495,7 @@
     },
     {
       "label": "Attack Hole",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/13.png",
+      "imageUrl": "/game/covers/13.png",
       "url": "/game/gn/13.html",
       "categories": [],
       "id": "attack-hole",
@@ -503,7 +503,7 @@
     },
     {
       "label": "Bridge Race",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/14.png",
+      "imageUrl": "/game/covers/14.png",
       "url": "/game/gn/14.html",
       "categories": [],
       "id": "bridge-race",
@@ -511,7 +511,7 @@
     },
     {
       "label": "Color Water Sort 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/15.png",
+      "imageUrl": "/game/covers/15.png",
       "url": "/game/gn/15.html",
       "categories": [],
       "id": "color-water-sort-3d",
@@ -519,7 +519,7 @@
     },
     {
       "label": "Hide N Seek",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/16.png",
+      "imageUrl": "/game/covers/16.png",
       "url": "/game/gn/16.html",
       "categories": [],
       "id": "hide-n-seek",
@@ -527,7 +527,7 @@
     },
     {
       "label": "Magic Tiles 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/17.png",
+      "imageUrl": "/game/covers/17.png",
       "url": "/game/gn/17.html",
       "categories": [],
       "id": "magic-tiles-3",
@@ -535,7 +535,7 @@
     },
     {
       "label": "Stacky Dash",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/18.png",
+      "imageUrl": "/game/covers/18.png",
       "url": "/game/gn/18.html",
       "categories": [],
       "id": "stacky-dash",
@@ -543,7 +543,7 @@
     },
     {
       "label": "Supreme Duelist",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/19.png",
+      "imageUrl": "/game/covers/19.png",
       "url": "/game/gn/19.html",
       "categories": [],
       "id": "supreme-duelist",
@@ -551,7 +551,7 @@
     },
     {
       "label": "Tall Man Run",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/20.png",
+      "imageUrl": "/game/covers/20.png",
       "url": "/game/gn/20.html",
       "categories": [],
       "id": "tall-man-run",
@@ -559,7 +559,7 @@
     },
     {
       "label": "Turbo Stars",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/21.png",
+      "imageUrl": "/game/covers/21.png",
       "url": "/game/gn/21.html",
       "categories": [],
       "id": "turbo-stars",
@@ -567,7 +567,7 @@
     },
     {
       "label": "Mob Control HTML5",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/22.png",
+      "imageUrl": "/game/covers/22.png",
       "url": "/game/gn/22.html",
       "categories": [],
       "id": "mob-control-html5",
@@ -575,7 +575,7 @@
     },
     {
       "label": "Pou",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/23.png",
+      "imageUrl": "/game/covers/23.png",
       "url": "/game/gn/23.html",
       "categories": [],
       "id": "pou",
@@ -583,7 +583,7 @@
     },
     {
       "label": "Crossy Road",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/24.png",
+      "imageUrl": "/game/covers/24.png",
       "url": "/game/gn/24.html",
       "categories": [],
       "id": "crossy-road",
@@ -591,7 +591,7 @@
     },
     {
       "label": "Basket Battle",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/25.png",
+      "imageUrl": "/game/covers/25.png",
       "url": "/game/gn/25.html",
       "categories": [],
       "id": "basket-battle",
@@ -599,7 +599,7 @@
     },
     {
       "label": "Amaze",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/26.png",
+      "imageUrl": "/game/covers/26.png",
       "url": "/game/gn/26.html",
       "categories": [],
       "id": "amaze",
@@ -607,7 +607,7 @@
     },
     {
       "label": "Geometry Dash Lite",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/27.png",
+      "imageUrl": "/game/covers/27.png",
       "url": "/game/gn/27.html",
       "categories": [],
       "id": "geometry-dash-lite",
@@ -615,7 +615,7 @@
     },
     {
       "label": "Basketball Frvr",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/28.png",
+      "imageUrl": "/game/covers/28.png",
       "url": "/game/gn/28.html",
       "categories": [],
       "id": "basketball-frvr",
@@ -623,7 +623,7 @@
     },
     {
       "label": "Bazooka Boy",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/29.png",
+      "imageUrl": "/game/covers/29.png",
       "url": "/game/gn/29.html",
       "categories": [],
       "id": "bazooka-boy",
@@ -631,7 +631,7 @@
     },
     {
       "label": "Bottle Jump 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/30.png",
+      "imageUrl": "/game/covers/30.png",
       "url": "/game/gn/30.html",
       "categories": [],
       "id": "bottle-jump-3d",
@@ -639,7 +639,7 @@
     },
     {
       "label": "Color Match",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/31.png",
+      "imageUrl": "/game/covers/31.png",
       "url": "/game/gn/31.html",
       "categories": [],
       "id": "color-match",
@@ -647,7 +647,7 @@
     },
     {
       "label": "Dig Deep",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/32.png",
+      "imageUrl": "/game/covers/32.png",
       "url": "/game/gn/32.html",
       "categories": [],
       "id": "dig-deep",
@@ -655,7 +655,7 @@
     },
     {
       "label": "Monster Tracks",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/36.png",
+      "imageUrl": "/game/covers/36.png",
       "url": "/game/gn/36.html",
       "categories": [],
       "id": "monster-tracks",
@@ -663,7 +663,7 @@
     },
     {
       "label": "Gobble",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/37.png",
+      "imageUrl": "/game/covers/37.png",
       "url": "/game/gn/37.html",
       "categories": [],
       "id": "gobble",
@@ -671,7 +671,7 @@
     },
     {
       "label": "Five Nights at Freddy's",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/38.png",
+      "imageUrl": "/game/covers/38.png",
       "url": "/game/gn/38.html",
       "categories": [],
       "id": "five-nights-at-freddys",
@@ -679,7 +679,7 @@
     },
     {
       "label": "Five Nights at Freddy's 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/39.png",
+      "imageUrl": "/game/covers/39.png",
       "url": "/game/gn/39.html",
       "categories": [],
       "id": "five-nights-at-freddys-2",
@@ -687,7 +687,7 @@
     },
     {
       "label": "Five Nights at Freddy's 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/40.png",
+      "imageUrl": "/game/covers/40.png",
       "url": "/game/gn/40.html",
       "categories": [],
       "id": "five-nights-at-freddys-3",
@@ -695,7 +695,7 @@
     },
     {
       "label": "Five Nights at Freddy's 4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/41.png",
+      "imageUrl": "/game/covers/41.png",
       "url": "/game/gn/41.html",
       "categories": [],
       "id": "five-nights-at-freddys-4",
@@ -703,7 +703,7 @@
     },
     {
       "label": "Road of Fury",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/42.png",
+      "imageUrl": "/game/covers/42.png",
       "url": "/game/gn/42.html",
       "categories": [],
       "id": "road-of-fury",
@@ -711,7 +711,7 @@
     },
     {
       "label": "Driven Wild",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/43.png",
+      "imageUrl": "/game/covers/43.png",
       "url": "/game/gn/43.html",
       "categories": [],
       "id": "driven-wild",
@@ -719,7 +719,7 @@
     },
     {
       "label": "Ragdoll Hit",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/44.png",
+      "imageUrl": "/game/covers/44.png",
       "url": "/game/gn/44.html",
       "categories": [],
       "id": "ragdoll-hit",
@@ -727,7 +727,7 @@
     },
     {
       "label": "Vex 1",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/45.png",
+      "imageUrl": "/game/covers/45.png",
       "url": "/game/gn/45.html",
       "categories": [],
       "id": "vex-1",
@@ -735,7 +735,7 @@
     },
     {
       "label": "Vex 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/46.png",
+      "imageUrl": "/game/covers/46.png",
       "url": "/game/gn/46.html",
       "categories": [],
       "id": "vex-2",
@@ -743,7 +743,7 @@
     },
     {
       "label": "Vex 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/47.png",
+      "imageUrl": "/game/covers/47.png",
       "url": "/game/gn/47.html",
       "categories": [],
       "id": "vex-3",
@@ -751,7 +751,7 @@
     },
     {
       "label": "Vex 3 XMAS",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/48.png",
+      "imageUrl": "/game/covers/48.png",
       "url": "/game/gn/48.html",
       "categories": [],
       "id": "vex-3-xmas",
@@ -759,7 +759,7 @@
     },
     {
       "label": "Vex 4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/49.png",
+      "imageUrl": "/game/covers/49.png",
       "url": "/game/gn/49.html",
       "categories": [],
       "id": "vex-4",
@@ -767,7 +767,7 @@
     },
     {
       "label": "Vex 5",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/50.png",
+      "imageUrl": "/game/covers/50.png",
       "url": "/game/gn/50.html",
       "categories": [],
       "id": "vex-5",
@@ -775,7 +775,7 @@
     },
     {
       "label": "Vex 6",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/51.png",
+      "imageUrl": "/game/covers/51.png",
       "url": "/game/gn/51.html",
       "categories": [],
       "id": "vex-6",
@@ -783,7 +783,7 @@
     },
     {
       "label": "Vex 7",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/52.png",
+      "imageUrl": "/game/covers/52.png",
       "url": "/game/gn/52.html",
       "categories": [],
       "id": "vex-7",
@@ -791,7 +791,7 @@
     },
     {
       "label": "Vex 8",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/53.png",
+      "imageUrl": "/game/covers/53.png",
       "url": "/game/gn/53.html",
       "categories": [],
       "id": "vex-8",
@@ -799,7 +799,7 @@
     },
     {
       "label": "Vex Challenges",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/54.png",
+      "imageUrl": "/game/covers/54.png",
       "url": "/game/gn/54.html",
       "categories": [],
       "id": "vex-challenges",
@@ -807,7 +807,7 @@
     },
     {
       "label": "Vex X3M",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/55.png",
+      "imageUrl": "/game/covers/55.png",
       "url": "/game/gn/55.html",
       "categories": [],
       "id": "vex-x3m",
@@ -815,7 +815,7 @@
     },
     {
       "label": "Vex X3M 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/56.png",
+      "imageUrl": "/game/covers/56.png",
       "url": "/game/gn/56.html",
       "categories": [],
       "id": "vex-x3m-2",
@@ -823,7 +823,7 @@
     },
     {
       "label": "Monkey Mart",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/57.png",
+      "imageUrl": "/game/covers/57.png",
       "url": "/game/gn/57.html",
       "categories": [],
       "id": "monkey-mart",
@@ -831,7 +831,7 @@
     },
     {
       "label": "A Dance of Fire and Ice",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/59.png",
+      "imageUrl": "/game/covers/59.png",
       "url": "/game/gn/59.html",
       "categories": [],
       "id": "a-dance-of-fire-and-ice",
@@ -839,7 +839,7 @@
     },
     {
       "label": "Achievement Unlocked",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/60.png",
+      "imageUrl": "/game/covers/60.png",
       "url": "/game/gn/60.html",
       "categories": [],
       "id": "achievement-unlocked",
@@ -847,7 +847,7 @@
     },
     {
       "label": "Achievement Unlocked 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/61.png",
+      "imageUrl": "/game/covers/61.png",
       "url": "/game/gn/61.html",
       "categories": [],
       "id": "achievement-unlocked-2",
@@ -855,7 +855,7 @@
     },
     {
       "label": "Achievement Unlocked 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/62.png",
+      "imageUrl": "/game/covers/62.png",
       "url": "/game/gn/62.html",
       "categories": [],
       "id": "achievement-unlocked-3",
@@ -863,7 +863,7 @@
     },
     {
       "label": "Angry Birds",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/63.png",
+      "imageUrl": "/game/covers/63.png",
       "url": "/game/gn/63.html",
       "categories": [],
       "id": "angry-birds",
@@ -871,7 +871,7 @@
     },
     {
       "label": "Backrooms",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/64.png",
+      "imageUrl": "/game/covers/64.png",
       "url": "/game/gn/64.html",
       "categories": [],
       "id": "backrooms",
@@ -879,7 +879,7 @@
     },
     {
       "label": "Baldi's Basics",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/65.png",
+      "imageUrl": "/game/covers/65.png",
       "url": "/game/gn/65.html",
       "categories": [],
       "id": "baldis-basics",
@@ -887,7 +887,7 @@
     },
     {
       "label": "Basket Random",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/66.png",
+      "imageUrl": "/game/covers/66.png",
       "url": "/game/gn/66.html",
       "categories": [],
       "id": "basket-random",
@@ -895,7 +895,7 @@
     },
     {
       "label": "Big Tower Tiny Square",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/67.png",
+      "imageUrl": "/game/covers/67.png",
       "url": "/game/gn/67.html",
       "categories": [],
       "id": "big-tower-tiny-square",
@@ -903,7 +903,7 @@
     },
     {
       "label": "Big NEON Tower Tiny Square",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/68.png",
+      "imageUrl": "/game/covers/68.png",
       "url": "/game/gn/68.html",
       "categories": [],
       "id": "big-neon-tower-tiny-square",
@@ -911,7 +911,7 @@
     },
     {
       "label": "Big ICE Tower Tiny Square",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/69.png",
+      "imageUrl": "/game/covers/69.png",
       "url": "/game/gn/69.html",
       "categories": [],
       "id": "big-ice-tower-tiny-square",
@@ -919,7 +919,7 @@
     },
     {
       "label": "BitLife",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/70.png",
+      "imageUrl": "/game/covers/70.png",
       "url": "/game/gn/70.html",
       "categories": [],
       "id": "bitlife",
@@ -927,7 +927,7 @@
     },
     {
       "label": "Bloons TD",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/71.png",
+      "imageUrl": "/game/covers/71.png",
       "url": "/game/gn/71.html",
       "categories": [],
       "id": "bloons-td",
@@ -935,7 +935,7 @@
     },
     {
       "label": "Bloons TD 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/72.png",
+      "imageUrl": "/game/covers/72.png",
       "url": "/game/gn/72.html",
       "categories": [],
       "id": "bloons-td-2",
@@ -943,7 +943,7 @@
     },
     {
       "label": "Bloons TD 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/73.png",
+      "imageUrl": "/game/covers/73.png",
       "url": "/game/gn/73.html",
       "categories": [],
       "id": "bloons-td-3",
@@ -951,7 +951,7 @@
     },
     {
       "label": "Bloons TD 4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/74.png",
+      "imageUrl": "/game/covers/74.png",
       "url": "/game/gn/74.html",
       "categories": [],
       "id": "bloons-td-4",
@@ -959,7 +959,7 @@
     },
     {
       "label": "Bloons TD 5",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/75.png",
+      "imageUrl": "/game/covers/75.png",
       "url": "/game/gn/75.html",
       "categories": [],
       "id": "bloons-td-5",
@@ -967,7 +967,7 @@
     },
     {
       "label": "Bob The Robber 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/76.png",
+      "imageUrl": "/game/covers/76.png",
       "url": "/game/gn/76.html",
       "categories": [],
       "id": "bob-the-robber-2",
@@ -975,7 +975,7 @@
     },
     {
       "label": "Boxing Random",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/77.png",
+      "imageUrl": "/game/covers/77.png",
       "url": "/game/gn/77.html",
       "categories": [],
       "id": "boxing-random",
@@ -983,7 +983,7 @@
     },
     {
       "label": "Burrito Bison",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/78.png",
+      "imageUrl": "/game/covers/78.png",
       "url": "/game/gn/78.html",
       "categories": [],
       "id": "burrito-bison",
@@ -991,7 +991,7 @@
     },
     {
       "label": "Cannon Basketball",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/79.png",
+      "imageUrl": "/game/covers/79.png",
       "url": "/game/gn/79.html",
       "categories": [],
       "id": "cannon-basketball",
@@ -999,7 +999,7 @@
     },
     {
       "label": "Cannon Basketball 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/80.png",
+      "imageUrl": "/game/covers/80.png",
       "url": "/game/gn/80.html",
       "categories": [],
       "id": "cannon-basketball-2",
@@ -1007,7 +1007,7 @@
     },
     {
       "label": "Cluster Rush",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/81.png",
+      "imageUrl": "/game/covers/81.png",
       "url": "/game/gn/81.html",
       "categories": [],
       "id": "cluster-rush",
@@ -1015,7 +1015,7 @@
     },
     {
       "label": "Cookie Clicker",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/82.png",
+      "imageUrl": "/game/covers/82.png",
       "url": "/game/gn/82-aa.html",
       "categories": [],
       "id": "cookie-clicker",
@@ -1023,7 +1023,7 @@
     },
     {
       "label": "Coreball",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/83.png",
+      "imageUrl": "/game/covers/83.png",
       "url": "/game/gn/83.html",
       "categories": [],
       "id": "coreball",
@@ -1031,7 +1031,7 @@
     },
     {
       "label": "Cubefield",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/84.png",
+      "imageUrl": "/game/covers/84.png",
       "url": "/game/gn/84.html",
       "categories": [],
       "id": "cubefield",
@@ -1039,7 +1039,7 @@
     },
     {
       "label": "Cut the Rope",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/85.png",
+      "imageUrl": "/game/covers/85.png",
       "url": "/game/gn/85.html",
       "categories": [],
       "id": "cut-the-rope",
@@ -1047,7 +1047,7 @@
     },
     {
       "label": "Draw Climber",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/86.png",
+      "imageUrl": "/game/covers/86.png",
       "url": "/game/gn/86.html",
       "categories": [],
       "id": "draw-climber",
@@ -1055,7 +1055,7 @@
     },
     {
       "label": "Emulator.JS",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/87.png",
+      "imageUrl": "/game/covers/87.png",
       "url": "/game/gn/87.html",
       "categories": [],
       "id": "emulator.js",
@@ -1063,7 +1063,7 @@
     },
     {
       "label": "Fireboy and Watergirl 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/88.png",
+      "imageUrl": "/game/covers/88.png",
       "url": "/game/gn/88.html",
       "categories": [],
       "id": "fireboy-and-watergirl-2",
@@ -1071,7 +1071,7 @@
     },
     {
       "label": "Fireboy and Watergirl 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/89.png",
+      "imageUrl": "/game/covers/89.png",
       "url": "/game/gn/89.html",
       "categories": [],
       "id": "fireboy-and-watergirl-3",
@@ -1079,7 +1079,7 @@
     },
     {
       "label": "Granny",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/90.png",
+      "imageUrl": "/game/covers/90.png",
       "url": "/game/gn/90.html",
       "categories": [],
       "id": "granny",
@@ -1087,7 +1087,7 @@
     },
     {
       "label": "Gunspin",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/91.png",
+      "imageUrl": "/game/covers/91.png",
       "url": "/game/gn/91.html",
       "categories": [],
       "id": "gunspin",
@@ -1095,7 +1095,7 @@
     },
     {
       "label": "Highway Racer 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/92.png",
+      "imageUrl": "/game/covers/92.png",
       "url": "/game/gn/92.html",
       "categories": [],
       "id": "highway-racer-2",
@@ -1103,7 +1103,7 @@
     },
     {
       "label": "Johnny Trigger",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/93.png",
+      "imageUrl": "/game/covers/93.png",
       "url": "/game/gn/93.html",
       "categories": [],
       "id": "johnny-trigger",
@@ -1111,7 +1111,7 @@
     },
     {
       "label": "Journey Downhill",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/94.png",
+      "imageUrl": "/game/covers/94.png",
       "url": "/game/gn/94.html",
       "categories": [],
       "id": "journey-downhill",
@@ -1119,7 +1119,7 @@
     },
     {
       "label": "Line Rider",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/95.png",
+      "imageUrl": "/game/covers/95.png",
       "url": "/game/gn/95.html",
       "categories": [],
       "id": "line-rider",
@@ -1127,7 +1127,7 @@
     },
     {
       "label": "Moto X3M",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/96.png",
+      "imageUrl": "/game/covers/96.png",
       "url": "/game/gn/96.html",
       "categories": [],
       "id": "moto-x3m",
@@ -1135,7 +1135,7 @@
     },
     {
       "label": "Moto X3M 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/97.png",
+      "imageUrl": "/game/covers/97.png",
       "url": "/game/gn/97.html",
       "categories": [],
       "id": "moto-x3m-2",
@@ -1143,7 +1143,7 @@
     },
     {
       "label": "Moto X3M 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/98.png",
+      "imageUrl": "/game/covers/98.png",
       "url": "/game/gn/98.html",
       "categories": [],
       "id": "moto-x3m-3",
@@ -1151,7 +1151,7 @@
     },
     {
       "label": "Moto X3M Spooky",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/99.png",
+      "imageUrl": "/game/covers/99.png",
       "url": "/game/gn/99.html",
       "categories": [],
       "id": "moto-x3m-spooky",
@@ -1159,7 +1159,7 @@
     },
     {
       "label": "Moto X3M Winter",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/100.png",
+      "imageUrl": "/game/covers/100.png",
       "url": "/game/gn/100.html",
       "categories": [],
       "id": "moto-x3m-winter",
@@ -1167,7 +1167,7 @@
     },
     {
       "label": "Ninja vs EvilCorp",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/101.png",
+      "imageUrl": "/game/covers/101.png",
       "url": "/game/gn/101.html",
       "categories": [],
       "id": "ninja-vs-evilcorp",
@@ -1175,7 +1175,7 @@
     },
     {
       "label": "Paper.io 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/102.png",
+      "imageUrl": "/game/covers/102.png",
       "url": "/game/gn/102.html",
       "categories": [],
       "id": "paper.io-2",
@@ -1183,7 +1183,7 @@
     },
     {
       "label": "The World's Hardest Game",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/103.png",
+      "imageUrl": "/game/covers/103.png",
       "url": "/game/gn/103.html",
       "categories": [],
       "id": "the-worlds-hardest-game",
@@ -1191,7 +1191,7 @@
     },
     {
       "label": "The World's Hardest Game 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/104.png",
+      "imageUrl": "/game/covers/104.png",
       "url": "/game/gn/104.html",
       "categories": [],
       "id": "the-worlds-hardest-game-3",
@@ -1199,7 +1199,7 @@
     },
     {
       "label": "The World's Hardest Game 4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/105.png",
+      "imageUrl": "/game/covers/105.png",
       "url": "/game/gn/105.html",
       "categories": [],
       "id": "the-worlds-hardest-game-4",
@@ -1207,7 +1207,7 @@
     },
     {
       "label": "This Is The Only Level",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/106.png",
+      "imageUrl": "/game/covers/106.png",
       "url": "/game/gn/106.html",
       "categories": [],
       "id": "this-is-the-only-level",
@@ -1215,7 +1215,7 @@
     },
     {
       "label": "This Is The Only Level 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/107.png",
+      "imageUrl": "/game/covers/107.png",
       "url": "/game/gn/107.html",
       "categories": [],
       "id": "this-is-the-only-level-2",
@@ -1223,7 +1223,7 @@
     },
     {
       "label": "Tiny Fishing",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/108.png",
+      "imageUrl": "/game/covers/108.png",
       "url": "/game/gn/108.html",
       "categories": [],
       "id": "tiny-fishing",
@@ -1231,7 +1231,7 @@
     },
     {
       "label": "Tomb Of The Mask",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/109.png",
+      "imageUrl": "/game/covers/109.png",
       "url": "/game/gn/109.html",
       "categories": [],
       "id": "tomb-of-the-mask",
@@ -1239,7 +1239,7 @@
     },
     {
       "label": "Toss The Turtle",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/110.png",
+      "imageUrl": "/game/covers/110.png",
       "url": "/game/gn/110.html",
       "categories": [],
       "id": "toss-the-turtle",
@@ -1247,7 +1247,7 @@
     },
     {
       "label": "Tube Jumpers",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/111.png",
+      "imageUrl": "/game/covers/111.png",
       "url": "/game/gn/111.html",
       "categories": [],
       "id": "tube-jumpers",
@@ -1255,7 +1255,7 @@
     },
     {
       "label": "Wordle",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/112.png",
+      "imageUrl": "/game/covers/112.png",
       "url": "/game/gn/112.html",
       "categories": [],
       "id": "wordle",
@@ -1263,7 +1263,7 @@
     },
     {
       "label": "Ruffle",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/113.png",
+      "imageUrl": "/game/covers/113.png",
       "url": "/game/gn/113.html",
       "categories": [],
       "id": "ruffle",
@@ -1271,7 +1271,7 @@
     },
     {
       "label": "2048",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/114.png",
+      "imageUrl": "/game/covers/114.png",
       "url": "/game/gn/114.html",
       "categories": [],
       "id": "2048",
@@ -1279,7 +1279,7 @@
     },
     {
       "label": "8 Ball Pool",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/115.png",
+      "imageUrl": "/game/covers/115.png",
       "url": "/game/gn/115.html",
       "categories": [],
       "id": "8-ball-pool",
@@ -1287,7 +1287,7 @@
     },
     {
       "label": "Offroad Mountain Bike",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/116.png",
+      "imageUrl": "/game/covers/116.png",
       "url": "/game/gn/116.html",
       "categories": [],
       "id": "offroad-mountain-bike",
@@ -1295,7 +1295,7 @@
     },
     {
       "label": "Space Waves",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/117.png",
+      "imageUrl": "/game/covers/117.png",
       "url": "/game/gn/117.html",
       "categories": [],
       "id": "space-waves",
@@ -1303,7 +1303,7 @@
     },
     {
       "label": "Solar Smash",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/118.png",
+      "imageUrl": "/game/covers/118.png",
       "url": "/game/gn/118.html",
       "categories": [],
       "id": "solar-smash",
@@ -1311,7 +1311,7 @@
     },
     {
       "label": "Snow Rider 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/119.png",
+      "imageUrl": "/game/covers/119.png",
       "url": "/game/gn/119.html",
       "categories": [],
       "id": "snow-rider-3d",
@@ -1319,7 +1319,7 @@
     },
     {
       "label": "Fortzone Battle Royale",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/120.png",
+      "imageUrl": "/game/covers/120.png",
       "url": "/game/gn/120.html",
       "categories": [],
       "id": "fortzone-battle-royale",
@@ -1327,7 +1327,7 @@
     },
     {
       "label": "Brawl Guys.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/121.png",
+      "imageUrl": "/game/covers/121.png",
       "url": "/game/gn/121.html",
       "categories": [],
       "id": "brawl-guys.io",
@@ -1335,7 +1335,7 @@
     },
     {
       "label": "Survival Race",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/122.png",
+      "imageUrl": "/game/covers/122.png",
       "url": "/game/gn/122.html",
       "categories": [],
       "id": "survival-race",
@@ -1343,7 +1343,7 @@
     },
     {
       "label": "Poly Track",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/123.png",
+      "imageUrl": "/game/covers/123.png",
       "url": "/game/gn/123.html",
       "categories": [],
       "id": "poly-track",
@@ -1351,7 +1351,7 @@
     },
     {
       "label": "Moto X3M Pool Party",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/124.png",
+      "imageUrl": "/game/covers/124.png",
       "url": "/game/gn/124.html",
       "categories": [],
       "id": "moto-x3m-pool-party",
@@ -1359,7 +1359,7 @@
     },
     {
       "label": "Granny 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/125.png",
+      "imageUrl": "/game/covers/125.png",
       "url": "/game/gn/125.html",
       "categories": [],
       "id": "granny-2",
@@ -1367,7 +1367,7 @@
     },
     {
       "label": "Granny 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/126.png",
+      "imageUrl": "/game/covers/126.png",
       "url": "/game/gn/126.html",
       "categories": [],
       "id": "granny-3",
@@ -1375,7 +1375,7 @@
     },
     {
       "label": "Fashion Battle",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/127.png",
+      "imageUrl": "/game/covers/127.png",
       "url": "/game/gn/127.html",
       "categories": [],
       "id": "fashion-battle",
@@ -1383,7 +1383,7 @@
     },
     {
       "label": "Slice it All",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/128.png",
+      "imageUrl": "/game/covers/128.png",
       "url": "/game/gn/128.html",
       "categories": [],
       "id": "slice-it-all",
@@ -1391,7 +1391,7 @@
     },
     {
       "label": "Flappy Bird",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/129.png",
+      "imageUrl": "/game/covers/129.png",
       "url": "/game/gn/129.html",
       "categories": [],
       "id": "flappy-bird",
@@ -1399,7 +1399,7 @@
     },
     {
       "label": "osu!",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/130.png",
+      "imageUrl": "/game/covers/130.png",
       "url": "/game/gn/130.html",
       "categories": [],
       "id": "osu",
@@ -1407,7 +1407,7 @@
     },
     {
       "label": "Subway Surfers: Barcelona",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/131.png",
+      "imageUrl": "/game/covers/131.png",
       "url": "/game/gn/131.html",
       "categories": [],
       "id": "subway-surfers-barcelona",
@@ -1415,7 +1415,7 @@
     },
     {
       "label": "Subway Surfers: Beijing",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/132.png",
+      "imageUrl": "/game/covers/132.png",
       "url": "/game/gn/132.html",
       "categories": [],
       "id": "subway-surfers-beijing",
@@ -1423,7 +1423,7 @@
     },
     {
       "label": "Subway Surfers: Berlin",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/133.png",
+      "imageUrl": "/game/covers/133.png",
       "url": "/game/gn/133.html",
       "categories": [],
       "id": "subway-surfers-berlin",
@@ -1431,7 +1431,7 @@
     },
     {
       "label": "Subway Surfers: Buenos Aires",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/134.png",
+      "imageUrl": "/game/covers/134.png",
       "url": "/game/gn/134.html",
       "categories": [],
       "id": "subway-surfers-buenos-aires",
@@ -1439,7 +1439,7 @@
     },
     {
       "label": "Subway Surfers: Havana",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/135.png",
+      "imageUrl": "/game/covers/135.png",
       "url": "/game/gn/135.html",
       "categories": [],
       "id": "subway-surfers-havana",
@@ -1447,7 +1447,7 @@
     },
     {
       "label": "Subway Surfers: Houston",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/136.png",
+      "imageUrl": "/game/covers/136.png",
       "url": "/game/gn/136.html",
       "categories": [],
       "id": "subway-surfers-houston",
@@ -1455,7 +1455,7 @@
     },
     {
       "label": "Subway Surfers: Iceland",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/137.png",
+      "imageUrl": "/game/covers/137.png",
       "url": "/game/gn/137.html",
       "categories": [],
       "id": "subway-surfers-iceland",
@@ -1463,7 +1463,7 @@
     },
     {
       "label": "Subway Surfers: London",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/138.png",
+      "imageUrl": "/game/covers/138.png",
       "url": "/game/gn/138.html",
       "categories": [],
       "id": "subway-surfers-london",
@@ -1471,7 +1471,7 @@
     },
     {
       "label": "Subway Surfers: Mexico",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/139.png",
+      "imageUrl": "/game/covers/139.png",
       "url": "/game/gn/139.html",
       "categories": [],
       "id": "subway-surfers-mexico",
@@ -1479,7 +1479,7 @@
     },
     {
       "label": "Subway Surfers: Miami",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/140.png",
+      "imageUrl": "/game/covers/140.png",
       "url": "/game/gn/140.html",
       "categories": [],
       "id": "subway-surfers-miami",
@@ -1487,7 +1487,7 @@
     },
     {
       "label": "Subway Surfers: Monaco",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/141.png",
+      "imageUrl": "/game/covers/141.png",
       "url": "/game/gn/141.html",
       "categories": [],
       "id": "subway-surfers-monaco",
@@ -1495,7 +1495,7 @@
     },
     {
       "label": "Subway Surfers: New Orleans",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/142.png",
+      "imageUrl": "/game/covers/142.png",
       "url": "/game/gn/142.html",
       "categories": [],
       "id": "subway-surfers-new-orleans",
@@ -1503,7 +1503,7 @@
     },
     {
       "label": "Subway Surfers: St. Petersburg",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/143.png",
+      "imageUrl": "/game/covers/143.png",
       "url": "/game/gn/143.html",
       "categories": [],
       "id": "subway-surfers-st.-petersburg",
@@ -1511,7 +1511,7 @@
     },
     {
       "label": "Subway Surfers: Winter Holiday",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/144.png",
+      "imageUrl": "/game/covers/144.png",
       "url": "/game/gn/144.html",
       "categories": [],
       "id": "subway-surfers-winter-holiday",
@@ -1519,7 +1519,7 @@
     },
     {
       "label": "Subway Surfers: Zurich",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/145.png",
+      "imageUrl": "/game/covers/145.png",
       "url": "/game/gn/145.html",
       "categories": [],
       "id": "subway-surfers-zurich",
@@ -1527,7 +1527,7 @@
     },
     {
       "label": "8 Ball Classic",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/146.png",
+      "imageUrl": "/game/covers/146.png",
       "url": "/game/gn/146.html",
       "categories": [],
       "id": "8-ball-classic",
@@ -1535,7 +1535,7 @@
     },
     {
       "label": "Angry Birds Showdown",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/147.png",
+      "imageUrl": "/game/covers/147.png",
       "url": "/game/gn/147.html",
       "categories": [],
       "id": "angry-birds-showdown",
@@ -1543,7 +1543,7 @@
     },
     {
       "label": "Archery World Tour",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/148.png",
+      "imageUrl": "/game/covers/148.png",
       "url": "/game/gn/148.html",
       "categories": [],
       "id": "archery-world-tour",
@@ -1551,7 +1551,7 @@
     },
     {
       "label": "Ball Blast",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/149.png",
+      "imageUrl": "/game/covers/149.png",
       "url": "/game/gn/149.html",
       "categories": [],
       "id": "ball-blast",
@@ -1559,7 +1559,7 @@
     },
     {
       "label": "Cannon Balls 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/150.png",
+      "imageUrl": "/game/covers/150.png",
       "url": "/game/gn/150.html",
       "categories": [],
       "id": "cannon-balls-3d",
@@ -1567,7 +1567,7 @@
     },
     {
       "label": "Chess Classic",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/151.png",
+      "imageUrl": "/game/covers/151.png",
       "url": "/game/gn/151.html",
       "categories": [],
       "id": "chess-classic",
@@ -1575,7 +1575,7 @@
     },
     {
       "label": "Draw the Line",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/152.png",
+      "imageUrl": "/game/covers/152.png",
       "url": "/game/gn/152.html",
       "categories": [],
       "id": "draw-the-line",
@@ -1583,7 +1583,7 @@
     },
     {
       "label": "Flappy Dunk",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/153.png",
+      "imageUrl": "/game/covers/153.png",
       "url": "/game/gn/153.html",
       "categories": [],
       "id": "flappy-dunk",
@@ -1591,7 +1591,7 @@
     },
     {
       "label": "Fork n Sausage",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/154.png",
+      "imageUrl": "/game/covers/154.png",
       "url": "/game/gn/154.html",
       "categories": [],
       "id": "fork-n-sausage",
@@ -1599,7 +1599,7 @@
     },
     {
       "label": "Guess Their Answer",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/155.png",
+      "imageUrl": "/game/covers/155.png",
       "url": "/game/gn/155.html",
       "categories": [],
       "id": "guess-their-answer",
@@ -1607,7 +1607,7 @@
     },
     {
       "label": "Harvest.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/156.png",
+      "imageUrl": "/game/covers/156.png",
       "url": "/game/gn/156.html",
       "categories": [],
       "id": "harvest.io",
@@ -1615,7 +1615,7 @@
     },
     {
       "label": "Hill Climb Racing Lite",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/157.png",
+      "imageUrl": "/game/covers/157.png",
       "url": "/game/gn/157.html",
       "categories": [],
       "id": "hill-climb-racing-lite",
@@ -1623,7 +1623,7 @@
     },
     {
       "label": "Pac-Man Superfast",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/158.png",
+      "imageUrl": "/game/covers/158.png",
       "url": "/game/gn/158.html",
       "categories": [],
       "id": "pac-man-superfast",
@@ -1631,7 +1631,7 @@
     },
     {
       "label": "Parking Rush",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/159.png",
+      "imageUrl": "/game/covers/159.png",
       "url": "/game/gn/159.html",
       "categories": [],
       "id": "parking-rush",
@@ -1639,7 +1639,7 @@
     },
     {
       "label": "Race Master 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/160.png",
+      "imageUrl": "/game/covers/160.png",
       "url": "/game/gn/160.html",
       "categories": [],
       "id": "race-master-3d",
@@ -1647,7 +1647,7 @@
     },
     {
       "label": "State.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/161.png",
+      "imageUrl": "/game/covers/161.png",
       "url": "/game/gn/161.html",
       "categories": [],
       "id": "state.io",
@@ -1655,7 +1655,7 @@
     },
     {
       "label": "Tower Crash 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/162.png",
+      "imageUrl": "/game/covers/162.png",
       "url": "/game/gn/162.html",
       "categories": [],
       "id": "tower-crash-3d",
@@ -1663,7 +1663,7 @@
     },
     {
       "label": "Trivia Crack",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/163.png",
+      "imageUrl": "/game/covers/163.png",
       "url": "/game/gn/163.html",
       "categories": [],
       "id": "trivia-crack",
@@ -1671,7 +1671,7 @@
     },
     {
       "label": "Crazy Cattle 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/164.png",
+      "imageUrl": "/game/covers/164.png",
       "url": "/game/gn/164-temp2.html",
       "categories": [],
       "id": "crazy-cattle-3d",
@@ -1679,7 +1679,7 @@
     },
     {
       "label": "Cheese Chompers 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/165.png",
+      "imageUrl": "/game/covers/165.png",
       "url": "/game/gn/165.html",
       "categories": [],
       "id": "cheese-chompers-3d",
@@ -1687,7 +1687,7 @@
     },
     {
       "label": "Blade Ball",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/167.png",
+      "imageUrl": "/game/covers/167.png",
       "url": "/game/gn/167.html",
       "categories": [],
       "id": "blade-ball",
@@ -1695,7 +1695,7 @@
     },
     {
       "label": "Blocky Snakes",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/168.png",
+      "imageUrl": "/game/covers/168.png",
       "url": "/game/gn/168.html",
       "categories": [],
       "id": "blocky-snakes",
@@ -1703,7 +1703,7 @@
     },
     {
       "label": "Bloxorz",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/169.png",
+      "imageUrl": "/game/covers/169.png",
       "url": "/game/gn/169.html",
       "categories": [],
       "id": "bloxorz",
@@ -1711,7 +1711,7 @@
     },
     {
       "label": "Big Tower Tiny Square 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/170.png",
+      "imageUrl": "/game/covers/170.png",
       "url": "/game/gn/170.html",
       "categories": [],
       "id": "big-tower-tiny-square-2",
@@ -1719,7 +1719,7 @@
     },
     {
       "label": "Candy Crush",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/171.png",
+      "imageUrl": "/game/covers/171.png",
       "url": "/game/gn/171.html",
       "categories": [],
       "id": "candy-crush",
@@ -1727,7 +1727,7 @@
     },
     {
       "label": "Melon Playground",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/172.png",
+      "imageUrl": "/game/covers/172.png",
       "url": "/game/gn/172.html",
       "categories": [],
       "id": "melon-playground",
@@ -1735,7 +1735,7 @@
     },
     {
       "label": "Drift Hunters",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/173.png",
+      "imageUrl": "/game/covers/173.png",
       "url": "/game/gn/173.html",
       "categories": [],
       "id": "drift-hunters",
@@ -1743,7 +1743,7 @@
     },
     {
       "label": "World Box",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/174.png",
+      "imageUrl": "/game/covers/174.png",
       "url": "/game/gn/174.html",
       "categories": [],
       "id": "world-box",
@@ -1751,7 +1751,7 @@
     },
     {
       "label": "Run 1",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/175.png",
+      "imageUrl": "/game/covers/175.png",
       "url": "/game/gn/175.html",
       "categories": [],
       "id": "run-1",
@@ -1759,7 +1759,7 @@
     },
     {
       "label": "Run 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/176.png",
+      "imageUrl": "/game/covers/176.png",
       "url": "/game/gn/176.html",
       "categories": [],
       "id": "run-2",
@@ -1767,7 +1767,7 @@
     },
     {
       "label": "Run 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/177.png",
+      "imageUrl": "/game/covers/177.png",
       "url": "/game/gn/177.html",
       "categories": [],
       "id": "run-3",
@@ -1775,7 +1775,7 @@
     },
     {
       "label": "Swords and Souls",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/178.png",
+      "imageUrl": "/game/covers/178.png",
       "url": "/game/gn/178.html",
       "categories": [],
       "id": "swords-and-souls",
@@ -1783,7 +1783,7 @@
     },
     {
       "label": "Soundboard",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/179.png",
+      "imageUrl": "/game/covers/179.png",
       "url": "/game/gn/179.html",
       "featured": true,
       "categories": [],
@@ -1792,7 +1792,7 @@
     },
     {
       "label": "n-gon",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/180.png",
+      "imageUrl": "/game/covers/180.png",
       "url": "/game/gn/180.html",
       "categories": [],
       "id": "n-gon",
@@ -1800,7 +1800,7 @@
     },
     {
       "label": "Five Nights at Freddy's: Sister Location",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/185.png",
+      "imageUrl": "/game/covers/185.png",
       "url": "/game/gn/185.html",
       "categories": [],
       "id": "five-nights-at-freddys-sister-location",
@@ -1808,7 +1808,7 @@
     },
     {
       "label": "Ragdoll Archers",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/186.png",
+      "imageUrl": "/game/covers/186.png",
       "url": "/game/gn/186.html",
       "categories": [],
       "id": "ragdoll-archers",
@@ -1816,7 +1816,7 @@
     },
     {
       "label": "Papers, Please",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/187.png",
+      "imageUrl": "/game/covers/187.png",
       "url": "/game/gn/187.html",
       "categories": [],
       "id": "papers-please",
@@ -1824,7 +1824,7 @@
     },
     {
       "label": "Scrap Metal 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/188.png",
+      "imageUrl": "/game/covers/188.png",
       "url": "/game/gn/188.html",
       "categories": [],
       "id": "scrap-metal-3",
@@ -1832,7 +1832,7 @@
     },
     {
       "label": "Five Nights at Freddy's: World",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/190.png",
+      "imageUrl": "/game/covers/190.png",
       "url": "/game/gn/190.html",
       "categories": [],
       "id": "five-nights-at-freddys-world",
@@ -1840,7 +1840,7 @@
     },
     {
       "label": "Five Nights at Freddy's: Pizza Simulator",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/191.png",
+      "imageUrl": "/game/covers/191.png",
       "url": "/game/gn/191.html",
       "categories": [],
       "id": "five-nights-at-freddys-pizza-simulator",
@@ -1848,7 +1848,7 @@
     },
     {
       "label": "Five Nights at Freddy's: Ultimate Custom Night",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/192.png",
+      "imageUrl": "/game/covers/192.png",
       "url": "/game/gn/192.html",
       "categories": [],
       "id": "five-nights-at-freddys-ultimate-custom-night",
@@ -1856,7 +1856,7 @@
     },
     {
       "label": "Do NOT Take This Cat Home",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/193.png",
+      "imageUrl": "/game/covers/193.png",
       "url": "/game/gn/193.html",
       "categories": [],
       "id": "do-not-take-this-cat-home",
@@ -1864,7 +1864,7 @@
     },
     {
       "label": "People Playground",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/194.png",
+      "imageUrl": "/game/covers/194.png",
       "url": "/game/gn/194.html",
       "featured": true,
       "categories": [],
@@ -1873,7 +1873,7 @@
     },
     {
       "label": "R.E.P.O",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/195.png",
+      "imageUrl": "/game/covers/195.png",
       "url": "/game/gn/195.html",
       "featured": true,
       "categories": [],
@@ -1882,7 +1882,7 @@
     },
     {
       "label": "ULTRAKILL",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/196.png",
+      "imageUrl": "/game/covers/196.png",
       "url": "/game/gn/196-fixed.html",
       "featured": true,
       "categories": [],
@@ -1891,7 +1891,7 @@
     },
     {
       "label": "Elastic Man",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/197.png",
+      "imageUrl": "/game/covers/197.png",
       "url": "/game/gn/197.html",
       "categories": [],
       "id": "elastic-man",
@@ -1899,7 +1899,7 @@
     },
     {
       "label": "Slope",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/198.png",
+      "imageUrl": "/game/covers/198.png",
       "url": "/game/gn/198.html",
       "categories": [],
       "id": "slope",
@@ -1907,7 +1907,7 @@
     },
     {
       "label": "Time Shooter 1",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/199.png",
+      "imageUrl": "/game/covers/199.png",
       "url": "/game/gn/199.html",
       "categories": [],
       "id": "time-shooter-1",
@@ -1915,7 +1915,7 @@
     },
     {
       "label": "Time Shooter 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/200.png",
+      "imageUrl": "/game/covers/200.png",
       "url": "/game/gn/200.html",
       "categories": [],
       "id": "time-shooter-2",
@@ -1923,7 +1923,7 @@
     },
     {
       "label": "Time Shooter 3: SWAT",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/201.png",
+      "imageUrl": "/game/covers/201.png",
       "url": "/game/gn/201.html",
       "categories": [],
       "id": "time-shooter-3-swat",
@@ -1931,7 +1931,7 @@
     },
     {
       "label": "Carrom Clash",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/202.png",
+      "imageUrl": "/game/covers/202.png",
       "url": "/game/gn/202.html",
       "categories": [],
       "id": "carrom-clash",
@@ -1939,7 +1939,7 @@
     },
     {
       "label": "DOOM",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/203.png",
+      "imageUrl": "/game/covers/203.png",
       "url": "/game/gn/203-a.html",
       "categories": [],
       "id": "doom",
@@ -1947,7 +1947,7 @@
     },
     {
       "label": "Five Nights at Winston's",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/204.png",
+      "imageUrl": "/game/covers/204.png",
       "url": "/game/gn/204.html",
       "categories": [],
       "id": "five-nights-at-winstons",
@@ -1955,7 +1955,7 @@
     },
     {
       "label": "Tunnel Rush",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/206.png",
+      "imageUrl": "/game/covers/206.png",
       "url": "/game/gn/206.html",
       "categories": [],
       "id": "tunnel-rush",
@@ -1963,7 +1963,7 @@
     },
     {
       "label": "Snowbattle.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/207.png",
+      "imageUrl": "/game/covers/207.png",
       "url": "/game/gn/207.html",
       "categories": [],
       "id": "snowbattle.io",
@@ -1971,7 +1971,7 @@
     },
     {
       "label": "Rolly Vortex",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/208.png",
+      "imageUrl": "/game/covers/208.png",
       "url": "/game/gn/208.html",
       "categories": [],
       "id": "rolly-vortex",
@@ -1979,7 +1979,7 @@
     },
     {
       "label": "Draw the Hill",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/209.png",
+      "imageUrl": "/game/covers/209.png",
       "url": "/game/gn/209.html",
       "categories": [],
       "id": "draw-the-hill",
@@ -1987,7 +1987,7 @@
     },
     {
       "label": "Dragon vs Bricks",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/210.png",
+      "imageUrl": "/game/covers/210.png",
       "url": "/game/gn/210.html",
       "categories": [],
       "id": "dragon-vs-bricks",
@@ -1995,7 +1995,7 @@
     },
     {
       "label": "Death Run 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/211.png",
+      "imageUrl": "/game/covers/211.png",
       "url": "/game/gn/211.html",
       "categories": [],
       "id": "death-run-3d",
@@ -2003,7 +2003,7 @@
     },
     {
       "label": "Cut the Rope",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/212.png",
+      "imageUrl": "/game/covers/212.png",
       "url": "/game/gn/212.html",
       "categories": [],
       "id": "cut-the-rope",
@@ -2011,7 +2011,7 @@
     },
     {
       "label": "Cut the Rope: Time Travel",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/213.png",
+      "imageUrl": "/game/covers/213.png",
       "url": "/game/gn/213.html",
       "categories": [],
       "id": "cut-the-rope-time-travel",
@@ -2019,7 +2019,7 @@
     },
     {
       "label": "Cut the Rope: Holiday Gift",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/214.png",
+      "imageUrl": "/game/covers/214.png",
       "url": "/game/gn/214.html",
       "categories": [],
       "id": "cut-the-rope-holiday-gift",
@@ -2027,7 +2027,7 @@
     },
     {
       "label": "Bendy and the Ink Machine",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/215.png",
+      "imageUrl": "/game/covers/215.png",
       "url": "/game/gn/215.html",
       "featured": true,
       "categories": [],
@@ -2036,7 +2036,7 @@
     },
     {
       "label": "That's Not My Neighbor",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/216.png",
+      "imageUrl": "/game/covers/216.png",
       "url": "/game/gn/216.html",
       "featured": true,
       "categories": [],
@@ -2045,7 +2045,7 @@
     },
     {
       "label": "Hotline Miami",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/217.png",
+      "imageUrl": "/game/covers/217.png",
       "url": "/game/gn/217-c.html",
       "featured": true,
       "categories": [],
@@ -2054,7 +2054,7 @@
     },
     {
       "label": "Papa's Bakeria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/218.png",
+      "imageUrl": "/game/covers/218.png",
       "url": "/game/gn/218.html",
       "categories": [],
       "id": "papas-bakeria",
@@ -2062,7 +2062,7 @@
     },
     {
       "label": "Papa's Burgeria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/219.png",
+      "imageUrl": "/game/covers/219.png",
       "url": "/game/gn/219.html",
       "categories": [],
       "id": "papas-burgeria",
@@ -2070,7 +2070,7 @@
     },
     {
       "label": "Papa's Cheeseria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/220.png",
+      "imageUrl": "/game/covers/220.png",
       "url": "/game/gn/220.html",
       "categories": [],
       "id": "papas-cheeseria",
@@ -2078,7 +2078,7 @@
     },
     {
       "label": "Papa's Cupcakeria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/221.png",
+      "imageUrl": "/game/covers/221.png",
       "url": "/game/gn/221.html",
       "categories": [],
       "id": "papas-cupcakeria",
@@ -2086,7 +2086,7 @@
     },
     {
       "label": "Papa's Donuteria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/222.png",
+      "imageUrl": "/game/covers/222.png",
       "url": "/game/gn/222.html",
       "categories": [],
       "id": "papas-donuteria",
@@ -2094,7 +2094,7 @@
     },
     {
       "label": "Papa's Freezeria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/223.png",
+      "imageUrl": "/game/covers/223.png",
       "url": "/game/gn/223.html",
       "categories": [],
       "id": "papas-freezeria",
@@ -2102,7 +2102,7 @@
     },
     {
       "label": "Papa's Hot Doggeria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/224.png",
+      "imageUrl": "/game/covers/224.png",
       "url": "/game/gn/224.html",
       "categories": [],
       "id": "papas-hot-doggeria",
@@ -2110,7 +2110,7 @@
     },
     {
       "label": "Papa's Pancakeria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/225.png",
+      "imageUrl": "/game/covers/225.png",
       "url": "/game/gn/225.html",
       "categories": [],
       "id": "papas-pancakeria",
@@ -2118,7 +2118,7 @@
     },
     {
       "label": "Papa's Pastaria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/226.png",
+      "imageUrl": "/game/covers/226.png",
       "url": "/game/gn/226.html",
       "categories": [],
       "id": "papas-pastaria",
@@ -2126,7 +2126,7 @@
     },
     {
       "label": "Papa's Pizeria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/227.png",
+      "imageUrl": "/game/covers/227.png",
       "url": "/game/gn/227.html",
       "categories": [],
       "id": "papas-pizeria",
@@ -2134,7 +2134,7 @@
     },
     {
       "label": "Papa's Scooperia",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/228.png",
+      "imageUrl": "/game/covers/228.png",
       "url": "/game/gn/228.html",
       "categories": [],
       "id": "papas-scooperia",
@@ -2142,7 +2142,7 @@
     },
     {
       "label": "Papa's Sushiria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/229.png",
+      "imageUrl": "/game/covers/229.png",
       "url": "/game/gn/229.html",
       "categories": [],
       "id": "papas-sushiria",
@@ -2150,7 +2150,7 @@
     },
     {
       "label": "Papa's Taco Mia",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/230.png",
+      "imageUrl": "/game/covers/230.png",
       "url": "/game/gn/230.html",
       "categories": [],
       "id": "papas-taco-mia",
@@ -2158,7 +2158,7 @@
     },
     {
       "label": "Papa's Wingeria",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/231.png",
+      "imageUrl": "/game/covers/231.png",
       "url": "/game/gn/231.html",
       "categories": [],
       "id": "papas-wingeria",
@@ -2166,7 +2166,7 @@
     },
     {
       "label": "Plants vs Zombies",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/232.png",
+      "imageUrl": "/game/covers/232.png",
       "url": "/game/gn/232.html",
       "categories": [],
       "id": "plants-vs-zombies",
@@ -2174,7 +2174,7 @@
     },
     {
       "label": "Superhot",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/233.png",
+      "imageUrl": "/game/covers/233.png",
       "url": "/game/gn/233.html",
       "categories": [],
       "id": "superhot",
@@ -2182,7 +2182,7 @@
     },
     {
       "label": "Duck Life",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/234.png",
+      "imageUrl": "/game/covers/234.png",
       "url": "/game/gn/234.html",
       "categories": [],
       "id": "duck-life",
@@ -2190,7 +2190,7 @@
     },
     {
       "label": "Duck Life 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/235.png",
+      "imageUrl": "/game/covers/235.png",
       "url": "/game/gn/235.html",
       "categories": [],
       "id": "duck-life-2",
@@ -2198,7 +2198,7 @@
     },
     {
       "label": "Duck Life 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/236.png",
+      "imageUrl": "/game/covers/236.png",
       "url": "/game/gn/236.html",
       "categories": [],
       "id": "duck-life-3",
@@ -2206,7 +2206,7 @@
     },
     {
       "label": "Duck Life 4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/237.png",
+      "imageUrl": "/game/covers/237.png",
       "url": "/game/gn/237.html",
       "categories": [],
       "id": "duck-life-4",
@@ -2214,7 +2214,7 @@
     },
     {
       "label": "Duck Life 5",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/238.png",
+      "imageUrl": "/game/covers/238.png",
       "url": "/game/gn/238.html",
       "categories": [],
       "id": "duck-life-5",
@@ -2222,7 +2222,7 @@
     },
     {
       "label": "Red Ball",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/239.png",
+      "imageUrl": "/game/covers/239.png",
       "url": "/game/gn/239.html",
       "categories": [],
       "id": "red-ball",
@@ -2230,7 +2230,7 @@
     },
     {
       "label": "Red Ball 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/240.png",
+      "imageUrl": "/game/covers/240.png",
       "url": "/game/gn/240.html",
       "categories": [],
       "id": "red-ball-2",
@@ -2238,7 +2238,7 @@
     },
     {
       "label": "Red Ball 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/241.png",
+      "imageUrl": "/game/covers/241.png",
       "url": "/game/gn/241.html",
       "categories": [],
       "id": "red-ball-3",
@@ -2246,7 +2246,7 @@
     },
     {
       "label": "Red Ball 4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/242.png",
+      "imageUrl": "/game/covers/242.png",
       "url": "/game/gn/242.html",
       "categories": [],
       "id": "red-ball-4",
@@ -2254,7 +2254,7 @@
     },
     {
       "label": "Red Ball 4 Vol. 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/243.png",
+      "imageUrl": "/game/covers/243.png",
       "url": "/game/gn/243.html",
       "categories": [],
       "id": "red-ball-4-vol.-2",
@@ -2262,7 +2262,7 @@
     },
     {
       "label": "Red Ball 4 Vol. 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/244.png",
+      "imageUrl": "/game/covers/244.png",
       "url": "/game/gn/244.html",
       "categories": [],
       "id": "red-ball-4-vol.-3",
@@ -2270,7 +2270,7 @@
     },
     {
       "label": "Wheely",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/245.png",
+      "imageUrl": "/game/covers/245.png",
       "url": "/game/gn/245.html",
       "categories": [],
       "id": "wheely",
@@ -2278,7 +2278,7 @@
     },
     {
       "label": "Wheely 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/246.png",
+      "imageUrl": "/game/covers/246.png",
       "url": "/game/gn/246.html",
       "categories": [],
       "id": "wheely-2",
@@ -2286,7 +2286,7 @@
     },
     {
       "label": "Wheely 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/247.png",
+      "imageUrl": "/game/covers/247.png",
       "url": "/game/gn/247.html",
       "categories": [],
       "id": "wheely-3",
@@ -2294,7 +2294,7 @@
     },
     {
       "label": "Wheely 4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/248.png",
+      "imageUrl": "/game/covers/248.png",
       "url": "/game/gn/248.html",
       "categories": [],
       "id": "wheely-4",
@@ -2302,7 +2302,7 @@
     },
     {
       "label": "Wheely 5",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/249.png",
+      "imageUrl": "/game/covers/249.png",
       "url": "/game/gn/249.html",
       "categories": [],
       "id": "wheely-5",
@@ -2310,7 +2310,7 @@
     },
     {
       "label": "Wheely 6",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/250.png",
+      "imageUrl": "/game/covers/250.png",
       "url": "/game/gn/250.html",
       "categories": [],
       "id": "wheely-6",
@@ -2318,7 +2318,7 @@
     },
     {
       "label": "Wheely 7",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/251.png",
+      "imageUrl": "/game/covers/251.png",
       "url": "/game/gn/251.html",
       "categories": [],
       "id": "wheely-7",
@@ -2326,7 +2326,7 @@
     },
     {
       "label": "Wheely 8",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/252.png",
+      "imageUrl": "/game/covers/252.png",
       "url": "/game/gn/252.html",
       "categories": [],
       "id": "wheely-8",
@@ -2334,7 +2334,7 @@
     },
     {
       "label": "Chat Bot (A.|.I)",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/253.png",
+      "imageUrl": "/game/covers/253.png",
       "url": "/game/gn/253.html",
       "featured": true,
       "categories": [],
@@ -2343,7 +2343,7 @@
     },
     {
       "label": "Crazy Chicken 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/255.png",
+      "imageUrl": "/game/covers/255.png",
       "url": "/game/gn/255.html",
       "categories": [],
       "id": "crazy-chicken-3d",
@@ -2351,7 +2351,7 @@
     },
     {
       "label": "Crazy Kitty 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/256.png",
+      "imageUrl": "/game/covers/256.png",
       "url": "/game/gn/256.html",
       "categories": [],
       "id": "crazy-kitty-3d",
@@ -2359,7 +2359,7 @@
     },
     {
       "label": "Google Baseball",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/257.png",
+      "imageUrl": "/game/covers/257.png",
       "url": "/game/gn/257.html",
       "categories": [],
       "id": "google-baseball",
@@ -2367,7 +2367,7 @@
     },
     {
       "label": "A Bite at Freddy's",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/258.png",
+      "imageUrl": "/game/covers/258.png",
       "url": "/game/gn/258.html",
       "categories": [],
       "id": "a-bite-at-freddys",
@@ -2375,7 +2375,7 @@
     },
     {
       "label": "Class of '09",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/259.png",
+      "imageUrl": "/game/covers/259.png",
       "url": "/game/gn/259.html",
       "featured": true,
       "categories": [],
@@ -2384,7 +2384,7 @@
     },
     {
       "label": "RE:RUN",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/260.png",
+      "imageUrl": "/game/covers/260.png",
       "url": "/game/gn/260.html",
       "featured": true,
       "categories": [],
@@ -2393,7 +2393,7 @@
     },
     {
       "label": "Fruit Ninja",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/261.png",
+      "imageUrl": "/game/covers/261.png",
       "url": "/game/gn/261.html",
       "categories": [],
       "id": "fruit-ninja",
@@ -2401,7 +2401,7 @@
     },
     {
       "label": "Half Life",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/262.png",
+      "imageUrl": "/game/covers/262.png",
       "url": "/game/gn/262.html",
       "featured": true,
       "categories": [],
@@ -2410,7 +2410,7 @@
     },
     {
       "label": "Quake III Arena",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/263.png",
+      "imageUrl": "/game/covers/263.png",
       "url": "/game/gn/263.html",
       "featured": true,
       "categories": [],
@@ -2419,7 +2419,7 @@
     },
     {
       "label": "Escape Road",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/264.png",
+      "imageUrl": "/game/covers/264.png",
       "url": "/game/gn/264.html",
       "categories": [],
       "id": "escape-road",
@@ -2427,7 +2427,7 @@
     },
     {
       "label": "Escape Road 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/265.png",
+      "imageUrl": "/game/covers/265.png",
       "url": "/game/gn/265.html",
       "categories": [],
       "id": "escape-road-2",
@@ -2435,7 +2435,7 @@
     },
     {
       "label": "Speed Stars",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/266.png",
+      "imageUrl": "/game/covers/266.png",
       "url": "/game/gn/266.html",
       "featured": true,
       "categories": [],
@@ -2444,7 +2444,7 @@
     },
     {
       "label": "Pizza Tower",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/267.png",
+      "imageUrl": "/game/covers/267.png",
       "url": "/game/gn/267.html",
       "featured": true,
       "categories": [],
@@ -2453,7 +2453,7 @@
     },
     {
       "label": "Bacon May Die",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/268.png",
+      "imageUrl": "/game/covers/268.png",
       "url": "/game/gn/268.html",
       "categories": [],
       "id": "bacon-may-die",
@@ -2461,7 +2461,7 @@
     },
     {
       "label": "Bad Ice Cream",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/269.png",
+      "imageUrl": "/game/covers/269.png",
       "url": "/game/gn/269.html",
       "categories": [],
       "id": "bad-ice-cream",
@@ -2469,7 +2469,7 @@
     },
     {
       "label": "Bad Ice Cream 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/270.png",
+      "imageUrl": "/game/covers/270.png",
       "url": "/game/gn/270.html",
       "categories": [],
       "id": "bad-ice-cream-2",
@@ -2477,7 +2477,7 @@
     },
     {
       "label": "Bad Ice Cream 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/271.png",
+      "imageUrl": "/game/covers/271.png",
       "url": "/game/gn/271.html",
       "categories": [],
       "id": "bad-ice-cream-3",
@@ -2485,7 +2485,7 @@
     },
     {
       "label": "Basketball Stars",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/272.png",
+      "imageUrl": "/game/covers/272.png",
       "url": "/game/gn/272.html",
       "categories": [],
       "id": "basketball-stars",
@@ -2493,7 +2493,7 @@
     },
     {
       "label": "BlockPost",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/273.png",
+      "imageUrl": "/game/covers/273.png",
       "url": "/game/gn/273.html",
       "categories": [],
       "id": "blockpost",
@@ -2501,7 +2501,7 @@
     },
     {
       "label": "CircloO",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/274.png",
+      "imageUrl": "/game/covers/274.png",
       "url": "/game/gn/274.html",
       "categories": [],
       "id": "circloo",
@@ -2509,7 +2509,7 @@
     },
     {
       "label": "CircloO 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/275.png",
+      "imageUrl": "/game/covers/275.png",
       "url": "/game/gn/275.html",
       "categories": [],
       "id": "circloo-2",
@@ -2517,7 +2517,7 @@
     },
     {
       "label": "Drift Boss",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/276.png",
+      "imageUrl": "/game/covers/276.png",
       "url": "/game/gn/276.html",
       "categories": [],
       "id": "drift-boss",
@@ -2525,7 +2525,7 @@
     },
     {
       "label": "Evil Glitch",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/277.png",
+      "imageUrl": "/game/covers/277.png",
       "url": "/game/gn/277.html",
       "categories": [],
       "id": "evil-glitch",
@@ -2533,7 +2533,7 @@
     },
     {
       "label": "Madalin Stunt Cars 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/278.png",
+      "imageUrl": "/game/covers/278.png",
       "url": "/game/gn/278.html",
       "categories": [],
       "id": "madalin-stunt-cars-2",
@@ -2541,7 +2541,7 @@
     },
     {
       "label": "Madalin Stunt Cars 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/279.png",
+      "imageUrl": "/game/covers/279.png",
       "url": "/game/gn/279.html",
       "categories": [],
       "id": "madalin-stunt-cars-3",
@@ -2549,7 +2549,7 @@
     },
     {
       "label": "Papery Planes",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/280.png",
+      "imageUrl": "/game/covers/280.png",
       "url": "/game/gn/280.html",
       "categories": [],
       "id": "papery-planes",
@@ -2557,7 +2557,7 @@
     },
     {
       "label": "Pixel Gun Survival",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/281.png",
+      "imageUrl": "/game/covers/281.png",
       "url": "/game/gn/281.html",
       "categories": [],
       "id": "pixel-gun-survival",
@@ -2565,7 +2565,7 @@
     },
     {
       "label": "Protektor",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/282.png",
+      "imageUrl": "/game/covers/282.png",
       "url": "/game/gn/282.html",
       "categories": [],
       "id": "protektor",
@@ -2573,7 +2573,7 @@
     },
     {
       "label": "Rooftop Snipers",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/283.png",
+      "imageUrl": "/game/covers/283.png",
       "url": "/game/gn/283.html",
       "categories": [],
       "id": "rooftop-snipers",
@@ -2581,7 +2581,7 @@
     },
     {
       "label": "War The Knights",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/284.png",
+      "imageUrl": "/game/covers/284.png",
       "url": "/game/gn/284.html",
       "categories": [],
       "id": "war-the-knights",
@@ -2589,7 +2589,7 @@
     },
     {
       "label": "Basket Bros",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/285.png",
+      "imageUrl": "/game/covers/285.png",
       "url": "/game/gn/285.html",
       "categories": [],
       "id": "basket-bros",
@@ -2597,7 +2597,7 @@
     },
     {
       "label": "Endoparasitic",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/286.png",
+      "imageUrl": "/game/covers/286.png",
       "url": "/game/gn/286.html",
       "categories": [],
       "id": "endoparasitic",
@@ -2605,7 +2605,7 @@
     },
     {
       "label": "Riddle School",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/287.png",
+      "imageUrl": "/game/covers/287.png",
       "url": "/game/gn/287.html",
       "categories": [],
       "id": "riddle-school",
@@ -2613,7 +2613,7 @@
     },
     {
       "label": "Riddle School 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/288.png",
+      "imageUrl": "/game/covers/288.png",
       "url": "/game/gn/288.html",
       "categories": [],
       "id": "riddle-school-2",
@@ -2621,7 +2621,7 @@
     },
     {
       "label": "Riddle School 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/289.png",
+      "imageUrl": "/game/covers/289.png",
       "url": "/game/gn/289.html",
       "categories": [],
       "id": "riddle-school-3",
@@ -2629,7 +2629,7 @@
     },
     {
       "label": "Riddle School 4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/290.png",
+      "imageUrl": "/game/covers/290.png",
       "url": "/game/gn/290.html",
       "categories": [],
       "id": "riddle-school-4",
@@ -2637,7 +2637,7 @@
     },
     {
       "label": "Riddle School 5",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/291.png",
+      "imageUrl": "/game/covers/291.png",
       "url": "/game/gn/291.html",
       "categories": [],
       "id": "riddle-school-5",
@@ -2645,7 +2645,7 @@
     },
     {
       "label": "Riddle Transfer",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/292.png",
+      "imageUrl": "/game/covers/292.png",
       "url": "/game/gn/292.html",
       "categories": [],
       "id": "riddle-transfer",
@@ -2653,7 +2653,7 @@
     },
     {
       "label": "Riddle Transfer 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/293.png",
+      "imageUrl": "/game/covers/293.png",
       "url": "/game/gn/293.html",
       "categories": [],
       "id": "riddle-transfer-2",
@@ -2661,7 +2661,7 @@
     },
     {
       "label": "Idle Dice",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/294.png",
+      "imageUrl": "/game/covers/294.png",
       "url": "/game/gn/294.html",
       "categories": [],
       "id": "idle-dice",
@@ -2669,7 +2669,7 @@
     },
     {
       "label": "12 Mini Battles",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/295.png",
+      "imageUrl": "/game/covers/295.png",
       "url": "/game/gn/295.html",
       "categories": [],
       "id": "12-mini-battles",
@@ -2677,7 +2677,7 @@
     },
     {
       "label": "Play!.js",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/296.png",
+      "imageUrl": "/game/covers/296.png",
       "url": "/game/gn/296.html",
       "categories": [],
       "id": "play.js",
@@ -2685,7 +2685,7 @@
     },
     {
       "label": "Little Runmo",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/302.png",
+      "imageUrl": "/game/covers/302.png",
       "url": "/game/gn/302.html",
       "categories": [],
       "id": "little-runmo",
@@ -2693,7 +2693,7 @@
     },
     {
       "label": "Territorial.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/303.png",
+      "imageUrl": "/game/covers/303.png",
       "url": "/game/gn/303.html",
       "categories": [],
       "id": "territorial.io",
@@ -2701,7 +2701,7 @@
     },
     {
       "label": "Alien Hominid",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/304.png",
+      "imageUrl": "/game/covers/304.png",
       "url": "/game/gn/304.html",
       "categories": [],
       "id": "alien-hominid",
@@ -2709,7 +2709,7 @@
     },
     {
       "label": "Tanuki Sunset",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/305.png",
+      "imageUrl": "/game/covers/305.png",
       "url": "/game/gn/305.html",
       "categories": [],
       "id": "tanuki-sunset",
@@ -2717,7 +2717,7 @@
     },
     {
       "label": "Shipo.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/306.png",
+      "imageUrl": "/game/covers/306.png",
       "url": "/game/gn/306.html",
       "categories": [],
       "id": "shipo.io",
@@ -2725,7 +2725,7 @@
     },
     {
       "label": "Rainbow Obby",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/307.png",
+      "imageUrl": "/game/covers/307.png",
       "url": "/game/gn/307.html",
       "categories": [],
       "id": "rainbow-obby",
@@ -2733,7 +2733,7 @@
     },
     {
       "label": "Nazi Zombies: Portable",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/308.png",
+      "imageUrl": "/game/covers/308.png",
       "url": "/game/gn/308.html",
       "categories": [],
       "id": "nazi-zombies-portable",
@@ -2741,7 +2741,7 @@
     },
     {
       "label": "Sandboxels",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/309.png",
+      "imageUrl": "/game/covers/309.png",
       "url": "/game/gn/309.html",
       "categories": [],
       "id": "sandboxels",
@@ -2749,7 +2749,7 @@
     },
     {
       "label": "Dreadhead Parkour",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/310.png",
+      "imageUrl": "/game/covers/310.png",
       "url": "/game/gn/310.html",
       "categories": [],
       "id": "dreadhead-parkour",
@@ -2757,7 +2757,7 @@
     },
     {
       "label": "Sandtris",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/311.png",
+      "imageUrl": "/game/covers/311.png",
       "url": "/game/gn/311.html",
       "categories": [],
       "id": "sandtris",
@@ -2765,7 +2765,7 @@
     },
     {
       "label": "BlackJack",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/312.png",
+      "imageUrl": "/game/covers/312.png",
       "url": "/game/gn/312.html",
       "categories": [],
       "id": "blackjack",
@@ -2773,7 +2773,7 @@
     },
     {
       "label": "Minesweeper Mania",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/313.png",
+      "imageUrl": "/game/covers/313.png",
       "url": "/game/gn/313.html",
       "categories": [],
       "id": "minesweeper-mania",
@@ -2781,7 +2781,7 @@
     },
     {
       "label": "Super Mario 63",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/314.png",
+      "imageUrl": "/game/covers/314.png",
       "url": "/game/gn/314.html",
       "categories": [],
       "id": "super-mario-63",
@@ -2789,7 +2789,7 @@
     },
     {
       "label": "Jelly Mario",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/315.png",
+      "imageUrl": "/game/covers/315.png",
       "url": "/game/gn/315.html",
       "categories": [],
       "id": "jelly-mario",
@@ -2797,7 +2797,7 @@
     },
     {
       "label": "Angry Birds Chrome",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/316.png",
+      "imageUrl": "/game/covers/316.png",
       "url": "/game/gn/316.html",
       "categories": [],
       "id": "angry-birds-chrome",
@@ -2805,7 +2805,7 @@
     },
     {
       "label": "sandspiel",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/317.png",
+      "imageUrl": "/game/covers/317.png",
       "url": "/game/gn/317.html",
       "categories": [],
       "id": "sandspiel",
@@ -2813,7 +2813,7 @@
     },
     {
       "label": "Side Effects",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/318.png",
+      "imageUrl": "/game/covers/318.png",
       "url": "/game/gn/318.html",
       "categories": [],
       "id": "side-effects",
@@ -2821,7 +2821,7 @@
     },
     {
       "label": "Build a Queen",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/319.png",
+      "imageUrl": "/game/covers/319.png",
       "url": "/game/gn/319.html",
       "categories": [],
       "id": "build-a-queen",
@@ -2829,7 +2829,7 @@
     },
     {
       "label": "3D Bowling",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/320.png",
+      "imageUrl": "/game/covers/320.png",
       "url": "/game/gn/320.html",
       "categories": [],
       "id": "3d-bowling",
@@ -2837,7 +2837,7 @@
     },
     {
       "label": "Room Sort",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/321.png",
+      "imageUrl": "/game/covers/321.png",
       "url": "/game/gn/321.html",
       "categories": [],
       "id": "room-sort",
@@ -2845,7 +2845,7 @@
     },
     {
       "label": "Sushi Roll",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/322.png",
+      "imageUrl": "/game/covers/322.png",
       "url": "/game/gn/322.html",
       "categories": [],
       "id": "sushi-roll",
@@ -2853,7 +2853,7 @@
     },
     {
       "label": "Find the Alien",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/323.png",
+      "imageUrl": "/game/covers/323.png",
       "url": "/game/gn/323.html",
       "categories": [],
       "id": "find-the-alien",
@@ -2861,7 +2861,7 @@
     },
     {
       "label": "Maze Speedrun",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/324.png",
+      "imageUrl": "/game/covers/324.png",
       "url": "/game/gn/324.html",
       "categories": [],
       "id": "maze-speedrun",
@@ -2869,7 +2869,7 @@
     },
     {
       "label": "Kitchen Bazar",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/325.png",
+      "imageUrl": "/game/covers/325.png",
       "url": "/game/gn/325.html",
       "categories": [],
       "id": "kitchen-bazar",
@@ -2877,7 +2877,7 @@
     },
     {
       "label": "Pokey Ball",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/326.png",
+      "imageUrl": "/game/covers/326.png",
       "url": "/game/gn/326.html",
       "categories": [],
       "id": "pokey-ball",
@@ -2885,7 +2885,7 @@
     },
     {
       "label": "Slime.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/327.png",
+      "imageUrl": "/game/covers/327.png",
       "url": "/game/gn/327.html",
       "categories": [],
       "id": "slime.io",
@@ -2893,7 +2893,7 @@
     },
     {
       "label": "Om Nom Run",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/328.png",
+      "imageUrl": "/game/covers/328.png",
       "url": "/game/gn/328.html",
       "categories": [],
       "id": "om-nom-run",
@@ -2901,7 +2901,7 @@
     },
     {
       "label": "TileTopia",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/329.png",
+      "imageUrl": "/game/covers/329.png",
       "url": "/game/gn/329.html",
       "categories": [],
       "id": "tiletopia",
@@ -2909,7 +2909,7 @@
     },
     {
       "label": "BitPlanes",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/330.png",
+      "imageUrl": "/game/covers/330.png",
       "url": "/game/gn/330.html",
       "categories": [],
       "id": "bitplanes",
@@ -2917,7 +2917,7 @@
     },
     {
       "label": "Crazy Cars",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/331.png",
+      "imageUrl": "/game/covers/331.png",
       "url": "/game/gn/331.html",
       "featured": true,
       "categories": [],
@@ -2926,7 +2926,7 @@
     },
     {
       "label": "Going Balls",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/332.png",
+      "imageUrl": "/game/covers/332.png",
       "url": "/game/gn/332.html",
       "categories": [],
       "id": "going-balls",
@@ -2934,7 +2934,7 @@
     },
     {
       "label": "Fancy Pants Adventure",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/333.png",
+      "imageUrl": "/game/covers/333.png",
       "url": "/game/gn/333.html",
       "categories": [],
       "id": "fancy-pants-adventure",
@@ -2942,7 +2942,7 @@
     },
     {
       "label": "Fancy Pants Adventure 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/334.png",
+      "imageUrl": "/game/covers/334.png",
       "url": "/game/gn/334.html",
       "categories": [],
       "id": "fancy-pants-adventure-2",
@@ -2950,7 +2950,7 @@
     },
     {
       "label": "Fancy Pants Adventure 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/335.png",
+      "imageUrl": "/game/covers/335.png",
       "url": "/game/gn/335.html",
       "categories": [],
       "id": "fancy-pants-adventure-3",
@@ -2958,7 +2958,7 @@
     },
     {
       "label": "Fancy Pants Adventure 4 Part 1",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/336.png",
+      "imageUrl": "/game/covers/336.png",
       "url": "/game/gn/336.html",
       "categories": [],
       "id": "fancy-pants-adventure-4-part-1",
@@ -2966,7 +2966,7 @@
     },
     {
       "label": "Fancy Pants Adventure 4 Part 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/337.png",
+      "imageUrl": "/game/covers/337.png",
       "url": "/game/gn/337.html",
       "categories": [],
       "id": "fancy-pants-adventure-4-part-2",
@@ -2974,7 +2974,7 @@
     },
     {
       "label": "Getaway Shootout",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/338.png",
+      "imageUrl": "/game/covers/338.png",
       "url": "/game/gn/338.html",
       "categories": [],
       "id": "getaway-shootout",
@@ -2982,7 +2982,7 @@
     },
     {
       "label": "House of Hazards",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/339.png",
+      "imageUrl": "/game/covers/339.png",
       "url": "/game/gn/339.html",
       "categories": [],
       "id": "house-of-hazards",
@@ -2990,7 +2990,7 @@
     },
     {
       "label": "Learn to Fly",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/340.png",
+      "imageUrl": "/game/covers/340.png",
       "url": "/game/gn/340.html",
       "categories": [],
       "id": "learn-to-fly",
@@ -2998,7 +2998,7 @@
     },
     {
       "label": "Learn to Fly 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/341.png",
+      "imageUrl": "/game/covers/341.png",
       "url": "/game/gn/341.html",
       "categories": [],
       "id": "learn-to-fly-2",
@@ -3006,7 +3006,7 @@
     },
     {
       "label": "Learn to Fly 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/342.png",
+      "imageUrl": "/game/covers/342.png",
       "url": "/game/gn/342.html",
       "categories": [],
       "id": "learn-to-fly-3",
@@ -3014,7 +3014,7 @@
     },
     {
       "label": "Learn to Fly Idle",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/343.png",
+      "imageUrl": "/game/covers/343.png",
       "url": "/game/gn/343.html",
       "categories": [],
       "id": "learn-to-fly-idle",
@@ -3022,7 +3022,7 @@
     },
     {
       "label": "Raft Wars",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/344.png",
+      "imageUrl": "/game/covers/344.png",
       "url": "/game/gn/344.html",
       "categories": [],
       "id": "raft-wars",
@@ -3030,7 +3030,7 @@
     },
     {
       "label": "Raft Wars 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/345.png",
+      "imageUrl": "/game/covers/345.png",
       "url": "/game/gn/345.html",
       "categories": [],
       "id": "raft-wars-2",
@@ -3038,7 +3038,7 @@
     },
     {
       "label": "Sort the Court",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/346.png",
+      "imageUrl": "/game/covers/346.png",
       "url": "/game/gn/346.html",
       "categories": [],
       "id": "sort-the-court",
@@ -3046,7 +3046,7 @@
     },
     {
       "label": "SpiderDoll",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/347.png",
+      "imageUrl": "/game/covers/347.png",
       "url": "/game/gn/347.html",
       "categories": [],
       "id": "spiderdoll",
@@ -3054,7 +3054,7 @@
     },
     {
       "label": "They Are Coming",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/348.png",
+      "imageUrl": "/game/covers/348.png",
       "url": "/game/gn/348.html",
       "categories": [],
       "id": "they-are-coming",
@@ -3062,7 +3062,7 @@
     },
     {
       "label": "Spiral Roll",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/349.png",
+      "imageUrl": "/game/covers/349.png",
       "url": "/game/gn/349.html",
       "categories": [],
       "id": "spiral-roll",
@@ -3070,7 +3070,7 @@
     },
     {
       "label": "Binding of Issac: Wrath of the Lamb",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/350.png",
+      "imageUrl": "/game/covers/350.png",
       "url": "/game/gn/350.html",
       "categories": [],
       "id": "binding-of-issac-wrath-of-the-lamb",
@@ -3078,7 +3078,7 @@
     },
     {
       "label": "Happy Sheepies",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/351.png",
+      "imageUrl": "/game/covers/351.png",
       "url": "/game/gn/351.html",
       "categories": [],
       "id": "happy-sheepies",
@@ -3086,7 +3086,7 @@
     },
     {
       "label": "DON'T YOU LECTURE ME",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/352.png",
+      "imageUrl": "/game/covers/352.png",
       "url": "/game/gn/352.html",
       "categories": [],
       "id": "dont-you-lecture-me",
@@ -3094,7 +3094,7 @@
     },
     {
       "label": "Blumgi Rocket",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/353.png",
+      "imageUrl": "/game/covers/353.png",
       "url": "/game/gn/353.html",
       "categories": [],
       "id": "blumgi-rocket",
@@ -3102,7 +3102,7 @@
     },
     {
       "label": "Adventure Capatalist",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/354.png",
+      "imageUrl": "/game/covers/354.png",
       "url": "/game/gn/354.html",
       "categories": [],
       "id": "adventure-capatalist",
@@ -3110,7 +3110,7 @@
     },
     {
       "label": "Dadish 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/355.png",
+      "imageUrl": "/game/covers/355.png",
       "url": "/game/gn/355.html",
       "categories": [],
       "id": "dadish-2",
@@ -3118,7 +3118,7 @@
     },
     {
       "label": "Dadish 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/356.png",
+      "imageUrl": "/game/covers/356.png",
       "url": "/game/gn/356.html",
       "categories": [],
       "id": "dadish-3",
@@ -3126,7 +3126,7 @@
     },
     {
       "label": "Dadish",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/357.png",
+      "imageUrl": "/game/covers/357.png",
       "url": "/game/gn/357.html",
       "categories": [],
       "id": "dadish",
@@ -3134,7 +3134,7 @@
     },
     {
       "label": "Dadish 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/358.png",
+      "imageUrl": "/game/covers/358.png",
       "url": "/game/gn/358.html",
       "categories": [],
       "id": "dadish-3d",
@@ -3142,7 +3142,7 @@
     },
     {
       "label": "Daily Dadish",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/359.png",
+      "imageUrl": "/game/covers/359.png",
       "url": "/game/gn/359.html",
       "categories": [],
       "id": "daily-dadish",
@@ -3150,7 +3150,7 @@
     },
     {
       "label": "EvoWars.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/360.png",
+      "imageUrl": "/game/covers/360.png",
       "url": "/game/gn/360.html",
       "categories": [],
       "id": "evowars.io",
@@ -3158,7 +3158,7 @@
     },
     {
       "label": "Google Feud",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/361.png",
+      "imageUrl": "/game/covers/361.png",
       "url": "/game/gn/361.html",
       "categories": [],
       "id": "google-feud",
@@ -3166,7 +3166,7 @@
     },
     {
       "label": "Idle Breakout",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/362.png",
+      "imageUrl": "/game/covers/362.png",
       "url": "/game/gn/362.html",
       "categories": [],
       "id": "idle-breakout",
@@ -3174,7 +3174,7 @@
     },
     {
       "label": "Idle Lumber Inc",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/363.png",
+      "imageUrl": "/game/covers/363.png",
       "url": "/game/gn/363.html",
       "categories": [],
       "id": "idle-lumber-inc",
@@ -3182,7 +3182,7 @@
     },
     {
       "label": "Idle Mining Empire",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/364.png",
+      "imageUrl": "/game/covers/364.png",
       "url": "/game/gn/364.html",
       "categories": [],
       "id": "idle-mining-empire",
@@ -3190,7 +3190,7 @@
     },
     {
       "label": "JustFall.lol",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/365.png",
+      "imageUrl": "/game/covers/365.png",
       "url": "/game/gn/365.html",
       "categories": [],
       "id": "justfall.lol",
@@ -3198,7 +3198,7 @@
     },
     {
       "label": "Merge Harvest",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/366.png",
+      "imageUrl": "/game/covers/366.png",
       "url": "/game/gn/366.html",
       "categories": [],
       "id": "merge-harvest",
@@ -3206,7 +3206,7 @@
     },
     {
       "label": "Parking Fury 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/367.png",
+      "imageUrl": "/game/covers/367.png",
       "url": "/game/gn/367.html",
       "categories": [],
       "id": "parking-fury-3d",
@@ -3214,7 +3214,7 @@
     },
     {
       "label": "Slope 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/368.png",
+      "imageUrl": "/game/covers/368.png",
       "url": "/game/gn/368.html",
       "categories": [],
       "id": "slope-2",
@@ -3222,7 +3222,7 @@
     },
     {
       "label": "Slowroads",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/369.png",
+      "imageUrl": "/game/covers/369.png",
       "url": "/game/gn/369.html",
       "categories": [],
       "id": "slowroads",
@@ -3230,7 +3230,7 @@
     },
     {
       "label": "Smash Karts",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/370.png",
+      "imageUrl": "/game/covers/370.png",
       "url": "/game/gn/370.html",
       "categories": [],
       "id": "smash-karts",
@@ -3238,7 +3238,7 @@
     },
     {
       "label": "Stickman Fight Ragdoll",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/371.png",
+      "imageUrl": "/game/covers/371.png",
       "url": "/game/gn/371.html",
       "categories": [],
       "id": "stickman-fight-ragdoll",
@@ -3246,7 +3246,7 @@
     },
     {
       "label": "Stickman Boost",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/372.png",
+      "imageUrl": "/game/covers/372.png",
       "url": "/game/gn/372.html",
       "categories": [],
       "id": "stickman-boost",
@@ -3254,7 +3254,7 @@
     },
     {
       "label": "Stickman Climb",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/373.png",
+      "imageUrl": "/game/covers/373.png",
       "url": "/game/gn/373.html",
       "categories": [],
       "id": "stickman-climb",
@@ -3262,7 +3262,7 @@
     },
     {
       "label": "Stickman Golf",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/374.png",
+      "imageUrl": "/game/covers/374.png",
       "url": "/game/gn/374.html",
       "categories": [],
       "id": "stickman-golf",
@@ -3270,7 +3270,7 @@
     },
     {
       "label": "2048 Merge Run",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/375.png",
+      "imageUrl": "/game/covers/375.png",
       "url": "/game/gn/375.html",
       "categories": [],
       "id": "2048-merge-run",
@@ -3278,7 +3278,7 @@
     },
     {
       "label": "Build a Big Army",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/376.png",
+      "imageUrl": "/game/covers/376.png",
       "url": "/game/gn/376.html",
       "categories": [],
       "id": "build-a-big-army",
@@ -3286,7 +3286,7 @@
     },
     {
       "label": "Build a Plane",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/377.png",
+      "imageUrl": "/game/covers/377.png",
       "url": "/game/gn/377.html",
       "categories": [],
       "id": "build-a-plane",
@@ -3294,7 +3294,7 @@
     },
     {
       "label": "Camouflage and Sniper",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/378.png",
+      "imageUrl": "/game/covers/378.png",
       "url": "/game/gn/378.html",
       "categories": [],
       "id": "camouflage-and-sniper",
@@ -3302,7 +3302,7 @@
     },
     {
       "label": "Car Survival 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/379.png",
+      "imageUrl": "/game/covers/379.png",
       "url": "/game/gn/379.html",
       "categories": [],
       "id": "car-survival-3d",
@@ -3310,7 +3310,7 @@
     },
     {
       "label": "City Defense",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/380.png",
+      "imageUrl": "/game/covers/380.png",
       "url": "/game/gn/380.html",
       "categories": [],
       "id": "city-defense",
@@ -3318,7 +3318,7 @@
     },
     {
       "label": "Clothing Shop 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/381.png",
+      "imageUrl": "/game/covers/381.png",
       "url": "/game/gn/381.html",
       "categories": [],
       "id": "clothing-shop-3d",
@@ -3326,7 +3326,7 @@
     },
     {
       "label": "Cool Cars Run 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/382.png",
+      "imageUrl": "/game/covers/382.png",
       "url": "/game/gn/382.html",
       "categories": [],
       "id": "cool-cars-run-3d",
@@ -3334,7 +3334,7 @@
     },
     {
       "label": "Crush Cars 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/383.png",
+      "imageUrl": "/game/covers/383.png",
       "url": "/game/gn/383.html",
       "categories": [],
       "id": "crush-cars-3d",
@@ -3342,7 +3342,7 @@
     },
     {
       "label": "Destiny Run 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/384.png",
+      "imageUrl": "/game/covers/384.png",
       "url": "/game/gn/384.html",
       "categories": [],
       "id": "destiny-run-3d",
@@ -3350,7 +3350,7 @@
     },
     {
       "label": "Destroy The Car 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/385.png",
+      "imageUrl": "/game/covers/385.png",
       "url": "/game/gn/385.html",
       "categories": [],
       "id": "destroy-the-car-3d",
@@ -3358,7 +3358,7 @@
     },
     {
       "label": "Diamond Seeker",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/386.png",
+      "imageUrl": "/game/covers/386.png",
       "url": "/game/gn/386.html",
       "categories": [],
       "id": "diamond-seeker",
@@ -3366,7 +3366,7 @@
     },
     {
       "label": "Draw Joust",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/387.png",
+      "imageUrl": "/game/covers/387.png",
       "url": "/game/gn/387.html",
       "categories": [],
       "id": "draw-joust",
@@ -3374,7 +3374,7 @@
     },
     {
       "label": "Evolving Bombs 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/388.png",
+      "imageUrl": "/game/covers/388.png",
       "url": "/game/gn/388.html",
       "categories": [],
       "id": "evolving-bombs-3d",
@@ -3382,7 +3382,7 @@
     },
     {
       "label": "Fire and Frost Master",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/389.png",
+      "imageUrl": "/game/covers/389.png",
       "url": "/game/gn/389.html",
       "categories": [],
       "id": "fire-and-frost-master",
@@ -3390,7 +3390,7 @@
     },
     {
       "label": "Fitness Empire",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/390.png",
+      "imageUrl": "/game/covers/390.png",
       "url": "/game/gn/390.html",
       "categories": [],
       "id": "fitness-empire",
@@ -3398,7 +3398,7 @@
     },
     {
       "label": "Flick Goal",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/391.png",
+      "imageUrl": "/game/covers/391.png",
       "url": "/game/gn/391.html",
       "categories": [],
       "id": "flick-goal",
@@ -3406,7 +3406,7 @@
     },
     {
       "label": "Flip Master",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/392.png",
+      "imageUrl": "/game/covers/392.png",
       "url": "/game/gn/392.html",
       "categories": [],
       "id": "flip-master",
@@ -3414,7 +3414,7 @@
     },
     {
       "label": "Giant Wanted",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/393.png",
+      "imageUrl": "/game/covers/393.png",
       "url": "/game/gn/393.html",
       "categories": [],
       "id": "giant-wanted",
@@ -3422,7 +3422,7 @@
     },
     {
       "label": "Gun Clone",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/394.png",
+      "imageUrl": "/game/covers/394.png",
       "url": "/game/gn/394.html",
       "categories": [],
       "id": "gun-clone",
@@ -3430,7 +3430,7 @@
     },
     {
       "label": "Gun Runner",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/395.png",
+      "imageUrl": "/game/covers/395.png",
       "url": "/game/gn/395.html",
       "categories": [],
       "id": "gun-runner",
@@ -3438,7 +3438,7 @@
     },
     {
       "label": "Kaji Run",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/396.png",
+      "imageUrl": "/game/covers/396.png",
       "url": "/game/gn/396.html",
       "categories": [],
       "id": "kaji-run",
@@ -3446,7 +3446,7 @@
     },
     {
       "label": "Make a SuperBoat",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/397.png",
+      "imageUrl": "/game/covers/397.png",
       "url": "/game/gn/397.html",
       "categories": [],
       "id": "make-a-superboat",
@@ -3454,7 +3454,7 @@
     },
     {
       "label": "Makeover Run",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/398.png",
+      "imageUrl": "/game/covers/398.png",
       "url": "/game/gn/398.html",
       "categories": [],
       "id": "makeover-run",
@@ -3462,7 +3462,7 @@
     },
     {
       "label": "Mega Car Jumps",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/399.png",
+      "imageUrl": "/game/covers/399.png",
       "url": "/game/gn/399.html",
       "categories": [],
       "id": "mega-car-jumps",
@@ -3470,7 +3470,7 @@
     },
     {
       "label": "Money Rush",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/400.png",
+      "imageUrl": "/game/covers/400.png",
       "url": "/game/gn/400.html",
       "categories": [],
       "id": "money-rush",
@@ -3478,7 +3478,7 @@
     },
     {
       "label": "Monster Box 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/401.png",
+      "imageUrl": "/game/covers/401.png",
       "url": "/game/gn/401.html",
       "categories": [],
       "id": "monster-box-3d",
@@ -3486,7 +3486,7 @@
     },
     {
       "label": "Office Fight",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/402.png",
+      "imageUrl": "/game/covers/402.png",
       "url": "/game/gn/402.html",
       "categories": [],
       "id": "office-fight",
@@ -3494,7 +3494,7 @@
     },
     {
       "label": "Robot Invasion",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/403.png",
+      "imageUrl": "/game/covers/403.png",
       "url": "/game/gn/403.html",
       "categories": [],
       "id": "robot-invasion",
@@ -3502,7 +3502,7 @@
     },
     {
       "label": "Seat Jam 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/404.png",
+      "imageUrl": "/game/covers/404.png",
       "url": "/game/gn/404.html",
       "categories": [],
       "id": "seat-jam-3d",
@@ -3510,7 +3510,7 @@
     },
     {
       "label": "Shooting Master",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/405.png",
+      "imageUrl": "/game/covers/405.png",
       "url": "/game/gn/405.html",
       "categories": [],
       "id": "shooting-master",
@@ -3518,7 +3518,7 @@
     },
     {
       "label": "Supermarket 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/406.png",
+      "imageUrl": "/game/covers/406.png",
       "url": "/game/gn/406.html",
       "categories": [],
       "id": "supermarket-3d",
@@ -3526,7 +3526,7 @@
     },
     {
       "label": "Survive to Victory",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/407.png",
+      "imageUrl": "/game/covers/407.png",
       "url": "/game/gn/407.html",
       "categories": [],
       "id": "survive-to-victory",
@@ -3534,7 +3534,7 @@
     },
     {
       "label": "Telekinesis Attack",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/408.png",
+      "imageUrl": "/game/covers/408.png",
       "url": "/game/gn/408.html",
       "categories": [],
       "id": "telekinesis-attack",
@@ -3542,7 +3542,7 @@
     },
     {
       "label": "Telekinesis Car",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/409.png",
+      "imageUrl": "/game/covers/409.png",
       "url": "/game/gn/409.html",
       "categories": [],
       "id": "telekinesis-car",
@@ -3550,7 +3550,7 @@
     },
     {
       "label": "Telekinesis Drive",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/410.png",
+      "imageUrl": "/game/covers/410.png",
       "url": "/game/gn/410.html",
       "categories": [],
       "id": "telekinesis-drive",
@@ -3558,7 +3558,7 @@
     },
     {
       "label": "Telekinesis",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/411.png",
+      "imageUrl": "/game/covers/411.png",
       "url": "/game/gn/411.html",
       "categories": [],
       "id": "telekinesis",
@@ -3566,7 +3566,7 @@
     },
     {
       "label": "Triple Match 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/412.png",
+      "imageUrl": "/game/covers/412.png",
       "url": "/game/gn/412.html",
       "categories": [],
       "id": "triple-match-3d",
@@ -3574,7 +3574,7 @@
     },
     {
       "label": "Tug of War with Cars",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/413.png",
+      "imageUrl": "/game/covers/413.png",
       "url": "/game/gn/413.html",
       "categories": [],
       "id": "tug-of-war-with-cars",
@@ -3582,7 +3582,7 @@
     },
     {
       "label": "Twerk Race 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/414.png",
+      "imageUrl": "/game/covers/414.png",
       "url": "/game/gn/414.html",
       "categories": [],
       "id": "twerk-race-3d",
@@ -3590,7 +3590,7 @@
     },
     {
       "label": "Twisted Rope 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/415.png",
+      "imageUrl": "/game/covers/415.png",
       "url": "/game/gn/415.html",
       "categories": [],
       "id": "twisted-rope-3d",
@@ -3598,7 +3598,7 @@
     },
     {
       "label": "Wall Crawler",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/416.png",
+      "imageUrl": "/game/covers/416.png",
       "url": "/game/gn/416.html",
       "categories": [],
       "id": "wall-crawler",
@@ -3606,7 +3606,7 @@
     },
     {
       "label": "War Regions",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/417.png",
+      "imageUrl": "/game/covers/417.png",
       "url": "/game/gn/417.html",
       "categories": [],
       "id": "war-regions",
@@ -3614,7 +3614,7 @@
     },
     {
       "label": "Weapon Craft Run",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/418.png",
+      "imageUrl": "/game/covers/418.png",
       "url": "/game/gn/418.html",
       "categories": [],
       "id": "weapon-craft-run",
@@ -3622,7 +3622,7 @@
     },
     {
       "label": "Weapon Upgrade Rush",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/419.png",
+      "imageUrl": "/game/covers/419.png",
       "url": "/game/gn/419.html",
       "categories": [],
       "id": "weapon-upgrade-rush",
@@ -3630,7 +3630,7 @@
     },
     {
       "label": "Weapon Scale",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/420.png",
+      "imageUrl": "/game/covers/420.png",
       "url": "/game/gn/420.html",
       "categories": [],
       "id": "weapon-scale",
@@ -3638,7 +3638,7 @@
     },
     {
       "label": "Rich Run 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/421.png",
+      "imageUrl": "/game/covers/421.png",
       "url": "/game/gn/421.html",
       "categories": [],
       "id": "rich-run-3d",
@@ -3646,7 +3646,7 @@
     },
     {
       "label": "High Heels",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/422.png",
+      "imageUrl": "/game/covers/422.png",
       "url": "/game/gn/422.html",
       "categories": [],
       "id": "high-heels",
@@ -3654,7 +3654,7 @@
     },
     {
       "label": "WebFishing",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/423.png",
+      "imageUrl": "/game/covers/423.png",
       "url": "/game/gn/423.html",
       "featured": true,
       "categories": [],
@@ -3663,7 +3663,7 @@
     },
     {
       "label": "Andy's Apple Farm",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/426.png",
+      "imageUrl": "/game/covers/426.png",
       "url": "/game/gn/426.html",
       "categories": [],
       "id": "andys-apple-farm",
@@ -3671,7 +3671,7 @@
     },
     {
       "label": "OMORI",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/427.png",
+      "imageUrl": "/game/covers/427.png",
       "url": "/game/gn/427-z.html",
       "featured": true,
       "categories": [],
@@ -3680,7 +3680,7 @@
     },
     {
       "label": "Five Nights at Freddy's 4: Halloween",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/428.png",
+      "imageUrl": "/game/covers/428.png",
       "url": "/game/gn/428.html",
       "categories": [],
       "id": "five-nights-at-freddys-4-halloween",
@@ -3688,7 +3688,7 @@
     },
     {
       "label": "Code Editor",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/429.png",
+      "imageUrl": "/game/covers/429.png",
       "url": "/game/gn/429.html",
       "categories": [],
       "id": "code-editor",
@@ -3696,7 +3696,7 @@
     },
     {
       "label": "10 Minutes Till Dawn",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/430.png",
+      "imageUrl": "/game/covers/430.png",
       "url": "/game/gn/430.html",
       "categories": [],
       "id": "10-minutes-till-dawn",
@@ -3704,7 +3704,7 @@
     },
     {
       "label": "99 Balls",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/431.png",
+      "imageUrl": "/game/covers/431.png",
       "url": "/game/gn/431.html",
       "categories": [],
       "id": "99-balls",
@@ -3712,7 +3712,7 @@
     },
     {
       "label": "Abandoned",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/432.png",
+      "imageUrl": "/game/covers/432.png",
       "url": "/game/gn/432.html",
       "categories": [],
       "id": "abandoned",
@@ -3720,7 +3720,7 @@
     },
     {
       "label": "Yume Nikki",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/433.png",
+      "imageUrl": "/game/covers/433.png",
       "url": "/game/gn/433.html",
       "featured": true,
       "categories": [],
@@ -3729,7 +3729,7 @@
     },
     {
       "label": "God's Flesh",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/434.png",
+      "imageUrl": "/game/covers/434.png",
       "url": "/game/gn/434.html",
       "categories": [],
       "id": "gods-flesh",
@@ -3737,7 +3737,7 @@
     },
     {
       "label": "A Small World Cup",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/435.png",
+      "imageUrl": "/game/covers/435.png",
       "url": "/game/gn/435.html",
       "categories": [],
       "id": "a-small-world-cup",
@@ -3745,7 +3745,7 @@
     },
     {
       "label": "Awesome Tanks",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/436.png",
+      "imageUrl": "/game/covers/436.png",
       "url": "/game/gn/436.html",
       "categories": [],
       "id": "awesome-tanks",
@@ -3753,7 +3753,7 @@
     },
     {
       "label": "Bouncemasters",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/437.png",
+      "imageUrl": "/game/covers/437.png",
       "url": "/game/gn/437.html",
       "categories": [],
       "id": "bouncemasters",
@@ -3761,7 +3761,7 @@
     },
     {
       "label": "Awesome Tanks 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/438.png",
+      "imageUrl": "/game/covers/438.png",
       "url": "/game/gn/438.html",
       "categories": [],
       "id": "awesome-tanks-2",
@@ -3769,7 +3769,7 @@
     },
     {
       "label": "Bank Robbery 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/439.png",
+      "imageUrl": "/game/covers/439.png",
       "url": "/game/gn/439.html",
       "categories": [],
       "id": "bank-robbery-2",
@@ -3777,7 +3777,7 @@
     },
     {
       "label": "Celeste PICO",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/440.png",
+      "imageUrl": "/game/covers/440.png",
       "url": "/game/gn/440.html",
       "categories": [],
       "id": "celeste-pico",
@@ -3785,7 +3785,7 @@
     },
     {
       "label": "Kitty Toy",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/441.png",
+      "imageUrl": "/game/covers/441.png",
       "url": "/game/gn/441.html",
       "categories": [],
       "id": "kitty-toy",
@@ -3793,7 +3793,7 @@
     },
     {
       "label": "Infinimoes",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/442.png",
+      "imageUrl": "/game/covers/442.png",
       "url": "/game/gn/442.html",
       "categories": [],
       "id": "infinimoes",
@@ -3801,7 +3801,7 @@
     },
     {
       "label": "Adventure Drivers",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/443.png",
+      "imageUrl": "/game/covers/443.png",
       "url": "/game/gn/443.html",
       "categories": [],
       "id": "adventure-drivers",
@@ -3809,7 +3809,7 @@
     },
     {
       "label": "Ages of Conflict",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/444.png",
+      "imageUrl": "/game/covers/444.png",
       "url": "/game/gn/444.html",
       "categories": [],
       "id": "ages-of-conflict",
@@ -3817,7 +3817,7 @@
     },
     {
       "label": "Kindergarten",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/445.png",
+      "imageUrl": "/game/covers/445.png",
       "url": "/game/gn/445.html",
       "featured": true,
       "categories": [],
@@ -3826,7 +3826,7 @@
     },
     {
       "label": "Kindergarten 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/446.png",
+      "imageUrl": "/game/covers/446.png",
       "url": "/game/gn/446.html",
       "featured": true,
       "categories": [],
@@ -3835,7 +3835,7 @@
     },
     {
       "label": "Nijika's Ahoge",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/447.png",
+      "imageUrl": "/game/covers/447.png",
       "url": "/game/gn/447.html",
       "categories": [],
       "id": "nijikas-ahoge",
@@ -3843,7 +3843,7 @@
     },
     {
       "label": "Aquapark.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/448.png",
+      "imageUrl": "/game/covers/448.png",
       "url": "/game/gn/448.html",
       "categories": [],
       "id": "aquapark.io",
@@ -3851,7 +3851,7 @@
     },
     {
       "label": "City Smash",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/449.png",
+      "imageUrl": "/game/covers/449.png",
       "url": "/game/gn/449.html",
       "categories": [],
       "id": "city-smash",
@@ -3859,7 +3859,7 @@
     },
     {
       "label": "Amanda the Adventurer",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/450.png",
+      "imageUrl": "/game/covers/450.png",
       "url": "/game/gn/450.html",
       "categories": [],
       "id": "amanda-the-adventurer",
@@ -3867,7 +3867,7 @@
     },
     {
       "label": "Slender: The 8 Pages",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/451.png",
+      "imageUrl": "/game/covers/451.png",
       "url": "/game/gn/451.html",
       "categories": [],
       "id": "slender-the-8-pages",
@@ -3875,7 +3875,7 @@
     },
     {
       "label": "Station 141",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/452.png",
+      "imageUrl": "/game/covers/452.png",
       "url": "/game/gn/452.html",
       "categories": [],
       "id": "station-141",
@@ -3883,7 +3883,7 @@
     },
     {
       "label": "Station Saturn",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/453.png",
+      "imageUrl": "/game/covers/453.png",
       "url": "/game/gn/453.html",
       "categories": [],
       "id": "station-saturn",
@@ -3891,7 +3891,7 @@
     },
     {
       "label": "BLOODMONEY!",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/454.png",
+      "imageUrl": "/game/covers/454.png",
       "url": "/game/gn/454.html",
       "categories": [],
       "id": "bloodmoney",
@@ -3899,7 +3899,7 @@
     },
     {
       "label": "BERGENTRUCK 201x",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/455.png",
+      "imageUrl": "/game/covers/455.png",
       "url": "/game/gn/455.html",
       "categories": [],
       "id": "bergentruck-201x",
@@ -3907,7 +3907,7 @@
     },
     {
       "label": "Undertale Yellow",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/456.png",
+      "imageUrl": "/game/covers/456.png",
       "url": "/game/gn/456.html",
       "categories": [],
       "id": "undertale-yellow",
@@ -3915,7 +3915,7 @@
     },
     {
       "label": "Raft",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/457.png",
+      "imageUrl": "/game/covers/457.png",
       "url": "/game/gn/457.html",
       "categories": [],
       "id": "raft",
@@ -3923,7 +3923,7 @@
     },
     {
       "label": "The Deadseat",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/458.png",
+      "imageUrl": "/game/covers/458.png",
       "url": "/game/gn/458.html",
       "categories": [],
       "id": "the-deadseat",
@@ -3931,7 +3931,7 @@
     },
     {
       "label": "The Man In The Window",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/459.png",
+      "imageUrl": "/game/covers/459.png",
       "url": "/game/gn/459.html",
       "categories": [],
       "id": "the-man-in-the-window",
@@ -3939,7 +3939,7 @@
     },
     {
       "label": "Fears to Fathom: Home Alone",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/460.png",
+      "imageUrl": "/game/covers/460.png",
       "url": "/game/gn/460.html",
       "categories": [],
       "id": "fears-to-fathom-home-alone",
@@ -3947,7 +3947,7 @@
     },
     {
       "label": "Slither.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/461.png",
+      "imageUrl": "/game/covers/461.png",
       "url": "/game/gn/461.html",
       "categories": [],
       "id": "slither.io",
@@ -3955,7 +3955,7 @@
     },
     {
       "label": "DEAD PLATE",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/462.png",
+      "imageUrl": "/game/covers/462.png",
       "url": "/game/gn/462.html",
       "categories": [],
       "id": "dead-plate",
@@ -3963,7 +3963,7 @@
     },
     {
       "label": "Lacey's Flash Games",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/463.png",
+      "imageUrl": "/game/covers/463.png",
       "url": "/game/gn/463.html",
       "categories": [],
       "id": "laceys-flash-games",
@@ -3971,7 +3971,7 @@
     },
     {
       "label": "Choppy Orc",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/464.png",
+      "imageUrl": "/game/covers/464.png",
       "url": "/game/gn/464.html",
       "categories": [],
       "id": "choppy-orc",
@@ -3979,7 +3979,7 @@
     },
     {
       "label": "Cuphead",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/465.png",
+      "imageUrl": "/game/covers/465.png",
       "url": "/game/gn/465.html",
       "featured": true,
       "categories": [],
@@ -3988,7 +3988,7 @@
     },
     {
       "label": "Baldi's Basics Classic Remastered",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/466.png",
+      "imageUrl": "/game/covers/466.png",
       "url": "/game/gn/466.html",
       "categories": [],
       "id": "baldis-basics-classic-remastered",
@@ -3996,7 +3996,7 @@
     },
     {
       "label": "Baldi's Basics Plus",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/467.png",
+      "imageUrl": "/game/covers/467.png",
       "url": "/game/gn/467-updatee.html",
       "featured": true,
       "categories": [],
@@ -4005,7 +4005,7 @@
     },
     {
       "label": "Hollow Knight",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/468.png",
+      "imageUrl": "/game/covers/468.png",
       "url": "/game/gn/468-a.html",
       "featured": true,
       "categories": [],
@@ -4014,7 +4014,7 @@
     },
     {
       "label": "sandstone",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/469.png",
+      "imageUrl": "/game/covers/469.png",
       "url": "/game/gn/469.html",
       "categories": [],
       "id": "sandstone",
@@ -4022,7 +4022,7 @@
     },
     {
       "label": "Doodle Jump",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/470.png",
+      "imageUrl": "/game/covers/470.png",
       "url": "/game/gn/470.html",
       "categories": [],
       "id": "doodle-jump",
@@ -4030,7 +4030,7 @@
     },
     {
       "label": "Madness Combat: Project Nexus (classic)",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/471.png",
+      "imageUrl": "/game/covers/471.png",
       "url": "/game/gn/471.html",
       "categories": [],
       "id": "madness-combat-project-nexus-classic",
@@ -4038,7 +4038,7 @@
     },
     {
       "label": "Bad Time Simulator",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/472.png",
+      "imageUrl": "/game/covers/472.png",
       "url": "/game/gn/472.html",
       "categories": [],
       "id": "bad-time-simulator",
@@ -4046,7 +4046,7 @@
     },
     {
       "label": "Spacebar Clicker",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/473.png",
+      "imageUrl": "/game/covers/473.png",
       "url": "/game/gn/473.html",
       "categories": [],
       "id": "spacebar-clicker",
@@ -4054,7 +4054,7 @@
     },
     {
       "label": "Friday Night Funkin': V.S. Whitty",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/474.png",
+      "imageUrl": "/game/covers/474.png",
       "url": "/game/gn/474.html",
       "categories": [],
       "id": "friday-night-funkin-v.s.-whitty",
@@ -4062,7 +4062,7 @@
     },
     {
       "label": "Friday Night Funkin': B-Sides",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/475.png",
+      "imageUrl": "/game/covers/475.png",
       "url": "/game/gn/475.html",
       "categories": [],
       "id": "friday-night-funkin-b-sides",
@@ -4070,7 +4070,7 @@
     },
     {
       "label": "Friday Night Funkin': Vs. Hex",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/476.png",
+      "imageUrl": "/game/covers/476.png",
       "url": "/game/gn/476.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-hex",
@@ -4078,7 +4078,7 @@
     },
     {
       "label": "Friday Night Funkin': Vs. Hatsune Miku",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/477.png",
+      "imageUrl": "/game/covers/477.png",
       "url": "/game/gn/477.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-hatsune-miku",
@@ -4086,7 +4086,7 @@
     },
     {
       "label": "Friday Night Funkin': Neo",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/478.png",
+      "imageUrl": "/game/covers/478.png",
       "url": "/game/gn/478.html",
       "categories": [],
       "id": "friday-night-funkin-neo",
@@ -4094,7 +4094,7 @@
     },
     {
       "label": "Steal A Brainrot",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/479.png",
+      "imageUrl": "/game/covers/479.png",
       "url": "/game/gn/479.html",
       "categories": [],
       "id": "steal-a-brainrot",
@@ -4102,7 +4102,7 @@
     },
     {
       "label": "Friday Night Funkin': Sarvente's Mid-Fight Masses",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/480.png",
+      "imageUrl": "/game/covers/480.png",
       "url": "/game/gn/480.html",
       "categories": [],
       "id": "friday-night-funkin-sarventes-mid-fight-masses",
@@ -4110,7 +4110,7 @@
     },
     {
       "label": "Friday Night Funkin': vs. Tricky",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/481.png",
+      "imageUrl": "/game/covers/481.png",
       "url": "/game/gn/481.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-tricky",
@@ -4118,7 +4118,7 @@
     },
     {
       "label": "Human Expenditure Program",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/482.png",
+      "imageUrl": "/game/covers/482.png",
       "url": "/game/gn/482-2.html",
       "categories": [],
       "id": "human-expenditure-program",
@@ -4126,7 +4126,7 @@
     },
     {
       "label": "Friday Night Funkin': Hit Single Real",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/483.png",
+      "imageUrl": "/game/covers/483.png",
       "url": "/game/gn/483.html",
       "categories": [],
       "id": "friday-night-funkin-hit-single-real",
@@ -4134,7 +4134,7 @@
     },
     {
       "label": "Friday Night Funkin': Creepypasta JP",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/484.png",
+      "imageUrl": "/game/covers/484.png",
       "url": "/game/gn/484.html",
       "categories": [],
       "id": "friday-night-funkin-creepypasta-jp",
@@ -4142,7 +4142,7 @@
     },
     {
       "label": "Friday Night Funkin': vs. Garcello",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/485.png",
+      "imageUrl": "/game/covers/485.png",
       "url": "/game/gn/485.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-garcello",
@@ -4150,7 +4150,7 @@
     },
     {
       "label": "Friday Night Funkin': Sonic Legacy",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/486.png",
+      "imageUrl": "/game/covers/486.png",
       "url": "/game/gn/486.html",
       "categories": [],
       "id": "friday-night-funkin-sonic-legacy",
@@ -4158,7 +4158,7 @@
     },
     {
       "label": "Friday Night Funkin': vs. QT",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/487.png",
+      "imageUrl": "/game/covers/487.png",
       "url": "/game/gn/487.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-qt",
@@ -4166,7 +4166,7 @@
     },
     {
       "label": "Friday Night Funkin': Mistful Crimson Morning Reboot",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/488.png",
+      "imageUrl": "/game/covers/488.png",
       "url": "/game/gn/488.html",
       "categories": [],
       "id": "friday-night-funkin-mistful-crimson-morning-reboot",
@@ -4174,7 +4174,7 @@
     },
     {
       "label": "Friday Night Funkin': Indie Cross",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/489.png",
+      "imageUrl": "/game/covers/489.png",
       "url": "/game/gn/489.html",
       "categories": [],
       "id": "friday-night-funkin-indie-cross",
@@ -4182,7 +4182,7 @@
     },
     {
       "label": "Rooftop Snipers 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/490.png",
+      "imageUrl": "/game/covers/490.png",
       "url": "/game/gn/490.html",
       "categories": [],
       "id": "rooftop-snipers-2",
@@ -4190,7 +4190,7 @@
     },
     {
       "label": "I woke up next to you again.",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/491.png",
+      "imageUrl": "/game/covers/491.png",
       "url": "/game/gn/491.html",
       "categories": [],
       "id": "i-woke-up-next-to-you-again.",
@@ -4198,7 +4198,7 @@
     },
     {
       "label": "UNDERWHEELS",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/492.png",
+      "imageUrl": "/game/covers/492.png",
       "url": "/game/gn/492.html",
       "categories": [],
       "id": "underwheels",
@@ -4206,7 +4206,7 @@
     },
     {
       "label": "RigBMX",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/493.png",
+      "imageUrl": "/game/covers/493.png",
       "url": "/game/gn/493.html",
       "categories": [],
       "id": "rigbmx",
@@ -4214,7 +4214,7 @@
     },
     {
       "label": "RigBMX 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/494.png",
+      "imageUrl": "/game/covers/494.png",
       "url": "/game/gn/494.html",
       "categories": [],
       "id": "rigbmx-2",
@@ -4222,7 +4222,7 @@
     },
     {
       "label": "groon groon, babey!",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/495.png",
+      "imageUrl": "/game/covers/495.png",
       "url": "/game/gn/495.html",
       "categories": [],
       "id": "groon-groon-babey",
@@ -4230,7 +4230,7 @@
     },
     {
       "label": "Friday Night Funkin': Jeffy's Endless Aethos",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/496.png",
+      "imageUrl": "/game/covers/496.png",
       "url": "/game/gn/496.html",
       "categories": [],
       "id": "friday-night-funkin-jeffys-endless-aethos",
@@ -4238,7 +4238,7 @@
     },
     {
       "label": "Friday Night Funkin': vs. BOPCITY",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/497.png",
+      "imageUrl": "/game/covers/497.png",
       "url": "/game/gn/497.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-bopcity",
@@ -4246,7 +4246,7 @@
     },
     {
       "label": "Friday Night Funkin': 17 Bucks: Floor 1",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/498.png",
+      "imageUrl": "/game/covers/498.png",
       "url": "/game/gn/498.html",
       "categories": [],
       "id": "friday-night-funkin-17-bucks-floor-1",
@@ -4254,7 +4254,7 @@
     },
     {
       "label": "Friday Night Funkin': FIRE IN THE HOLE: Lobotomy Dash Funkin'",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/499.png",
+      "imageUrl": "/game/covers/499.png",
       "url": "/game/gn/499.html",
       "categories": [],
       "id": "friday-night-funkin-fire-in-the-hole-lobotomy-dash-funkin",
@@ -4262,7 +4262,7 @@
     },
     {
       "label": "Friday Night Funkin': TWIDDLEFINGER",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/500.png",
+      "imageUrl": "/game/covers/500.png",
       "url": "/game/gn/500.html",
       "categories": [],
       "id": "friday-night-funkin-twiddlefinger",
@@ -4270,7 +4270,7 @@
     },
     {
       "label": "Kindergarten 3",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/501.png",
+      "imageUrl": "/game/covers/501.png",
       "url": "/game/gn/501.html",
       "categories": [],
       "id": "kindergarten-3",
@@ -4278,7 +4278,7 @@
     },
     {
       "label": "Stick With It",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/502.png",
+      "imageUrl": "/game/covers/502.png",
       "url": "/game/gn/502.html",
       "categories": [],
       "id": "stick-with-it",
@@ -4286,7 +4286,7 @@
     },
     {
       "label": "Five Nights at Candy's",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/503.png",
+      "imageUrl": "/game/covers/503.png",
       "url": "/game/gn/503.html",
       "categories": [],
       "id": "five-nights-at-candys",
@@ -4294,7 +4294,7 @@
     },
     {
       "label": "Five Nights at Candy's 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/504.png",
+      "imageUrl": "/game/covers/504.png",
       "url": "/game/gn/504.html",
       "categories": [],
       "id": "five-nights-at-candys-2",
@@ -4302,7 +4302,7 @@
     },
     {
       "label": "Pokemon Red",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/505.png",
+      "imageUrl": "/game/covers/505.png",
       "url": "/game/gn/505.html",
       "categories": [],
       "id": "pokemon-red",
@@ -4310,7 +4310,7 @@
     },
     {
       "label": "Pokemon Emerald",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/506.png",
+      "imageUrl": "/game/covers/506.png",
       "url": "/game/gn/506.html",
       "categories": [],
       "id": "pokemon-emerald",
@@ -4318,7 +4318,7 @@
     },
     {
       "label": "The Impossible Quiz",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/507.png",
+      "imageUrl": "/game/covers/507.png",
       "url": "/game/gn/507.html",
       "categories": [],
       "id": "the-impossible-quiz",
@@ -4326,7 +4326,7 @@
     },
     {
       "label": "Super Mario Bros",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/508.png",
+      "imageUrl": "/game/covers/508.png",
       "url": "/game/gn/508.html",
       "categories": [],
       "id": "super-mario-bros",
@@ -4334,7 +4334,7 @@
     },
     {
       "label": "Friday Night Funkin’ Soft",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/509.png",
+      "imageUrl": "/game/covers/509.png",
       "url": "/game/gn/509.html",
       "categories": [],
       "id": "friday-night-funkin-soft",
@@ -4342,7 +4342,7 @@
     },
     {
       "label": "Tomodachi Collection",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/510.png",
+      "imageUrl": "/game/covers/510.png",
       "url": "/game/gn/510.html",
       "categories": [],
       "id": "tomodachi-collection",
@@ -4350,7 +4350,7 @@
     },
     {
       "label": "Doge Miner",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/511.png",
+      "imageUrl": "/game/covers/511.png",
       "url": "/game/gn/511.html",
       "categories": [],
       "id": "doge-miner",
@@ -4358,7 +4358,7 @@
     },
     {
       "label": "Final Earth 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/512.png",
+      "imageUrl": "/game/covers/512.png",
       "url": "/game/gn/512.html",
       "categories": [],
       "id": "final-earth-2",
@@ -4366,7 +4366,7 @@
     },
     {
       "label": "Swordfight!!",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/513.png",
+      "imageUrl": "/game/covers/513.png",
       "url": "/game/gn/513.html",
       "categories": [],
       "id": "swordfight",
@@ -4374,7 +4374,7 @@
     },
     {
       "label": "PortaBoy+",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/514.png",
+      "imageUrl": "/game/covers/514.png",
       "url": "/game/gn/514.html",
       "categories": [],
       "id": "portaboy",
@@ -4382,7 +4382,7 @@
     },
     {
       "label": "PacMan (Horror)",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/515.png",
+      "imageUrl": "/game/covers/515.png",
       "url": "/game/gn/515.html",
       "categories": [],
       "id": "pacman-horror",
@@ -4390,7 +4390,7 @@
     },
     {
       "label": "Oshi Oshi Punch!",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/516.png",
+      "imageUrl": "/game/covers/516.png",
       "url": "/game/gn/516.html",
       "categories": [],
       "id": "oshi-oshi-punch",
@@ -4398,7 +4398,7 @@
     },
     {
       "label": "Nubby's Number Factory",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/517.png",
+      "imageUrl": "/game/covers/517.png",
       "url": "/game/gn/517.html",
       "categories": [],
       "id": "nubbys-number-factory",
@@ -4406,7 +4406,7 @@
     },
     {
       "label": "Touhou: Luminous Strike",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/518.png",
+      "imageUrl": "/game/covers/518.png",
       "url": "/game/gn/518.html",
       "categories": [],
       "id": "touhou-luminous-strike",
@@ -4414,7 +4414,7 @@
     },
     {
       "label": "Generic Fighter Maybe",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/519.png",
+      "imageUrl": "/game/covers/519.png",
       "url": "/game/gn/519.html",
       "categories": [],
       "id": "generic-fighter-maybe",
@@ -4422,7 +4422,7 @@
     },
     {
       "label": "Dan The Man",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/520.png",
+      "imageUrl": "/game/covers/520.png",
       "url": "/game/gn/520.html",
       "categories": [],
       "id": "dan-the-man",
@@ -4430,7 +4430,7 @@
     },
     {
       "label": "Bust a Loop",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/521.png",
+      "imageUrl": "/game/covers/521.png",
       "url": "/game/gn/521.html",
       "categories": [],
       "id": "bust-a-loop",
@@ -4438,7 +4438,7 @@
     },
     {
       "label": "Bad Monday Simulator",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/522.png",
+      "imageUrl": "/game/covers/522.png",
       "url": "/game/gn/522.html",
       "categories": [],
       "id": "bad-monday-simulator",
@@ -4446,7 +4446,7 @@
     },
     {
       "label": "Touhou Mother",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/523.png",
+      "imageUrl": "/game/covers/523.png",
       "url": "/game/gn/523.html",
       "categories": [],
       "id": "touhou-mother",
@@ -4454,7 +4454,7 @@
     },
     {
       "label": "Parappa The Rapper",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/524.png",
+      "imageUrl": "/game/covers/524.png",
       "url": "/game/gn/524.html",
       "categories": [],
       "id": "parappa-the-rapper",
@@ -4462,7 +4462,7 @@
     },
     {
       "label": "Friday Night Funkin': Darkness Takeover",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/525.png",
+      "imageUrl": "/game/covers/525.png",
       "url": "/game/gn/525.html",
       "categories": [],
       "id": "friday-night-funkin-darkness-takeover",
@@ -4470,7 +4470,7 @@
     },
     {
       "label": "SpongeBob SquarePants: Land Ho!",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/526.png",
+      "imageUrl": "/game/covers/526.png",
       "url": "/game/gn/526.html",
       "categories": [],
       "id": "spongebob-squarepants-land-ho",
@@ -4478,7 +4478,7 @@
     },
     {
       "label": "SpongeBob SquarePants: SpongeBob Run",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/527.png",
+      "imageUrl": "/game/covers/527.png",
       "url": "/game/gn/527.html",
       "categories": [],
       "id": "spongebob-squarepants-spongebob-run",
@@ -4486,7 +4486,7 @@
     },
     {
       "label": "SpongeBob SquarePants: Squidward's Sizzlin' Scare",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/528.png",
+      "imageUrl": "/game/covers/528.png",
       "url": "/game/gn/528.html",
       "categories": [],
       "id": "spongebob-squarepants-squidwards-sizzlin-scare",
@@ -4494,7 +4494,7 @@
     },
     {
       "label": "SpongeBob SquarePants: Sandy's Sponge Stacker",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/529.png",
+      "imageUrl": "/game/covers/529.png",
       "url": "/game/gn/529.html",
       "categories": [],
       "id": "spongebob-squarepants-sandys-sponge-stacker",
@@ -4502,7 +4502,7 @@
     },
     {
       "label": "SpongeBob SquarePants: Tasty Pastry Party",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/530.png",
+      "imageUrl": "/game/covers/530.png",
       "url": "/game/gn/530.html",
       "categories": [],
       "id": "spongebob-squarepants-tasty-pastry-party",
@@ -4510,7 +4510,7 @@
     },
     {
       "label": "SpongeBob SquarePants: The Kah-Ray-Tay Squid",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/531.png",
+      "imageUrl": "/game/covers/531.png",
       "url": "/game/gn/531.html",
       "categories": [],
       "id": "spongebob-squarepants-the-kah-ray-tay-squid",
@@ -4518,7 +4518,7 @@
     },
     {
       "label": "SpongeBob SquarePants: WereSquirrel",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/532.png",
+      "imageUrl": "/game/covers/532.png",
       "url": "/game/gn/532.html",
       "categories": [],
       "id": "spongebob-squarepants-weresquirrel",
@@ -4526,7 +4526,7 @@
     },
     {
       "label": "SpongeBob SquarePants: Krabby Katch",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/533.png",
+      "imageUrl": "/game/covers/533.png",
       "url": "/game/gn/533.html",
       "categories": [],
       "id": "spongebob-squarepants-krabby-katch",
@@ -4534,7 +4534,7 @@
     },
     {
       "label": "Teen Titans GO!: Jump Jousts",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/534.png",
+      "imageUrl": "/game/covers/534.png",
       "url": "/game/gn/534.html",
       "categories": [],
       "id": "teen-titans-go-jump-jousts",
@@ -4542,7 +4542,7 @@
     },
     {
       "label": "Teen Titans GO!: Jump Jousts 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/535.png",
+      "imageUrl": "/game/covers/535.png",
       "url": "/game/gn/535.html",
       "categories": [],
       "id": "teen-titans-go-jump-jousts-2",
@@ -4550,7 +4550,7 @@
     },
     {
       "label": "Cat Connection",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/536.png",
+      "imageUrl": "/game/covers/536.png",
       "url": "/game/gn/536.html",
       "categories": [],
       "id": "cat-connection",
@@ -4558,7 +4558,7 @@
     },
     {
       "label": "Cat Gunner: Super Zombie Shoot",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/537.png",
+      "imageUrl": "/game/covers/537.png",
       "url": "/game/gn/537.html",
       "categories": [],
       "id": "cat-gunner-super-zombie-shoot",
@@ -4566,7 +4566,7 @@
     },
     {
       "label": "Love Letters",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/538.png",
+      "imageUrl": "/game/covers/538.png",
       "url": "/game/gn/538.html",
       "categories": [],
       "id": "love-letters",
@@ -4574,7 +4574,7 @@
     },
     {
       "label": "Chiikawa Puzzle",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/539.png",
+      "imageUrl": "/game/covers/539.png",
       "url": "/game/gn/539.html",
       "categories": [],
       "id": "chiikawa-puzzle",
@@ -4582,7 +4582,7 @@
     },
     {
       "label": "myTeardrop",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/540.png",
+      "imageUrl": "/game/covers/540.png",
       "url": "/game/gn/540.html",
       "categories": [],
       "id": "myteardrop",
@@ -4590,7 +4590,7 @@
     },
     {
       "label": "Friday Night Funkin': Pibby: Apocalypse",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/541.png",
+      "imageUrl": "/game/covers/541.png",
       "url": "/game/gn/541.html",
       "categories": [],
       "id": "friday-night-funkin-pibby-apocalypse",
@@ -4598,7 +4598,7 @@
     },
     {
       "label": "Karlson",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/542.png",
+      "imageUrl": "/game/covers/542.png",
       "url": "/game/gn/542-a.html",
       "featured": true,
       "categories": [],
@@ -4607,7 +4607,7 @@
     },
     {
       "label": "Jelly Drift",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/543.png",
+      "imageUrl": "/game/covers/543.png",
       "url": "/game/gn/543-a.html",
       "categories": [],
       "id": "jelly-drift",
@@ -4615,7 +4615,7 @@
     },
     {
       "label": "Plinko",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/544.png",
+      "imageUrl": "/game/covers/544.png",
       "url": "/game/gn/544.html",
       "categories": [],
       "id": "plinko",
@@ -4623,7 +4623,7 @@
     },
     {
       "label": "Clash Of Vikings",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/545.png",
+      "imageUrl": "/game/covers/545.png",
       "url": "/game/gn/545.html",
       "categories": [],
       "id": "clash-of-vikings",
@@ -4631,7 +4631,7 @@
     },
     {
       "label": "Recoil",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/546.png",
+      "imageUrl": "/game/covers/546.png",
       "url": "/game/gn/546.html",
       "categories": [],
       "id": "recoil",
@@ -4639,7 +4639,7 @@
     },
     {
       "label": "Baseball Bros",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/547.png",
+      "imageUrl": "/game/covers/547.png",
       "url": "/game/gn/547.html",
       "categories": [],
       "id": "baseball-bros",
@@ -4647,7 +4647,7 @@
     },
     {
       "label": "Football Bros",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/548.png",
+      "imageUrl": "/game/covers/548.png",
       "url": "/game/gn/548.html",
       "categories": [],
       "id": "football-bros",
@@ -4655,7 +4655,7 @@
     },
     {
       "label": "Sonic the Hedgehog 2: Community's Cut",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/549.png",
+      "imageUrl": "/game/covers/549.png",
       "url": "/game/gn/549.html",
       "categories": [],
       "id": "sonic-the-hedgehog-2-communitys-cut",
@@ -4663,7 +4663,7 @@
     },
     {
       "label": "Sonic the Hedgehog 3: Angel Island Remastered",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/550.png",
+      "imageUrl": "/game/covers/550.png",
       "url": "/game/gn/550.html",
       "categories": [],
       "id": "sonic-the-hedgehog-3-angel-island-remastered",
@@ -4671,7 +4671,7 @@
     },
     {
       "label": "Hypper Sandbox",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/551.png",
+      "imageUrl": "/game/covers/551.png",
       "url": "/game/gn/551.html",
       "categories": [],
       "id": "hypper-sandbox",
@@ -4679,7 +4679,7 @@
     },
     {
       "label": "Aviamasters",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/552.png",
+      "imageUrl": "/game/covers/552.png",
       "url": "/game/gn/552.html",
       "categories": [],
       "id": "aviamasters",
@@ -4687,7 +4687,7 @@
     },
     {
       "label": "Rolling Sky",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/553.png",
+      "imageUrl": "/game/covers/553.png",
       "url": "/game/gn/553.html",
       "categories": [],
       "id": "rolling-sky",
@@ -4695,7 +4695,7 @@
     },
     {
       "label": "Yandere Simulator",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/554.png",
+      "imageUrl": "/game/covers/554.png",
       "url": "/game/gn/554.html",
       "categories": [],
       "id": "yandere-simulator",
@@ -4703,7 +4703,7 @@
     },
     {
       "label": "Friday Night Funkin VS. KAPI",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/555.png",
+      "imageUrl": "/game/covers/555.png",
       "url": "/game/gn/555.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-kapi",
@@ -4711,7 +4711,7 @@
     },
     {
       "label": "Friday Night Funkin VS. Sky",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/556.png",
+      "imageUrl": "/game/covers/556.png",
       "url": "/game/gn/556.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-sky",
@@ -4719,7 +4719,7 @@
     },
     {
       "label": "Getting Over It with Bennett Foddy",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/557.png",
+      "imageUrl": "/game/covers/557.png",
       "url": "/game/gn/557.html",
       "categories": [],
       "id": "getting-over-it-with-bennett-foddy",
@@ -4727,7 +4727,7 @@
     },
     {
       "label": "Friday Night Funkin Vs. Cyber Sensation",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/558.png",
+      "imageUrl": "/game/covers/558.png",
       "url": "/game/gn/558.html",
       "categories": [],
       "id": "friday-night-funkin-vs.-cyber-sensation",
@@ -4735,7 +4735,7 @@
     },
     {
       "label": "Friday Night Funkin vs Shaggy",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/559.png",
+      "imageUrl": "/game/covers/559.png",
       "url": "/game/gn/559.html",
       "categories": [],
       "id": "friday-night-funkin-vs-shaggy",
@@ -4743,7 +4743,7 @@
     },
     {
       "label": "Deltatraveler",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/560.png",
+      "imageUrl": "/game/covers/560.png",
       "url": "/game/gn/560.html",
       "categories": [],
       "id": "deltatraveler",
@@ -4751,7 +4751,7 @@
     },
     {
       "label": "BitGun.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/561.png",
+      "imageUrl": "/game/covers/561.png",
       "url": "/game/gn/561.html",
       "categories": [],
       "id": "bitgun.io",
@@ -4759,7 +4759,7 @@
     },
     {
       "label": "Boom Slingers: Reboom",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/562.png",
+      "imageUrl": "/game/covers/562.png",
       "url": "/game/gn/562.html",
       "categories": [],
       "id": "boom-slingers-reboom",
@@ -4767,7 +4767,7 @@
     },
     {
       "label": "CG FC 25",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/563.png",
+      "imageUrl": "/game/covers/563.png",
       "url": "/game/gn/563.html",
       "categories": [],
       "id": "cg-fc-25",
@@ -4775,7 +4775,7 @@
     },
     {
       "label": "Count Masters: Stickman Games",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/564.png",
+      "imageUrl": "/game/covers/564.png",
       "url": "/game/gn/564.html",
       "categories": [],
       "id": "count-masters-stickman-games",
@@ -4783,7 +4783,7 @@
     },
     {
       "label": "Dalgona Candy Honeycomb Cookie",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/565.png",
+      "imageUrl": "/game/covers/565.png",
       "url": "/game/gn/565.html",
       "categories": [],
       "id": "dalgona-candy-honeycomb-cookie",
@@ -4791,7 +4791,7 @@
     },
     {
       "label": "Highway Racer",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/567.png",
+      "imageUrl": "/game/covers/567.png",
       "url": "/game/gn/567.html",
       "categories": [],
       "id": "highway-racer",
@@ -4799,7 +4799,7 @@
     },
     {
       "label": "Highway Racer 2 REMASTERED",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/568.png",
+      "imageUrl": "/game/covers/568.png",
       "url": "/game/gn/568.html",
       "categories": [],
       "id": "highway-racer-2-remastered",
@@ -4807,7 +4807,7 @@
     },
     {
       "label": "Hula Hoop Race",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/569.png",
+      "imageUrl": "/game/covers/569.png",
       "url": "/game/gn/569.html",
       "categories": [],
       "id": "hula-hoop-race",
@@ -4815,7 +4815,7 @@
     },
     {
       "label": "Jelly Restaurant",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/570.png",
+      "imageUrl": "/game/covers/570.png",
       "url": "/game/gn/570.html",
       "categories": [],
       "id": "jelly-restaurant",
@@ -4823,7 +4823,7 @@
     },
     {
       "label": "Layers Roll",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/571.png",
+      "imageUrl": "/game/covers/571.png",
       "url": "/game/gn/571.html",
       "categories": [],
       "id": "layers-roll",
@@ -4831,7 +4831,7 @@
     },
     {
       "label": "Lazy Jumper",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/572.png",
+      "imageUrl": "/game/covers/572.png",
       "url": "/game/gn/572.html",
       "categories": [],
       "id": "lazy-jumper",
@@ -4839,7 +4839,7 @@
     },
     {
       "label": "Man Runner 2048",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/573.png",
+      "imageUrl": "/game/covers/573.png",
       "url": "/game/gn/573.html",
       "categories": [],
       "id": "man-runner-2048",
@@ -4847,7 +4847,7 @@
     },
     {
       "label": "Pottery Master",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/574.png",
+      "imageUrl": "/game/covers/574.png",
       "url": "/game/gn/574.html",
       "categories": [],
       "id": "pottery-master",
@@ -4855,7 +4855,7 @@
     },
     {
       "label": "Shovel 3D",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/575.png",
+      "imageUrl": "/game/covers/575.png",
       "url": "/game/gn/575.html",
       "categories": [],
       "id": "shovel-3d",
@@ -4863,7 +4863,7 @@
     },
     {
       "label": "Sky Riders",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/576.png",
+      "imageUrl": "/game/covers/576.png",
       "url": "/game/gn/576.html",
       "categories": [],
       "id": "sky-riders",
@@ -4871,7 +4871,7 @@
     },
     {
       "label": "Steal Brainrot Online",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/577.png",
+      "imageUrl": "/game/covers/577.png",
       "url": "/game/gn/577.html",
       "categories": [],
       "id": "steal-brainrot-online",
@@ -4879,7 +4879,7 @@
     },
     {
       "label": "Stickman and Guns",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/578.png",
+      "imageUrl": "/game/covers/578.png",
       "url": "/game/gn/578.html",
       "categories": [],
       "id": "stickman-and-guns",
@@ -4887,7 +4887,7 @@
     },
     {
       "label": "Super Star Car",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/579.png",
+      "imageUrl": "/game/covers/579.png",
       "url": "/game/gn/579.html",
       "categories": [],
       "id": "super-star-car",
@@ -4895,7 +4895,7 @@
     },
     {
       "label": "Traffic Rider",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/580.png",
+      "imageUrl": "/game/covers/580.png",
       "url": "/game/gn/580.html",
       "categories": [],
       "id": "traffic-rider",
@@ -4903,7 +4903,7 @@
     },
     {
       "label": "BuildNow.gg",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/581.png",
+      "imageUrl": "/game/covers/581.png",
       "url": "/game/gn/581.html",
       "categories": [],
       "id": "buildnow.gg",
@@ -4911,7 +4911,7 @@
     },
     {
       "label": "Friday Night Funkin': Mario's Madness",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/582.png",
+      "imageUrl": "/game/covers/582.png",
       "url": "/game/gn/582.html",
       "categories": [],
       "id": "friday-night-funkin-marios-madness",
@@ -4919,7 +4919,7 @@
     },
     {
       "label": "Friday Night Funkin' vs Hypno Lullaby",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/583.png",
+      "imageUrl": "/game/covers/583.png",
       "url": "/game/gn/583.html",
       "categories": [],
       "id": "friday-night-funkin-vs-hypno-lullaby",
@@ -4927,7 +4927,7 @@
     },
     {
       "label": "Stone Grass Mowing Simulator",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/584-a.png",
+      "imageUrl": "/game/covers/584-a.png",
       "url": "/game/gn/584.html",
       "categories": [],
       "id": "stone-grass-mowing-simulator",
@@ -4935,7 +4935,7 @@
     },
     {
       "label": "Fallout",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/585.png",
+      "imageUrl": "/game/covers/585.png",
       "url": "/game/gn/585.html",
       "categories": [],
       "id": "fallout",
@@ -4943,7 +4943,7 @@
     },
     {
       "label": "The Oregon Trail",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/586.png",
+      "imageUrl": "/game/covers/586.png",
       "url": "/game/gn/586.html",
       "categories": [],
       "id": "the-oregon-trail",
@@ -4951,7 +4951,7 @@
     },
     {
       "label": "Newgrounds Rumble",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/587.png",
+      "imageUrl": "/game/covers/587.png",
       "url": "/game/gn/587.html",
       "categories": [],
       "id": "newgrounds-rumble",
@@ -4959,7 +4959,7 @@
     },
     {
       "label": "Super Mario 64",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/588.png",
+      "imageUrl": "/game/covers/588.png",
       "url": "/game/gn/588.html",
       "categories": [],
       "id": "super-mario-64",
@@ -4967,7 +4967,7 @@
     },
     {
       "label": "Sonic CD",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/589.png",
+      "imageUrl": "/game/covers/589.png",
       "url": "/game/gn/589.html",
       "categories": [],
       "id": "sonic-cd",
@@ -4975,7 +4975,7 @@
     },
     {
       "label": "Sonic Mania",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/590.png",
+      "imageUrl": "/game/covers/590.png",
       "url": "/game/gn/590.html",
       "categories": [],
       "id": "sonic-mania",
@@ -4983,7 +4983,7 @@
     },
     {
       "label": "Slime Rancher",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/591.png",
+      "imageUrl": "/game/covers/591.png",
       "url": "/game/gn/591-a.html",
       "categories": [],
       "id": "slime-rancher",
@@ -4991,7 +4991,7 @@
     },
     {
       "label": "Pac Man World",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/592.png",
+      "imageUrl": "/game/covers/592.png",
       "url": "/game/gn/592.html",
       "categories": [],
       "id": "pac-man-world",
@@ -4999,7 +4999,7 @@
     },
     {
       "label": "Pac Man World 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/593.png",
+      "imageUrl": "/game/covers/593.png",
       "url": "/game/gn/593.html",
       "categories": [],
       "id": "pac-man-world-2",
@@ -5007,7 +5007,7 @@
     },
     {
       "label": "Waterworks!",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/594.png",
+      "imageUrl": "/game/covers/594.png",
       "url": "/game/gn/594.html",
       "categories": [],
       "id": "waterworks",
@@ -5015,7 +5015,7 @@
     },
     {
       "label": "Shapez.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/595.png",
+      "imageUrl": "/game/covers/595.png",
       "url": "/game/gn/595.html",
       "categories": [],
       "id": "shapez.io",
@@ -5023,7 +5023,7 @@
     },
     {
       "label": "[!] COMMENTS",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/596-uu.png",
+      "imageUrl": "/game/covers/596-uu.png",
       "url": "/game/gn/596-u.html",
       "featured": true,
       "categories": [],
@@ -5032,7 +5032,7 @@
     },
     {
       "label": "Plants vs. Zombies 2 Gardenless",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/597.png",
+      "imageUrl": "/game/covers/597.png",
       "url": "/game/gn/597.html",
       "categories": [],
       "id": "plants-vs.-zombies-2-gardenless",
@@ -5040,7 +5040,7 @@
     },
     {
       "label": "Sonic.EXE",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/598.png",
+      "imageUrl": "/game/covers/598.png",
       "url": "/game/gn/598.html",
       "categories": [],
       "id": "sonic.exe",
@@ -5048,7 +5048,7 @@
     },
     {
       "label": "Metal Gear Solid",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/599.png",
+      "imageUrl": "/game/covers/599.png",
       "url": "/game/gn/599.html",
       "categories": [],
       "id": "metal-gear-solid",
@@ -5056,7 +5056,7 @@
     },
     {
       "label": "FNF Vs. Hypno's Lullaby v2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/600.png",
+      "imageUrl": "/game/covers/600.png",
       "url": "/game/gn/600.html",
       "categories": [],
       "id": "fnf-vs.-hypnos-lullaby-v2",
@@ -5064,7 +5064,7 @@
     },
     {
       "label": "FNF Vs. Sonic.EXE 3.0/4.0",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/601.png",
+      "imageUrl": "/game/covers/601.png",
       "url": "/game/gn/601.html",
       "categories": [],
       "id": "fnf-vs.-sonic.exe-3.04.0",
@@ -5072,7 +5072,7 @@
     },
     {
       "label": "Doom 2",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/602.png",
+      "imageUrl": "/game/covers/602.png",
       "url": "/game/gn/602.html",
       "categories": [],
       "id": "doom-2",
@@ -5080,7 +5080,7 @@
     },
     {
       "label": "Growden.io",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/603.png",
+      "imageUrl": "/game/covers/603.png",
       "url": "/game/gn/603-aa.html",
       "categories": [],
       "id": "growden.io",
@@ -5088,7 +5088,7 @@
     },
     {
       "label": "Minesweeper Plus",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/604.png",
+      "imageUrl": "/game/covers/604.png",
       "url": "/game/gn/604.html",
       "categories": [],
       "id": "minesweeper-plus",
@@ -5096,7 +5096,7 @@
     },
     {
       "label": "Schoolboy Runaway",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/605.png",
+      "imageUrl": "/game/covers/605.png",
       "url": "/game/gn/605-e.html",
       "categories": [],
       "id": "schoolboy-runaway",
@@ -5104,7 +5104,7 @@
     },
     {
       "label": "Sonic.EXE (ORIGINAL)",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/606.png",
+      "imageUrl": "/game/covers/606.png",
       "url": "/game/gn/606-e.html",
       "categories": [],
       "id": "sonic.exe-original",
@@ -5112,7 +5112,7 @@
     },
     {
       "label": "Tattletail",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/607.png",
+      "imageUrl": "/game/covers/607.png",
       "url": "/game/gn/607-e.html",
       "categories": [],
       "id": "tattletail",
@@ -5120,7 +5120,7 @@
     },
     {
       "label": "Friday Night Funkin VS Impostor v4",
-      "imageUrl": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/608.png",
+      "imageUrl": "/game/covers/608.png",
       "url": "/game/gn/608.html",
       "categories": [],
       "id": "friday-night-funkin-vs-impostor-v4",

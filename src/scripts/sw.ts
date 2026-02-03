@@ -50,7 +50,7 @@ const config: RouteConfig[] = [
   {
     name: 'images',
     pattern: /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/,
-    strategy: CachingStrategy.PreferCache,
+    strategy: CachingStrategy.StaleWhileRevalidate,
     expiration: { maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 }
   },
   {

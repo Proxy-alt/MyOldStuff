@@ -21,7 +21,8 @@ You're mainly supposed to use our site at places that have restrictions.
 Our website is host to over 300k users!
 
 Links- You can visit [https://petezahgames.com](https://petezahgames.com), and
-you can get more links in our [Discord Server](https://discord.gg/unrestricted)
+you can get more links in our
+[Discord Server](https://discord.gg/petezah-games-1337108365591187640)
 
 ## Deploying
 

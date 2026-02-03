@@ -135,7 +135,7 @@ const parseBackground = (bg?: string): string | undefined => {
         // 1. Normalize Image Source (Schema allows 'img' or 'imageUrl')
         const rawImg = item.img || item.imageUrl || '';
         const fileName = rawImg ? rawImg.split('/').pop() : '';
-        const isHttpUrl = rawImg && (rawImg.startsWith('http://') || rawImg.startsWith('https://'));
+        const isHttpUrl = rawImg && (rawImg.startsWith('http://') || rawImg.startsWith('https://') || rawImg.includes('/games'));
 
         // 2. Resolve Categories
         const mainCategory = item.categories?.[0]?.toLowerCase() || '';

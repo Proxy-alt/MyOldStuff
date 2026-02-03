@@ -261,28 +261,6 @@ const loc = '/' + raw.replace(/^\/+/, '');
   </div>
 
   <script>
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    let url = urlParams.get('url');
-
-    if (url && window.location.hash) {
-      url = url + window.location.hash;
-    }
-
-    const iframe = document.getElementById('myIframe');
-
-    if (url) {
-      iframe.src = url;
-      history.replaceState(null, '', window.location.pathname);
-    } else {
-      const savedUrl = localStorage.getItem('iframeUrl');
-      if (savedUrl) {
-        iframe.src = savedUrl;
-      } else {
-        console.error('No URL parameter provided and no saved URL found.');
-      }
-    }
-
     let currentZoom = 1;
 
     window.performZoomIn = function () {

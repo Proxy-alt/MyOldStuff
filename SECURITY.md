@@ -2,8 +2,8 @@
 
 ## Supported Versions
 
-We actively maintain the latest branch of PeteZahGames.  
-Other branches may be experimental. Always deploy the stable version.
+We actively maintain the latest branch of PeteZahGames. Other branches may be
+experimental. Always deploy the stable version.
 
 | Branch | Supported |
 | ------ | --------- |
@@ -51,4 +51,4 @@ For urgent security concerns, please reach out via:
 - GitHub Security Advisories
 - Email:
   [contact@petezahgames.com](mailto:contact@petezahgames.com?subject=Security%20Advisory)
-- Discord: https://discord.gg/cYjHFDguxS
+- Discord: https://discord.gg/petezah-games-1337108365591187640

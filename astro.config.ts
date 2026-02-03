@@ -86,6 +86,14 @@ export default defineConfig({
     svgo: true,
     failOnPrerenderConflict: true,
     clientPrerender: true,
+    staticImportMetaEnv: true,
+    preserveScriptOrder: true,
+    csp: {
+      directives: ["base-uri: 'none'", 'upgrade-insecure-requests', "font-src: 'self'", "worker-src: 'self'"],
+      styleDirective: {
+        resources: ["'self'", "'https://cdn.jsdelivr.net/gh/gn-math/covers@main/'"]
+      }
+    },
     fonts: [
       {
         provider: fontProviders.googleicons(),
