@@ -14,6 +14,9 @@ importers:
       '@astrojs/react':
         specifier: ^4.4.2
         version: 4.4.2(@types/node@25.0.10)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(terser@5.46.0)(yaml@2.8.2)
+      '@bprogress/core':
+        specifier: ^1.3.4
+        version: 1.3.4
       '@fastify/static':
         specifier: ^9.0.0
         version: 9.0.0
@@ -35,12 +38,12 @@ importers:
       '@mercuryworkshop/scramjet':
         specifier: 2.0.2-alpha
         version: 2.0.2-alpha
-      '@mercuryworkshop/scramjet-controller':
-        specifier: ^0.0.9
-        version: 0.0.9
       '@mercuryworkshop/wisp-js':
         specifier: ^0.4.1
         version: 0.4.1
+      '@petezah-games/scramjet':
+        specifier: 2.0.3-petezah-alpha
+        version: 2.0.3-petezah-alpha
       '@petezah-games/scramjet-controller':
         specifier: ^0.1.4
         version: 0.1.4
@@ -116,6 +119,9 @@ importers:
       wawoff2:
         specifier: ^2.0.1
         version: 2.0.1
+      workbox-window:
+        specifier: ^7.4.0
+        version: 7.4.0
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.6
@@ -736,6 +742,9 @@ packages:
     resolution: {integrity: sha512-0ZrskXVEHSWIqZM/sQZ4EV3jZJXRkio/WCxaqKZP1g//CEWEPSfeZFcms4XeKBCHU0ZKnIkdJeU/kF+eRp5lBg==}
     engines: {node: '>=6.9.0'}
 
+  '@bprogress/core@1.3.4':
+    resolution: {integrity: sha512-q/AqpurI/1uJzOrQROuZWixn/+ARekh+uvJGwLCP6HQ/EqAX4SkvNf618tSBxL4NysC0MwqAppb/mRw6Tzi61w==}
+
   '@capsizecss/unpack@4.0.0':
     resolution: {integrity: sha512-VERIM64vtTP1C4mxQ5thVT9fK0apjPFobqybMtA1UdUujWka24ERHbRHFGmpbbhp73MhV+KSsHQH9C6uOTdEQA==}
     engines: {node: '>=18'}
@@ -1207,9 +1216,6 @@ packages:
   '@mercuryworkshop/proxy-transports@1.0.2':
     resolution: {integrity: sha512-zgD+JMYNSx8LxVLWwGPPVnoDHjoh1GqqwUJIjhIwCwhy+Z7g+MhmiTJvCcRPAo7qXXbqJwIrpBJduRSOrjMV7g==}
 
-  '@mercuryworkshop/scramjet-controller@0.0.9':
-    resolution: {integrity: sha512-APYSejR8ST3pOCfJcsJELD93J3P9AvPoUTLrePZMw/jaR17KGw6RH9s1zpo3k5x7EemgQkJ9YkwInMQxG+PW4w==}
-
   '@mercuryworkshop/scramjet@2.0.2-alpha':
     resolution: {integrity: sha512-j7GZAovXP3vlY88vCq+DoxO7Sm9aCksOr1RhjL49MYV1AJvLq3RufOgCVztNdYlOdU/Unhdn4DB+Usb+xGQmwA==}
 
@@ -1222,6 +1228,9 @@ packages:
 
   '@petezah-games/scramjet-controller@0.1.4':
     resolution: {integrity: sha512-lhRYk6zgHyVTCDD8dZOKUL0ESqZ2/8RObhmNgIFElx/+p8tRZ2Z9ySh/MmuvC2sPF5BFOtnZv/QbxwhXYmCzpg==}
+
+  '@petezah-games/scramjet@2.0.3-petezah-alpha':
+    resolution: {integrity: sha512-VG6n0/VwxS5qDICVWX8V7KoLrnXzIBhNKoTlGI7j+8lCQKCDtJ4HQ6ulYGRKnuAPAU+efIMyeN9cItPz+P27hA==}
 
   '@petezah-games/ultraviolet@3.2.13':
     resolution: {integrity: sha512-4UlFL4XYvSJSPjd9nRg/XifqKs/SOYjpFDIkOCZ7Zw0jBa5o9LVCPM7lKrPrm2rC2q74/EY5D/Hwx+MiwbWmNw==}
@@ -5749,6 +5758,8 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
+  '@bprogress/core@1.3.4': {}
+
   '@capsizecss/unpack@4.0.0':
     dependencies:
       fontkitten: 1.0.2
@@ -6125,11 +6136,6 @@ snapshots:
 
   '@mercuryworkshop/proxy-transports@1.0.2': {}
 
-  '@mercuryworkshop/scramjet-controller@0.0.9':
-    dependencies:
-      '@mercuryworkshop/proxy-transports': 1.0.2
-      '@mercuryworkshop/scramjet': 2.0.2-alpha
-
   '@mercuryworkshop/scramjet@2.0.2-alpha':
     dependencies:
       '@mercuryworkshop/proxy-transports': 1.0.2
@@ -6156,6 +6162,17 @@ snapshots:
     dependencies:
       '@mercuryworkshop/proxy-transports': 1.0.2
       '@mercuryworkshop/scramjet': 2.0.2-alpha
+
+  '@petezah-games/scramjet@2.0.3-petezah-alpha':
+    dependencies:
+      '@mercuryworkshop/proxy-transports': 1.0.2
+      dom-serializer: 2.0.0
+      domhandler: 5.0.3
+      domutils: 3.2.2
+      htmlparser2: 10.1.0
+      idb: 8.0.3
+      parse-domain: 8.2.2
+      set-cookie-parser: 2.7.2
 
   '@petezah-games/ultraviolet@3.2.13(esbuild@0.25.12)(eslint@9.39.2(jiti@2.6.1))(prettier@3.8.1)(typescript@5.9.3)':
     dependencies:

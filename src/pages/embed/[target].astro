@@ -1,11 +1,14 @@
 ---
 import controllerUrl from '@petezah-games/scramjet-controller?url';
-import scramjetUrl from '@mercuryworkshop/scramjet?url';
-import AppLayout from '../../layouts/AppLayout.astro';
+import wasmPath from '@petezah-games/scramjet/wasm?url';
+import scramjetPath from '@petezah-games/scramjet-controller?url';
+import sjInject from '@petezah-games/scramjet-controller/inject?url';
+import AppLayout from '../../layouts/Layout.astro';
 
 const { target } = Astro.params;
-let computedURL: string;
+let computedURL: string = '';
 
+// --- Blocklist Logic ---
 let cachedList: Set<string> | null = null;
 let cachedAt = 0;
 const CACHE_DURATION = 2 * 60 * 60 * 1000;
@@ -32,10 +35,11 @@ async function getBlockedDomains() {
     return domains;
   } catch (e) {
     console.error('Failed to fetch blocklist', e);
-    return new Set<string>(); // Fail open if list is down
+    return new Set<string>();
   }
 }
 
+// --- Route Validation ---
 try {
   if (!target) throw new Error('No target specified');
 
@@ -46,7 +50,6 @@ try {
     throw new Error('Invalid protocol');
   }
 
-  // Check Blocklist
   const blocked = await getBlockedDomains();
   if (blocked.has(parsed.hostname)) {
     return Astro.redirect('/blocked');
@@ -57,119 +60,130 @@ try {
   return Astro.redirect('/404');
 }
 
-// Configuration for Client
+// --- Client Configuration ---
 const scramjetConfig = {
   controllerUrl,
-  scramjetUrl, // This acts as the initPath
-  wispUrl: 'ws://localhost:4501/',
-  scope: '/petezah/scram/',
-  swPath: '../../scripts/SJsw.ts'
+  wasmUrl: wasmPath,
+  injectUrl: sjInject,
+  scramjetPath,
+  scope: '/scram/'
 };
 ---
 
 <AppLayout title="Scramjet Embed" description={`Embedded Site for ${computedURL}`}>
-  <div id="status-container">
-    <h1 id="status">Initializing...</h1>
+  <div id="status-container" class="absolute inset-0 flex items-center justify-center bg-[#111] z-50 text-white font-sans">
+    <div class="text-center">
+      <h1 id="status" class="text-2xl font-bold mb-2">Initializing...</h1><br />
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+    </div>
   </div>
 
-  <iframe id="embedFrame" style="width: 100%; height: 100%; border: none;" data-url={computedURL} data-config={JSON.stringify(scramjetConfig)}
-  ></iframe>
+  <iframe id="embedFrame" class="w-full h-full border-none bg-white" data-url={computedURL} data-config={JSON.stringify(scramjetConfig)}></iframe>
 
   <script>
-    import libcurlPKG from '@mercuryworkshop/libcurl-transport';
-    import { Controller, config } from '@petezah-games/scramjet-controller';
+    import { LibcurlClient } from '@mercuryworkshop/libcurl-transport';
+    import { registerSW } from 'virtual:pwa-register';
+    import { Controller, config as sjConfig } from '@petezah-games/scramjet-controller';
 
-    const { LibcurlClient } = libcurlPKG as any;
-    const computedURL = document.getElementById('embedFrame')?.dataset.url;
-    async function main(): Promise<void> {
-      const frameEl = document.querySelector<HTMLIFrameElement>('#embedFrame');
-      const statusEl = document.getElementById('status') as HTMLElement | null;
-      if (!frameEl || !statusEl || !frameEl.dataset.config) {
-        console.error('Required elements missing');
+    async function main() {
+      const frameEl = document.getElementById('embedFrame') as HTMLIFrameElement;
+      const statusEl = document.getElementById('status') as HTMLHeadingElement;
+      const statusContainer = document.getElementById('status-container') as HTMLDivElement;
+
+      if (!frameEl || !frameEl.dataset.config || !frameEl.dataset.url) {
+        console.error('Missing configuration');
         return;
       }
-      let cfg: any;
-      // Parse config passed from frontmatter
+
+      const targetURL = frameEl.dataset.url;
+      let cfg;
+
       try {
         cfg = JSON.parse(frameEl.dataset.config);
       } catch (e) {
-        if (statusEl) statusEl.textContent = 'Error: Invalid configuration';
-        console.error('Config parse error', e);
+        if (statusEl) statusEl.textContent = 'Config Error';
         return;
       }
 
-      // Setup Scramjet Global Config
-      config.prefix = cfg.scope;
-      config.wasmPath = `${cfg.scramjetUrl}scramjet.wasm`;
-      config.scramjetPath = cfg.scramjetUrl;
+      // 1. Wisp URL Setup
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wispUrl = `${protocol}//${window.location.host}/wisp/`;
 
-      // 1. Register Service Worker
-      if (statusEl) statusEl.textContent = 'Registering service worker...';
+      // 2. Scramjet Config
+      sjConfig.prefix = cfg.scope;
+      sjConfig.wasmPath = cfg.wasmUrl;
+      sjConfig.injectPath = cfg.injectUrl;
+      sjConfig.scramjetPath = cfg.scramjetPath;
+
+      if (statusEl) statusEl.textContent = 'Connecting to Service Worker...';
 
       try {
-        const registration = await navigator.serviceWorker.register(cfg.swPath, {
-          scope: cfg.scope,
-          type: 'module' // Ensure your SW integration outputs ESM
+        const registration = await navigator.serviceWorker.register('/scram-sw.js', {
+          type: 'module',
+          scope: cfg.scope
         });
 
-        // 2. Wait for Activation
+        // Wait for the service worker to be ready
         if (!navigator.serviceWorker.controller) {
-          if (statusEl) statusEl.textContent = 'Waiting for service worker to activate...';
+          statusEl.textContent = 'Waiting for service worker to activate...';
+          window.location.reload();
+        }
 
-          await new Promise<void>((resolve): void => {
-            if (registration.active) {
-              resolve();
-            } else {
-              const sw = registration.installing || registration.waiting;
-              if (sw) {
-                sw.addEventListener('statechange', (e: Event): void => {
-                  const target = e.target as ServiceWorker | null;
-                  if (target && target.state === 'activated') resolve();
-                });
-              }
-            }
+        // 4. Wait for Control (with Reload Fallback)
+        // If the SW activates but doesn't claim the page fast enough, we reload to force it.
+        if (!navigator.serviceWorker.controller) {
+          console.log('Waiting for controller...');
+
+          const controllerPromise = new Promise<void>((resolve) => {
+            navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true });
           });
 
-          // Force claim implies we usually don't need a reload if the SW claims immediately
-          // but we wait for controller change to be safe
-          if (!navigator.serviceWorker.controller) {
-            await new Promise<void>((resolve): void => navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true }));
+          // Race: If controller doesn't appear in 1.5s, reload the page
+          const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('TIMEOUT')), 15000));
+
+          try {
+            await Promise.race([controllerPromise, timeoutPromise]);
+          } catch (e) {
+            if (statusEl) statusEl.textContent = 'Reloading for activation...';
+            window.location.reload();
+            return;
           }
         }
 
-        if (statusEl) statusEl.textContent = 'Initializing controller...';
+        if (statusEl) statusEl.textContent = 'Establishing Connection...';
 
-        // 3. Initialize Transport and Controller
-        const transport = new LibcurlClient({ wisp: cfg.wispUrl });
-        const activeServiceWorker = registration.active;
-        if (!activeServiceWorker) {
-          throw new Error('Service worker failed to activate');
-        }
-        const controller = new Controller({
-          serviceworker: activeServiceWorker as ServiceWorker,
-          transport
+        // 5. Initialize Transport
+        const transport = new LibcurlClient({
+          wisp: wispUrl
         });
 
-        // 4. Start Scramjet
-        controller.wait;
+        const controller = new Controller({
+          scope: cfg.scope,
+          serviceworker: registration.active || registration.installing || registration.waiting,
+          transport: transport
+        });
+
+        // 6. Init Controller
+        await controller.wait();
+
+        // 7. Launch
         const frame = controller.createFrame(frameEl);
 
-        if (statusEl) statusEl.textContent = ''; // Clear status on success
-        const statusContainer = document.getElementById('status-container') as HTMLElement | null;
         if (statusContainer) statusContainer.style.display = 'none';
 
-        // 5. Navigate
-        if (computedURL) {
-          frame.go(computedURL);
+        await frame.go(targetURL);
+      } catch (err) {
+        console.error('Proxy Error:', err);
+        if (statusEl) {
+          statusEl.textContent = 'Connection Failed';
+          const sub = document.createElement('p');
+          sub.className = 'text-sm text-red-400 mt-2';
+          sub.textContent = err instanceof Error ? err.message : String(err);
+          statusEl.parentElement?.appendChild(sub);
         }
-      } catch (err: unknown) {
-        const errMsg = err instanceof Error ? err.message : String(err);
-        if (statusEl) statusEl.textContent = `Error: ${errMsg}`;
-        console.error('Scramjet Init Error:', err);
       }
     }
 
-    // Run main
     main();
   </script>
 </AppLayout>

@@ -188,5 +188,23 @@ export interface Props {
         });
       }
     </script>
+    <script>
+      import { registerSW } from 'virtual:pwa-register';
+
+      function initSW() {
+        registerSW({
+          immediate: true,
+          onNeedRefresh() {
+            console.log('New content available, reload to update.');
+          },
+          onOfflineReady() {
+            console.log('App is ready to work offline.');
+          }
+        });
+      }
+
+      initSW();
+      document.addEventListener('astro:after-swap', initSW);
+    </script>
   </body>
 </html>

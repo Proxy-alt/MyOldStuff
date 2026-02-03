@@ -9,6 +9,7 @@ ${logo('#')}
 User-agent: *
 Allow: /
 Disallow: /api/
+sitemap: /sitemap.xml
 `;
 
 export const GET: APIRoute = () => {

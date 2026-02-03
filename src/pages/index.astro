@@ -1,35 +1,7 @@
 ---
 import AppLayout from '../layouts/AppLayout.astro';
 import '../styles/index.css';
-
-// --- FontAwesome Integration ---
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { library, icon, config } from '@fortawesome/fontawesome-svg-core';
-import { faXTwitter, faDiscord } from '@fortawesome/free-brands-svg-icons';
-import {
-  faChevronLeft,
-  faChevronRight,
-  faBatteryFull,
-  faBatteryThreeQuarters,
-  faBatteryHalf,
-  faBatteryQuarter,
-  faBatteryEmpty
-} from '@fortawesome/free-solid-svg-icons';
-
-// Prevent FontAwesome from automatically adding CSS to the head
-config.autoAddCss = false;
-
-library.add(
-  faXTwitter,
-  faDiscord,
-  faChevronLeft,
-  faChevronRight,
-  faBatteryFull,
-  faBatteryThreeQuarters,
-  faBatteryHalf,
-  faBatteryQuarter,
-  faBatteryEmpty
-);
+import Fa from '../components/fontawesome.astro';
 
 // Import games data
 import gamesData from '../data/games.json';
@@ -80,10 +52,10 @@ const highlightedGame = highlightedGames.length > 0 ? highlightedGames[Math.floo
 
     <nav class="social-media-tray" aria-label="Social Media Links">
       <a href="https://x.com/PeteZahGames/" target="_parent" aria-label="Twitter X">
-        <div class="social-media-icon-container shiny-btn" set:html={icon(faXTwitter).html[0]} />
+        <div class="social-media-icon-container shiny-btn"><Fa type="brand" icon="x-twitter" class="w-5 h-5" /></div>
       </a>
       <a href="https://discord.petezahgames.com" target="_parent" aria-label="Discord">
-        <div class="social-media-icon-container shiny-btn" set:html={icon(faDiscord).html[0]} />
+        <div class="social-media-icon-container shiny-btn"><Fa type="brand" icon="discord" /></div>
       </a>
     </nav>
   </section>
@@ -97,7 +69,7 @@ const highlightedGame = highlightedGames.length > 0 ? highlightedGames[Math.floo
 
   <section class="image-shuffler" aria-label="Game Carousel">
     <div class="carousel-container">
-      <button id="btn-prev" class="carousel-btn carousel-btn-prev" aria-label="Previous Game" set:html={icon(faChevronLeft).html[0]} />
+      <button id="btn-prev" class="carousel-btn carousel-btn-prev" aria-label="Previous Game"><Fa type="solid" icon="chevron-left" /></button>
 
       <div class="carousel-track">
         {
@@ -115,7 +87,7 @@ const highlightedGame = highlightedGames.length > 0 ? highlightedGames[Math.floo
         }
       </div>
     </div>
-    <button id="btn-next" class="carousel-btn carousel-btn-next" aria-label="Next Game" set:html={icon(faChevronRight).html[0]} />
+    <button id="btn-next" class="carousel-btn carousel-btn-next" aria-label="Next Game"><Fa type="solid" icon="chevron-right" /></button>
   </section>
 
   <div id="carouselDots" class="carousel-dots"></div>
@@ -127,10 +99,10 @@ const highlightedGame = highlightedGames.length > 0 ? highlightedGames[Math.floo
       <p>Click below to join our Discord community and follow us on Twitter/X to stay updated!</p>
       <div class="discord-btn">
         <a href="https://x.com/PeteZahGames/" target="_parent">
-          <div class="social-media-icon-container-2" set:html={icon(faXTwitter).html[0]} />
+          <div class="social-media-icon-container-2"></div>
         </a>
         <a href="https://discord.petezahgames.com" target="_parent">
-          <div class="social-media-icon-container-2" set:html={icon(faDiscord).html[0]} />
+          <div class="social-media-icon-container-2"></div>
         </a>
       </div>
     </div>
@@ -140,12 +112,12 @@ const highlightedGame = highlightedGames.length > 0 ? highlightedGames[Math.floo
     <div class="info-row">
       <span id="battery-display">
         <span class="battery-container" id="battery-wrapper">
-          <span id="bat-full" class="bat-icon" style="display:none" set:html={icon(faBatteryFull).html[0]} />
-          <span id="bat-three-quarters" class="bat-icon" style="display:none" set:html={icon(faBatteryThreeQuarters).html[0]} />
-          <span id="bat-half" class="bat-icon" style="display:none" set:html={icon(faBatteryHalf).html[0]} />
-          <span id="bat-quarter" class="bat-icon" style="display:none" set:html={icon(faBatteryQuarter).html[0]} />
-          <span id="bat-empty" class="bat-icon" style="display:none" set:html={icon(faBatteryEmpty).html[0]} />
-          <span id="bat-loading" class="bat-icon" set:html={icon(faBatteryEmpty).html[0]} />
+          <span id="bat-full" class="bat-icon" style="display:none"><Fa type="solid" icon="battery-full" /></span>
+          <span id="bat-three-quarters" class="bat-icon" style="display:none"><Fa type="solid" icon="battery-three-quarters" /></span>
+          <span id="bat-half" class="bat-icon" style="display:none"><Fa type="solid" icon="battery-half" /></span>
+          <span id="bat-quarter" class="bat-icon" style="display:none"><Fa type="solid" icon="battery-quarter" /></span>
+          <span id="bat-empty" class="bat-icon" style="display:none"><Fa type="solid" icon="battery-empty" /></span>
+          <span id="bat-loading" class="bat-icon"><Fa type="solid" icon="battery-empty" /></span>
         </span>
         <span id="battery-percentage">Loading...</span>
       </span>
@@ -464,12 +436,12 @@ const highlightedGame = highlightedGames.length > 0 ? highlightedGames[Math.floo
       const images = [
         { src: '/storage/images/main/highway-racer.jpeg', caption: 'Highway Racer' },
         { src: '/storage/images/main/buildnow.jpeg', caption: 'Buildnow.gg' },
-        { src: '/storage/ag/g/slope/IMG_5256.jpeg', caption: 'Slope' },
+        { src: '/game/slope/IMG_5256.jpeg', caption: 'Slope' },
         { src: '/storage/images/main/clash.jpeg', caption: 'Clash Royale' },
         { src: '/storage/images/main/superstarcar.jpeg', caption: 'Superstar Car' },
-        { src: '/storage/ag/g/polytrack/splash.png', caption: 'Polytrack' },
+        { src: '/game/polytrack/splash.png', caption: 'Polytrack' },
         { src: '/storage/images/main/brawlstars1.jpg', caption: 'Brawl Stars' },
-        { src: '/storage/ag/g/yohoho/IMG_5302.jpeg', caption: 'YoHoHo!' },
+        { src: '/game/yohoho/IMG_5302.jpeg', caption: 'YoHoHo!' },
         { src: '/storage/images/main/smashy.jpg', caption: 'Smashy Road' },
         { src: '/storage/images/main/ragdoll.jpg', caption: 'Ragdoll Archers' },
         { src: '/storage/images/main/slitherio.jpg', caption: 'Slither.io' }

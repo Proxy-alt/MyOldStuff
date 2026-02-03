@@ -41,7 +41,78 @@ import type { Props } from './Layout.astro';
       </header>
     )
   }
+  <noscript>
+    <style>
+      /* 1. Disable scrolling and selection on the whole page */
+      body {
+        overflow: hidden !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+      }
 
+      /* 2. "Gradient out" and obscure all other content */
+      body > *:not(noscript) {
+        filter: blur(8px) brightness(0.4) !important;
+        pointer-events: none !important;
+        transition: none !important;
+      }
+
+      /* 3. The Overlay Container */
+      .noscript-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2147483647; /* Max Z-Index */
+
+        /* The "Gradiented out" background effect */
+        background: radial-gradient(circle at center, rgba(21, 26, 45, 0.85) 0%, rgba(4, 4, 29, 0.98) 100%);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      /* 4. The Message Box */
+      .noscript-content {
+        background: #151a2d;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 3rem;
+        border-radius: 1rem;
+        text-align: center;
+        max-width: 400px;
+
+        /* Drop shadow as requested */
+        box-shadow:
+          0 10px 40px rgba(0, 0, 0, 0.6),
+          0 0 0 1000vh rgba(0, 0, 0, 0.3); /* Darken surroundings further */
+      }
+
+      .noscript-content h2 {
+        color: #fff;
+        margin-bottom: 1rem;
+        font-family: 'Poppins', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .noscript-content p {
+        color: #dcdcdc;
+        font-family: 'Poppins', sans-serif;
+        line-height: 1.6;
+        margin: 0;
+      }
+    </style>
+
+    <div class="noscript-overlay">
+      <div class="noscript-content">
+        <h2>JavaScript Required</h2>
+        <p>This application relies on JavaScript to function. Please enable it in your browser settings to continue.</p>
+      </div>
+    </div>
+  </noscript>
   <!-- Sidebar -->
   <Sidebar transition:persist />
 
@@ -58,23 +129,5 @@ import type { Props } from './Layout.astro';
       </footer>
     )
   }
-  <script is:inline>
-    import { registerSW } from 'virtual:pwa-register';
-
-    function initSW() {
-      registerSW({
-        immediate: true,
-        onNeedRefresh() {
-          console.log('New content available, reload to update.');
-        },
-        onOfflineReady() {
-          console.log('App is ready to work offline.');
-        }
-      });
-    }
-
-    initSW();
-    document.addEventListener('astro:after-swap', initSW);
-  </script>
   <Settings />
 </Layout>

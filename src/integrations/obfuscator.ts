@@ -10,7 +10,12 @@ const CONFIG_FILE = path.join(CACHE_DIR, '../obfuscator-config.json');
 
 // --- SHARED TYPES ---
 export interface IntegrationOptions {
-  pairs: { targets: string[]; cssVariable: string; stripAriaLabel?: boolean }[];
+  pairs: {
+    targets: string[];
+    cssVariable: string;
+    originalCssVariable?: string; // <--- Add this line
+    stripAriaLabel?: boolean;
+  }[];
   defaultStripAriaLabel?: boolean;
   allowlist?: string[];
   blocklist?: string[];

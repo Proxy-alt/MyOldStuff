@@ -1,8 +1,5 @@
-import fastifyStatic from '@fastify/static';
-import { scramjetPath } from '@mercuryworkshop/scramjet/path';
 // @ts-expect-error - wisp-js does not have TypeScript declarations
 import { server as wisp } from '@mercuryworkshop/wisp-js/server';
-import scramjetControllerPath from '@petezah-games/scramjet-controller/path';
 import bareServerPkg from '@tomphttp/bare-server-node';
 import dotenv from 'dotenv';
 import type { FastifyInstance } from 'fastify';
@@ -73,17 +70,6 @@ async function createServerLogic(): Promise<FastifyInstance> {
 
   const bare = createBareServer('/bare/', {});
   const barePremium = createBareServer('/api/bare-premium/', {});
-
-  await fastify.register(fastifyStatic, {
-    root: scramjetPath,
-    prefix: '/scram/'
-  });
-
-  await fastify.register(fastifyStatic, {
-    root: scramjetControllerPath,
-    prefix: '/scramcontroller/',
-    decorateReply: false
-  });
 
   fastify.addHook('onRequest', (_request, _reply, done) => {
     done();

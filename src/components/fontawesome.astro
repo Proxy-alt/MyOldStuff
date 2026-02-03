@@ -1,0 +1,33 @@
+---
+import { icon } from '@fortawesome/fontawesome-svg-core';
+
+// Import the full icon sets so we can look them up dynamically
+import * as SolidIcons from '@fortawesome/free-solid-svg-icons';
+import * as BrandIcons from '@fortawesome/free-brands-svg-icons';
+
+const { type = 'solid', icon: iconName, class: className, ...rest } = Astro.props;
+
+// 1. Convert kebab-case (x-twitter) to camelCase/PascalCase (XTwitter)
+const pascalName = iconName
+  .split('-')
+  .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+  .join('');
+
+// 2. Add the prefix (faXTwitter)
+const lookupName = `fa${pascalName}`;
+
+// 3. Select the correct library
+const library = type === 'brand' || type === 'brands' ? BrandIcons : SolidIcons;
+const iconDef = library[lookupName];
+
+// 4. Generate SVG HTML
+// We pass 'classes' (for string classes) and 'attributes' (for rest props)
+// This matches your working snippet: icon(faChevronLeft).html[0]
+const svgHTML = iconDef ? icon(iconDef, { classes: className, attributes: rest }).html[0] : '';
+
+if (!iconDef) {
+  console.warn(`[Fa] Icon not found: ${lookupName} in ${type}`);
+}
+---
+
+<Fragment set:html={svgHTML} />

@@ -167,10 +167,22 @@ const parseBackground = (bg?: string): string | undefined => {
           objectFit: objectFit,
           aspectRatio: aspectRatio
         };
+        // Build final link target
+        let href;
+
+        // Case 1: External HTTP URL → use embed route
+        if (item.url.startsWith('http://') || item.url.startsWith('https://')) {
+          const encoded = encodeURIComponent(item.url);
+          href = `/play/embed/${encoded}`;
+        } else {
+          // Case 2: Internal path → normalize and prepend /play
+          const clean = item.url.replace(/^\/+/, ''); // remove leading slashes
+          href = `/play/${clean}`;
+        }
 
         return (
           <figure class="collection-card" data-label={item.label} data-category={mainCategory} data-url={item.url}>
-            <a href={`/play?url=${encodeURIComponent(item.url)}`} aria-label={`Open ${item.label}`} style={cardStyles}>
+            <a href={href} aria-label={`Open ${item.label}`} style={cardStyles}>
               {/* SVG Component (Local) */}
               {SvgComponent && (
                 <div
@@ -232,7 +244,7 @@ const parseBackground = (bg?: string): string | undefined => {
               )}
             </a>
 
-            <figcaption class="label game-name" style="font-family: var(--font-poppins-obfuscated);">
+            <figcaption class="label game-name" style="font-family: var(--font-poppins);">
               {item.label}
             </figcaption>
           </figure>

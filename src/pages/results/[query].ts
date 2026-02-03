@@ -19,7 +19,7 @@ export const GET: APIRoute = async ({ params }) => {
   } catch (error: any) {
     console.error('Error generating suggestions:', error.message);
     return new Response(JSON.stringify({ error: 'Failed to fetch suggestions' }), {
-      status: 500,
+      status: 502,
       headers: { 'Content-Type': 'application/json' }
     });
   }

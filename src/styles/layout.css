@@ -33,29 +33,17 @@ body {
   margin: 0;
   border: none;
   border-radius: 0;
-  background: var(--body-bg); /* Or transparent if body has bg */
+  background: var(--body-bg);
 
-  /* Ensure it sits BEHIND the sidebar */
+  /* Ensure it sits BEHIND the sidebar but covers everything else */
   z-index: 1;
   overflow-y: auto; /* Content scrolls inside here */
-  padding: 2rem; /* Optional: Internal padding for text */
+  padding: 0; /* Remove padding so games/iframes touch edges */
 }
 
-/* --- RESPONSIVE --- */
-@media (max-width: 768px) {
-  .sidebar {
-    /* Optional: Full height/width on mobile */
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 85%;
-    height: 100vh;
-    border-radius: 0;
-    border-left: none;
-  }
-}
+/* --- WIDGET & POPUP (Fixed on top of main) --- */
 .widget {
-  position: absolute;
+  position: fixed; /* Changed to fixed so it stays visible while scrolling main */
   bottom: 30px;
   right: 16px;
   z-index: 200;
@@ -94,15 +82,16 @@ body {
   border-radius: 8px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   flex-direction: column;
-  width: max-content; /* Grow only as wide as needed */
-  padding-right: 1rem; /* Extend 1rem beyond longest text */
-  padding-left: 0.5rem; /* Optional: keep left padding tidy */
-  box-sizing: content-box; /* Ensures padding doesn't shrink content */
+  width: max-content;
+  padding-right: 1rem;
+  padding-left: 0.5rem;
+  box-sizing: content-box;
 }
 
 .widget-popup.show {
   display: flex;
   overflow: hidden;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .widget-option {
@@ -120,26 +109,63 @@ body {
   background: #fff;
   color: #151a2d;
 }
+
+/* --- RESPONSIVE & REDUCED MOTION --- */
+
+/* Mobile: Sidebar behavior */
+@media (max-width: 768px) {
+  .sidebar {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 85%;
+    height: 100vh;
+    border-radius: 0;
+    border-left: none;
+  }
+}
+
+/* Reduced Motion: Disable animations */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition: none !important;
+  }
+
+  *,
+  .widget-button,
+  .widget-option,
+  .sidebar,
+  .shiny-btn,
+  .reload-content,
+  .reload-overlay {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Ensure shiny button effect doesn't slide */
+  .shiny-btn:after {
+    display: none;
+  }
+}
+
 /* =========================================
    RELOAD MODAL (Integrated Styles)
    ========================================= */
 
-/* Overlay - Covers the whole screen including Sidebar */
 .reload-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(4, 4, 29, 0.85); /* Darkened var(--body-bg) */
-  backdrop-filter: blur(8px); /* Modern frosted glass effect */
-  display: flex; /* Hidden by default? Change to 'none' if controlling via JS */
+  background-color: rgba(4, 4, 29, 0.95); /* Slightly darker for better contrast */
+  backdrop-filter: blur(8px);
+  display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000; /* Higher than Sidebar (1000) and Toggle (900) */
+  z-index: 2000;
   animation: fadeIn 0.4s ease-out;
 }
 
-/* Modal Card - Uses the "Image Shuffler" aesthetic */
 .reload-content {
-  background-color: #0a1d37; /* The specific dark blue from source */
+  background-color: #0a1d37;
   color: white;
   width: clamp(18rem, 80vw, 28rem);
   padding: clamp(1.5rem, 4vw, 2.5rem);
@@ -147,18 +173,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow:
     0 clamp(0.6rem, 2vw, 1.5rem) clamp(2rem, 4vw, 3rem) rgba(0, 0, 0, 0.5),
-    0 0 15px rgba(255, 255, 255, 0.05); /* Subtle inner glow */
+    0 0 15px rgba(255, 255, 255, 0.05);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-
-  /* Animation from source */
   animation: slideInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* Typography */
 .reload-content h2 {
   font-family: 'Poppins', sans-serif;
   font-size: clamp(1.2rem, 3vw, 1.8rem);
@@ -172,12 +195,11 @@ body {
 .reload-content p {
   font-family: 'Poppins', sans-serif;
   font-size: clamp(0.85rem, 2vw, 1rem);
-  color: #dcdcdc; /* Light grey from source */
+  color: #dcdcdc;
   margin: 0;
   line-height: 1.6;
 }
 
-/* Icon Styling */
 .reload-icon {
   color: #fff;
   width: clamp(3rem, 6vw, 4rem);
@@ -187,7 +209,7 @@ body {
 }
 
 /* =========================================
-   THE SHINY BUTTON (Ported Exactly)
+   SHINY BUTTON
    ========================================= */
 .shiny-btn {
   position: relative;
@@ -198,7 +220,7 @@ body {
   align-items: center;
   cursor: pointer;
   text-transform: uppercase;
-  background-color: #3c5b8e; /* The blue button color */
+  background-color: #3c5b8e;
   border: none;
   border-radius: clamp(0.4rem, 1vw, 0.8rem);
   color: #fff;
@@ -224,7 +246,6 @@ body {
   z-index: 20;
 }
 
-/* The Shine Effect */
 .shiny-btn:after {
   background: #fff;
   content: '';
@@ -244,7 +265,7 @@ body {
 }
 
 /* =========================================
-   ANIMATIONS (Ported)
+   ANIMATIONS
    ========================================= */
 @keyframes fadeIn {
   from {

@@ -1,5 +1,6 @@
 onlyBuiltDependencies:
   - '@mercuryworkshop/scramjet'
+  - '@petezah-games/scramjet'
   - bcrypt
   - better-sqlite3
   - bufferutil

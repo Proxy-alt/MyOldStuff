@@ -12,7 +12,26 @@ export default defineConfig({
   site: process.env.SITE_URL || 'http://localhost:3000',
   adapter: node({ mode: 'standalone' }),
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    server: {
+      proxy: {
+        '/bare': {
+          target: 'http://localhost:3001',
+          changeOrigin: true,
+          ws: true
+        },
+        '/wisp': {
+          target: 'http://localhost:3001',
+          changeOrigin: true,
+          ws: true
+        },
+        '/api/wisp-premium': {
+          target: 'http://localhost:3001',
+          changeOrigin: true,
+          ws: true
+        }
+      }
+    }
   },
   integrations: [
     {
@@ -34,6 +53,9 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg, avif, webp}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024 // 5 Megabytes
       },
+      workbox: {
+        globIgnores: ['scram/**']
+      },
       devOptions: {
         enabled: true,
         type: 'module'
@@ -42,17 +64,19 @@ export default defineConfig({
     react(),
     fontObfuscator({
       dev: true,
-      blocklist: ['localhost', process.env.SITE_URL?.replace(/^https?:\/\//, '') || ''],
+      //blocklist: ['localhost', process.env.SITE_URL?.replace(/^https?:\/\//, '') || ''],
       defaultStripAriaLabel: true,
       pairs: [
         {
           targets: ['.obfuscate', '.obfuscated-text', '[data-obfuscate]'],
           cssVariable: '--font-inter-obfuscated',
+          originalCssVariable: '--font-inter',
           stripAriaLabel: true
         },
         {
           targets: ['.obfuscate-poppins', '.obfuscated-text-poppins', '[data-obfuscate-poppins]', '.game-name'],
           cssVariable: '--font-poppins-obfuscated',
+          originalCssVariable: '--font-poppins',
           stripAriaLabel: true
         }
       ]
