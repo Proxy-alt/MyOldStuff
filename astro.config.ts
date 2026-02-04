@@ -10,7 +10,15 @@ import startFastifyServer from './src/server.ts';
 export default defineConfig({
   output: 'server',
   site: process.env.SITE_URL || 'http://localhost:3000',
-  adapter: node({ mode: 'standalone' }),
+  adapter: node({
+    mode: 'standalone'
+  }),
+  session: {
+    driver: 'memory',
+    options: {
+      ttl: 1000 * 60 * 60 * 24 * 7 // 1 week
+    }
+  },
   vite: {
     plugins: [tailwindcss()],
     server: {
@@ -89,7 +97,18 @@ export default defineConfig({
     staticImportMetaEnv: true,
     preserveScriptOrder: true,
     csp: {
-      directives: ["base-uri: 'none'", 'upgrade-insecure-requests', "font-src: 'self'", "worker-src: 'self'"],
+      directives: [
+        "default-src: 'self'",
+        "base-uri: 'none'",
+        'upgrade-insecure-requests',
+        "font-src: 'self'",
+        "worker-src: 'self'",
+        "img-src: 'self' data: https://raw.githubusercontent.com https://cdn.jsdelivr.net/gh/gn-math/covers@main/",
+        "connect-src: 'self' wss://localhost:3000 ws://localhost:3000 https://discord.com https://discord.gg https://api.github.com https://raw.githubusercontent.com https://cdn.jsdelivr.net https://www.googletagmanager.com"
+      ],
+      scriptDirective: {
+        resources: ["'self'", 'https://www.googletagmanager.com']
+      },
       styleDirective: {
         resources: ["'self'", "'https://cdn.jsdelivr.net/gh/gn-math/covers@main/'"]
       }

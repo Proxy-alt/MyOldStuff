@@ -54,6 +54,12 @@ const config: RouteConfig[] = [
     expiration: { maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 }
   },
   {
+    name: 'staticish-pages',
+    pattern: /\/(apps|games)\/?/,
+    strategy: CachingStrategy.StaleWhileRevalidate,
+    expiration: { maxEntries: 20, maxAgeSeconds: 7 * 24 * 60 * 60 }
+  },
+  {
     name: 'api-fresh-data',
     pattern: /\/api\/live-data/,
     strategy: CachingStrategy.PreferNetwork

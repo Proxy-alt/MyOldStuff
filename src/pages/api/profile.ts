@@ -3,7 +3,7 @@ import { getSession } from '../../lib/auth.ts';
 import db from '../../lib/db.ts';
 
 export const GET: APIRoute = async (context) => {
-  const user = getSession(context); // You must implement this helper based on your DB
+  const user = await getSession(context); // You must implement this helper based on your DB
 
   if (!user) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });

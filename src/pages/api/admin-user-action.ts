@@ -5,7 +5,7 @@ import db from '../../lib/db.ts';
 
 export const POST: APIRoute = async (context) => {
   try {
-    const user = requireAuth(context as any) as User;
+    const user = (await requireAuth(context as any)) as User;
     const body = await context.request.json();
     const { userId, action } = body;
     if (!userId || !['suspend', 'staff', 'delete', 'ban', 'promote_admin', 'demote_admin'].includes(action))

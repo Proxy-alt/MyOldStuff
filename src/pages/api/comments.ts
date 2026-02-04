@@ -34,7 +34,7 @@ export const GET: APIRoute = async ({ request }) => {
 
 export const POST: APIRoute = async (context) => {
   try {
-    const user = requireAuth(context as any);
+    const user = await requireAuth(context as any);
     const { type, targetId, content } = await context.request.json();
     if (!['changelog', 'feedback'].includes(type || '')) return new Response(JSON.stringify({ error: 'Invalid type' }), { status: 400 });
     if (!targetId || typeof targetId !== 'string') return new Response(JSON.stringify({ error: 'Invalid targetId' }), { status: 400 });
@@ -61,7 +61,7 @@ export const POST: APIRoute = async (context) => {
 
 export const DELETE: APIRoute = async (context) => {
   try {
-    const user = requireAuth(context as any) as any;
+    const user = (await requireAuth(context as any)) as any;
     const body = await context.request.json();
     const commentId = body.commentId;
     if (!commentId || typeof commentId !== 'string') return new Response(JSON.stringify({ error: 'Invalid commentId' }), { status: 400 });
@@ -80,7 +80,7 @@ export const DELETE: APIRoute = async (context) => {
 export const PUT: APIRoute = async (context) => {
   // Admin cleanup endpoint: expects admin session
   try {
-    const user = requireAuth(context as any) as any;
+    const user = (await requireAuth(context as any)) as any;
     if (!user.is_admin) return new Response(JSON.stringify({ error: 'Admin access required' }), { status: 403 });
     // perform cleanup similar to server version
     const allComments = db.prepare('SELECT id, content FROM comments').all() as any[];

@@ -3,8 +3,9 @@ import bcrypt from 'bcrypt';
 import { createSession } from '../../lib/auth.ts';
 import type { User } from '../../lib/db.ts';
 import db from '../../lib/db.ts';
+import { migrateLegacySession } from '../../lib/migration.ts';
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, ...context }) => {
   try {
     const { email, password } = await request.json();
 
@@ -19,19 +20,14 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       return new Response(JSON.stringify({ error: 'Email not verified' }), { status: 403 });
     }
 
-    // Create DB Session
-    const { sessionId, expiresAt } = createSession(user.id);
+    // Create Astro session
+    await createSession(context as any, user);
 
-    // Set Cookie
-    cookies.set('session_id', sessionId, {
-      path: '/',
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: import.meta.env.PROD,
-      expires: new Date(expiresAt)
-    });
+    // Attempt to migrate legacy session if one exists
+    const migrationResult = await migrateLegacySession(context as any, user, true);
+    const migrated = migrationResult.migrated;
 
-    return new Response(JSON.stringify({ message: 'Signed in' }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Signed in', migrated }), { status: 200 });
   } catch (e) {
     console.error(e);
     return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 });

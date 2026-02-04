@@ -23,7 +23,7 @@ export const GET: APIRoute = async ({ request }) => {
 
 export const POST: APIRoute = async (context) => {
   try {
-    const user = requireAuth(context as any);
+    const user = await requireAuth(context as any);
     const { type, targetId } = await context.request.json();
     if (!['changelog', 'feedback'].includes(type || '') || !targetId)
       return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400 });

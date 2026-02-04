@@ -23,7 +23,7 @@ export const GET: APIRoute = async () => {
 };
 
 export const POST: APIRoute = async (context) => {
-  const user = getSession(context);
+  const user = await getSession(context);
   if (!user) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   if (!isAdmin(user)) return new Response(JSON.stringify({ error: 'Admin access required' }), { status: 403 });
 

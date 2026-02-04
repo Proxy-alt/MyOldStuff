@@ -1,123 +1,70 @@
 import type { APIContext } from 'astro';
-import { randomUUID } from 'crypto';
-import type { User, UserSession } from './db.ts';
+import type { User } from './db.ts';
 import db from './db.ts';
 
-/** Session duration in milliseconds (1 week) */
-const SESSION_DURATION: number = 1000 * 60 * 60 * 24 * 7;
-
 /**
- * Create a new user session in the database.
- * @param {string} userId - The ID of the user to create a session for
- * @returns {{sessionId: string, expiresAt: number}} Object containing the session ID and expiration timestamp
- */
-export const createSession = (userId: string): { sessionId: string; expiresAt: number } => {
-  const sessionId: string = randomUUID();
-  const now: number = Date.now();
-  const expiresAt: number = now + SESSION_DURATION;
-
-  db.prepare(
-    `
-    INSERT INTO user_sessions (session_id, user_id, created_at, expires_at)
-    VALUES (?, ?, ?, ?)
-  `
-  ).run(sessionId, userId, now, expiresAt);
-
-  return { sessionId, expiresAt };
-};
-
-/**
- * Create a session and set an HTTP-only cookie on the Astro API context.
- * Use this from signin/signup handlers to issue cookie-backed sessions.
+ * Create a user session using Astro's built-in session management.
  * @param {APIContext} context - Astro API context object
- * @param {string} userId - The ID of the user to create a session for
- * @returns {{sessionId: string, expiresAt: number}} Object containing the session ID and expiration timestamp
+ * @param {User} user - The user object to store in the session
+ * @returns {Promise<void>}
  */
-export const createSessionAndSetCookie = (context: APIContext, userId: string): { sessionId: string; expiresAt: number } => {
-  const { sessionId, expiresAt } = createSession(userId);
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax' as const,
-    path: '/',
-    expires: new Date(expiresAt)
+export const createSession = async (context: APIContext, user: User): Promise<void> => {
+  const sessionUser: App.SessionData['user'] = {
+    id: user.id,
+    email: user.email,
+    username: user.username || 'User',
+    is_admin: user.is_admin,
+    avatar_url: user.avatar_url || undefined,
+    bio: user.bio || undefined,
+    created_at: user.created_at,
+    updated_at: user.updated_at
   };
-  context.cookies.set('session_id', sessionId, cookieOptions);
-  return { sessionId, expiresAt };
+
+  await context.session?.set('user', sessionUser);
 };
 
 /**
- * Retrieve a user session from the database by cookie ID.
- * Validates session expiration and cleans up expired sessions.
+ * Retrieve the current user session using Astro's built-in session management.
  * @param {APIContext} context - Astro API context object
- * @returns {User | null} The user object if a valid session exists, null otherwise
+ * @returns {Promise<User | null>} The user object if a valid session exists, null otherwise
  */
-export const getSession = (context: APIContext): User | null => {
-  const cookie = context.cookies.get('session_id');
-  if (!cookie?.value) return null;
+export const getSession = async (context: APIContext): Promise<User | null> => {
+  const sessionUser = await context.session?.get('user');
+  if (!sessionUser) return null;
 
-  const sessionId: string = cookie.value;
-
-  // Fetch session record
-  const session = db
-    .prepare(
-      `
-    SELECT * FROM user_sessions WHERE session_id = ?
-  `
-    )
-    .get(sessionId) as UserSession | undefined;
-
-  // Validate session exists
-  if (!session) return null;
-
-  // Check if session is expired
-  if (Date.now() > session.expires_at) {
-    // Clean up expired session
-    db.prepare('DELETE FROM user_sessions WHERE session_id = ?').run(sessionId);
-    return null;
-  }
-
-  // Fetch and return user
-  const user = db.prepare('SELECT * FROM users WHERE id = ?').get(session.user_id) as User | undefined;
+  // Fetch the full user record from database to ensure fresh data
+  const user = db.prepare('SELECT * FROM users WHERE id = ?').get(sessionUser.id) as User | undefined;
   return user || null;
 };
 
 /**
- * Clear a user session by removing it from the database and deleting the session cookie.
+ * Clear the user session using Astro's built-in session management.
  * @param {APIContext} context - Astro API context object
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export const clearSession = (context: APIContext): void => {
-  const cookie = context.cookies.get('session_id');
-  if (!cookie?.value) return;
-  const sessionId: string = cookie.value;
-  try {
-    db.prepare('DELETE FROM user_sessions WHERE session_id = ?').run(sessionId);
-  } catch (e) {
-    // Ignore errors during session cleanup
-  }
-  context.cookies.set('session_id', '', { path: '/', expires: new Date(0) });
+export const clearSession = async (context: APIContext): Promise<void> => {
+  await context.session?.delete('user');
 };
 
 /**
  * Attach a user session to the context or return the user.
  * For Astro's APIContext, returns the user object for handler use.
  * @param {APIContext} context - Astro API context object
- * @returns {User | null} The user object if a valid session exists, null otherwise
+ * @returns {Promise<User | null>} The user object if a valid session exists, null otherwise
  */
-export const attachSession = (context: APIContext): User | null => {
-  const user = getSession(context);
+export const attachSession = async (context: APIContext): Promise<User | null> => {
+  const user = await getSession(context);
   return user;
 };
 
 /**
  * Require a valid authenticated session. Throws a 401 response if not authenticated.
  * @param {APIContext} context - Astro API context object
- * @returns {User} The authenticated user object
+ * @returns {Promise<User>} The authenticated user object
  * @throws {Response} Response with 401 status if user is not authenticated
  */
-export const requireAuth = (context: APIContext): User => {
-  const user = getSession(context);
+export const requireAuth = async (context: APIContext): Promise<User> => {
+  const user = await getSession(context);
   if (!user) {
     const res = new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
     throw res;

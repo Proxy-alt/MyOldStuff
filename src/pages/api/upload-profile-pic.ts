@@ -5,7 +5,7 @@ import { getSession } from '../../lib/auth.ts';
 import db from '../../lib/db.ts';
 
 export const POST: APIRoute = async (context) => {
-  const user = getSession(context);
+  const user = await getSession(context);
   if (!user) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
 
   try {
