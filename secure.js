@@ -726,7 +726,9 @@ class DDoSShield {
         setTimeout(() => this.endAttackAlert(), 15000);
       }
 
-      if (interaction.commandName === 'security-stats') {
+     if (interaction.commandName === 'security-stats') {
+        await interaction.deferReply({ ephemeral: true });
+    
         const topAbusers = this.getTopAbusers(10);
         const blockRate = this.getRecentBlockRate();
         const cpuUsage = this.getCpuUsage().toFixed(1);
@@ -801,10 +803,12 @@ class DDoSShield {
           .setColor(statusColor)
           .setTimestamp();
 
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.editReply({ embeds: [embed] });
       }
 
       if (interaction.commandName === 'memory-status') {
+        await interaction.deferReply({ ephemeral: true });
+    
         const mem = process.memoryUsage();
         const heapUsed = (mem.heapUsed / 1024 / 1024 / 1024).toFixed(2);
         const heapTotal = (mem.heapTotal / 1024 / 1024 / 1024).toFixed(2);
@@ -829,7 +833,7 @@ class DDoSShield {
           .setColor(this.memoryStats.active ? '#ff0000' : '#00ff00')
           .setTimestamp();
 
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.editReply({ embeds: [embed] });
       }
 
       if (interaction.commandName === 'force-cleanup') {
