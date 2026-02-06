@@ -58,9 +58,9 @@ function formatAIResponse(response) {
       }
       if (detectedLang) {
         return `<div class="code-block">
-                  <div class="code-lang">${detectedLang.toUpperCase()}</div>
-                  <pre class="hljs"><code class="language-${detectedLang}">${highlightedCode}</code></pre>
-                </div>`;
+                 <div class="code-lang">${detectedLang.toUpperCase()}</div>
+                 <pre class="hljs"><code class="language-${detectedLang}">${highlightedCode}</code></pre>
+               </div>`;
       }
       return `<pre class="hljs"><code>${highlightedCode}</code></pre>`;
     }
@@ -75,6 +75,12 @@ function formatAIResponse(response) {
   let formattedResponse = marked.parse(response, { renderer });
   formattedResponse = formattedResponse.replace(/<p>\s*<\/p>/g, '').replace(/<br\s*\/?>$/, '');
   return formattedResponse;
+}
+
+function decodeUnicode(str) {
+  return str.replace(/\\u[\dA-F]{4}/gi, (match) => {
+    return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+  });
 }
 
 function sanitizeHTML(message) {
@@ -531,16 +537,17 @@ sendMsg.addEventListener('click', () => {
     .slice(-10)
     .map((msg) => `${msg.role}: ${msg.content}`)
     .join('\n');
-  fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`, {
+  fetch(`/api/ai/chat/${encodeURIComponent(prompt)}`, {
     method: 'GET',
     signal: abortController.signal
   })
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((data) => {
       isFetching = false;
       document.querySelectorAll('.thinking-indicator').forEach((indicator) => indicator.remove());
       NProgress.done();
-      let aiResponse = data || 'No response from PeteAI.';
+      let aiResponse = data?.message?.content || 'No response from PeteAI.';
+      aiResponse = decodeUnicode(aiResponse);
       if (prompt.includes('Jailbreak')) {
         aiResponse = 'AI Jailbroken by PeteZah.';
       } else if (prompt.includes('source code')) {
@@ -585,26 +592,23 @@ function regenerateResponse(regenPrompt, oldMessage, attempt = 0) {
     .slice(-10)
     .map((msg) => `${msg.role}: ${msg.content}`)
     .join('\n');
-  fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`, {
+  fetch(`/api/ai/chat/${encodeURIComponent(prompt)}`, {
     method: 'GET',
     signal: abortController.signal
   })
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((data) => {
       isFetching = false;
       document.querySelectorAll('.thinking-indicator').forEach((indicator) => indicator.remove());
       NProgress.done();
-      let aiResponse = data || 'No response from PeteAI.';
+      let aiResponse = data?.message?.content || 'No response from PeteAI.';
+      aiResponse = decodeUnicode(aiResponse);
       if (prompt.includes('Jailbreak')) {
         aiResponse = 'AI Jailbroken by PeteZah.';
       } else if (prompt.includes('source code')) {
         aiResponse = "I'm sorry, I cannot reveal my source code as per my programming.";
       } else if (prompt.includes('illegal')) {
         aiResponse = "I'm sorry, I cannot assist with anything illegal as per my programming.";
-      }
-      if (oldMessage && aiResponse.trim() === oldMessage.trim() && attempt < MAX_ATTEMPTS) {
-        regenerateResponse(regenPrompt, oldMessage, attempt + 1);
-        return;
       }
       const formattedResponse = formatAIResponse(aiResponse);
       const cleanedResponse = cleanupMessage(formattedResponse);
