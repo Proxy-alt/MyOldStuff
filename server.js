@@ -3,7 +3,6 @@ import { epoxyPath } from '@mercuryworkshop/epoxy-transport';
 import { scramjetPath } from '@mercuryworkshop/scramjet/path';
 import { server as wisp } from '@mercuryworkshop/wisp-js/server';
 import bareServerPkg from '@tomphttp/bare-server-node';
-import { init } from '@heyputer/puter.js/src/init.cjs';
 import bcrypt from 'bcrypt';
 import CleanCSS from 'clean-css';
 import compression from 'compression';
@@ -38,15 +37,9 @@ import db from './server/db.js';
 import setupExternalApis from './external-apis.js';
 import { blockIPKernel } from './xdp-integration.js';
 
-
 const { createBareServer } = bareServerPkg;
 
-
 dotenv.config();
-
-
-const puter = init(process.env.PUTER_AUTH_TOKEN);
-
 
 const envFile = `.env.${process.env.NODE_ENV || 'production'}`;
 if (fs.existsSync(envFile)) {
@@ -1873,26 +1866,6 @@ app.post('/api/change-password', async (req, res) => {
    res.status(500).json({ error: 'Internal server error' });
  }
 });
-
-
-app.get('/api/ai/chat/:prompt', async (req, res) => {
- try {
-   const prompt = decodeURIComponent(req.params.prompt);
-  
-   if (!prompt || prompt.trim().length === 0) {
-     return res.status(400).send('No prompt provided');
-   }
-
-
-   const response = await puter.ai.chat(prompt);
-  
-   res.status(200).send(response);
- } catch (error) {
-   console.error('AI Chat error:', error);
-   res.status(500).send('Error communicating with AI');
- }
-});
-
 
 app.use((req, res) => res.status(404).sendFile(join(__dirname, publicPath, '404.html')));
 
