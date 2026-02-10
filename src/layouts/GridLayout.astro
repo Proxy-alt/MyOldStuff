@@ -5,6 +5,10 @@ import collectionData from '../data/games.json';
 import AppLayout from '../layouts/AppLayout.astro';
 import '../styles/grid.css';
 
+/** CSP for images */
+Astro.csp.insertDirective(
+  "img-src 'self' https://cdn.jsdelivr.net/gh/gn-math/covers@main/ https://raw.githubusercontent.com/gn-math/covers/main/ https://raw.githubusercontent.com/PeteZah-Games/Games-lib/main/"
+);
 /**
  * TYPE DEFINITIONS BASED ON JSON SCHEMA
  */

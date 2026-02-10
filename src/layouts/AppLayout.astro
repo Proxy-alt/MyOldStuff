@@ -4,7 +4,7 @@ import Particles from '../components/Particles.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Widget from '../components/Widget.astro';
 import Settings from '../components/Settings.astro';
-
+import Ads from '../components/ads.astro';
 import '../styles/layout.css';
 
 /** Check if header slot is provided */
@@ -27,13 +27,23 @@ const {
   currency: _currency,
   reviews: _reviews,
   forumThread: _forumThread,
-  faq: _faq
+  faq: _faq,
+  hasAds = true
 } = Astro.props;
-import type { Props } from './Layout.astro';
+import type { Props as LayoutProps } from './Layout.astro';
+export interface Props extends LayoutProps {
+  /** Whether to include ads in the layout */
+  hasAds?: boolean;
+}
 ---
 
 <Layout {...Astro.props as Props}>
-  <Fragment slot="head"><slot name="head" /></Fragment>
+  <Fragment slot="head">
+    <slot name="head" />
+    {hasAds && <Ads type="adsense" location="head" />}
+    <Sidebar isInHead={true} />
+  </Fragment>
+  {hasAds && <Ads type="adsense" location="body" slot="sidebar" format="rectangle" style="margin: 1rem 0;" />}
   {
     hasHeader && (
       <header>

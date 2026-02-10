@@ -2,14 +2,19 @@
 import Logo from '../assets/images/svg/logo.svg';
 import { Font } from 'astro:assets';
 import '../styles/sidebar.css';
+const {isInHead = false} = Astro.props;
+interface Props {
+  /** Whether to include in head for preloading fonts */
+  isInHead?: boolean;
+}
 ---
-
-<Font cssVariable="--symbols-rounded" preload />
-
-<!-- Overlay -->
+{ isInHead && (
+  <Font cssVariable="--symbols-rounded" preload />
+)}
+{ !isInHead && (
+  <>
 <div id="sidebar-overlay" class="sidebar-overlay" tabindex="-1"></div>
 
-<!-- Floating Toggle Button -->
 <button id="floating-toggle" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
   <span class="material-symbols-rounded" aria-hidden="true">arrow_forward_ios</span>
 </button>
@@ -20,7 +25,6 @@ import '../styles/sidebar.css';
       <Logo aria-label="PeteZahGames Logo" height="40" width="40" />
     </a>
 
-    <!-- Internal close button -->
     <button class="toggler sidebar-toggler" aria-label="Close menu" aria-controls="sidebar" aria-expanded="true">
       <span class="material-symbols-rounded" aria-hidden="true">chevron_left</span>
     </button>
@@ -107,3 +111,5 @@ import '../styles/sidebar.css';
   initSidebar();
   document.addEventListener('astro:after-swap', initSidebar);
 </script>
+</>
+)}

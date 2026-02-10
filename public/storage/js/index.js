@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const t = document.createElement('style');
   t.innerHTML = '.typewrite > .wrap { border-right: 0.06em solid #a04cff}';
   document.body.appendChild(t);
-  
+
   if (navLinks.length > 0) {
     const initialSrc = mainFrame.getAttribute('src');
     if (initialSrc) {

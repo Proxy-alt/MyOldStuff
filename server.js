@@ -5,6 +5,7 @@ import { server as wisp } from '@mercuryworkshop/wisp-js/server';
 import bareServerPkg from '@tomphttp/bare-server-node';
 import bcrypt from 'bcrypt';
 import CleanCSS from 'clean-css';
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from 'crypto';
@@ -16,7 +17,6 @@ import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import session from 'express-session';
 import fs from 'fs';
 import { minify as minifyHTML } from 'html-minifier-terser';
-import compression from 'compression';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import fetch from 'node-fetch';
 import { createServer } from 'node:http';
@@ -649,22 +649,25 @@ function generateObfuscatedPath(originalPath) {
   if (!originalPath.startsWith('/storage/js/') && !originalPath.startsWith('/storage/css/')) {
     return originalPath;
   }
-  
+
   if (fileManifest.has(originalPath)) return fileManifest.get(originalPath);
-  
+
   if (fileManifest.size > MAX_FILE_MANIFEST) {
     const firstKey = fileManifest.keys().next().value;
     fileManifest.delete(firstKey);
   }
-  
-  const hash = createHash('sha256').update(originalPath + TOKEN_SECRET).digest('hex').slice(0, 16);
+
+  const hash = createHash('sha256')
+    .update(originalPath + TOKEN_SECRET)
+    .digest('hex')
+    .slice(0, 16);
   const ext = path.extname(originalPath);
   const dir = path.dirname(originalPath);
   const obfuscated = `${dir}/${hash}${ext}`;
-  
+
   fileManifest.set(originalPath, obfuscated);
   fileManifest.set(obfuscated, originalPath);
-  
+
   return obfuscated;
 }
 
@@ -678,7 +681,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   let filePath;
-  
+
   if (req.path === '/' || req.path === '') {
     filePath = path.join(__dirname, publicPath, 'index.html');
   } else if (req.path.endsWith('.html')) {
@@ -686,29 +689,29 @@ app.use((req, res, next) => {
   } else {
     return next();
   }
-  
+
   if (!fs.existsSync(filePath)) return next();
-  
+
   const stat = fs.statSync(filePath);
   const cacheKey = `${filePath}:${stat.mtimeMs}`;
-  
+
   if (processedHtmlCache.has(cacheKey)) {
     return res.type('html').send(processedHtmlCache.get(cacheKey));
   }
-  
+
   if (processedHtmlCache.size > MAX_HTML_CACHE) {
     const firstKey = processedHtmlCache.keys().next().value;
     processedHtmlCache.delete(firstKey);
   }
-  
+
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) return next();
-    
+
     const processed = data.replace(/\/?storage\/(js|css)\/([^"'\s<>]+\.(js|css))/g, (match, type, file) => {
       const fullPath = `/storage/${type}/${file}`;
       return generateObfuscatedPath(fullPath);
     });
-    
+
     processedHtmlCache.set(cacheKey, processed);
     res.type('html').send(processed);
   });

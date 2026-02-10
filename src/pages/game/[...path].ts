@@ -33,7 +33,7 @@ const SOURCE_MAPPINGS: SourceMapping[] = [
   {
     prefix: '', // Default (Catch-all for PeteZah-Games)
     cdnBase: 'https://cdn.jsdelivr.net/gh/PeteZah-Games/Games-lib/',
-    rawBase: 'https://raw.githubusercontent.com/PeteZah-Games/Games-lib/master/'
+    rawBase: 'https://raw.githubusercontent.com/PeteZah-Games/Games-lib/main/'
   }
 ];
 

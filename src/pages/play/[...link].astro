@@ -1,8 +1,8 @@
 ---
 import Layout from '../../layouts/AppLayout.astro';
 const raw = Astro.params.link ?? 'Unavailable';
-
 const loc = '/' + raw.replace(/^\/+/, '');
+Astro.csp.insertDirective(`frame-src ${loc}`);
 ---
 
 <Layout title={`Embed of ${loc.toString()}`} description="Embed game in iframe">
@@ -174,7 +174,7 @@ const loc = '/' + raw.replace(/^\/+/, '');
   <div class="container-iframe">
     <div class="iframe-container">
       <div class="iframe-wrapper" id="iframeWrapper">
-        <iframe sandbox="allow-scripts allow-pointer-lock allow-forms allow-same-origin allow-downloads" id="myIframe" src={loc.toString()}></iframe>
+        <iframe sandbox="allow-scripts allow-pointer-lock allow-forms allow-downloads" id="myIframe" src={loc.toString()}></iframe>
       </div>
     </div>
 

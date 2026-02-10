@@ -1,4 +1,3 @@
-
 const { ScramjetController: ScramjetController } = $scramjetLoadController(),
   scramjet = new ScramjetController({
     prefix: '/scramjet/',
@@ -50,7 +49,9 @@ let debounceTimer;
 function debounce(func, timeout = 300) {
   return (...args) => {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => { func.apply(this, args); }, timeout);
+    debounceTimer = setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
   };
 }
 
@@ -75,106 +76,130 @@ function getFaviconUrl(e) {
   }
 }
 function setupFrameInterception(frame) {
-    if (!frame || !frame.frame) return;
-    
-    const iframe = frame.frame;
-    
-    try {
-        const iframeWin = iframe.contentWindow;
-        const iframeDoc = iframe.contentDocument;
-        
-        if (!iframeDoc || !iframeWin) return;
-        
-        iframeDoc.addEventListener('mousedown', function() {
-            const menu = document.getElementById("menu-dropdown");
-            if (menu) menu.classList.remove("show");
-            
-            const suggestionList = document.getElementById("suggestion-list");
-            if (suggestionList) suggestionList.style.display = "none";
-            
-            const contextMenu = document.getElementById("tab-context-menu");
-            if (contextMenu) contextMenu.remove();
-            
-            const securePopup = document.getElementById("secure-popup");
-            if (securePopup) securePopup.remove();
-        });
-        
-        if (iframeWin.__interceptionSetup) return;
-        iframeWin.__interceptionSetup = true;
-        
-        const originalWindowOpen = iframeWin.open;
-        iframeWin.open = function(url, target, features) {
-            if (url) {
-                try {
-                    var fullUrl = new URL(url, iframeWin.location.href).href;
-                    window.postMessage({
-                        action: 'openInNewTab',
-                        url: fullUrl
-                    }, '*');
-                    return null;
-                } catch(e) {}
-            }
-            return originalWindowOpen.call(iframeWin, url, target, features);
-        };
-        
-        iframeDoc.addEventListener('click', function(e) {
-            var link = e.target.closest('a');
-            if (link && link.href) {
-                var target = link.target;
-                if (target === '_blank' || target === '_top' || target === '_parent') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.stopImmediatePropagation();
-                    window.postMessage({
-                        action: 'openInNewTab',
-                        url: link.href
-                    }, '*');
-                    return false;
-                }
-            }
-        }, true);
-        
-        iframeDoc.addEventListener('auxclick', function(e) {
-            if (e.button === 1) { // Middle mouse button
-                var link = e.target.closest('a');
-                if (link && link.href) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.postMessage({
-                        action: 'openInNewTab',
-                        url: link.href
-                    }, '*');
-                    return false;
-                }
-            }
-        }, true);
-        
-        iframeDoc.addEventListener('submit', function(e) {
-            var form = e.target;
-            if (form && (form.target === '_top' || form.target === '_parent' || form.target === '_blank')) {
-                e.preventDefault();
-                window.postMessage({
-                    action: 'openInNewTab',
-                    url: form.action || iframeWin.location.href
-                }, '*');
-            }
-        }, true);
-        
-        var observer = new MutationObserver(function(mutations) {
-            var allFrames = iframeDoc.querySelectorAll('iframe');
-            allFrames.forEach(function(childFrame) {
-                try { 
-                    setupFrameInterception({ frame: childFrame }); 
-                } catch(e) {}
-            });
-        });
-        
-        observer.observe(iframeDoc.body || iframeDoc.documentElement, {
-            childList: true,
-            subtree: true
-        });
-        
-    } catch (e) {}
+  if (!frame || !frame.frame) return;
+
+  const iframe = frame.frame;
+
+  try {
+    const iframeWin = iframe.contentWindow;
+    const iframeDoc = iframe.contentDocument;
+
+    if (!iframeDoc || !iframeWin) return;
+
+    iframeDoc.addEventListener('mousedown', function () {
+      const menu = document.getElementById('menu-dropdown');
+      if (menu) menu.classList.remove('show');
+
+      const suggestionList = document.getElementById('suggestion-list');
+      if (suggestionList) suggestionList.style.display = 'none';
+
+      const contextMenu = document.getElementById('tab-context-menu');
+      if (contextMenu) contextMenu.remove();
+
+      const securePopup = document.getElementById('secure-popup');
+      if (securePopup) securePopup.remove();
+    });
+
+    if (iframeWin.__interceptionSetup) return;
+    iframeWin.__interceptionSetup = true;
+
+    const originalWindowOpen = iframeWin.open;
+    iframeWin.open = function (url, target, features) {
+      if (url) {
+        try {
+          var fullUrl = new URL(url, iframeWin.location.href).href;
+          window.postMessage(
+            {
+              action: 'openInNewTab',
+              url: fullUrl
+            },
+            '*'
+          );
+          return null;
+        } catch (e) {}
+      }
+      return originalWindowOpen.call(iframeWin, url, target, features);
+    };
+
+    iframeDoc.addEventListener(
+      'click',
+      function (e) {
+        var link = e.target.closest('a');
+        if (link && link.href) {
+          var target = link.target;
+          if (target === '_blank' || target === '_top' || target === '_parent') {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            window.postMessage(
+              {
+                action: 'openInNewTab',
+                url: link.href
+              },
+              '*'
+            );
+            return false;
+          }
+        }
+      },
+      true
+    );
+
+    iframeDoc.addEventListener(
+      'auxclick',
+      function (e) {
+        if (e.button === 1) {
+          // Middle mouse button
+          var link = e.target.closest('a');
+          if (link && link.href) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.postMessage(
+              {
+                action: 'openInNewTab',
+                url: link.href
+              },
+              '*'
+            );
+            return false;
+          }
+        }
+      },
+      true
+    );
+
+    iframeDoc.addEventListener(
+      'submit',
+      function (e) {
+        var form = e.target;
+        if (form && (form.target === '_top' || form.target === '_parent' || form.target === '_blank')) {
+          e.preventDefault();
+          window.postMessage(
+            {
+              action: 'openInNewTab',
+              url: form.action || iframeWin.location.href
+            },
+            '*'
+          );
+        }
+      },
+      true
+    );
+
+    var observer = new MutationObserver(function (mutations) {
+      var allFrames = iframeDoc.querySelectorAll('iframe');
+      allFrames.forEach(function (childFrame) {
+        try {
+          setupFrameInterception({ frame: childFrame });
+        } catch (e) {}
+      });
+    });
+
+    observer.observe(iframeDoc.body || iframeDoc.documentElement, {
+      childList: true,
+      subtree: true
+    });
+  } catch (e) {}
 }
 function createTab(e = store.homepage) {
   const t = scramjet.createFrame(),
@@ -208,7 +233,7 @@ function createTab(e = store.homepage) {
           updateTabsUI(),
           updateAddressBar());
 
-          setTimeout(() => setupFrameInterception(t), 500);
+        setTimeout(() => setupFrameInterception(t), 500);
       }
     }),
     tabs.push(n),
@@ -531,25 +556,25 @@ function showSecurePopup() {
   };
   document.addEventListener('click', s);
 }
-window.open = (function(originalOpen) {
-    return function(url, target, features) {
-        if (url && typeof url === 'string' && url.includes("?webfix")) {
-            return originalOpen.call(window, url, target, features);
-        }
+window.open = (function (originalOpen) {
+  return function (url, target, features) {
+    if (url && typeof url === 'string' && url.includes('?webfix')) {
+      return originalOpen.call(window, url, target, features);
+    }
 
-        if (url && (target === '_blank' || target === '_top' || target === '_parent' || !target)) {
-            const realUrl = url; // You can add getDecodedUrl here if needed
+    if (url && (target === '_blank' || target === '_top' || target === '_parent' || !target)) {
+      const realUrl = url; // You can add getDecodedUrl here if needed
 
-            const newTab = createTab(realUrl);
-            const iframeContainer = document.getElementById("iframe-container");
-            if (iframeContainer) {
-                iframeContainer.appendChild(newTab.frame.frame);
-            }
-            switchTab(newTab.id);
-            return null;
-        }
-        return originalOpen.call(window, url, target, features);
-    };
+      const newTab = createTab(realUrl);
+      const iframeContainer = document.getElementById('iframe-container');
+      if (iframeContainer) {
+        iframeContainer.appendChild(newTab.frame.frame);
+      }
+      switchTab(newTab.id);
+      return null;
+    }
+    return originalOpen.call(window, url, target, features);
+  };
 })(window.open);
 class Search {
   constructor(e, t) {
@@ -696,7 +721,6 @@ class Search {
     for (
       this.currentSectionIndex = (this.currentSectionIndex - 1 + e.length) % e.length;
       0 === e[this.currentSectionIndex].searchResults.children.length;
-
     )
       this.currentSectionIndex = (this.currentSectionIndex - 1 + e.length) % e.length;
     const t = this.getCurrentSuggestionItems();
@@ -752,51 +776,53 @@ window.addEventListener('load', async () => {
   window.addEventListener('message', (event) => {
     const data = event.data;
     if (!data) return;
-    
+
     let url = data.url;
     let shouldOpenNewTab = false;
-    
-    if (data.action === 'openInNewTab' || 
-        data.action === 'openInTop' || 
-        data.action === 'openInParent' ||
-        data.action === 'newTab' ||
-        data.type === 'OPEN_IN_TOP' || 
-        data.type === 'openNewTab' ||
-        data.type === 'newTab' ||
-        data.type === 'open') {
-        shouldOpenNewTab = true;
+
+    if (
+      data.action === 'openInNewTab' ||
+      data.action === 'openInTop' ||
+      data.action === 'openInParent' ||
+      data.action === 'newTab' ||
+      data.type === 'OPEN_IN_TOP' ||
+      data.type === 'openNewTab' ||
+      data.type === 'newTab' ||
+      data.type === 'open'
+    ) {
+      shouldOpenNewTab = true;
     }
-    
+
     if (shouldOpenNewTab && url) {
-        let proxyUrl = url;
-        if (!url.startsWith('/scramjet/') && url.startsWith('http')) {
-            proxyUrl = scramjet.encodeUrl(url);
-        }
-        const newTab = createTab(proxyUrl);
-        const iframeContainer = document.getElementById("iframe-container");
-        if (iframeContainer) {
-            iframeContainer.appendChild(newTab.frame.frame);
-        }
-        switchTab(newTab.id);
+      let proxyUrl = url;
+      if (!url.startsWith('/scramjet/') && url.startsWith('http')) {
+        proxyUrl = scramjet.encodeUrl(url);
+      }
+      const newTab = createTab(proxyUrl);
+      const iframeContainer = document.getElementById('iframe-container');
+      if (iframeContainer) {
+        iframeContainer.appendChild(newTab.frame.frame);
+      }
+      switchTab(newTab.id);
     }
-    
+
     if (data.action === 'navigate' && url) {
-        const activeTab = getActiveTab();
-        if (activeTab) {
-            if (url.startsWith('/scramjet/')) {
-                activeTab.frame.frame.src = url;
-                activeTab.url = url;
-                updateTabsUI();
-                updateAddressBar();
-            } else if (url.startsWith('http')) {
-                activeTab.frame.go(url);
-            } else {
-                activeTab.frame.frame.src = url;
-                activeTab.url = url;
-                updateTabsUI();
-                updateAddressBar();
-            }
+      const activeTab = getActiveTab();
+      if (activeTab) {
+        if (url.startsWith('/scramjet/')) {
+          activeTab.frame.frame.src = url;
+          activeTab.url = url;
+          updateTabsUI();
+          updateAddressBar();
+        } else if (url.startsWith('http')) {
+          activeTab.frame.go(url);
+        } else {
+          activeTab.frame.frame.src = url;
+          activeTab.url = url;
+          updateTabsUI();
+          updateAddressBar();
         }
+      }
     }
-});
+  });
 });

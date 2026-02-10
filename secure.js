@@ -1,8 +1,8 @@
+import { exec } from 'child_process';
 import { EmbedBuilder } from 'discord.js';
 import dotenv from 'dotenv';
 import os from 'node:os';
 import process from 'process';
-import { exec } from 'child_process';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
@@ -122,14 +122,7 @@ class DDoSShield {
   }
 
   isKnownGoodBot(ua, ip) {
-    const goodBots = [
-      /googlebot/i,
-      /bingbot/i,
-      /slurp/i,
-      /duckduckbot/i,
-      /baiduspider/i,
-      /yandexbot/i
-    ];
+    const goodBots = [/googlebot/i, /bingbot/i, /slurp/i, /duckduckbot/i, /baiduspider/i, /yandexbot/i];
     return goodBots.some((pattern) => pattern.test(ua));
   }
 
@@ -198,7 +191,7 @@ class DDoSShield {
     const now = Date.now();
     const hits = this.challengeHits.get(ip) || [];
     hits.push(now);
-    
+
     let writeIdx = 0;
     for (let i = 0; i < hits.length; i++) {
       if (now - hits[i] < 30000) {
@@ -206,7 +199,7 @@ class DDoSShield {
       }
     }
     hits.length = Math.min(writeIdx, this.MAX_WS_HISTORY);
-    
+
     this.challengeHits.set(ip, hits);
   }
 
@@ -404,7 +397,7 @@ class DDoSShield {
         }
       }
       data.blocks.length = writeIdx;
-      
+
       if (data.blocks.length === 0) {
         this.ipBlocks.delete(ip);
       }
@@ -418,7 +411,7 @@ class DDoSShield {
         }
       }
       hits.length = writeIdx;
-      
+
       if (hits.length === 0) {
         this.challengeHits.delete(ip);
       }
@@ -445,8 +438,8 @@ class DDoSShield {
     if (this.ipBlocks.size > this.MAX_IP_TRACKING) {
       const entries = Array.from(this.ipBlocks.entries());
       entries.sort((a, b) => {
-        const aRecent = a[1].blocks.filter(t => now - t < 30000).length;
-        const bRecent = b[1].blocks.filter(t => now - t < 30000).length;
+        const aRecent = a[1].blocks.filter((t) => now - t < 30000).length;
+        const bRecent = b[1].blocks.filter((t) => now - t < 30000).length;
         return aRecent - bRecent;
       });
       const toRemove = entries.slice(0, Math.floor(this.MAX_IP_TRACKING * 0.3));
@@ -564,8 +557,11 @@ class DDoSShield {
     }
 
     if (heapUsed > MEMORY_THRESHOLD * 1.1 || rss > MEMORY_THRESHOLD * 1.1) {
-      this.sendLog(`💀 CRITICAL: Memory usage at ${(heapUsed / 1024 / 1024 / 1024).toFixed(2)}GB heap, ${(rss / 1024 / 1024 / 1024).toFixed(2)}GB RSS`, null);
-      
+      this.sendLog(
+        `💀 CRITICAL: Memory usage at ${(heapUsed / 1024 / 1024 / 1024).toFixed(2)}GB heap, ${(rss / 1024 / 1024 / 1024).toFixed(2)}GB RSS`,
+        null
+      );
+
       const uptime = process.uptime();
       if (rss > MEMORY_THRESHOLD && uptime > 1800) {
         this.sendLog('🔄 High RSS detected, restarting process...', null);
@@ -586,7 +582,7 @@ class DDoSShield {
       for (let i = 0; i < data.blocks.length; i++) {
         if (now - data.blocks[i] < PATTERN_DETECTION_WINDOW) recentCount++;
       }
-      
+
       if (recentCount < ATTACK_PATTERN_THRESHOLD) continue;
 
       const types = data.types;
@@ -654,12 +650,12 @@ class DDoSShield {
       const etOffset = -5;
       const now = new Date();
       const etHour = (now.getUTCHours() + etOffset + 24) % 24;
-      
+
       if (etHour === RESTART_HOUR_ET && now.getMinutes() === 0) {
         this.performGracefulRestart();
       }
     };
-    
+
     setInterval(checkRestart, 60000);
   }
 
@@ -844,10 +840,12 @@ class DDoSShield {
 
       if (interaction.commandName === 'kill-switch') {
         this.killSwitchActive = true;
-        
+
         const embed = new EmbedBuilder()
           .setTitle('🔴 KILL SWITCH ACTIVATED')
-          .setDescription('Server is now in emergency shutdown mode.\nAll incoming connections will be rejected.\nUse /startup to restore normal operations.')
+          .setDescription(
+            'Server is now in emergency shutdown mode.\nAll incoming connections will be rejected.\nUse /startup to restore normal operations.'
+          )
           .setColor('#ff0000')
           .setTimestamp();
 
@@ -864,14 +862,14 @@ class DDoSShield {
 
       if (interaction.commandName === 'startup') {
         if (!this.killSwitchActive) {
-          return interaction.reply({ 
-            content: '✅ Kill switch is not active. Server is running normally.', 
-            ephemeral: true 
+          return interaction.reply({
+            content: '✅ Kill switch is not active. Server is running normally.',
+            ephemeral: true
           });
         }
 
         this.killSwitchActive = false;
-        
+
         const embed = new EmbedBuilder()
           .setTitle('✅ Server Restored')
           .setDescription('Kill switch deactivated.\nServer is now accepting connections normally.')
@@ -881,7 +879,7 @@ class DDoSShield {
         await interaction.reply({ embeds: [embed] });
         await this.sendLog(null, embed);
       }
-      
+
       if (interaction.commandName === 'graceful-restart') {
         await interaction.reply({ content: '🔄 Initiating graceful restart...', ephemeral: false });
         await this.performGracefulRestart();
@@ -889,10 +887,12 @@ class DDoSShield {
 
       if (interaction.commandName === 'attack-mode') {
         this.forceAttackMode = true;
-  
+
         const embed = new EmbedBuilder()
           .setTitle('⚔️ Attack Mode Activated')
-          .setDescription('Server is now in forced attack mode.\nAll traffic will be treated as hostile.\nUse /attack-mode-off to restore normal operations.')
+          .setDescription(
+            'Server is now in forced attack mode.\nAll traffic will be treated as hostile.\nUse /attack-mode-off to restore normal operations.'
+          )
           .setColor('#ff0000')
           .setTimestamp();
 
@@ -902,14 +902,14 @@ class DDoSShield {
 
       if (interaction.commandName === 'attack-mode-off') {
         if (!this.forceAttackMode) {
-          return interaction.reply({ 
-            content: '✅ Attack mode is not active.', 
-            ephemeral: true 
+          return interaction.reply({
+            content: '✅ Attack mode is not active.',
+            ephemeral: true
           });
         }
 
         this.forceAttackMode = false;
-  
+
         const embed = new EmbedBuilder()
           .setTitle('✅ Attack Mode Deactivated')
           .setDescription('Server has returned to normal threat assessment mode.')
@@ -918,7 +918,7 @@ class DDoSShield {
 
         await interaction.reply({ embeds: [embed] });
         await this.sendLog(null, embed);
-        
+
         if (this.isUnderAttack) {
           await this.endAttackAlert();
         }

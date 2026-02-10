@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import Analytics from '../components/Analytics.astro';
 import SEO from '../components/seo.astro';
 import SEOjson from '../components/SEOjson.astro';
+import type { Props as SEOjsonProps } from '../components/SEOjson.astro';
 import type { Review, ForumPost } from '../components/SEOjson.astro';
 import '../styles/global.css';
 
@@ -28,45 +29,10 @@ const {
  * Props interface for the Layout component.
  * Defines all supported properties for SEO, game/product metadata, and discussion/article content.
  */
-export interface Props {
-  /** Page title for SEO */
-  title: string;
-  /** Page description for meta tags */
-  description?: string;
-  /** Publication date (ISO format) */
-  publishDate?: string;
-  /** Last modification date (ISO format) */
-  modifiedDate?: string;
-  /** Content type: website, game, article, or discussion */
-  type?: 'website' | 'game' | 'article' | 'discussion';
-  /** Author name */
-  author?: string;
-
-  // Game / Product Specifics
-  /** Aggregate rating value (e.g., 4.5) */
-  ratingValue?: number;
-  /** Total number of rating votes */
-  ratingCount?: number;
-  /** Game genres (e.g., "Action", "Puzzle") */
-  genre?: string[];
-  /** Supported platforms (e.g., "Web Browser") */
-  platform?: string[];
-  /** Price as string */
-  price?: string;
-  /** Currency code (e.g., "USD") */
-  currency?: string;
-
-  // Reviews (Individual user reviews)
-  /** Array of user reviews */
-  reviews?: Review[];
-
-  // Discussion Forum Specifics
-  /** Main post of a forum thread */
-  forumThread?: ForumPost;
-
-  // FAQ
-  /** Frequently asked questions */
-  faq?: { question: string; answer: string }[];
+export interface Props extends SEOjsonProps {
+  /**
+   * Empty for now
+   */
 }
 ---
 
@@ -118,7 +84,6 @@ export interface Props {
 
     <Analytics location="body" />
     <slot />
-
     <script>
       const progressBar = document.getElementById('astro-progress-bar') as HTMLProgressElement;
       let progress = 0;
