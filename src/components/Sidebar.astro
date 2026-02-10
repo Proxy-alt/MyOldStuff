@@ -1,109 +1,201 @@
 ---
+// Sidebar.astro
 import Logo from '../assets/images/svg/logo.svg';
-import { Font } from 'astro:assets';
 import '../styles/sidebar.css';
+
+// 1. Types: Strict typing for stability
+type NavItem = {
+  href: string;
+  label: string;
+  icon: string;
+};
+
+type NavGroup = {
+  id: 'primary' | 'secondary';
+  items: NavItem[];
+};
+
+// 2. Data: Centralized configuration
+const navGroups: NavGroup[] = [
+  {
+    id: 'primary',
+    items: [
+      { href: '/', label: 'Home', icon: 'home' },
+      { href: '/games', label: 'Games', icon: 'sports_esports' },
+      { href: '/apps', label: 'Apps', icon: 'apps' },
+      { href: '/proxy', label: 'Proxy', icon: 'globe_book' }
+    ]
+  },
+  {
+    id: 'secondary',
+    items: [
+      { href: '/profile', label: 'Profile', icon: 'account_circle' },
+      { href: '/settings', label: 'Settings', icon: 'settings' }
+    ]
+  }
+];
+
+// 3. Logic: Centralized active state calculation
+const currentPath = Astro.url.pathname;
+
+/**
+ * Determines if a link is active.
+ * Handles exact match for root, partial match for sub-paths.
+ */
+function getLinkState(href: string) {
+  const isActive = href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+
+  return {
+    isActive,
+    ariaCurrent: isActive ? 'page' : undefined
+  } as const;
+}
 ---
 
-<Font cssVariable="--symbols-rounded" preload />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 
-<!-- Overlay -->
-<div id="sidebar-overlay" class="sidebar-overlay" tabindex="-1"></div>
+<div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
 
-<!-- Floating Toggle Button -->
-<button id="floating-toggle" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+<button id="floating-toggle" class="floating-toggle" aria-label="Open main navigation" aria-controls="sidebar-content" aria-expanded="false">
   <span class="material-symbols-rounded" aria-hidden="true">arrow_forward_ios</span>
 </button>
 
-<aside id="sidebar" class="sidebar" aria-label="Main navigation">
+<aside id="sidebar-content" class="sidebar" aria-label="Main Navigation Sidebar">
   <header class="sidebar-header">
-    <a href="/" class="header-logo">
-      <Logo aria-label="PeteZahGames Logo" height="40" width="40" />
+    <a href="/" class="header-logo" aria-label="PeteZahGames Home">
+      <Logo aria-hidden="true" height="40" width="40" />
     </a>
 
-    <!-- Internal close button -->
-    <button class="toggler sidebar-toggler" aria-label="Close menu" aria-controls="sidebar" aria-expanded="true">
+    <button id="internal-toggle" class="toggler sidebar-toggler" aria-label="Close navigation" aria-controls="sidebar-content" aria-expanded="true">
       <span class="material-symbols-rounded" aria-hidden="true">chevron_left</span>
     </button>
   </header>
 
-  <nav class="sidebar-nav">
-    <ul class="nav-list primary-nav">
-      <li class="nav-item">
-        <a href="/" class="nav-link">
-          <span class="nav-icon material-symbols-rounded" aria-hidden="true">home</span>
-          <span class="nav-label">Home</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="/games" class="nav-link">
-          <span class="nav-icon material-symbols-rounded" aria-hidden="true">sports_esports</span>
-          <span class="nav-label">Games</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="/apps" class="nav-link">
-          <span class="nav-icon material-symbols-rounded" aria-hidden="true">apps</span>
-          <span class="nav-label">Apps</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="/proxy" class="nav-link">
-          <span class="nav-icon material-symbols-rounded" aria-hidden="true">globe_book</span>
-          <span class="nav-label">Proxy</span>
-        </a>
-      </li>
-    </ul>
-
-    <ul class="nav-list secondary-nav">
-      <li class="nav-item">
-        <a href="/profile" class="nav-link">
-          <span class="nav-icon material-symbols-rounded" aria-hidden="true">account_circle</span>
-          <span class="nav-label">Profile</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="/settings" class="nav-link">
-          <span class="nav-icon material-symbols-rounded" aria-hidden="true">settings</span>
-          <span class="nav-label">Settings</span>
-        </a>
-      </li>
-    </ul>
+  <nav class="sidebar-nav" aria-label="Site Links">
+    {
+      navGroups.map((group) => (
+        <ul class={`nav-list ${group.id}-nav`}>
+          {group.items.map((item) => {
+            const { isActive, ariaCurrent } = getLinkState(item.href);
+            return (
+              <li class="nav-item">
+                <a href={item.href} class:list={['nav-link', { active: isActive }]} aria-current={ariaCurrent}>
+                  <span class="nav-icon material-symbols-rounded" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  <span class="nav-label">{item.label}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      ))
+    }
   </nav>
 </aside>
 
 <script>
-  function initSidebar() {
-    const body = document.body;
-    const floatBtn = document.getElementById('floating-toggle') as HTMLElement;
-    const overlay = document.getElementById('sidebar-overlay') as HTMLElement;
-    const internalToggler = document.querySelector('.sidebar-toggler') as HTMLElement;
+  /**
+   * SidebarController
+   * Handles visibility, aria-attributes, and focus management.
+   * Uses the 'inert' attribute to completely remove the sidebar
+   * from the keyboard flow when hidden on mobile.
+   */
+  class SidebarController {
+    private sidebar: HTMLElement;
+    private overlay: HTMLElement;
+    private toggleButtons: NodeListOf<HTMLButtonElement>;
+    private previousActiveElement: HTMLElement | null = null;
+    private readonly STORAGE_KEY = 'sidebar-state';
+    private mediaQuery = window.matchMedia('(min-width: 768px)'); // Adjust breakpoint as needed
 
-    const toggleSidebar = (forceOpen: boolean) => {
-      const isOpen = forceOpen ?? !body.classList.contains('sidebar-open');
-      body.classList.toggle('sidebar-open', isOpen);
+    constructor() {
+      // Non-null assertions used as we control the HTML structure
+      this.sidebar = document.getElementById('sidebar-content')!;
+      this.overlay = document.getElementById('sidebar-overlay')!;
+      this.toggleButtons = document.querySelectorAll('[aria-controls="sidebar-content"]');
 
-      floatBtn.setAttribute('aria-expanded', isOpen.toString());
-      internalToggler.setAttribute('aria-expanded', isOpen.toString());
+      this.init();
+    }
 
-      localStorage.setItem('sidebar-state', isOpen ? 'open' : 'closed');
-    };
+    private init() {
+      // 1. Initial State Load
+      const savedState = localStorage.getItem(this.STORAGE_KEY);
+      const shouldBeOpen = savedState === 'open' || this.mediaQuery.matches; // Default open on desktop
+      this.setSidebarState(shouldBeOpen, false);
 
-    floatBtn?.addEventListener('click', () => toggleSidebar(true));
-    overlay?.addEventListener('click', () => toggleSidebar(false));
-    internalToggler?.addEventListener('click', () => toggleSidebar(false));
+      // 2. Event Listeners
+      this.toggleButtons.forEach((btn) => {
+        btn.addEventListener('click', () => this.toggle());
+      });
 
-    const savedState = localStorage.getItem('sidebar-state');
-    if (savedState === 'open') {
-      body.classList.add('sidebar-open');
-      floatBtn.setAttribute('aria-expanded', true.toString());
-      internalToggler.setAttribute('aria-expanded', true.toString());
+      this.overlay.addEventListener('click', () => this.setSidebarState(false));
+
+      // 3. A11y: Handle Escape Key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen && !this.mediaQuery.matches) {
+          this.setSidebarState(false);
+        }
+      });
+
+      // 4. Handle Resize (Reset inert state if switching to desktop)
+      this.mediaQuery.addEventListener('change', (e) => {
+        if (e.matches) {
+          this.sidebar.removeAttribute('inert');
+        } else if (!this.isOpen) {
+          this.sidebar.setAttribute('inert', '');
+        }
+      });
+    }
+
+    private get isOpen() {
+      return document.body.classList.contains('sidebar-open');
+    }
+
+    private toggle() {
+      this.setSidebarState(!this.isOpen);
+    }
+
+    private setSidebarState(isOpen: boolean, animate = true) {
+      if (isOpen) {
+        this.previousActiveElement = document.activeElement as HTMLElement;
+      }
+
+      // Toggle Class
+      document.body.classList.toggle('sidebar-open', isOpen);
+      if (!animate) document.body.classList.add('no-transition');
+
+      // Update ARIA
+      this.toggleButtons.forEach((btn) => btn.setAttribute('aria-expanded', String(isOpen)));
+
+      // Manage Inert (Critical for A11y)
+      // On mobile, if closed, sidebar should be inert (unfocusable)
+      if (!this.mediaQuery.matches) {
+        if (isOpen) {
+          this.sidebar.removeAttribute('inert');
+          // Optional: Move focus to close button or first link
+          if (animate) this.sidebar.querySelector<HTMLElement>('.sidebar-toggler')?.focus();
+        } else {
+          this.sidebar.setAttribute('inert', '');
+          // Return focus to trigger if we just closed it via user interaction
+          if (this.previousActiveElement && animate) {
+            this.previousActiveElement.focus();
+          }
+        }
+      } else {
+        // Always remove inert on desktop
+        this.sidebar.removeAttribute('inert');
+      }
+
+      // Cleanup animation suppression
+      if (!animate) {
+        requestAnimationFrame(() => document.body.classList.remove('no-transition'));
+      }
+
+      localStorage.setItem(this.STORAGE_KEY, isOpen ? 'open' : 'closed');
     }
   }
 
-  initSidebar();
-  document.addEventListener('astro:after-swap', initSidebar);
+  // Bind to Astro Page Load for View Transitions support
+  document.addEventListener('astro:page-load', () => new SidebarController());
 </script>

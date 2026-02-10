@@ -3,7 +3,6 @@ import Layout from './Layout.astro';
 import Particles from '../components/Particles.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Widget from '../components/Widget.astro';
-import Settings from '../components/Settings.astro';
 
 import '../styles/layout.css';
 
@@ -47,16 +46,11 @@ import type { Props } from './Layout.astro';
       body {
         overflow: hidden !important;
         user-select: none !important;
-        -webkit-user-select: none !important;
       }
-
-      /* 2. "Gradient out" and obscure all other content */
       body > *:not(noscript) {
         filter: blur(8px) brightness(0.4) !important;
         pointer-events: none !important;
-        transition: none !important;
       }
-
       /* 3. The Overlay Container */
       .noscript-overlay {
         position: fixed;
@@ -129,5 +123,10 @@ import type { Props } from './Layout.astro';
       </footer>
     )
   }
-  <Settings />
+  <script>
+    import Settings from '../components/Settings.ts';
+    document.addEventListener('DOMContentLoaded', () => {
+      Settings();
+    });
+  </script>
 </Layout>

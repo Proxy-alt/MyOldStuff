@@ -10,6 +10,10 @@ import startFastifyServer from './src/server.ts';
 export default defineConfig({
   output: 'server',
   site: process.env.SITE_URL || 'http://localhost:3000',
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport'
+  },
   adapter: node({
     mode: 'standalone'
   }),

@@ -1,30 +1,17 @@
 ---
 import { Picture } from 'astro:assets';
-import { Font } from 'astro:assets';
 import collectionData from '../data/games.json';
 import AppLayout from '../layouts/AppLayout.astro';
-import '../styles/grid.css';
 
-/**
- * TYPE DEFINITIONS BASED ON JSON SCHEMA
- */
-interface CollectionItem {
-  id?: string;
+// --- TYPE DEFINITIONS ---
+interface RawCollectionItem {
   label: string;
   url: string;
-  igdbId?: number | null;
-  // Handle 'oneOf' img vs imageUrl
-  imageUrl?: string;
   img?: string;
+  imageUrl?: string;
   categories?: string[];
-  featured?: boolean;
-  isHighlighted?: boolean;
-  // Visual overrides
-  width?: string | number;
-  height?: string | number;
-  objectFit?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
-  aspectRatio?: string;
-  backgroundColor?: string;
+  width?: number | string;
+  height?: number | string;
   style?: Record<string, string>;
 }
 
@@ -34,294 +21,661 @@ interface Props {
   collection?: 'games' | 'apps';
 }
 
-const { title = 'Collection', description = 'Browse our collection', collection = 'games' } = Astro.props;
+const { title = 'PeteZah | Games', description = 'Pete Zah, game on', collection = 'games' } = Astro.props;
 
-// Safe casting assuming JSON validates against schema
-const items = (collectionData[collection] || []) as CollectionItem[];
+// --- ASSET RESOLUTION ---
+const allAssets = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.{png,jpg,jpeg,webp,avif,svg}', { eager: true });
 
-/**
- * IMAGE IMPORTS
- * Supports raster (PNG, JPG, WebP, AVIF) and vector (SVG) formats
- */
-const rasterImports = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.{png,jpg,jpeg,webp,avif}', { eager: true });
-const svgImports = import.meta.glob<{ default: any }>('../assets/images/**/*.svg', { eager: true });
-
-const rasterMap = new Map<string, ImageMetadata>();
-const svgMap = new Map<string, any>();
-
-for (const [path, module] of Object.entries(rasterImports)) {
+const assetMap = new Map<string, ImageMetadata>();
+for (const [path, module] of Object.entries(allAssets)) {
   const fileName = path.split('/').pop();
-  if (fileName) rasterMap.set(fileName, module.default);
+  if (fileName) assetMap.set(fileName, module.default);
 }
 
-for (const [path, module] of Object.entries(svgImports)) {
-  const fileName = path.split('/').pop();
-  if (fileName) svgMap.set(fileName, module.default);
-}
+// --- DATA PROCESSING ---
+const rawItems = (collectionData[collection] || []) as RawCollectionItem[];
 
-/**
- * HELPER: Parse custom background syntax into valid CSS
- */
-const parseBackground = (bg?: string): string | undefined => {
-  if (!bg) return undefined;
+// Extract unique categories for the filter bar
+const allCategories = ['All', ...new Set(rawItems.flatMap((i) => i.categories || []).map((c) => c.toLowerCase()))];
+// Limit to the ones in your design + generic ones if needed
+const displayCategories = ['All', 'Action', 'Racing', 'Strategy', 'Sports', 'Skill', 'Shooting', '2 Player', 'Io'];
 
-  // Format: "COLORS | DIRECTION"
-  const [colorDef, directionDef] = bg.split('|').map((s) => s.trim());
-  const direction = directionDef || 'to bottom right';
+const processedItems = rawItems.map((item) => {
+  const rawImg = item.img || item.imageUrl || '';
+  const fileName = rawImg.split('/').pop() || '';
+  const isExternal = rawImg.startsWith('http');
+  const localAsset = !isExternal ? assetMap.get(fileName) : undefined;
 
-  const raw = colorDef;
-  const upper = raw.toUpperCase();
+  const href = item.url.startsWith('http') ? `/play/embed/${encodeURIComponent(item.url)}` : `/play/${item.url.replace(/^\/+/, '')}`;
 
-  // Handle RGB Gradient: "RGB: 4 4 5 > 24 57 73"
-  if (upper.startsWith('RGB:') && upper.includes('>')) {
-    const colors = raw
-      .slice(4)
-      .split('>')
-      .map((part) => {
-        const numbers = part.trim().split(/\s+/).join(',');
-        return `rgb(${numbers})`;
-      });
-    return `linear-gradient(${direction}, ${colors[0]}, ${colors[1]})`;
-  }
-
-  // Handle HEX Gradient: "HEX: #040405 > #183949"
-  if (upper.startsWith('HEX:') && upper.includes('>')) {
-    const colors = raw
-      .slice(4)
-      .split('>')
-      .map((c) => c.trim());
-    return `linear-gradient(${direction}, ${colors[0]}, ${colors[1]})`;
-  }
-
-  // Fallback: return raw string
-  return bg;
-};
+  return {
+    ...item,
+    href,
+    isExternal,
+    localAsset,
+    // Join all categories for easier filtering in JS
+    categoryString: (item.categories || []).join(' ').toLowerCase()
+  };
+});
 ---
 
 <AppLayout title={title} description={description}>
-  <Fragment slot="head">
-    <Font cssVariable="--font-poppins" />
-    <Font cssVariable="--font-poppins-obfuscated" />
-  </Fragment>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" slot="head" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" slot="head" />
 
-  <div class="bg-effects"></div>
+  <div class="god-rays" aria-hidden="true"></div>
 
-  <Fragment slot="header">
-    <button class="random-btn" id="randomItemBtn">
-      Random {collection.slice(0, -1).replace(/^\w/, (c) => c.toUpperCase())}
-    </button>
+  <button class="randomGameOpensBtn" id="randomBtn" aria-label="Play Random Game">
+    <i class="fas fa-dice" aria-hidden="true"></i>
+    Random Game
+  </button>
 
-    <search>
-      <input
-        list="datalist-items"
-        type="text"
-        id="search-input"
-        placeholder={`Search for YOUR Favorite ${collection.slice(0, -1)}...`}
-        autocomplete="on"
-        aria-label="On this page"
-      />
-    </search>
+  <button class="add-game-btn" id="addGameBtn" aria-label="Add Custom Game">
+    <i class="fas fa-plus" aria-hidden="true"></i>
+    Add Game
+  </button>
 
-    <datalist id="datalist-items">
-      {items.map((item) => <option value={item.label} />)}
+  <search class="search-container">
+    <input type="text" id="search-games" list="game-list" placeholder="Search games..." autocomplete="off" />
+    <datalist id="game-list">
+      {processedItems.map((item) => <option value={item.label} />)}
     </datalist>
+  </search>
 
-    <div class="filter-container"></div>
-  </Fragment>
-
-  <section class="collection-container" id="imageContainer">
+  <nav class="category-container" aria-label="Game Categories">
     {
-      items.map((item) => {
-        // 1. Normalize Image Source (Schema allows 'img' or 'imageUrl')
-        const rawImg = item.img || item.imageUrl || '';
-        const fileName = rawImg ? rawImg.split('/').pop() : '';
-        const isHttpUrl = rawImg && (rawImg.startsWith('http://') || rawImg.startsWith('https://') || rawImg.includes('/games'));
+      displayCategories.map((cat, index) => (
+        <button class={`category-btn ${index === 0 ? 'active' : ''}`} data-category={cat === 'All' ? '' : cat.toLowerCase()}>
+          {cat}
+        </button>
+      ))
+    }
+  </nav>
 
-        // 2. Resolve Categories
-        const mainCategory = item.categories?.[0]?.toLowerCase() || '';
-
-        // 3. Resolve Styling
-        const bgParsed = parseBackground(item.backgroundColor);
-
-        // Merge arbitrary 'style' object with the parsed background
-        const cardStyles = {
-          ...(item.style || {}),
-          ...(bgParsed ? { background: bgParsed } : {})
-        };
-
-        // 4. Resolve Dimensions & Object Fit
-        // Default to 100% dimensions via CSS if not specified
-        const cssWidth = item.width ? (typeof item.width === 'number' ? `${item.width}px` : item.width) : '100%';
-        const cssHeight = item.height ? (typeof item.height === 'number' ? `${item.height}px` : item.height) : '100%';
-        const objectFit = item.objectFit || 'cover';
-        const aspectRatio = item.aspectRatio || 'auto';
-
-        // 5. Check for local assets
-        const localRaster = fileName ? rasterMap.get(fileName) : undefined;
-        const SvgComponent = fileName ? svgMap.get(fileName) : undefined;
-
-        // Common styles applied to the image/SVG element
-        const imgStyle = {
-          width: cssWidth,
-          height: cssHeight,
-          objectFit: objectFit,
-          aspectRatio: aspectRatio
-        };
-        // Build final link target
-        let href;
-
-        // Case 1: External HTTP URL → use embed route
-        if (item.url.startsWith('http://') || item.url.startsWith('https://')) {
-          const encoded = encodeURIComponent(item.url);
-          href = `/play/embed/${encoded}`;
-        } else {
-          // Case 2: Internal path → normalize and prepend /play
-          const clean = item.url.replace(/^\/+/, ''); // remove leading slashes
-          href = `/play/${clean}`;
-        }
+  <section class="game-container" id="imageContainer">
+    {
+      processedItems.map((item, index) => {
+        // PERF: Eager load top 8 items
+        const isPriority = index < 8;
+        const loading = isPriority ? 'eager' : 'lazy';
 
         return (
-          <figure class="collection-card" data-label={item.label} data-category={mainCategory} data-url={item.url}>
-            <a href={href} aria-label={`Open ${item.label}`} style={cardStyles}>
-              {/* SVG Component (Local) */}
-              {SvgComponent && (
-                <div
-                  class="svg-wrapper"
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                    height: '100%'
-                  }}
-                >
-                  <SvgComponent
-                    width={typeof item.width === 'number' ? item.width : 200}
-                    height={typeof item.height === 'number' ? item.height : 170}
-                    style={imgStyle}
-                    aria-label={item.label}
-                  />
-                </div>
-              )}
+          <figure class="image-item" data-label={item.label.toLowerCase()} data-categories={item.categoryString}>
+            {/* Favorite Badge (Visual only based on reference) */}
+            <div class="favorite-badge">
+              <i class="fas fa-star" /> Favorite
+            </div>
 
-              {/* Local Raster Image */}
-              {localRaster && !SvgComponent && (
+            {/* Options Menu Trigger */}
+            <div class="game-options" role="button" aria-label="Game Options">
+              <i class="fas fa-cog" />
+            </div>
+
+            <a href={item.href} aria-label={`Play ${item.label}`}>
+              {item.localAsset ? (
                 <Picture
-                  src={localRaster}
-                  width={200}
-                  height={170}
-                  alt={item.label}
-                  loading="lazy"
-                  fetchpriority="auto"
-                  decoding="async"
-                  data-auto-detect
-                  formats={['avif', 'webp', 'png']}
-                  style={imgStyle}
+                  src={item.localAsset}
+                  widths={[200, 400]}
+                  sizes="(max-width: 600px) 100vw, 200px"
+                  alt=""
+                  loading={loading}
+                  fetchpriority={isPriority ? 'high' : 'auto'}
+                  formats={['avif', 'webp']}
                 />
-              )}
-
-              {/* Remote Image */}
-              {!localRaster && !SvgComponent && isHttpUrl && (
-                <Picture
-                  src={rawImg}
-                  width={200}
-                  height={170}
-                  alt={item.label}
-                  loading="lazy"
-                  fetchpriority="auto"
-                  decoding="async"
-                  data-auto-detect
-                  formats={['avif', 'webp', 'png']}
-                  style={imgStyle}
-                />
-              )}
-
-              {/* Fallback: No Image */}
-              {!localRaster && !SvgComponent && !isHttpUrl && (
-                <div style="width: 100%; height: 100%; min-height: 170px; background: #333; display: flex; align-items: center; justify-content: center;">
-                  <span>No Image</span>
-                </div>
+              ) : (
+                <img src={item.img || item.imageUrl} alt="" loading={loading} />
               )}
             </a>
 
-            <figcaption class="label game-name" style="font-family: var(--font-poppins);">
-              {item.label}
-            </figcaption>
+            <figcaption class="label">{item.label}</figcaption>
           </figure>
         );
       })
     }
   </section>
 
-  <style>
-    .collection-card a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      border-radius: inherit;
+  <div id="addGamePopup" class="popup-overlay" aria-hidden="true">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h2>Add Custom Game</h2>
+        <button class="popup-close">&times;</button>
+      </div>
+      <form id="addGameForm" onsubmit="event.preventDefault();">
+        <div class="form-group">
+          <label for="gameTitle">Game Title</label>
+          <input type="text" id="gameTitle" required placeholder="Enter game name" />
+        </div>
+        <div class="form-group">
+          <label for="gameUrl">Game URL</label>
+          <input type="url" id="gameUrl" required placeholder="https://example.com/game" />
+        </div>
+        <div class="form-group">
+          <label for="gameImage">Game Image</label>
+          <input type="file" id="gameImage" required accept="image/*" />
+        </div>
+        <button type="submit" class="submit-btn">Add Game</button>
+      </form>
+    </div>
+  </div>
+</AppLayout>
+
+<style is:global>
+  /* --- GLOBAL STYLES ---
+    Exact port of provided CSS with font fixes
+  */
+
+  :root {
+    --primary-gradient: linear-gradient(90deg, #2e6b4f, #3e8c65); /* Fallback */
+    --hover-gradient: linear-gradient(90deg, #1f4a3a, #2e6b4f);
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #0a1d37;
+    color: #fff;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* GOD RAYS */
+  .god-rays {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 550px;
+    --stripes: repeating-linear-gradient(
+      100deg,
+      rgba(20, 40, 60, 0.8) 0%,
+      rgba(20, 40, 60, 0.8) 7%,
+      transparent 10%,
+      transparent 12%,
+      rgba(20, 40, 60, 0.8) 16%
+    );
+    --rays: repeating-linear-gradient(
+      100deg,
+      rgba(30, 50, 90, 0.9) 10%,
+      rgba(20, 40, 80, 0.9) 15%,
+      rgba(30, 50, 90, 0.9) 20%,
+      rgba(20, 40, 80, 0.9) 25%,
+      rgba(30, 50, 90, 0.9) 30%
+    );
+    background-image: var(--stripes), var(--rays);
+    background-size: 300%, 200%;
+    background-position:
+      50% 50%,
+      50% 50%;
+    animation: 2s fadeIn;
+    mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .god-rays::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--stripes), var(--rays);
+    background-size: 200%, 100%;
+    animation: 40s linear infinite god-rays;
+    background-attachment: fixed;
+    mix-blend-mode: difference;
+  }
+
+  /* SEARCH */
+  .search-container {
+    position: fixed;
+    top: 26px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .search-container input {
+    font-family: 'Inter', sans-serif;
+    width: 42vw;
+    max-width: 520px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 400;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    background: #151a2d;
+    border-radius: 50px;
+    transition: 0.3s;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+  }
+  .search-container input:focus {
+    background: rgba(5, 15, 28, 0.95);
+    outline: 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    border-color: #fff;
+    padding-left: 52px;
+    padding-right: 52px;
+    transform: translateY(-2px);
+  }
+
+  /* CATEGORIES */
+  .category-container {
+    position: fixed;
+    top: 82px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    z-index: 999;
+    padding: 10px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .category-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-btn {
+    padding: 9px 20px;
+    background: #151a2d;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    transition: 0.3s;
+    backdrop-filter: blur(8px);
+  }
+  .category-btn:hover {
+    background: rgba(5, 15, 28, 0.95);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+    border-color: #fff;
+  }
+  .category-btn.active {
+    background: rgba(5, 15, 28, 0.95);
+    border-color: #fff;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  /* GRID & CARDS */
+  .game-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    padding: 150px 15px 30px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .image-item {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 75%;
+    overflow: hidden;
+    transition: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: 16px;
+    margin: 0;
+    animation: 0.5s ease-out forwards slideInFromLeft;
+    background-color: transparent;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+  .image-item:hover {
+    z-index: 2;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    filter: brightness(1.08) contrast(1.2);
+    transform: scale(1.4) translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.6);
+    border-width: 2px;
+  }
+
+  /* Link & Image handling */
+  .image-item a {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 16px;
+    pointer-events: none;
+  }
+  .image-item img,
+  .image-item picture,
+  .image-item picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 13px;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .image-item:hover img {
+    transform: scale(1.4);
+  }
+
+  /* Label */
+  .image-item .label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: 0 0;
+    color: #fff;
+    text-align: center;
+    padding: 28px 12px 8px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0;
+    transition: 0.3s;
+    pointer-events: none;
+  }
+  .image-item:hover .label {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  }
+
+  /* BUTTONS */
+  .add-game-btn,
+  .randomGameOpensBtn {
+    position: fixed;
+    top: 24px;
+    z-index: 9999;
+    padding: 10px 20px;
+    background: #151a2d;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    font-family: 'Inter', sans-serif;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+  }
+  .randomGameOpensBtn {
+    left: 20px;
+  }
+  .add-game-btn {
+    right: 20px;
+  }
+  .add-game-btn:hover,
+  .randomGameOpensBtn:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    background: rgba(5, 15, 28, 0.95);
+    border-color: #fff;
+  }
+
+  /* POPUP STYLES */
+  .popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+  }
+  .popup-overlay.active {
+    display: flex;
+  }
+  .popup-content {
+    background: rgba(10, 29, 55, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    padding: 28px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+    animation: 0.3s popupSlideIn;
+    backdrop-filter: blur(15px);
+  }
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+  .popup-header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .popup-close {
+    background: 0 0;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: rgba(10, 29, 55, 0.6);
+    color: #fff;
+    border-radius: 12px;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: rgba(10, 29, 55, 0.6);
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+  }
+
+  /* OVERLAY ICONS (Visual Identity) */
+  .game-options {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: rgba(10, 29, 55, 0.9);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: 0.3s;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .image-item:hover .game-options {
+    opacity: 1;
+  }
+  .game-options i {
+    font-size: 13px;
+    color: #fff;
+  }
+
+  .favorite-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(255, 215, 0, 0.95);
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255, 215, 0, 0.5);
+  }
+  .image-item.favorited .favorite-badge {
+    display: flex;
+  }
+
+  /* KEYFRAMES */
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
-  </style>
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes god-rays {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+  @keyframes popupSlideIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+</style>
 
-  <script is:inline>
-    document.addEventListener('DOMContentLoaded', () => {
-      const searchInput = document.getElementById('search-input');
-      const randomBtn = document.getElementById('randomItemBtn');
-      const allCards = Array.from(document.querySelectorAll('.collection-card'));
+<script>
+  // CLIENT SIDE LOGIC
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-games') as HTMLInputElement;
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    const items = Array.from(document.querySelectorAll('.image-item'));
+    const randomBtn = document.getElementById('randomBtn');
+    const addGameBtn = document.getElementById('addGameBtn');
+    const popupOverlay = document.getElementById('addGamePopup');
+    const closePopupBtn = document.querySelector('.popup-close');
 
-      /* -----------------------------
-         AUTO-DETECT ABOVE THE FOLD
-      ------------------------------ */
-      const autoImages = document.querySelectorAll('img[data-auto-detect]');
+    let currentCategory = '';
+    let currentSearch = '';
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.loading = 'eager';
-            img.fetchPriority = 'high';
-            img.decoding = 'auto';
-            observer.unobserve(img);
-          }
+    // --- FILTER LOGIC ---
+    function applyFilters() {
+      requestAnimationFrame(() => {
+        items.forEach((item) => {
+          const el = item as HTMLElement;
+          const label = el.dataset.label || '';
+          const cats = el.dataset.categories || '';
+
+          const matchesSearch = label.includes(currentSearch);
+          const matchesCategory = currentCategory === '' || cats.includes(currentCategory);
+
+          el.style.display = matchesSearch && matchesCategory ? '' : 'none';
         });
       });
+    }
 
-      autoImages.forEach((img) => observer.observe(img));
+    // Search Input
+    searchInput?.addEventListener('input', (e) => {
+      currentSearch = (e.target as HTMLInputElement).value.toLowerCase();
+      applyFilters();
+    });
 
-      /* -----------------------------
-         FILTER LOGIC
-      ------------------------------ */
-      function filterItems() {
-        const searchTerm = searchInput.value.toLowerCase();
+    // Category Buttons
+    categoryBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        // Update Active State
+        categoryBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
 
-        allCards.forEach((card) => {
-          const label = card.getAttribute('data-label').toLowerCase();
-          const matchesSearch = label.includes(searchTerm);
-          card.style.display = matchesSearch ? '' : 'none';
-        });
-      }
-
-      randomBtn.addEventListener('click', () => {
-        if (allCards.length > 0) {
-          const randomIndex = Math.floor(Math.random() * allCards.length);
-          const link = allCards[randomIndex].querySelector('a');
-          if (link) window.location.href = link.href;
-        }
+        // Update Filter
+        currentCategory = (btn as HTMLElement).dataset.category || '';
+        applyFilters();
       });
+    });
 
-      function debounce(func, wait) {
-        let timeout;
-        return function (...args) {
-          clearTimeout(timeout);
-          timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-      }
-
-      if (searchInput) {
-        searchInput.addEventListener('input', debounce(filterItems, 300));
+    // Random Game Logic
+    randomBtn?.addEventListener('click', () => {
+      const visibleItems = items.filter((i) => (i as HTMLElement).style.display !== 'none');
+      if (visibleItems.length > 0) {
+        const randomIndex = Math.floor(Math.random() * visibleItems.length);
+        const link = visibleItems[randomIndex].querySelector('a');
+        link?.click();
       }
     });
-  </script>
-</AppLayout>
+
+    // Popup Logic (Visual Only)
+    const togglePopup = (show: boolean) => {
+      if (popupOverlay) {
+        if (show) popupOverlay.classList.add('active');
+        else popupOverlay.classList.remove('active');
+      }
+    };
+
+    addGameBtn?.addEventListener('click', () => togglePopup(true));
+    closePopupBtn?.addEventListener('click', () => togglePopup(false));
+    popupOverlay?.addEventListener('click', (e) => {
+      if (e.target === popupOverlay) togglePopup(false);
+    });
+  });
+</script>
+=

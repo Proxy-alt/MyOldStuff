@@ -1,7 +1,6 @@
 ---
 import controllerUrl from '@petezah-games/scramjet-controller?url';
 import wasmPath from '@petezah-games/scramjet/wasm?url';
-import scramjetPath from '@petezah-games/scramjet-controller?url';
 import sjInject from '@petezah-games/scramjet-controller/inject?url';
 import AppLayout from '../../layouts/Layout.astro';
 
@@ -65,7 +64,7 @@ const scramjetConfig = {
   controllerUrl,
   wasmUrl: wasmPath,
   injectUrl: sjInject,
-  scramjetPath,
+  // REMOVED: scramjetPath
   scope: '/scram/'
 };
 ---
@@ -78,7 +77,7 @@ const scramjetConfig = {
     </div>
   </div>
 
-  <iframe id="embedFrame" class="w-full h-full border-none bg-white" data-url={computedURL} data-config={JSON.stringify(scramjetConfig)}></iframe>
+  <iframe id="embedFrame" style="height: 100dvh; width: 100dvw;" data-url={computedURL} data-config={JSON.stringify(scramjetConfig)}></iframe>
 
   <script>
     import { LibcurlClient } from '@mercuryworkshop/libcurl-transport';
@@ -113,41 +112,45 @@ const scramjetConfig = {
       sjConfig.prefix = cfg.scope;
       sjConfig.wasmPath = cfg.wasmUrl;
       sjConfig.injectPath = cfg.injectUrl;
-      sjConfig.scramjetPath = cfg.scramjetPath;
+      // REMOVED: sjConfig.scramjetPath = cfg.scramjetPath;
 
       if (statusEl) statusEl.textContent = 'Connecting to Service Worker...';
 
       try {
-        const registration = await navigator.serviceWorker.register('/scram-sw.js', {
-          type: 'module',
-          scope: cfg.scope
+        // Fix 1: registerSW returns an update function, NOT the registration object.
+        // We call it just to ensure registration happens.
+        registerSW({
+          immediate: true,
+          onNeedRefresh() {
+            console.log('New content available');
+          },
+          onOfflineReady() {
+            console.log('Offline ready');
+          }
         });
 
-        // Wait for the service worker to be ready
-        if (!navigator.serviceWorker.controller) {
-          statusEl.textContent = 'Waiting for service worker to activate...';
-          window.location.reload();
-        }
+        // Fix 2: Use standard API to get the registration
+        const registration = await navigator.serviceWorker.ready;
 
         // 4. Wait for Control (with Reload Fallback)
-        // If the SW activates but doesn't claim the page fast enough, we reload to force it.
         if (!navigator.serviceWorker.controller) {
-          console.log('Waiting for controller...');
+          statusEl.textContent = 'Waiting for service worker to activate...';
 
-          const controllerPromise = new Promise<void>((resolve) => {
-            navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true });
-          });
-
-          // Race: If controller doesn't appear in 1.5s, reload the page
-          const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('TIMEOUT')), 15000));
-
-          try {
-            await Promise.race([controllerPromise, timeoutPromise]);
-          } catch (e) {
-            if (statusEl) statusEl.textContent = 'Reloading for activation...';
+          // Wait for controllerchange
+          await new Promise<void>((resolve, reject) => {
+            const timeout = setTimeout(() => reject(new Error('SW Activation Timeout')), 5000);
+            navigator.serviceWorker.addEventListener(
+              'controllerchange',
+              () => {
+                clearTimeout(timeout);
+                resolve();
+              },
+              { once: true }
+            );
+          }).catch(() => {
+            // Fallback: reload if it takes too long
             window.location.reload();
-            return;
-          }
+          });
         }
 
         if (statusEl) statusEl.textContent = 'Establishing Connection...';
@@ -159,7 +162,8 @@ const scramjetConfig = {
 
         const controller = new Controller({
           scope: cfg.scope,
-          serviceworker: registration.active || registration.installing || registration.waiting,
+          // Fix 3: explicit check for the active controller
+          serviceworker: navigator.serviceWorker.controller || registration.active,
           transport: transport
         });
 

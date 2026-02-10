@@ -1,4 +1,3 @@
-// src/integrations/obfuscator-middleware.ts
 import { defineMiddleware } from 'astro/middleware';
 import { parse } from 'node-html-parser';
 import fs from 'node:fs';

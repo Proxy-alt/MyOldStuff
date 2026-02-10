@@ -7,3 +7,6 @@ onlyBuiltDependencies:
   - esbuild
   - puppeteer
   - sharp
+
+overrides:
+  '@petezah-games/scramjet-controller': link:../.local/share/pnpm/global/5/node_modules/@petezah-games/scramjet-controller
