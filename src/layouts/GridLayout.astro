@@ -1,5 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
+import { Font } from 'astro:assets';
+import Fa from '../components/fontawesome.astro';
 import collectionData from '../data/games.json';
 import AppLayout from '../layouts/AppLayout.astro';
 
@@ -40,7 +42,7 @@ for (const [path, module] of Object.entries(allAssets)) {
 }
 
 // --- DATA PROCESSING ---
-const rawItems = (collectionData[collection] || []) as RawCollectionItem[];
+const rawItems = (collectionData[collection] || []) as CollectionItem[];
 
 // Extract unique categories for the filter bar
 const allCategories = ['All', ...new Set(rawItems.flatMap((i) => i.categories || []).map((c) => c.toLowerCase()))];
@@ -67,18 +69,20 @@ const processedItems = rawItems.map((item) => {
 ---
 
 <AppLayout title={title} description={description}>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" slot="head" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" slot="head" />
+  <Fragment slot="head">
+    <Font cssVariable="--font-inter" preload />
+    <Font cssVariable="--font-inter-obfuscated" />
+  </Fragment>
 
   <div class="god-rays" aria-hidden="true"></div>
 
   <button class="randomGameOpensBtn" id="randomBtn" aria-label="Play Random Game">
-    <i class="fas fa-dice" aria-hidden="true"></i>
+    <Fa icon="dice" />
     Random Game
   </button>
 
   <button class="add-game-btn" id="addGameBtn" aria-label="Add Custom Game">
-    <i class="fas fa-plus" aria-hidden="true"></i>
+    <Fa icon="plus" />
     Add Game
   </button>
 
@@ -110,12 +114,12 @@ const processedItems = rawItems.map((item) => {
           <figure class="image-item" data-label={item.label.toLowerCase()} data-categories={item.categoryString}>
             {/* Favorite Badge (Visual only based on reference) */}
             <div class="favorite-badge">
-              <i class="fas fa-star" /> Favorite
+              <Fa icon="star" /> Favorite
             </div>
 
             {/* Options Menu Trigger */}
             <div class="game-options" role="button" aria-label="Game Options">
-              <i class="fas fa-cog" />
+              <Fa icon="cog" />
             </div>
 
             <a href={item.href} aria-label={`Play ${item.label}`}>
@@ -145,7 +149,7 @@ const processedItems = rawItems.map((item) => {
     <div class="popup-content">
       <div class="popup-header">
         <h2>Add Custom Game</h2>
-        <button class="popup-close">&times;</button>
+        <button class="popup-close"><Fa icon="xmark" /></button>
       </div>
       <form id="addGameForm" onsubmit="event.preventDefault();">
         <div class="form-group">
@@ -166,7 +170,7 @@ const processedItems = rawItems.map((item) => {
   </div>
 </AppLayout>
 
-<style is:global>
+<style>
   /* --- GLOBAL STYLES ---
     Exact port of provided CSS with font fixes
   */
@@ -260,7 +264,8 @@ const processedItems = rawItems.map((item) => {
     justify-content: center;
   }
   .search-container input {
-    font-family: 'Inter', sans-serif;
+    /* Ensure input uses the variable too */
+    font-family: var(--font-inter);
     width: 42vw;
     max-width: 520px;
     padding: 10px 22px;
@@ -311,7 +316,7 @@ const processedItems = rawItems.map((item) => {
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-inter); /* Updated */
     white-space: nowrap;
     transition: 0.3s;
     backdrop-filter: blur(8px);
