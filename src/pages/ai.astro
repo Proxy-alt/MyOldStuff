@@ -2,6 +2,7 @@
 // src/pages/index.astro
 import Layout from '../layouts/AppLayout.astro';
 import Fa from '../components/fontawesome.astro';
+import Logo from '../assets/images/svg/logo.svg';
 import 'highlight.js/styles/vs2015.css';
 
 // Configuration: Matches Pollinations supported models
@@ -72,7 +73,7 @@ const SUGGESTIONS = ['How do I learn to code efficiently?', 'Tell me a funny jok
     </header>
 
     <div class="branding">
-      <img src="/storage/images/logo-png-removebg-preview.png" alt="" aria-hidden="true" />
+      <Logo />
       <div class="branding-text">Pete AI</div>
     </div>
 
@@ -486,7 +487,23 @@ const SUGGESTIONS = ['How do I learn to code efficiently?', 'Tell me a funny jok
     opacity: 0.3;
   }
 
-  .god-rays {
+  /* --- 2. Global Styles (Body & Toasts) --- */
+  :global(body) {
+    font-family: var(--font-family-primary);
+    background-color: #0a1d37;
+    background-image: radial-gradient(var(--color-pattern-dot) var(--dot-size), transparent 0);
+    background-size: var(--dot-space) var(--dot-space);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    position: relative;
+    z-index: 1;
+    color: var(--color-fg-primary);
+  }
+
+  :global(body::before) {
+    content: '';
     position: fixed;
     top: 0;
     left: 0;

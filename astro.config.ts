@@ -7,6 +7,8 @@ import { fontObfuscatorIntegration as fontObfuscator, obfuscate } from './src/in
 import sitemapPlus from './src/integrations/sitemap';
 import startFastifyServer from './src/server.ts';
 
+import partytown from '@astrojs/partytown';
+
 export default defineConfig({
   output: 'server',
   site: process.env.SITE_URL || 'http://localhost:3000',
@@ -92,7 +94,8 @@ export default defineConfig({
           stripAriaLabel: true
         }
       ]
-    })
+    }),
+    partytown()
   ],
   experimental: {
     svgo: true,
