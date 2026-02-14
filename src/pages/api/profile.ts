@@ -1,45 +1,51 @@
 import type { APIRoute } from 'astro';
-import { getSession } from '../../lib/auth.ts';
-import db from '../../lib/db.ts';
+import { db, eq, Users } from 'astro:db';
+import { getSession } from '../../../server/session';
 
+/**
+ * GET /api/profile
+ * Retrieves the current user's profile information from Astro DB
+ */
 export const GET: APIRoute = async (context) => {
-  const user = await getSession(context); // You must implement this helper based on your DB
-
-  if (!user) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
-  }
-
   try {
-    // Re-fetch to ensure fresh data
-    const dbUser = db.prepare('SELECT id, email, username, bio, avatar_url, is_admin, created_at FROM users WHERE id = ?').get(user.id) as any;
+    const session = getSession(context);
 
-    if (!dbUser) return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+    if (!session?.user?.id) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    const user = await db.select().from(Users).where(eq(Users.id, session.user.id)).first();
+
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'User not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+    }
 
     let role = 'User';
-    if (dbUser.is_admin === 1 && dbUser.email === process.env.ADMIN_EMAIL) role = 'Owner';
-    else if (dbUser.is_admin === 3) role = 'Admin';
-    else if (dbUser.is_admin === 2) role = 'Staff';
+    if (user.is_admin === 1 && user.email === process.env.ADMIN_EMAIL) role = 'Owner';
+    else if (user.is_admin === 3) role = 'Admin';
+    else if (user.is_admin === 2) role = 'Staff';
 
     return new Response(
       JSON.stringify({
         user: {
-          id: dbUser.id,
-          email: dbUser.email,
+          id: user.id,
+          email: user.email,
           user_metadata: {
-            name: dbUser.username,
-            bio: dbUser.bio,
-            avatar_url: dbUser.avatar_url
+            name: user.username,
+            bio: user.bio,
+            avatar_url: user.avatar_url
           },
           app_metadata: {
             provider: 'email',
-            is_admin: dbUser.is_admin,
+            is_admin: user.is_admin,
             role
           }
         }
       }),
-      { headers: { 'Content-Type': 'application/json' } }
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
+    console.error('Error fetching profile:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 };

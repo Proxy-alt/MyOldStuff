@@ -1,3 +1,4 @@
+import db from '@astrojs/db';
 import node from '@astrojs/node';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
@@ -56,6 +57,7 @@ export default defineConfig({
         }
       }
     },
+    db(),
     sitemapPlus({
       debug: true
     }),
@@ -95,7 +97,11 @@ export default defineConfig({
         }
       ]
     }),
-    partytown()
+    partytown({
+      config: {
+        forward: ['adsbygoogle.push', 'dataLayer.push', 'gtag', 'atOptions', 'aclib.runAutoTag']
+      }
+    })
   ],
   experimental: {
     svgo: true,
@@ -172,6 +178,12 @@ export default defineConfig({
         cssVariable: '--font-inter-tight',
         weights: ['400', '500'],
         styles: ['normal']
+      },
+      {
+        provider: fontProviders.google(),
+        name: 'Roboto',
+        cssVariable: '--font-roboto',
+        weights: ['400', '500', '600', '700']
       }
     ]
   }

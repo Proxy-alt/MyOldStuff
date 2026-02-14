@@ -1,51 +1,80 @@
 import type { APIRoute } from 'astro';
+import { count as countFn, db, eq, Likes } from 'astro:db';
 import { randomUUID } from 'crypto';
-import { requireAuth } from '../../lib/auth.ts';
-import db from '../../lib/db.ts';
+import { getSession } from '../../../server/session';
 
-export const GET: APIRoute = async ({ request }) => {
+/**
+ * GET /api/likes
+ * Retrieves like count for a specific game using Astro DB
+ */
+export const GET: APIRoute = async (context) => {
   try {
-    const url = new URL(request.url);
-    const type = url.searchParams.get('type');
-    const targetId = url.searchParams.get('targetId');
-    if (!['changelog', 'feedback'].includes(type || '') || !targetId)
-      return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400 });
-    const result = db.prepare('SELECT COUNT(*) as count FROM likes WHERE type = ? AND target_id = ?').get(type, targetId) as
-      | { count: number }
-      | undefined;
-    const count = result?.count || 0;
-    return new Response(JSON.stringify({ count }), { status: 200 });
-  } catch (err) {
-    console.error('Get likes error:', err);
-    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 });
+    const url = new URL(context.request.url);
+    const gameId = url.searchParams.get('gameId');
+
+    if (!gameId) {
+      return new Response(JSON.stringify({ error: 'gameId parameter is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const result = await db.select({ count: countFn() }).from(Likes).where(eq(Likes.game_id, gameId));
+
+    return new Response(JSON.stringify({ count: result[0]?.count || 0 }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  } catch (error) {
+    console.error('Get likes error:', error);
+    return new Response(JSON.stringify({ error: 'Failed to fetch likes' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 };
 
+/**
+ * POST /api/likes
+ * Adds a like to a game using Astro DB (toggle on/off)
+ */
 export const POST: APIRoute = async (context) => {
   try {
-    const user = await requireAuth(context as any);
-    const { type, targetId } = await context.request.json();
-    if (!['changelog', 'feedback'].includes(type || '') || !targetId)
-      return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400 });
-    const id = randomUUID();
-    const now = Date.now();
-    try {
-      db.prepare('INSERT INTO likes (id, type, target_id, user_id, created_at) VALUES (?, ?, ?, ?, ?)').run(
-        id,
-        type,
-        targetId,
-        (user as any).id,
-        now
-      );
-      return new Response(JSON.stringify({ message: 'Liked!' }), { status: 200 });
-    } catch (e) {
-      // unique constraint -> already liked; remove
-      db.prepare('DELETE FROM likes WHERE type = ? AND target_id = ? AND user_id = ?').run(type, targetId, (user as any).id);
-      return new Response(JSON.stringify({ message: 'Unliked.' }), { status: 200 });
+    const session = await getSession(context);
+
+    if (!session?.user?.id) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
     }
-  } catch (err) {
-    if (err instanceof Response) return err;
-    console.error('Like error:', err);
-    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 });
+
+    const body = await context.request.json();
+    const { gameId } = body;
+
+    if (!gameId || typeof gameId !== 'string') {
+      return new Response(JSON.stringify({ error: 'Invalid gameId' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    // Check if already liked
+    const existing = await db.select().from(Likes).where(eq(Likes.user_id, session.user.id));
+
+    const alreadyLiked = existing.some((like) => like.game_id === gameId);
+
+    if (alreadyLiked) {
+      // Remove like (unlike)
+      const likeToDelete = existing.find((like) => like.game_id === gameId);
+      if (likeToDelete) {
+        await db.delete(Likes).where(eq(Likes.id, likeToDelete.id));
+      }
+      return new Response(JSON.stringify({ message: 'Like removed' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    } else {
+      // Add new like
+      const id = randomUUID();
+      const now = new Date();
+
+      await db.insert(Likes).values({
+        id,
+        user_id: session.user.id,
+        game_id: gameId,
+        created_at: now
+      });
+
+      return new Response(JSON.stringify({ message: 'Like added successfully' }), { status: 201, headers: { 'Content-Type': 'application/json' } });
+    }
+  } catch (error) {
+    console.error('Post like error:', error);
+    return new Response(JSON.stringify({ error: 'Failed to process like' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 };

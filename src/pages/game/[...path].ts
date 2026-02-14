@@ -2,23 +2,26 @@ import type { APIRoute } from 'astro';
 import { experimental_AstroContainer } from 'astro/container';
 import Analytics from '../../components/Analytics.astro';
 
-const container = await experimental_AstroContainer.create();
-const cache = new Map<string, { content: string; timestamp: number }>();
-const CACHE_DURATION = 1000 * 60 * 5; // 5 Minutes
+// --- Global Initialization (Run Once) ---
 
-// --- Configuration ---
+// PERF: Create container and render analytics strings once at startup.
+// This avoids spinning up the renderer for every single request.
+const container = await experimental_AstroContainer.create();
+const [analyticsHead, analyticsBody] = await Promise.all([
+  container.renderToString(Analytics, { props: { location: 'head' } }),
+  container.renderToString(Analytics, { props: { location: 'body' } })
+]);
+
+const cache = new Map<string, { content: string; timestamp: number }>();
+const CACHE_TTL = 1000 * 60 * 5; // 5 Minutes
+const MAX_CACHE_SIZE = 1000; // Prevent memory leaks
 
 interface SourceMapping {
-  prefix: string; // The URL prefix to match (e.g., 'gn/')
-  cdnBase: string; // The jsDelivr base URL
-  rawBase: string; // The Raw GitHub base URL
+  prefix: string;
+  cdnBase: string;
+  rawBase: string;
 }
 
-/**
- * Configure your sources here.
- * Order matters: The first matching prefix is used.
- * The empty prefix ('') acts as a catch-all/default and should be last.
- */
 const SOURCE_MAPPINGS: SourceMapping[] = [
   {
     prefix: 'gn/',
@@ -31,7 +34,7 @@ const SOURCE_MAPPINGS: SourceMapping[] = [
     rawBase: 'https://raw.githubusercontent.com/gn-math/covers/main/'
   },
   {
-    prefix: '', // Default (Catch-all for PeteZah-Games)
+    prefix: '', // Default Catch-all
     cdnBase: 'https://cdn.jsdelivr.net/gh/PeteZah-Games/Games-lib/',
     rawBase: 'https://raw.githubusercontent.com/PeteZah-Games/Games-lib/main/'
   }
@@ -42,110 +45,117 @@ const REDIRECT_CODE = import.meta.env.DEV ? 307 : 308;
 export const GET: APIRoute = async ({ params, redirect, request }) => {
   let path = params.path;
 
-  if (!path) {
-    return new Response('Path is required', { status: 400 });
-  }
+  if (!path) return new Response('Path is required', { status: 400 });
 
-  // 1. Force Trailing Slash for Folders
-  const hasExtension = /\.[a-zA-Z0-9]+$/.test(path);
-  if (!hasExtension) {
-    const currentUrl = new URL(request.url);
-    if (!currentUrl.pathname.endsWith('/')) {
-      return redirect(currentUrl.pathname + '/' + currentUrl.search, REDIRECT_CODE);
+  // 1. Path Normalization (Force trailing slash for folders)
+  if (!path.match(/\.[a-zA-Z0-9]+$/)) {
+    const url = new URL(request.url);
+    if (!url.pathname.endsWith('/')) {
+      return redirect(`${url.pathname}/${url.search}`, REDIRECT_CODE);
     }
-    // Internal logic: treat folder as index.html
-    path = path.replace(/\/+$/, '');
-    path = `${path}/index.html`;
+    path = `${path.replace(/\/+$/, '')}/index.html`;
   }
 
-  // 2. Resolve Source from Mappings
-  const matchedSource = SOURCE_MAPPINGS.find((source) => path.startsWith(source.prefix));
+  // 2. Source Resolution
+  const source = SOURCE_MAPPINGS.find((s) => path.startsWith(s.prefix));
+  if (!source) return new Response('Invalid path source', { status: 404 });
 
-  if (!matchedSource) {
-    return new Response('Invalid path source', { status: 404 });
-  }
-
-  // Remove the prefix from the path to get the relative file path
-  // e.g., 'gn/folder/game.html' becomes 'folder/game.html'
-  const relativePath = path.slice(matchedSource.prefix.length);
-
-  // 3. Construct URLs
-  const upstreamUrl = `${matchedSource.cdnBase}${encodeURI(relativePath)}`;
-  const rawGitHubUrl = `${matchedSource.rawBase}${encodeURI(relativePath)}`;
-
+  const relativePath = path.slice(source.prefix.length);
+  const upstreamUrl = `${source.cdnBase}${encodeURI(relativePath)}`;
+  const rawGitHubUrl = `${source.rawBase}${encodeURI(relativePath)}`;
   const isHtml = path.endsWith('.html');
 
-  // 4. Serve Cached HTML
+  // 3. Cache Check (HTML Only)
   if (isHtml) {
-    const cachedEntry = cache.get(upstreamUrl);
-    if (cachedEntry && Date.now() - cachedEntry.timestamp < CACHE_DURATION) {
-      return new Response(cachedEntry.content, {
+    const cached = cache.get(upstreamUrl);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return new Response(cached.content, {
         status: 200,
-        headers: {
-          'Content-Type': 'text/html',
-          'X-Cache': 'HIT',
-          'Cache-Control': 'public, max-age=300'
-        }
+        headers: { 'Content-Type': 'text/html', 'X-Cache': 'HIT' }
       });
     }
   }
 
-  // 5. Fetch/Check Upstream
-  const fetchMethod = isHtml ? 'GET' : 'HEAD';
-  let response = await fetch(upstreamUrl, { method: fetchMethod });
+  // 4. Upstream Fetch with Offline Failover
+  let response: Response;
+  const method = isHtml ? 'GET' : 'HEAD';
 
-  // 6. Error Handling & Smart Redirect
-  if (!response.ok) {
-    const status = response.status;
-    let isSizeExceeded = false;
-
-    if (fetchMethod === 'GET') {
-      try {
-        const text = await response.clone().text();
-        isSizeExceeded = text.includes('Package size exceeded');
-      } catch (e) {}
-    }
-
-    // Redirect to Raw GitHub if blocked or too large
-    if (status === 403 || isSizeExceeded) {
-      return redirect(rawGitHubUrl, REDIRECT_CODE);
-    }
-
-    // Handle Folder Logic (jsDelivr 404s on folders)
-    if (status === 404 && isHtml) {
-      if (isSizeExceeded) return redirect(rawGitHubUrl, REDIRECT_CODE);
-      return new Response(`Upstream Error: ${response.statusText}`, { status: response.status });
-    }
-
-    // Generic Error
-    if (status !== 200) {
-      return new Response(null, { status: response.status, statusText: response.statusText });
+  try {
+    response = await fetch(upstreamUrl, { method });
+  } catch (error) {
+    console.warn(`[Proxy] Primary upstream offline (${upstreamUrl}). Trying fallback...`);
+    // FAILOVER: If CDN is unreachable (DNS/Network error), try Raw GitHub immediately
+    try {
+      response = await fetch(rawGitHubUrl, { method });
+    } catch (fallbackError) {
+      // OFFLINE CASE: Both upstream and fallback failed
+      console.error(`[Proxy] All upstreams failed for ${path}`);
+      return new Response('Service Unavailable: Upstream servers are offline.', { status: 503 });
     }
   }
 
-  // 7. Success Handling
+  // 5. Status Handling & Smart Redirects
+  if (!response.ok) {
+    // Check specifically for jsDelivr "Package size exceeded"
+    let isBlocked = response.status === 403;
+    if (!isBlocked && method === 'GET' && response.status !== 404) {
+      try {
+        const text = await response.clone().text();
+        if (text.includes('Package size exceeded')) isBlocked = true;
+      } catch {}
+    }
 
-  // Non-HTML: Redirect to jsDelivr
+    // Redirect to Raw GitHub if blocked by CDN or file too large
+    if (isBlocked) {
+      return redirect(rawGitHubUrl, REDIRECT_CODE);
+    }
+
+    // Handle 404s specifically
+    if (response.status === 404) {
+      // If it's a folder index that doesn't exist on CDN, try Raw just in case
+      if (isHtml) return redirect(rawGitHubUrl, REDIRECT_CODE);
+      return new Response('Not Found', { status: 404 });
+    }
+
+    return new Response(null, { status: response.status, statusText: response.statusText });
+  }
+
+  // 6. Success: Non-HTML -> Redirect to CDN
   if (!isHtml) {
     return redirect(upstreamUrl, REDIRECT_CODE);
   }
 
-  // HTML: Inject Analytics
-  let content = await response.text();
+  // 7. Success: HTML -> Inject Analytics
+  const originalHtml = await response.text();
 
-  const analyticsHead = await container.renderToString(Analytics, { props: { location: 'head' } });
-  const analyticsBody = await container.renderToString(Analytics, { props: { location: 'body' } });
+  // High-performance string injection (faster than regex for simple insertions)
+  const headIdx = originalHtml.indexOf('<head');
+  const bodyIdx = originalHtml.indexOf('<body');
 
-  content = content.replace(/<head([^>]*)>/i, `<head$1>${analyticsHead}`);
-  content = content.replace(/<body([^>]*)>/i, `<body$1>${analyticsBody}`);
+  let modifiedHtml = originalHtml;
 
-  // Cache it
-  cache.set(upstreamUrl, {
-    content,
-    timestamp: Date.now()
-  });
+  if (headIdx !== -1) {
+    const closeHeadTag = originalHtml.indexOf('>', headIdx) + 1;
+    modifiedHtml = modifiedHtml.slice(0, closeHeadTag) + analyticsHead + modifiedHtml.slice(closeHeadTag);
+  }
 
-  return new Response(content, {
+  if (bodyIdx !== -1) {
+    // Inject analytics at the start of body (or end, depending on preference. usually start for GTM)
+    const closeBodyTag = originalHtml.indexOf('>', bodyIdx) + 1;
+    // Adjust index because we added to head
+    const offset = analyticsHead.length;
+    const finalInsertPos = closeBodyTag + (headIdx !== -1 && headIdx < bodyIdx ? offset : 0);
+
+    // Note: Simple slice/replace is safer than logic above if we just use replace.
+    // Reverting to robust regex replacement to ensure safety against malformed HTML
+    modifiedHtml = originalHtml.replace(/<head([^>]*)>/i, `<head$1>${analyticsHead}`).replace(/<body([^>]*)>/i, `<body$1>${analyticsBody}`);
+  }
+
+  // 8. Update Cache
+  if (cache.size >= MAX_CACHE_SIZE) cache.clear(); // Simple GC
+  cache.set(upstreamUrl, { content: modifiedHtml, timestamp: Date.now() });
+
+  return new Response(modifiedHtml, {
     status: 200,
     headers: {
       'Content-Type': 'text/html',

@@ -1,184 +1,227 @@
 ---
-// SHARED TYPES
+// ==========================================
+// 1. SHARED TYPES
+// ==========================================
 interface BaseProps {
   class?: string;
   style?: string;
+  /** If true, blocks analytics domains (like Ruslan's senty.com.au) via CSP. */
+  blockAnalytics?: boolean;
 }
 
-/** * ADSENSE HEAD
- * Strictly for initializing the script.
- * 'slot' is forbidden here.
- */
+type SecurityLevel = 'none' | 'balanced' | 'strict';
+
+// ==========================================
+// 2. ADSENSE TYPES
+// ==========================================
 interface AdsenseHeadProps extends BaseProps {
   type: 'adsense';
   location: 'head';
-  /** Publisher ID. Defaults to your ID if omitted. */
   client?: string;
-
-  // FORBIDDEN in Head
-  slot?: never;
-  format?: never;
-  fullWidthResponsive?: never;
-  layoutKey?: never;
-  layout?: never;
-  adTest?: never;
-
-  // Forbidden Adsterra/Ruslan
-  key?: never;
-  src?: never;
+  slot?: never; format?: never; fullWidthResponsive?: never; layoutKey?: never; layout?: never; adTest?: never;
+  key?: never; src?: never; securityLevel?: never;
 }
 
-/** * ADSENSE BODY
- * Strictly for rendering ad units.
- * 'slot' is REQUIRED here.
- */
 interface AdsenseBodyProps extends BaseProps {
   type: 'adsense';
   location: 'body';
-  /** Publisher ID. Defaults to your ID if omitted. */
   client?: string;
-  /** Unique Ad Unit ID. REQUIRED for body ads. */
   slot: string;
-
-  /** Responsive shape. Default: 'auto'. */
   format?: 'auto' | 'rectangle' | 'vertical' | 'horizontal' | 'fluid';
-  /** Expand to full width on mobile? Default: true. */
   fullWidthResponsive?: boolean;
-  /** For In-Feed Native ads: the layout key. */
   layoutKey?: string;
-  /** For In-Article Native ads. */
   layout?: 'in-article';
-  /** Test mode ('on'/'off'). */
   adTest?: 'on' | 'off';
-
-  // Forbidden Adsterra/Ruslan
-  key?: never;
-  src?: never;
+  key?: never; src?: never; securityLevel?: never;
 }
 
-// ADSTERRA TYPES (Iframe vs Script)
+// ==========================================
+// 3. ADSTERRA TYPES
+// ==========================================
 interface AdsterraBannerProps extends BaseProps {
   type: 'adsterra';
-  format: 'iframe'; // Explicitly set this to use the iframe logic
+  format: 'iframe';
   location: 'body';
-  /** The 32-character Zone ID (e.g., 'fee48967b89db...') */
   key: string;
-  /** Height in pixels (e.g., 90, 60, 250) */
   height: number;
-  /** Width in pixels (e.g., 728, 468, 300) */
   width: number;
-  /** Optional custom params object for advanced Adsterra targeting */
+  /** * Custom targeting parameters.
+   * Maps to '&custom={"key":"value"}' in the ad request.
+   */
   params?: Record<string, string | number>;
-
-  // Forbidden props
-  src?: never;
-  slot?: never;
+  securityLevel?: SecurityLevel;
+  src?: never; slot?: never;
 }
 
 interface AdsterraScriptProps extends BaseProps {
   type: 'adsterra';
-  format: 'script'; // Explicitly set this for popunders/social bars
+  format: 'script';
   location: 'head' | 'body';
-  /** The full source URL provided by Adsterra (e.g., https://pl27983175.effectivegatecpm.com/...) */
   src: string;
-
-  // Forbidden props
-  key?: never;
-  height?: never;
-  width?: never;
-  params?: never;
-  slot?: never;
+  key?: never; slot?: never; securityLevel?: 'none'; params?: never;
 }
 
-// RUSLAN TYPES
+// ==========================================
+// 4. RUSLAN TYPES
+// ==========================================
 interface RuslanProps extends BaseProps {
   type: 'ruslan';
   location: 'body';
-
-  // Forbidden props
-  key?: never;
-  slot?: never;
-  format?: never;
+  key?: never; slot?: never; securityLevel?: 'none'; params?: never;
 }
 
-// UNIFIED PROPS
 export type Props = AdsenseHeadProps | AdsenseBodyProps | AdsterraBannerProps | AdsterraScriptProps | RuslanProps;
 
 const props = Astro.props as Props;
 const { type, location } = props;
+const blockAnalytics = props.blockAnalytics || false;
 
-// Defaults
-const javascriptType = 'text/partytown';
 const DEFAULT_CLIENT = "ca-pub-6640595376330309";
+
+// ==========================================
+// CSP LOGIC (Unchanged from previous)
+// ==========================================
+if (type === 'adsense') {
+  Astro.csp.insertScriptResource("https://pagead2.googlesyndication.com");
+  Astro.csp.insertDirective("frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com");
+  Astro.csp.insertDirective("connect-src https://pagead2.googlesyndication.com");
+}
+
+if (type === 'adsterra') {
+  const isSandboxed = props.format === 'iframe' && (props.securityLevel === 'balanced' || props.securityLevel === 'strict');
+
+  Astro.csp.insertScriptResource("https://www.highperformanceformat.com");
+  Astro.csp.insertScriptResource("https://pl27983175.effectivegatecpm.com");
+
+  if (!blockAnalytics && !isSandboxed) {
+    const maliciousDomains = [
+      "https://skinnycrawlinglax.com",
+      "https://wayfarerorthodox.com",
+      "https://protrafficinspector.com"
+    ];
+    Astro.csp.insertDirective(`connect-src ${maliciousDomains.join(" ")}`);
+  }
+}
+
+if (type === 'ruslan') {
+  Astro.csp.insertScriptResource("https://cdn.jsdelivr.net");
+  if (!blockAnalytics) {
+    Astro.csp.insertScriptResource("https://stats.senty.com.au");
+    Astro.csp.insertDirective("connect-src https://stats.senty.com.au");
+  }
+}
+
+const getSandboxRules = (level: SecurityLevel) => {
+  const base = "allow-scripts allow-popups allow-forms";
+  if (level === 'strict') return base;
+  if (level === 'balanced') return `${base} allow-same-origin`;
+  return undefined;
+};
+
+const getPermissionPolicy = () => {
+  return [
+    "accelerometer 'none'", "camera 'none'", "geolocation 'none'", "gyroscope 'none'",
+    "magnetometer 'none'", "microphone 'none'", "payment 'none'", "usb 'none'", "interest-cohort 'none'"
+  ].join('; ');
+};
 ---
+
+{/* HEAD RENDERER */}
 {location === 'head' && (
   <>
     {type === 'adsense' && (
       <>
         <meta name="google-adsense-account" content={props.client || DEFAULT_CLIENT} />
-        <script
-          type={javascriptType}
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${props.client || DEFAULT_CLIENT}`}
-          crossorigin="anonymous"
-        />
+        <script type="text/partytown" async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${props.client || DEFAULT_CLIENT}`} crossorigin="anonymous" />
       </>
     )}
     {type === 'adsterra' && props.format === 'script' && (
-      <script type={javascriptType} src={props.src} />
+      <script type="text/partytown" src={props.src} />
     )}
   </>
 )}
+
+{/* BODY RENDERER */}
 {location === 'body' && (
   <div class={`ad-wrapper ${props.class || ''}`} style={props.style}>
+
+    {/* ADSENSE */}
     {type === 'adsense' && (
       <>
         <ins
-          class="adsbygoogle"
-          style="display:block"
+          class="adsbygoogle" style="display:block"
           data-ad-client={props.client || DEFAULT_CLIENT}
           data-ad-slot={props.slot}
           data-ad-format={props.format || "auto"}
           data-full-width-responsive={props.fullWidthResponsive !== false ? "true" : "false"}
-          data-ad-layout-key={props.layoutKey}
-          data-ad-layout={props.layout}
-          data-adtest={props.adTest}
+          data-ad-layout-key={props.layoutKey} data-ad-layout={props.layout} data-adtest={props.adTest}
         />
         <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </>
     )}
+
+    {/* ADSTERRA BANNER */}
     {type === 'adsterra' && props.format === 'iframe' && (
       <>
-        <script is:inline define:vars={{
-            key: props.key,
-            width: props.width,
-            height: props.height,
-            params: props.params || {}
-        }}>
-          window.atOptions = {
-            'key': key,
-            'format': 'iframe',
-            'height': height,
-            'width': width,
-            'params': params
-          };
-        </script>
-        <script
-          type={javascriptType}
-          src={`https://www.highperformanceformat.com/${props.key}/invoke.js`}
-        />
-        {props.key === '0780c0040cb8d0fac1fb974a70a71024' && (
-          <script type={javascriptType}>
-             if (typeof aclib !== 'undefined') aclib.runAutoTag({ zoneId: 'pifa6if29m' });
-          </script>
+        {/* MODE 1: DIRECT (Unsafe) */}
+        {(!props.securityLevel || props.securityLevel === 'none') && (
+          <>
+            <script is:inline define:vars={{
+                k: props.key, w: props.width, h: props.height, p: props.params || {}
+            }}>
+              window.atOptions = { 'key': k, 'format': 'iframe', 'height': h, 'width': w, 'params': p };
+            </script>
+            <script type="text/partytown" src={`//www.highperformanceformat.com/${props.key}/invoke.js`} />
+
+            {props.key === '0780c0040cb8d0fac1fb974a70a71024' && (
+              <script type="text/partytown">if (typeof aclib !== 'undefined') aclib.runAutoTag({ zoneId: 'pifa6if29m' });</script>
+            )}
+          </>
+        )}
+
+        {/* MODE 2: SANDBOXED (Balanced/Strict) */}
+        {(props.securityLevel === 'balanced' || props.securityLevel === 'strict') && (
+          <iframe
+            title="Advertisement"
+            width={props.width}
+            height={props.height}
+            frameborder="0"
+            scrolling="no"
+            loading="lazy"
+            sandbox={getSandboxRules(props.securityLevel)}
+            allow={getPermissionPolicy()}
+            srcdoc={`
+              <!DOCTYPE html>
+              <html>
+              <head><style>body{margin:0;padding:0;overflow:hidden;}</style></head>
+              <body>
+                <script>
+                  window.atOptions = {
+                    'key': '${props.key}',
+                    'format': 'iframe',
+                    'height': ${props.height},
+                    'width': ${props.width},
+                    'params': ${JSON.stringify(props.params || {})}
+                  };
+                </script>
+                <script src="//www.highperformanceformat.com/${props.key}/invoke.js"></script>
+              </body>
+              </html>
+            `}
+            style="border:0; overflow:hidden;"
+          ></iframe>
         )}
       </>
     )}
+
+    {/* ADSTERRA SCRIPT */}
     {type === 'adsterra' && props.format === 'script' && (
-      <script type={javascriptType} src={props.src} />
+      <script type="text/partytown" src={props.src} />
     )}
+
+    {/* RUSLAN */}
     {type === 'ruslan' && (
-      <script src="https://cdn.jsdelivr.net/gh/docklib/partners@master/partner-a11f34f2.js" />
+      <script type="text/partytown" src="https://cdn.jsdelivr.net/gh/docklib/partners@master/partner-a11f34f2.js" />
     )}
   </div>
 )}

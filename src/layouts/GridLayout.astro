@@ -5,13 +5,7 @@ import Fa from '../components/fontawesome.astro';
 import collectionData from '../data/games.json';
 import AppLayout from '../layouts/AppLayout.astro';
 
-/** CSP for images */
-Astro.csp.insertDirective(
-  "img-src 'self' https://cdn.jsdelivr.net/gh/gn-math/covers@main/ https://raw.githubusercontent.com/gn-math/covers/main/ https://raw.githubusercontent.com/PeteZah-Games/Games-lib/main/"
-);
-/**
- * TYPE DEFINITIONS BASED ON JSON SCHEMA
- */
+// --- TYPE DEFINITIONS ---
 interface CollectionItem {
   id?: string;
   label: string;
@@ -43,10 +37,6 @@ for (const [path, module] of Object.entries(allAssets)) {
 
 // --- DATA PROCESSING ---
 const rawItems = (collectionData[collection] || []) as CollectionItem[];
-
-// Extract unique categories for the filter bar
-const allCategories = ['All', ...new Set(rawItems.flatMap((i) => i.categories || []).map((c) => c.toLowerCase()))];
-// Limit to the ones in your design + generic ones if needed
 const displayCategories = ['All', 'Action', 'Racing', 'Strategy', 'Sports', 'Skill', 'Shooting', '2 Player', 'Io'];
 
 const processedItems = rawItems.map((item) => {
@@ -62,7 +52,6 @@ const processedItems = rawItems.map((item) => {
     href,
     isExternal,
     localAsset,
-    // Join all categories for easier filtering in JS
     categoryString: (item.categories || []).join(' ').toLowerCase()
   };
 });
@@ -74,7 +63,20 @@ const processedItems = rawItems.map((item) => {
     <Font cssVariable="--font-inter-obfuscated" />
   </Fragment>
 
-  <div class="god-rays" aria-hidden="true"></div>
+  <script type="speculationrules">
+    {
+      "prefetch": [
+        {
+          "source": "document",
+          "where": { "selector_matches": ".category-btn" },
+          "eagerness": "eager"
+        }
+      ]
+    }
+  </script>
+  <script id="dynamic-speculation" type="speculationrules">
+    {}
+  </script>
 
   <button class="randomGameOpensBtn" id="randomBtn" aria-label="Play Random Game">
     <Fa icon="dice" />
@@ -112,12 +114,10 @@ const processedItems = rawItems.map((item) => {
 
         return (
           <figure class="image-item" data-label={item.label.toLowerCase()} data-categories={item.categoryString}>
-            {/* Favorite Badge (Visual only based on reference) */}
             <div class="favorite-badge">
               <Fa icon="star" /> Favorite
             </div>
 
-            {/* Options Menu Trigger */}
             <div class="game-options" role="button" aria-label="Game Options">
               <Fa icon="cog" />
             </div>
@@ -171,12 +171,9 @@ const processedItems = rawItems.map((item) => {
 </AppLayout>
 
 <style>
-  /* --- GLOBAL STYLES ---
-    Exact port of provided CSS with font fixes
-  */
-
+  /* --- GLOBAL STYLES --- */
   :root {
-    --primary-gradient: linear-gradient(90deg, #2e6b4f, #3e8c65); /* Fallback */
+    --primary-gradient: linear-gradient(90deg, #2e6b4f, #3e8c65);
     --hover-gradient: linear-gradient(90deg, #1f4a3a, #2e6b4f);
   }
 
@@ -189,11 +186,8 @@ const processedItems = rawItems.map((item) => {
     margin: 0;
     background-color: #0a1d37;
     color: #fff;
-    font-family:
-      'Inter',
-      -apple-system,
-      BlinkMacSystemFont,
-      sans-serif;
+    /* Use the variable injected by <Font /> */
+    font-family: var(--font-inter);
     padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
@@ -204,51 +198,6 @@ const processedItems = rawItems.map((item) => {
 
   body::-webkit-scrollbar {
     display: none;
-  }
-
-  /* GOD RAYS */
-  .god-rays {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 550px;
-    --stripes: repeating-linear-gradient(
-      100deg,
-      rgba(20, 40, 60, 0.8) 0%,
-      rgba(20, 40, 60, 0.8) 7%,
-      transparent 10%,
-      transparent 12%,
-      rgba(20, 40, 60, 0.8) 16%
-    );
-    --rays: repeating-linear-gradient(
-      100deg,
-      rgba(30, 50, 90, 0.9) 10%,
-      rgba(20, 40, 80, 0.9) 15%,
-      rgba(30, 50, 90, 0.9) 20%,
-      rgba(20, 40, 80, 0.9) 25%,
-      rgba(30, 50, 90, 0.9) 30%
-    );
-    background-image: var(--stripes), var(--rays);
-    background-size: 300%, 200%;
-    background-position:
-      50% 50%,
-      50% 50%;
-    animation: 2s fadeIn;
-    mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
-    pointer-events: none;
-    z-index: -1;
-  }
-  .god-rays::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: var(--stripes), var(--rays);
-    background-size: 200%, 100%;
-    animation: 40s linear infinite god-rays;
-    background-attachment: fixed;
-    mix-blend-mode: difference;
   }
 
   /* SEARCH */
@@ -264,7 +213,6 @@ const processedItems = rawItems.map((item) => {
     justify-content: center;
   }
   .search-container input {
-    /* Ensure input uses the variable too */
     font-family: var(--font-inter);
     width: 42vw;
     max-width: 520px;
@@ -316,7 +264,7 @@ const processedItems = rawItems.map((item) => {
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    font-family: var(--font-inter); /* Updated */
+    font-family: var(--font-inter);
     white-space: nowrap;
     transition: 0.3s;
     backdrop-filter: blur(8px);
@@ -334,7 +282,7 @@ const processedItems = rawItems.map((item) => {
     color: #fff;
   }
 
-  /* GRID & CARDS */
+  /* GRID */
   .game-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
@@ -370,7 +318,7 @@ const processedItems = rawItems.map((item) => {
     border-width: 2px;
   }
 
-  /* Link & Image handling */
+  /* IMAGES */
   .image-item a {
     display: block;
     position: absolute;
@@ -384,7 +332,6 @@ const processedItems = rawItems.map((item) => {
     pointer-events: none;
   }
   .image-item img,
-  .image-item picture,
   .image-item picture img {
     width: 100%;
     height: 100%;
@@ -396,7 +343,7 @@ const processedItems = rawItems.map((item) => {
     transform: scale(1.4);
   }
 
-  /* Label */
+  /* LABELS */
   .image-item .label {
     position: absolute;
     bottom: 0;
@@ -419,7 +366,7 @@ const processedItems = rawItems.map((item) => {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
   }
 
-  /* BUTTONS */
+  /* BUTTONS & ICONS */
   .add-game-btn,
   .randomGameOpensBtn {
     position: fixed;
@@ -434,7 +381,7 @@ const processedItems = rawItems.map((item) => {
     cursor: pointer;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     border-radius: 16px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-inter);
     transition: 0.3s;
     display: flex;
     align-items: center;
@@ -455,7 +402,62 @@ const processedItems = rawItems.map((item) => {
     border-color: #fff;
   }
 
-  /* POPUP STYLES */
+  /* SVG Helper */
+  .add-game-btn svg,
+  .randomGameOpensBtn svg {
+    height: 1em;
+    width: auto;
+  }
+
+  /* OVERLAYS */
+  .game-options {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: rgba(10, 29, 55, 0.9);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: 0.3s;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .image-item:hover .game-options {
+    opacity: 1;
+  }
+  .game-options svg {
+    font-size: 13px;
+    color: #fff;
+    height: 13px;
+  }
+
+  .favorite-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(255, 215, 0, 0.95);
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255, 215, 0, 0.5);
+  }
+  .favorite-badge svg {
+    height: 10px;
+  }
+
+  /* POPUPS */
   .popup-overlay {
     display: none;
     position: fixed;
@@ -501,6 +503,11 @@ const processedItems = rawItems.map((item) => {
     color: #fff;
     font-size: 28px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .popup-close svg {
+    height: 1em;
   }
 
   .form-group {
@@ -528,56 +535,10 @@ const processedItems = rawItems.map((item) => {
     color: #fff;
     border: 2px solid rgba(255, 255, 255, 0.25);
     border-radius: 12px;
-  }
-
-  /* OVERLAY ICONS (Visual Identity) */
-  .game-options {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 32px;
-    height: 32px;
-    background: rgba(10, 29, 55, 0.9);
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 0;
-    transition: 0.3s;
-    z-index: 10;
-    backdrop-filter: blur(8px);
-  }
-  .image-item:hover .game-options {
-    opacity: 1;
-  }
-  .game-options i {
-    font-size: 13px;
-    color: #fff;
-  }
-
-  .favorite-badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: rgba(255, 215, 0, 0.95);
-    color: #000;
-    padding: 5px 10px;
-    border-radius: 12px;
-    font-size: 11px;
     font-weight: 600;
-    display: none;
-    align-items: center;
-    gap: 4px;
-    backdrop-filter: blur(5px);
-    border: 2px solid rgba(255, 215, 0, 0.5);
-  }
-  .image-item.favorited .favorite-badge {
-    display: flex;
+    cursor: pointer;
   }
 
-  /* KEYFRAMES */
   @keyframes slideInFromLeft {
     from {
       opacity: 0;
@@ -586,22 +547,6 @@ const processedItems = rawItems.map((item) => {
     to {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes god-rays {
-    0% {
-      background-position: 0% 0%;
-    }
-    100% {
-      background-position: 100% 100%;
     }
   }
   @keyframes popupSlideIn {
@@ -617,7 +562,6 @@ const processedItems = rawItems.map((item) => {
 </style>
 
 <script>
-  // CLIENT SIDE LOGIC
   document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-games') as HTMLInputElement;
     const categoryBtns = document.querySelectorAll('.category-btn');
@@ -626,56 +570,78 @@ const processedItems = rawItems.map((item) => {
     const addGameBtn = document.getElementById('addGameBtn');
     const popupOverlay = document.getElementById('addGamePopup');
     const closePopupBtn = document.querySelector('.popup-close');
+    const speculationScript = document.getElementById('dynamic-speculation');
 
-    let currentCategory = '';
-    let currentSearch = '';
+    let debounceTimer: number;
+
+    // --- SPECULATION LOGIC ---
+    function updateSpeculationRules(visibleLinks: string[]) {
+      if (!speculationScript || visibleLinks.length === 0) return;
+
+      const topLinks = visibleLinks.slice(0, 5); // Preload top 5 results
+      const rules = {
+        prerender: [
+          {
+            source: 'list',
+            urls: topLinks,
+            eagerness: 'moderate'
+          }
+        ]
+      };
+      speculationScript.textContent = JSON.stringify(rules);
+    }
 
     // --- FILTER LOGIC ---
     function applyFilters() {
+      const currentSearch = searchInput?.value.toLowerCase() || '';
+      const currentCategory = document.querySelector('.category-btn.active')?.getAttribute('data-category') || '';
+      const visibleHrefs: string[] = [];
+
       requestAnimationFrame(() => {
         items.forEach((item) => {
           const el = item as HTMLElement;
+          // IMPORTANT: Check the parent <a> tag for the link
+          const parentLink = el.closest('a');
           const label = el.dataset.label || '';
           const cats = el.dataset.categories || '';
 
           const matchesSearch = label.includes(currentSearch);
           const matchesCategory = currentCategory === '' || cats.includes(currentCategory);
 
-          el.style.display = matchesSearch && matchesCategory ? '' : 'none';
+          if (matchesSearch && matchesCategory) {
+            if (parentLink) parentLink.style.display = '';
+            // Collect link for speculation
+            if (parentLink?.href && currentSearch.length >= 2) visibleHrefs.push(parentLink.href);
+          } else {
+            if (parentLink) parentLink.style.display = 'none';
+          }
         });
+
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => updateSpeculationRules(visibleHrefs), 300);
       });
     }
 
-    // Search Input
-    searchInput?.addEventListener('input', (e) => {
-      currentSearch = (e.target as HTMLInputElement).value.toLowerCase();
-      applyFilters();
-    });
+    // Event Listeners
+    searchInput?.addEventListener('input', applyFilters);
 
-    // Category Buttons
     categoryBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
-        // Update Active State
         categoryBtns.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-
-        // Update Filter
-        currentCategory = (btn as HTMLElement).dataset.category || '';
         applyFilters();
       });
     });
 
-    // Random Game Logic
     randomBtn?.addEventListener('click', () => {
-      const visibleItems = items.filter((i) => (i as HTMLElement).style.display !== 'none');
-      if (visibleItems.length > 0) {
-        const randomIndex = Math.floor(Math.random() * visibleItems.length);
-        const link = visibleItems[randomIndex].querySelector('a');
-        link?.click();
+      const visibleLinks = Array.from(document.querySelectorAll('a[aria-label^="Play"]:not([style*="display: none"])')) as HTMLAnchorElement[];
+      if (visibleLinks.length > 0) {
+        const randomIndex = Math.floor(Math.random() * visibleLinks.length);
+        visibleLinks[randomIndex].click();
       }
     });
 
-    // Popup Logic (Visual Only)
+    // Popups
     const togglePopup = (show: boolean) => {
       if (popupOverlay) {
         if (show) popupOverlay.classList.add('active');
@@ -690,4 +656,3 @@ const processedItems = rawItems.map((item) => {
     });
   });
 </script>
-=

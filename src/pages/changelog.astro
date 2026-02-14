@@ -1,450 +1,572 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>PeteZah | Changelog</title>
-    <link rel="icon" type="image/x-icon" href="/storage/images/logo-png-removebg-preview.png" />
+---
+import AppLayout from '../layouts/AppLayout.astro';
+import { Font } from 'astro:assets';
+import Fa from '../components/fontawesome.astro';
+import { isAdmin } from '../../server/session';
+
+// --- SERVER SIDE LOGIC ---
+
+// 1. Security Check
+const isUserAdmin = await isAdmin(Astro);
+
+// 2. Data Fetching (SSR)
+// We fetch data here so search engines see it and users get instant content.
+let changelogs = [];
+let fetchError = null;
+
+try {
+  // Use absolute URL for server-side fetch
+  const apiUrl = new URL('/api/changelog', Astro.url.origin);
+  const response = await fetch(apiUrl);
+  if (response.ok) {
+    const data = await response.json();
+    changelogs = data.changelogs || [];
+  } else {
+    fetchError = 'Failed to retrieve updates.';
+  }
+} catch (e) {
+  // Fallback for build time or network errors
+  console.error('SSG Fetch Error:', e);
+  fetchError = 'Updates temporarily unavailable.';
+}
+---
+
+<AppLayout title="PeteZah | Changelog" description="Latest updates, features, and fixes.">
+  <Fragment slot="head">
+    <Font cssVariable="--font-roboto" preload />
     <link rel="stylesheet" href="/storage/css/themes.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+  </Fragment>
+
+  <div class="container">
+    <header class="header">
+      <h1>Changelog</h1>
+
+      {
+        isUserAdmin && (
+          <button class="add-btn" id="addEntryBtn" aria-label="Add Changelog Entry">
+            <Fa icon="plus" />
+          </button>
+        )
       }
-      body {
-        font-family: Roboto, sans-serif;
-        background: #0a1d37;
-        min-height: 100vh;
-        padding: 20px;
-        color: #fff;
-        position: relative;
-      }
-      .god-rays {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        --stripes: repeating-linear-gradient(
-          100deg,
-          rgba(20, 40, 60, 0.8) 0%,
-          rgba(20, 40, 60, 0.8) 7%,
-          transparent 10%,
-          transparent 12%,
-          rgba(20, 40, 60, 0.8) 16%
-        );
-        --rays: repeating-linear-gradient(
-          100deg,
-          rgba(30, 50, 90, 0.9) 10%,
-          rgba(20, 40, 80, 0.9) 15%,
-          rgba(30, 50, 90, 0.9) 20%,
-          rgba(20, 40, 80, 0.9) 25%,
-          rgba(30, 50, 90, 0.9) 30%
-        );
-        background-image: var(--stripes), var(--rays);
-        background-size: 300%, 200%;
-        background-position:
-          50% 50%,
-          50% 50%;
-        animation: fadeIn 2s ease;
-        mask-image: radial-gradient(ellipse at 100% 0%, rgba(255, 255, 255, 0) 40%, transparent 70%);
-        -webkit-mask-image: radial-gradient(ellipse at 100% 0%, white 40%, transparent 70%);
-        pointer-events: none;
-        z-index: 0;
-      }
-      .god-rays::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: var(--stripes), var(--rays);
-        background-size: 200%, 100%;
-        animation: god-rays 40s linear infinite;
-        background-attachment: fixed;
-        mix-blend-mode: difference;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
+    </header>
+
+    <div class="section">
+      <div id="changelog-list">
+        {
+          fetchError && (
+            <div class="empty-state error">
+              <Fa icon="triangle-exclamation" /> {fetchError}
+            </div>
+          )
         }
-        to {
-          opacity: 1;
+
+        {!fetchError && changelogs.length === 0 && <div class="empty-state">No updates yet. Check back soon!</div>}
+
+        {
+          changelogs.map((entry) => (
+            <article class="changelog-item" data-id={entry.id}>
+              <div class="header-item">
+                <img src="/storage/images/logo-png-removebg-preview.png" alt="PeteZah" class="author-icon" />
+                <h3>{entry.title}</h3>
+              </div>
+
+              <div class="meta">
+                By {entry.author_name || 'PeteZah'} • {new Date(entry.created_at).toLocaleDateString()}
+              </div>
+
+              <div class="content">{entry.content}</div>
+
+              <div class="actions">
+                <button class="btn action-btn like-btn" data-id={entry.id}>
+                  <Fa icon="thumbs-up" />
+                  <span class="like-count">0</span>
+                </button>
+
+                <button class="btn action-btn comment-btn" data-id={entry.id}>
+                  <Fa icon="comment" />
+                </button>
+              </div>
+            </article>
+          ))
         }
-      }
-      @keyframes god-rays {
-        0% {
-          background-position:
-            0 0,
-            0 0;
-        }
-        100% {
-          background-position:
-            100% 100%,
-            100% 100%;
-        }
-      }
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-      }
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 40px;
-      }
-      .header h1 {
-        font-size: 32px;
-        font-weight: 700;
-        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      .add-btn {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-        border: none;
-        color: #fff;
-        font-size: 24px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
-      }
-      .add-btn:hover {
-        transform: scale(1.1) rotate(90deg);
-        box-shadow: 0 6px 24px rgba(59, 130, 246, 0.4);
-      }
-      .section {
-        background: linear-gradient(135deg, #111117, #182129);
-        border-radius: 24px;
-        padding: 32px;
-        margin-bottom: 24px;
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
-        border: 1px solid #3a4a5a;
-      }
-      .changelog-item {
-        background: rgba(30, 41, 59, 0.4);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 16px;
-        border-left: 4px solid #3b82f6;
-      }
-      .changelog-item .header-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-      .changelog-item .author-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-      .changelog-item h3 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin: 0;
-        color: #fff;
-      }
-      .changelog-item .meta {
-        color: #9ab;
-        font-size: 0.85rem;
-        margin-bottom: 12px;
-      }
-      .changelog-item .content {
-        color: #fff;
-        line-height: 1.6;
-        white-space: pre-wrap;
-      }
-      .form-group {
-        margin-bottom: 20px;
-      }
-      .form-group label {
-        display: block;
-        color: #cde;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-bottom: 0.25rem;
-      }
-      .form-group input,
-      .form-group textarea {
-        width: 100%;
-        background: 0 0;
-        border: none;
-        border-bottom: 1px solid #456;
-        color: #fff;
-        padding: 0.5rem 0;
-        font-size: 0.95rem;
-        outline: 0;
-        transition: border-color 0.3s ease;
-        font-family: inherit;
-      }
-      .form-group textarea {
-        resize: vertical;
-        min-height: 150px;
-      }
-      .form-group input:focus,
-      .form-group textarea:focus {
-        border-bottom-color: #fff;
-        box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-      }
-      .form-group input::placeholder,
-      .form-group textarea::placeholder {
-        color: #678;
-      }
-      .btn {
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 16px;
-        font-size: 0.95rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: inherit;
-        background: linear-gradient(135deg, #fff, #f0f0f0);
-        color: #0a1d37;
-      }
-      .btn:hover:not(:disabled) {
-        background: linear-gradient(135deg, #f0f0f0, #ddd);
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
-      }
-      .btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-      .btn-full {
-        width: 100%;
-      }
-      .empty-state {
-        text-align: center;
-        padding: 40px;
-        color: #9ab;
-      }
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-      }
-      .modal.active {
-        display: flex;
-      }
-      .modal-content {
-        background: linear-gradient(135deg, #111117, #182129);
-        border-radius: 24px;
-        padding: 32px;
-        max-width: 500px;
-        width: 90%;
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
-        border: 1px solid #3a4a5a;
-        position: relative;
-      }
-      .modal-close {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        background: 0 0;
-        border: none;
-        color: #9ab;
-        font-size: 24px;
-        cursor: pointer;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .modal-close:hover {
-        color: #fff;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="god-rays"></div>
-    <div class="container">
-      <div class="header">
-        <h1>Changelog</h1>
-        <button class="add-btn" id="add-btn" title="Add Changelog Entry" style="display: none"><i class="fas fa-plus"></i></button>
-      </div>
-      <div class="section">
-        <div id="changelog-list"><div class="empty-state">Loading changelog...</div></div>
       </div>
     </div>
-    <div class="modal" id="changelog-modal">
-      <div class="modal-content">
-        <button class="modal-close" id="close-modal"><i class="fas fa-times"></i></button>
-        <h2 style="margin-bottom: 24px; font-size: 1.5rem; font-weight: 600">Create Changelog Entry</h2>
-        <form id="changelog-form">
-          <div class="form-group"><label for="title">Title</label> <input type="text" id="title" required /></div>
-          <div class="form-group"><label for="content">Content</label> <textarea id="content" required></textarea></div>
-          <button type="submit" class="btn btn-full" id="submit-btn"><i class="fas fa-paper-plane"></i> Create Entry</button>
-        </form>
+  </div>
+
+  {
+    isUserAdmin && (
+      <div class="modal" id="create-modal" aria-hidden="true">
+        <div class="modal-content">
+          <button class="modal-close" id="close-create-modal">
+            <Fa icon="xmark" />
+          </button>
+          <h2>Create Entry</h2>
+          <form id="create-form">
+            <div class="form-group">
+              <label for="new-title">Title</label>
+              <input type="text" id="new-title" required />
+            </div>
+            <div class="form-group">
+              <label for="new-content">Content</label>
+              <textarea id="new-content" required rows="5" />
+            </div>
+            <button type="submit" class="btn btn-full">
+              Post Update
+            </button>
+          </form>
+        </div>
       </div>
+    )
+  }
+
+  <div class="modal" id="comment-modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" id="close-comment-modal">
+        <Fa icon="xmark" />
+      </button>
+      <h2>Comments</h2>
+      <div id="comment-list" class="comment-scroll-area"></div>
+      <form id="comment-form">
+        <textarea id="comment-text" placeholder="Write a comment..." required></textarea>
+        <button type="submit" class="btn btn-full">Post</button>
+      </form>
     </div>
-    <div class="modal" id="comment-modal" style="display: none">
-      <div class="modal-content">
-        <button class="modal-close" id="close-comment-modal"><i class="fas fa-times"></i></button>
-        <h2 style="margin-bottom: 18px; font-size: 1.2rem; font-weight: 600">Comments</h2>
-        <div id="comment-modal-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 12px"></div>
-        <form id="comment-form">
-          <textarea
-            id="comment-content"
-            placeholder="Add a comment..."
-            required
-            style="width: 100%; background: 0 0; border: 1px solid #456; color: #fff; padding: 8px; border-radius: 8px"></textarea>
-          <button type="submit" class="btn btn-full" id="submit-comment-btn" style="margin-top: 10px"><i class="fas fa-paper-plane"></i> Post</button>
-        </form>
-      </div>
-    </div>
-    <script src="/storage/js/popup.js"></script>
-    <script>
-      let isAdmin = !1;
-      async function checkAdmin() {
+  </div>
+
+  <div id="toast-container"></div>
+</AppLayout>
+
+<style>
+  :root {
+    --accent-blue: #3b82f6;
+    --accent-purple: #8b5cf6;
+    --bg-card: rgba(30, 41, 59, 0.4);
+    --border-color: #3a4a5a;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .add-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+    transition: transform 0.3s;
+  }
+  .add-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+  }
+
+  /* Main Card Section */
+  .section {
+    background: linear-gradient(135deg, #111117, #182129);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--border-color);
+  }
+
+  /* Changelog Entry */
+  .changelog-item {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border-left: 4px solid var(--accent-blue);
+  }
+
+  .header-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .author-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .changelog-item h3 {
+    font-size: 1.25rem;
+    margin: 0;
+    color: #fff;
+  }
+
+  .meta {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+  .content {
+    color: #e2e8f0;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin-bottom: 16px;
+  }
+
+  /* Actions */
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+  .action-btn {
+    background: rgba(30, 41, 59, 0.6);
+    border: none;
+    color: #94a3b8;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+  }
+  .action-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    color: #fff;
+  }
+
+  /* SVG Fixes for icons inside buttons */
+  .action-btn :global(svg) {
+    height: 1em;
+  }
+
+  /* Modals */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+  }
+  .modal.active {
+    display: flex;
+  }
+
+  .modal-content {
+    background: #182129;
+    border: 1px solid var(--border-color);
+    padding: 32px;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: #9ab;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .modal-close:hover {
+    color: #fff;
+  }
+
+  /* Forms */
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    color: #cde;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: inherit;
+  }
+  input:focus,
+  textarea:focus {
+    border-color: var(--accent-blue);
+    outline: none;
+  }
+
+  .btn-full {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    color: #0a1d37;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .btn-full:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+  }
+
+  /* Comments */
+  .comment-scroll-area {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+  .comment-item {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+  .comment-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+
+  /* Empty States */
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+  }
+  .empty-state.error {
+    color: #ef4444;
+  }
+
+  /* Toasts */
+  #toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 2000;
+  }
+  .toast {
+    background: #10b981;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease;
+  }
+  .toast.error {
+    background: #ef4444;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  // CLIENT INTERACTIVITY
+  document.addEventListener('DOMContentLoaded', () => {
+    let activeCommentId = null;
+
+    // --- 1. TOAST HELPER ---
+    function showToast(msg, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.textContent = msg;
+      container?.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 300);
+      }, 3000);
+    }
+
+    // --- 2. ADMIN ACTIONS (Conditional) ---
+    const addBtn = document.getElementById('addEntryBtn');
+    const createModal = document.getElementById('create-modal');
+    const closeCreate = document.getElementById('close-create-modal');
+    const createForm = document.getElementById('create-form');
+
+    if (addBtn && createModal) {
+      addBtn.onclick = () => createModal.classList.add('active');
+      closeCreate.onclick = () => createModal.classList.remove('active');
+
+      createForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('new-title').value;
+        const content = document.getElementById('new-content').value;
+
         try {
-          const e = await fetch('/api/profile', { credentials: 'include' });
-          if (e.ok) {
-            const t = await e.json();
-            ((isAdmin = t.user.app_metadata?.is_admin || !1), isAdmin && (document.getElementById('add-btn').style.display = 'flex'));
+          const res = await fetch('/api/changelog', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, content })
+          });
+
+          if (res.ok) {
+            showToast('Entry created! Refreshing...');
+            setTimeout(() => window.location.reload(), 1000);
+          } else {
+            showToast('Failed to create entry', 'error');
           }
-        } catch (e) {
-          console.error('Admin check error:', e);
+        } catch (err) {
+          showToast('Network error', 'error');
         }
-      }
-      async function loadChangelog() {
+      };
+    }
+
+    // --- 3. COMMENTS & LIKES ---
+    const commentModal = document.getElementById('comment-modal');
+    const commentList = document.getElementById('comment-list');
+    const commentForm = document.getElementById('comment-form');
+
+    // Load initial like counts (Example of hydrating SSR content)
+    document.querySelectorAll('.like-btn').forEach(async (btn) => {
+      const id = btn.dataset.id;
+      try {
+        const res = await fetch(`/api/likes?type=changelog&targetId=${id}`);
+        const data = await res.json();
+        btn.querySelector('.like-count').textContent = data.count || 0;
+      } catch (e) {}
+    });
+
+    // Event Delegation for List
+    document.getElementById('changelog-list')?.addEventListener('click', async (e) => {
+      const target = e.target.closest('button');
+      if (!target) return;
+
+      const id = target.dataset.id;
+
+      // LIKE
+      if (target.classList.contains('like-btn')) {
         try {
-          const e = await fetch('/api/changelog'),
-            t = await e.json(),
-            n = document.getElementById('changelog-list');
-          t.changelogs && t.changelogs.length > 0
-            ? (n.innerHTML = t.changelogs
-                .map((e) => {
-                  const t = new Date(e.created_at);
-                  return `\n              <div class="changelog-item">\n                <div class="header-item">\n                  <img src="/storage/images/logo-png-removebg-preview.png" alt="PeteZah" class="author-icon">\n                  <h3>${e.title}</h3>\n                </div>\n                <div class="meta">By ${e.author_name || 'PeteZah'} • ${t.toLocaleDateString()}</div>\n                <div class="content">${e.content}</div>\n                <div style="margin-top:12px;display:flex;gap:12px;">\n                  <button class="btn" style="background:#232b36;color:#3b82f6;padding:4px 18px;font-size:1em;box-shadow:0 1px 4px rgba(59,130,246,0.04);" onclick="likeChangelog('${e.id}', this)"><i class="fa fa-thumbs-up"></i> <span class="like-count" data-id="${e.id}">0</span></button>\n                  <button class="btn" style="background:#232b36;padding:4px 18px;font-size:1em;box-shadow:0 1px 4px rgba(139,92,246,0.04);" onclick="openCommentModal('changelog','${e.id}')"><i class="fa fa-comment" style="color:#fff;"></i></button>\n                </div>\n                <div class="comments-list" id="comments-changelog-${e.id}" style="margin-top:10px;"></div>\n              </div>\n            `;
-                })
-                .join(''))
-            : (n.innerHTML = '<div class="empty-state">No changelog entries yet.</div>');
-        } catch (e) {
-          showPopup('Failed to load changelog', 'error');
+          const res = await fetch('/api/like', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'changelog', targetId: id })
+          });
+          if (res.ok) {
+            showToast('Liked!');
+            // Update count locally for instant feedback
+            const countSpan = target.querySelector('.like-count');
+            countSpan.textContent = parseInt(countSpan.textContent) + 1;
+          }
+        } catch (err) {
+          showToast('Error liking post', 'error');
         }
       }
-      function likeChangelog(e, t) {
-        fetch('/api/like', {
+
+      // COMMENT OPEN
+      if (target.classList.contains('comment-btn')) {
+        activeCommentId = id;
+        commentModal.classList.add('active');
+        commentList.innerHTML = '<div style="text-align:center; padding: 20px;">Loading...</div>';
+
+        try {
+          const res = await fetch(`/api/comments?type=changelog&targetId=${id}`);
+          const data = await res.json();
+
+          if (data.comments?.length) {
+            commentList.innerHTML = data.comments
+              .map(
+                (c) => `
+              <div class="comment-item">
+                <div class="comment-header">
+                  <img src="${c.avatar_url || '/storage/images/main/profile.png'}" class="comment-avatar">
+                  ${c.username || 'User'}
+                </div>
+                <div>${c.content}</div>
+              </div>
+            `
+              )
+              .join('');
+          } else {
+            commentList.innerHTML = '<div class="empty-state" style="padding:20px;">No comments yet.</div>';
+          }
+        } catch (err) {
+          commentList.innerHTML = '<div class="empty-state error">Failed to load comments</div>';
+        }
+      }
+    });
+
+    // COMMENT POST
+    commentForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const textarea = document.getElementById('comment-text');
+      const content = textarea.value.trim();
+      if (!content || !activeCommentId) return;
+
+      try {
+        const res = await fetch('/api/comment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ type: 'changelog', targetId: e })
-        })
-          .then((e) => e.json())
-          .then((e) => {
-            (showPopup(e.message || 'Liked!', 'success'), loadChangelogLikes());
-          });
-      }
-      function loadChangelogLikes() {
-        document.querySelectorAll('.like-count[data-id]').forEach(async (e) => {
-          const t = e.getAttribute('data-id'),
-            n = await fetch(`/api/likes?type=changelog&targetId=${t}`),
-            o = await n.json();
-          e.textContent = o.count || 0;
+          body: JSON.stringify({ type: 'changelog', targetId: activeCommentId, content })
         });
+
+        if (res.ok) {
+          showToast('Comment posted');
+          textarea.value = '';
+          commentModal.classList.remove('active');
+        } else {
+          showToast('Failed to post comment', 'error');
+        }
+      } catch (err) {
+        showToast('Network Error', 'error');
       }
-      function openCommentModal(e, t) {
-        ((window._commentType = e),
-          (window._commentTarget = t),
-          (document.getElementById('comment-modal').style.display = 'flex'),
-          loadComments(e, t));
-      }
-      function loadComments(e, t) {
-        fetch(`/api/comments?type=${e}&targetId=${t}`)
-          .then((e) => e.json())
-          .then((e) => {
-            const t = document.getElementById('comment-modal-list');
-            e.comments && e.comments.length
-              ? (t.innerHTML = e.comments
-                  .map(
-                    (e) =>
-                      `<div style='margin-bottom:8px;'><img src='${e.avatar_url || '/storage/images/main/profile.png'}' style='width:24px;height:24px;border-radius:50%;vertical-align:middle;margin-right:6px;'><b>${e.username || 'User'}</b>: <span style='color:#fff;'>${e.content}</span></div>`
-                  )
-                  .join(''))
-              : (t.innerHTML = '<div style="color:#99aabb;">No comments yet.</div>');
-          });
-      }
-      ((document.getElementById('close-comment-modal').onclick = () => {
-        document.getElementById('comment-modal').style.display = 'none';
-      }),
-        (document.getElementById('comment-form').onsubmit = async function (e) {
-          e.preventDefault();
-          const t = document.getElementById('comment-content').value.trim();
-          if (!t) return showPopup('Please enter a comment', 'error');
-          const n = document.getElementById('submit-comment-btn');
-          ((n.disabled = !0), (n.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...'));
-          const o = await fetch('/api/comment', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'include',
-              body: JSON.stringify({ type: window._commentType, targetId: window._commentTarget, content: t })
-            }),
-            a = await o.json();
-          ((n.disabled = !1),
-            (n.innerHTML = '<i class="fas fa-paper-plane"></i> Post'),
-            o.ok
-              ? (showPopup('Comment posted', 'success'),
-                (document.getElementById('comment-content').value = ''),
-                loadComments(window._commentType, window._commentTarget))
-              : showPopup(a.error || 'Failed to post', 'error'));
-        }),
-        document.getElementById('add-btn').addEventListener('click', () => {
-          document.getElementById('changelog-modal').classList.add('active');
-        }),
-        document.getElementById('close-modal').addEventListener('click', () => {
-          document.getElementById('changelog-modal').classList.remove('active');
-        }),
-        document.getElementById('changelog-form').addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const t = document.getElementById('title').value,
-            n = document.getElementById('content').value,
-            o = document.getElementById('submit-btn');
-          ((o.disabled = !0), (o.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...'));
-          try {
-            const e = await fetch('/api/changelog', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ title: t, content: n })
-              }),
-              o = await e.json();
-            e.ok
-              ? (showPopup('Changelog entry created', 'success'),
-                document.getElementById('changelog-form').reset(),
-                document.getElementById('changelog-modal').classList.remove('active'),
-                loadChangelog())
-              : showPopup(o.error || 'Failed to create entry', 'error');
-          } catch (e) {
-            showPopup('Network error', 'error');
-          } finally {
-            ((o.disabled = !1), (o.innerHTML = '<i class="fas fa-paper-plane"></i> Create Entry'));
-          }
-        }),
-        checkAdmin(),
-        loadChangelog(),
-        setTimeout(loadChangelogLikes, 500));
-    </script>
-  </body>
-</html>
+    };
+
+    document.getElementById('close-comment-modal').onclick = () => {
+      commentModal.classList.remove('active');
+    };
+  });
+</script>
