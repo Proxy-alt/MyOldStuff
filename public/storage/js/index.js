@@ -8,6 +8,10 @@ const sidebar = document.querySelector('.sidebar'),
   widgetPopup = document.querySelector('.widget-popup'),
   widgetOptions = document.querySelectorAll('.widget-option');
 
+function isMobile() {
+  return window.innerWidth <= 1024;
+}
+
 if ((location.pathname.endsWith('index.html') && '#blank' === location.hash) || location.href.endsWith('#blank')) {
   const e = window.open(),
     t = e.document.createElement('iframe');
@@ -20,12 +24,45 @@ if ((location.pathname.endsWith('index.html') && '#blank' === location.hash) || 
     (window.location = 'about:blank'));
 }
 
-sidebar.classList.add('collapsed');
-mainContent.classList.remove('sidebar-expanded');
+if (!isMobile()) {
+  sidebar.classList.add('collapsed');
+  mainContent.classList.remove('sidebar-expanded');
+} else {
+  sidebar.classList.add('mobile-hidden');
+}
 
-sidebarToggler.addEventListener('click', () => {
-  sidebar.classList.toggle('collapsed');
-  mainContent.classList.toggle('sidebar-expanded');
+function handleToggle() {
+  if (isMobile()) {
+    sidebar.classList.toggle('mobile-hidden');
+    sidebar.classList.toggle('mobile-visible');
+  } else {
+    sidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('sidebar-expanded');
+  }
+}
+
+sidebarToggler.addEventListener('click', handleToggle);
+if (menuToggler) {
+  menuToggler.addEventListener('click', handleToggle);
+}
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (isMobile()) {
+      sidebar.classList.remove('collapsed');
+      mainContent.classList.remove('sidebar-expanded');
+      if (!sidebar.classList.contains('mobile-visible')) {
+        sidebar.classList.add('mobile-hidden');
+      }
+    } else {
+      sidebar.classList.remove('mobile-hidden', 'mobile-visible');
+      if (!sidebar.classList.contains('collapsed')) {
+        sidebar.classList.add('collapsed');
+      }
+    }
+  }, 250);
 });
 
 function updateActiveNavLink(src) {

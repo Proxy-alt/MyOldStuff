@@ -21,6 +21,7 @@ try {
 dotenv.config({ path: '.env.production' });
 
 const OWNER_ID = '1311722282317779097';
+const HARDCODED_CHANNEL_ID = '1457434974234869855';
 const ALERT_COOLDOWN = 600000;
 const ATTACK_END_TIMEOUT = 300000;
 const WINDOW_SIZE = 10000;
@@ -34,7 +35,7 @@ const RESTART_HOUR_ET = 0;
 class DDoSShield {
   constructor(client) {
     this.client = client;
-    this.logChannelId = null;
+    this.logChannelId = HARDCODED_CHANNEL_ID;
     this.isUnderAttack = false;
     this.attackStartTime = null;
     this.mitigatedCount = 0;
@@ -725,7 +726,9 @@ class DDoSShield {
         setTimeout(() => this.endAttackAlert(), 15000);
       }
 
-      if (interaction.commandName === 'security-stats') {
+     if (interaction.commandName === 'security-stats') {
+        await interaction.deferReply({ ephemeral: true });
+    
         const topAbusers = this.getTopAbusers(10);
         const blockRate = this.getRecentBlockRate();
         const cpuUsage = this.getCpuUsage().toFixed(1);
@@ -738,6 +741,26 @@ class DDoSShield {
         const systemState = interaction.client.systemState || {};
         const powDifficulty = systemState.currentPowDifficulty || 16;
         const requestRate = systemState.requestRatePerMinute || 0;
+
+        let systemLoadOutput = 'N/A';
+        let contextSwitchesOutput = 'N/A';
+
+        try {
+          const { stdout: loadavg } = await execAsync("uptime | awk -F\"load average:\" '{print $2}' | awk '{print $1}' | tr -d ','");
+          systemLoadOutput = parseFloat(loadavg.trim()).toFixed(2);
+        } catch (err) {
+          console.error('Failed to get system load:', err.message);
+        }
+
+        try {
+          const { stdout: cswch } = await execAsync("sar -w 1 3 2>/dev/null | grep Average | awk '{print $3}'");
+          const cswchValue = parseFloat(cswch.trim());
+          if (!isNaN(cswchValue)) {
+            contextSwitchesOutput = Math.round(cswchValue).toLocaleString() + '/sec';
+          }
+        } catch (err) {
+          console.error('Failed to get context switches:', err.message);
+        }
 
         let statusText = '🟩 Normal';
         let statusColor = '#00ff00';
@@ -762,16 +785,17 @@ class DDoSShield {
           .setTitle('📊 Security Statistics')
           .addFields(
             { name: 'Status', value: statusText, inline: true },
+            { name: 'System Load', value: systemLoadOutput, inline: true },
+            { name: 'Context Switches', value: contextSwitchesOutput, inline: true },
             { name: 'CPU Usage', value: `${cpuUsage}%`, inline: true },
+            { name: 'Memory (Heap)', value: `${heapUsed}GB`, inline: true },
+            { name: 'Memory (RSS)', value: `${rss}GB`, inline: true },
             { name: 'PoW Difficulty', value: `${powDifficulty}`, inline: true },
             { name: 'Requests/min', value: `${Math.round(requestRate)}`, inline: true },
             { name: 'Block Rate', value: `${blockRate}/min`, inline: true },
-            { name: 'Memory (Heap)', value: `${heapUsed}GB`, inline: true },
-            { name: 'Memory (RSS)', value: `${rss}GB`, inline: true },
             { name: 'Total Blocks', value: this.mitigatedCount.toLocaleString(), inline: true },
             { name: 'Challenge Hits', value: `${totalHits} from ${uniqueIps} IPs`, inline: true },
             { name: 'Attack Patterns', value: this.attackPatterns.size.toString(), inline: true },
-            { name: 'XDP Blocks', value: `${xdpBlockCount}/100`, inline: true },
             { name: 'Tracked IPs', value: `${this.ipBlocks.size}/${this.MAX_IP_TRACKING}`, inline: true },
             { name: 'Tracked Requests', value: `${this.ipRequests.size}/${this.MAX_IP_TRACKING}`, inline: true },
             { name: 'Top Abusers', value: topAbusers.map((a) => `${a.ip}: ${a.count} (${a.primaryType})`).join('\n') || 'None', inline: false }
@@ -779,10 +803,12 @@ class DDoSShield {
           .setColor(statusColor)
           .setTimestamp();
 
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.editReply({ embeds: [embed] });
       }
 
       if (interaction.commandName === 'memory-status') {
+        await interaction.deferReply({ ephemeral: true });
+    
         const mem = process.memoryUsage();
         const heapUsed = (mem.heapUsed / 1024 / 1024 / 1024).toFixed(2);
         const heapTotal = (mem.heapTotal / 1024 / 1024 / 1024).toFixed(2);
@@ -807,7 +833,7 @@ class DDoSShield {
           .setColor(this.memoryStats.active ? '#ff0000' : '#00ff00')
           .setTimestamp();
 
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.editReply({ embeds: [embed] });
       }
 
       if (interaction.commandName === 'force-cleanup') {
