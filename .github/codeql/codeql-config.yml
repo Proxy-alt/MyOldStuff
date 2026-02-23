@@ -1,5 +1,0 @@
-name: 'CodeQL Config'
-paths-ignore:
-  - public/storage/ag/*
-  - public/static/uv/
-  - public/scram/
